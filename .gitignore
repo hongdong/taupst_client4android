@@ -1,2 +1,6 @@
 /NC_HOME
 /out
+# Eclipse project files
+.classpath
+.project
+.settings/
