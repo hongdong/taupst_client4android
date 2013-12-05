@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="@drawable/login_bg_college">
     <TextView 
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
@@ -11,8 +12,8 @@
     	android:textSize="20sp"
     	android:textColor="@color/black"
     	android:paddingLeft="15dp"
-    	android:paddingTop="13dp"
-    	android:paddingBottom="13dp"/>
+    	android:paddingTop="10dp"
+    	android:paddingBottom="10dp"/>
     <TextView 
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
@@ -22,11 +23,12 @@
     	android:textColor="@color/dimgray"
     	android:gravity="right"
     	android:paddingRight="15dp"
-    	android:paddingTop="13dp"
-    	android:paddingBottom="13dp"/>
+    	android:paddingTop="10dp"
+    	android:paddingBottom="10dp"/>
     <ImageView 
         android:layout_width="wrap_content"
     	android:layout_height="match_parent"
+    	android:layout_marginRight="20dp"
     	android:src="@drawable/img_select"
     	android:background="@null"
     	android:contentDescription="@string/select_college"/>

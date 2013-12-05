@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
     <item 
         android:state_pressed="true"
-        android:drawable="@color/sandybrown"/>
+        android:drawable="@drawable/login_bn_p"/>
     <item 
         android:state_pressed="false"
-        android:drawable="@color/lightblue"/>
+        android:drawable="@drawable/login_bn_n"/>
 </selector>

@@ -19,7 +19,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 
 	private ListView listView;
 	private Button bn_login;
-	private TextView txt_about;
+	private TextView txt_about, txt_server;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -86,7 +86,16 @@ public class LoginActivity extends Activity implements ItaActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				System.out.println("about software");
+				System.out.println("about us");
+			}
+		});
+		txt_server = (TextView)findViewById(R.id.txt_server);
+		txt_server.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				System.out.println("server declare");
 			}
 		});
 	}
