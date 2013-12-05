@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="college">
+        <item >福建工程学院</item>
+        <item >福建师范大学</item>
+        <item >福州大学</item>
+    </string-array>
+</resources>

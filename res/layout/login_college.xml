@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    <TextView 
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_weight="1"
+    	android:text="@string/college"
+    	android:textSize="20sp"
+    	android:textColor="@color/black"
+    	android:paddingLeft="15dp"
+    	android:paddingTop="13dp"
+    	android:paddingBottom="13dp"/>
+    <TextView 
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_weight="1"
+    	android:text="@string/select_college"
+    	android:textSize="20sp"
+    	android:textColor="@color/dimgray"
+    	android:gravity="right"
+    	android:paddingRight="15dp"
+    	android:paddingTop="13dp"
+    	android:paddingBottom="13dp"/>
+    <ImageView 
+        android:layout_width="wrap_content"
+    	android:layout_height="match_parent"
+    	android:src="@drawable/img_select"
+    	android:background="@null"
+    	android:contentDescription="@string/select_college"/>
+</LinearLayout>
