@@ -8,12 +8,13 @@
     <string name="ver001">Version 001</string>
     
     <string name="logo">logo</string>
-    <string name="login">登录</string>
+    <string name="login">登    录</string>
     <string name="no_login">未登录</string>
     <string name="college">学校</string>
     <string name="select_college">点击选择</string>
     <string name="input_studentid">学号</string>
     <string name="input_password">教务系统密码</string>
-    <string name="about_software">关于软件</string>
+    <string name="about_us">关于我们</string>
+    <string name="server_declare">服务声名</string>
 
 </resources>

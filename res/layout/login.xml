@@ -14,6 +14,8 @@
             android:id="@+id/list_login"
             android:layout_width="match_parent"
     		android:layout_height="wrap_content"
+    		android:divider="@color/white_divider"
+    		android:dividerHeight="1dp"
     		android:background="@drawable/login_bg_list">
         </ListView>
 	    <Button 
@@ -27,16 +29,38 @@
 	        android:textSize="26sp"
 	        android:background="@drawable/login_bg_bn"/>
     </LinearLayout>
-    <TextView 
-        android:id="@+id/txt_about"
+    <LinearLayout 
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:text="@string/about_software"
-        android:textSize="16sp"
-        android:textColor="@color/blue"
-        android:clickable="true"
-        android:background="@drawable/login_bg_txt"/>
+        android:layout_marginBottom="20dp">
+        <TextView 
+	        android:id="@+id/txt_about"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:text="@string/about_us"
+	        android:textSize="16sp"
+	        android:textColor="@color/blue"
+	        android:clickable="true"
+	        android:background="@drawable/login_bg_txt"/>
+        <ImageView 
+	        android:layout_width="2dp"
+	    	android:layout_height="20dp"
+	    	android:layout_marginLeft="10dp"
+	    	android:layout_marginRight="10dp"
+	    	android:src="@color/plum"
+	    	android:background="@null"
+	    	android:contentDescription="@string/login"/>
+        <TextView 
+	        android:id="@+id/txt_server"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:text="@string/server_declare"
+	        android:textSize="16sp"
+	        android:textColor="@color/blue"
+	        android:clickable="true"
+	        android:background="@drawable/login_bg_txt"/>
+    </LinearLayout>
 </RelativeLayout>
