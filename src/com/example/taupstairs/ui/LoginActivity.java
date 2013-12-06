@@ -36,6 +36,15 @@ public class LoginActivity extends Activity implements ItaActivity {
 				switch (position) {
 				case 0:
 					view = LinearLayout.inflate(LoginActivity.this, R.layout.login_college, null);
+					view.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							Intent intent = new Intent(LoginActivity.this, SelectCollegeActivity.class);
+							startActivity(intent);
+						}
+					});
 					break;
 				case 1:
 					view = LinearLayout.inflate(LoginActivity.this, R.layout.login_studentid, null);
