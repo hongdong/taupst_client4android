@@ -11,7 +11,8 @@
     <string name="login">登    录</string>
     <string name="no_login">未登录</string>
     <string name="college">学校</string>
-    <string name="select_college">点击选择</string>
+    <string name="go_select_college">点击选择</string>
+    <string name="select_college">选择学校</string>
     <string name="input_college">请输入大学名称</string>
     <string name="input_studentid">学号</string>
     <string name="input_password">教务系统密码</string>
