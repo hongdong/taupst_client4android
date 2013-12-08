@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 共同的主题  -->
+	<style name="Common_Theme" parent="android:Theme">
+		<item name="android:windowNoTitle">true</item>		
+		<item name="android:typeface">sans</item>
+		<item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
+	</style>
+	 
+</resources>

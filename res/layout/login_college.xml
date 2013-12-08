@@ -24,12 +24,7 @@
     	android:gravity="right"
     	android:paddingRight="15dp"
     	android:paddingTop="10dp"
-    	android:paddingBottom="10dp"/>
-    <ImageView 
-        android:layout_width="wrap_content"
-    	android:layout_height="match_parent"
-    	android:layout_marginRight="20dp"
-    	android:src="@drawable/img_select"
-    	android:background="@null"
-    	android:contentDescription="@string/select_college"/>
+    	android:paddingBottom="10dp"
+    	android:drawableRight="@drawable/img_select"
+    	android:drawablePadding="20dp"/>
 </LinearLayout>
