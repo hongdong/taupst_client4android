@@ -45,7 +45,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				System.out.println("about us");
+				Intent intent = new Intent(LoginActivity.this, AboutUsActivity.class);
+				startActivity(intent);
 			}
 		});
 		txt_server = (TextView)findViewById(R.id.txt_server);
@@ -54,7 +55,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				System.out.println("server declare");
+				Intent intent = new Intent(LoginActivity.this, ServerDeclareActivity.class);
+				startActivity(intent);
 			}
 		});
 	}

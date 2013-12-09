@@ -17,6 +17,8 @@
     <string name="input_studentid">学号</string>
     <string name="input_password">教务系统密码</string>
     <string name="about_us">关于我们</string>
+    <string name="about_us_text">看看要写什么</string>
     <string name="server_declare">服务声名</string>
+    <string name="server_declare_text">看看要写什么</string>
 
 </resources>

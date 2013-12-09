@@ -22,13 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name=".ui.LogoActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-        <activity 
-            android:name=".ui.LoginActivity"></activity>
-        <activity 
-            android:name=".ui.SelectCollegeActivity"></activity>
-        
+        <activity android:name=".ui.LogoActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity android:name=".ui.LoginActivity"></activity>
+        <activity android:name=".ui.SelectCollegeActivity"></activity>
+        <activity android:name=".ui.AboutUsActivity"></activity>
+        <activity android:name=".ui.ServerDeclareActivity"></activity>
         <service android:name=".logic.MainService"></service>
     </application>
 

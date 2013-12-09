@@ -51,7 +51,6 @@
 	    	android:layout_marginRight="10dp"
 	    	android:src="@color/plum"
 	    	android:background="@null"
-	    	
 	    	android:contentDescription="@string/login"/>
         <TextView 
 	        android:id="@+id/txt_server"
