@@ -24,6 +24,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_college);
+		init();
 		btn_back = (Button)findViewById(R.id.btn_back_search);
 		btn_back.setOnClickListener(new OnClickListener() {
 			
@@ -60,17 +61,16 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
-		list = (ListView)findViewById(R.id.list_college);
-		list.setTextFilterEnabled(true);
-		String[] arr = new String[]{"福大", "师大", "工程",};
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
-				R.layout.college_item, arr);
-		list.setAdapter(adapter);
 	}
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+		String[] arr = new String[]{"福大", "师大", "工程",};
+		list = (ListView)findViewById(R.id.list_college);
+		list.setTextFilterEnabled(true);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
+				R.layout.college_item, arr);
+		list.setAdapter(adapter);
 	}
 	@Override
 	public void refresh(Object... params) {

@@ -25,7 +25,43 @@ public class LoginActivity extends Activity implements ItaActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		init();
 		Intent intent = new Intent(LoginActivity.this, MainService.class);
+		startService(intent);
+		MainService.addActivity(this);	//���Լ��ŵ�activitys�ļ�������
+		bn_login = (Button)findViewById(R.id.bn_login);
+		bn_login.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Task task = new Task(Task.TA_LOGIN, null);
+				MainService.addTask(task);
+			}
+		});
+		txt_about = (TextView)findViewById(R.id.txt_about);
+		txt_about.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				System.out.println("about us");
+			}
+		});
+		txt_server = (TextView)findViewById(R.id.txt_server);
+		txt_server.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				System.out.println("server declare");
+			}
+		});
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
 		listView = (ListView)findViewById(R.id.list_login);
 		BaseAdapter adapter = new BaseAdapter() {
 			
@@ -77,42 +113,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 			}
 		};
 		listView.setAdapter(adapter);
-		startService(intent);
-		MainService.addActivity(this);	//���Լ��ŵ�activitys�ļ�������
-		bn_login = (Button)findViewById(R.id.bn_login);
-		bn_login.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Task task = new Task(Task.TA_LOGIN, null);
-				MainService.addTask(task);
-			}
-		});
-		txt_about = (TextView)findViewById(R.id.txt_about);
-		txt_about.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println("about us");
-			}
-		});
-		txt_server = (TextView)findViewById(R.id.txt_server);
-		txt_server.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println("server declare");
-			}
-		});
-	}
-
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
