@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
     <item 
         android:state_pressed="true"
-        android:drawable="@drawable/login_bn_p"/>
+        android:drawable="@drawable/login_btn_p"/>
     <item 
         android:state_pressed="false"
-        android:drawable="@drawable/login_bn_n"/>
+        android:drawable="@drawable/login_btn_n"/>
 </selector>
