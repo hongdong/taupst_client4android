@@ -2,6 +2,7 @@ package com.example.taupstairs.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,16 +10,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 import com.example.taupstairs.R;
+import com.example.taupstairs.bean.College;
+import com.example.taupstairs.services.CollegeService;
 
 public class SelectCollegeActivity extends Activity implements ItaActivity {
 
 	private Button btn_back;
 	private EditText edit;
 	private ListView list;
+	private ArrayAdapter<String> adapter;
+	private String[] allCollegeNames;
+	private CollegeService collegeService;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -55,22 +63,35 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
 				if (edit.getText().toString().isEmpty()) {
-					//list.clearTextFilter();
+					showAllCollege();
 				} else {
-					//list.setFilterText(edit.getText().toString());
+					showSearchCollege();
 				}
 			}
 		});
 	}
+	
+	private void showAllCollege() {
+		list.setAdapter(adapter);
+	}
+
+	private void showSearchCollege() {
+		Cursor cursor = collegeService.getCursorByKeyword(edit.getText().toString());
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.college_item, cursor, 
+				new String[] {College.COLLEGE_NAME}, new int[] {R.id.txt_college_item}, 
+				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		list.setAdapter(adapter);
+	}
+	
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		String[] arr = new String[]{"福大", "师大", "工程",};
+		allCollegeNames = getResources().getStringArray(R.array.college_name);
 		list = (ListView)findViewById(R.id.list_college);
-		list.setTextFilterEnabled(true);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
-				R.layout.college_item, arr);
+		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
+				R.layout.college_item, allCollegeNames);
 		list.setAdapter(adapter);
+		collegeService = new CollegeService(SelectCollegeActivity.this);
 	}
 	@Override
 	public void refresh(Object... params) {
