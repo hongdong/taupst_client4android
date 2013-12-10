@@ -24,8 +24,12 @@
 	    	android:layout_centerInParent="true"/>
 	</RelativeLayout>
     <TextView 
+        android:id="@+id/txt_server_declare"
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
+       
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="3dp"
         android:text="@string/server_declare_text"
         android:textSize="16sp"
         android:textColor="@color/black"/>
