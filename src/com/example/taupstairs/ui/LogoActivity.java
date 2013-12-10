@@ -1,15 +1,16 @@
 package com.example.taupstairs.ui;
 
-import com.example.taupstairs.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-public class LogoActivity extends Activity {
+import com.example.taupstairs.R;
+
+public class LogoActivity extends Activity implements ItaActivity {
 
 	private ImageView img_logo;
 	private Animation animation;
@@ -39,8 +40,19 @@ public class LogoActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(LogoActivity.this, LoginActivity.class);
 				startActivity(intent);
+				finish();
 			}
 		});
 		img_logo.setAnimation(animation);
+	}
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void refresh(Object... params) {
+		// TODO Auto-generated method stub
+		
 	}
 }

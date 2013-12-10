@@ -1,16 +1,13 @@
 package com.example.taupstairs.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Scroller;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 
 public class ServerDeclareActivity extends Activity implements ItaActivity {
@@ -110,8 +107,7 @@ public class ServerDeclareActivity extends Activity implements ItaActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(ServerDeclareActivity.this, LoginActivity.class);
-				startActivity(intent);
+				finish();
 			}
 		});
 	}

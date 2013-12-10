@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(MainActivity.this, LogoActivity.class);
 				startActivity(intent);
+				finish();
 			}
 		});
 	}
