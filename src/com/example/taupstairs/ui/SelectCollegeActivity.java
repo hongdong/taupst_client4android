@@ -8,15 +8,18 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
+import android.widget.TextView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
+import com.example.taupstairs.intent.IntentInfo;
 import com.example.taupstairs.services.CollegeService;
 
 public class SelectCollegeActivity extends Activity implements ItaActivity {
@@ -91,11 +94,31 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
 				R.layout.college_item, allCollegeNames);
 		list.setAdapter(adapter);
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				String collegeName = ((TextView)arg1).getText().toString();
+				Intent intent = new Intent();
+				intent.putExtra("collegeName", collegeName);
+				setResult(IntentInfo.ResultCode.SELECTCOLLEGE_LOGIN, intent);
+				finish();
+			}
+		});
 		collegeService = new CollegeService(SelectCollegeActivity.this);
 	}
 	@Override
 	public void refresh(Object... params) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		collegeService.closeDBHelper();
 	}
 }
