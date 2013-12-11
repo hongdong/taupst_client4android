@@ -4,15 +4,16 @@ import java.util.Map;
 
 public class Task {
 
-	//����ID
+	//任务ID
 	private int taskId;
-	//�������
+	//任务参数
 	private Map<String, Object> taskParams;
 	
-	//��¼
+	//登录任务用到的常量值
 	public static final int TA_LOGIN = 1;
+	public static final String TA_LOGIN_TASKPARAMS = "login";
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
-	public static final String TA_LOGIN_SUCCESS = "��¼�ɹ�";
+	public static final String TA_LOGIN_SUCCESS = "登录成功";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

@@ -16,11 +16,11 @@ import com.example.taupstairs.ui.ItaActivity;
 
 public class MainService extends Service implements Runnable {
 
-	//�Ƿ������߳�
+	//主服务是否运行
 	private boolean isRun;
-	//�������
+	//任务队列
 	private static Queue<Task> tasks = new LinkedList<Task>();
-	//Activity����
+	//Activity链表
 	private static ArrayList<Activity> activities = new ArrayList<Activity>();
 	
 	Handler handler = new Handler() {
@@ -46,7 +46,7 @@ public class MainService extends Service implements Runnable {
 		thread.start();
 	}
 	
-	/*����������������*/
+	/*添加任务到任务队列*/
 	public static void addTask(Task task) {
 		tasks.add(task);
 	}
@@ -58,7 +58,7 @@ public class MainService extends Service implements Runnable {
 		Task task;
 		while (isRun) {
 			if (!tasks.isEmpty()) {
-				task = tasks.poll();	//ִ�������������Ӷ������Ƴ�
+				task = tasks.poll();	//ִ执行完任务后将它从队列中删除
 				if (task != null) {
 					doTask(task);
 				}
@@ -86,12 +86,12 @@ public class MainService extends Service implements Runnable {
 		handler.sendMessage(msg);
 	}
 	
-	/*���Activity��Activity������*/
+	/*将Activity添加到Activity链表中去*/
 	public static void addActivity(Activity activity) {
 		activities.add(activity);
 	}
 	
-	/*���Activity��name��ȡActivity����*/
+	/*根据Activity的name从Activity链表中找到它*/
 	private Activity getActivityByName(String name) {
 		if (!activities.isEmpty()) {
 			for (Activity activity : activities) {

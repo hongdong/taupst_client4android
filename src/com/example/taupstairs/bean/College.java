@@ -4,7 +4,9 @@ public class College {
 
 	private Long id;
 	private String collegeName;
+	
 	public static final String TB_NAME = "college";
+	
 	public static final String ID = "_id";
 	public static final String COLLEGE_NAME = "collegeName";
 	

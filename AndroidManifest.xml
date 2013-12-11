@@ -27,6 +27,7 @@
         <activity android:name=".ui.SelectCollegeActivity"></activity>
         <activity android:name=".ui.AboutUsActivity"></activity>
         <activity android:name=".ui.ServerDeclareActivity"></activity>
+        <activity android:name=".ui.HomePageActivity"></activity>
         <service android:name=".logic.MainService"></service>
     </application>
 

@@ -1,10 +1,10 @@
 package com.example.taupstairs.ui;
 
-/*Activity �ӿ�*/
+/*Activity 公用接口*/
 public interface ItaActivity {
 
-	/*��ʼ��*/
+	/*初始化操作*/
 	void init();
-	/*ˢ��UI*/
+	/*更新UI*/
 	void refresh(Object...params);
 }
