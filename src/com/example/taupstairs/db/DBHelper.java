@@ -8,11 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 	
-	private String[] allCollegeNames;
+	private String[] collegeIds;
+	private String[] collegeNames;
 	
 	public DBHelper(Context context) {
 		super(context, DBInfo.DB.DB_NAME, null, DBInfo.DB.DB_VERSION);
-		allCollegeNames = context.getResources().getStringArray(R.array.college_name);
+		collegeIds = context.getResources().getStringArray(R.array.college_id);
+		collegeNames = context.getResources().getStringArray(R.array.college_name);
 	}
 
 	@Override
@@ -22,8 +24,9 @@ public class DBHelper extends SQLiteOpenHelper {
 	
 	private void initCollegeDB(SQLiteDatabase db) {
 		db.execSQL(DBInfo.Table.COLLEGE_CREATE_STRING);
-		for (int i = 0; i < allCollegeNames.length; i++) {
-			db.execSQL("insert into " + College.TB_NAME + " values(null, ?)", new String[] {allCollegeNames[i], });
+		for (int i = 0; i < collegeIds.length; i++) {
+			db.execSQL("insert into " + College.TB_NAME + " values(null, ?, ?)", 
+					new String[] {collegeIds[i], collegeNames[i]});
 		}
 	}
 

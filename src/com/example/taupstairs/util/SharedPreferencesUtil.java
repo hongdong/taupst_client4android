@@ -14,8 +14,7 @@ public class SharedPreferencesUtil {
 	public static void saveDefaultUser(Context context, User user) {
 		SharedPreferences sp = context.getSharedPreferences(DEFAULT_USER, Context.MODE_PRIVATE);
 		Editor editor = sp.edit();
-		editor.putString(User.USER_ID, user.getUserId());
-		editor.putString(User.USER_COLLEGE, user.getUserCollege());
+		editor.putString(User.USER_COLLEGEID, user.getUserCollegeId());
 		editor.putString(User.USER_STUDENTID, user.getUserStudentId());
 		editor.putString(User.USER_PASSWORD, user.getUserPassword());
 		editor.commit();
@@ -24,13 +23,12 @@ public class SharedPreferencesUtil {
 	/*从存储器里面找出默认账户*/
 	public static User getDefaultUser(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(DEFAULT_USER, Context.MODE_PRIVATE);
-		String userId = sp.getString(User.USER_ID, null);
-		if (null == userId) {
+		String userCollegeId = sp.getString(User.USER_COLLEGEID, null);
+		if (null == userCollegeId) {
 			return null;		//如果先前没有存储默认账户的话，就返回null
 		}
-		String userCollege = sp.getString(User.USER_COLLEGE, null);
 		String userStudentId = sp.getString(User.USER_STUDENTID, null);
 		String userPassword = sp.getString(User.USER_PASSWORD, null);
-		return new User(userId, userCollege, userStudentId, userPassword);
+		return new User(userCollegeId, userStudentId, userPassword);
 	}
 }

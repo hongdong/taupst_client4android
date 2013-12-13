@@ -10,14 +10,14 @@
     	android:layout_centerInParent="true"
     	android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
-        <ListView 
-            android:id="@+id/list_login"
+        <LinearLayout 
             android:layout_width="match_parent"
     		android:layout_height="wrap_content"
-    		android:divider="@color/white_divider"
-    		android:dividerHeight="1dp"
-    		android:background="@drawable/login_bg_list">
-        </ListView>
+    		android:orientation="vertical">
+            <include layout="@layout/login_college"/>            
+            <include layout="@layout/login_studentid"/> 
+            <include layout="@layout/login_password"/>    
+        </LinearLayout>
 	    <Button 
 	        android:id="@+id/bn_login"
 	        android:layout_width="match_parent" 

@@ -4,7 +4,8 @@ public class User {
 
 	private Long id;
 	private String userId;
-	private String userCollege;
+	private String userCollegeId;
+	private String userCollegeName;
 	private String userStudentId;
 	private String userPassword;
 	
@@ -12,19 +13,26 @@ public class User {
 	
 	public static final String ID = "_id";
 	public static final String USER_ID = "userId";
-	public static final String USER_COLLEGE = "userCollege";
+	public static final String USER_COLLEGEID = "userCollegeId";
+	public static final String USER_COLLEGENAME = "userCollegeName";
 	public static final String USER_STUDENTID = "userStudentId";
 	public static final String USER_PASSWORD = "userPassword";
-	
-	public User(String userCollege, String userStudentId, String userPassword) {
-		this.userCollege = userCollege;
+
+	public User() {
+		
+	}
+
+	public User(String userCollegeId, String userStudentId, String userPassword) {
+		this.userCollegeId = userCollegeId;
 		this.userStudentId = userStudentId;
 		this.userPassword = userPassword;
 	}
 	
-	public User(String userId, String userCollege, String userStudentId, String userPassword) {
+	public User(String userId, String userCollegeId, String userCollegeName, 
+			String userStudentId, String userPassword) {
 		this.userId = userId;
-		this.userCollege = userCollege;
+		this.userCollegeId = userCollegeId;
+		this.userCollegeName = userCollegeName;
 		this.userStudentId = userStudentId;
 		this.userPassword = userPassword;
 	}
@@ -41,11 +49,17 @@ public class User {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getUserCollege() {
-		return userCollege;
+	public String getUserCollegeId() {
+		return userCollegeId;
 	}
-	public void setUserCollege(String userCollege) {
-		this.userCollege = userCollege;
+	public void setUserCollegeId(String userCollegeId) {
+		this.userCollegeId = userCollegeId;
+	}
+	public String getUserCollegeName() {
+		return userCollegeName;
+	}
+	public void setUserCollegeName(String userCollegeName) {
+		this.userCollegeName = userCollegeName;
 	}
 	public String getUserStudentId() {
 		return userStudentId;
@@ -59,4 +73,10 @@ public class User {
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
+
+	public String toString() {
+		return "User [userCollegeId=" + userCollegeId + ", userStudentId="
+				+ userStudentId + ", userPassword=" + userPassword + "]";
+	}
+	
 }

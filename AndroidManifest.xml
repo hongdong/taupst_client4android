@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
+    
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -23,8 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.LogoActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-        <activity android:name=".ui.LoginActivity"></activity>
-        <activity android:name=".ui.SelectCollegeActivity"></activity>
+        <activity android:name=".ui.LoginActivity" android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity android:name=".ui.SelectCollegeActivity" android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".ui.AboutUsActivity"></activity>
         <activity android:name=".ui.ServerDeclareActivity"></activity>
         <activity android:name=".ui.HomePageActivity"></activity>

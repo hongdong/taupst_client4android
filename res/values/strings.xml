@@ -20,5 +20,7 @@
     <string name="about_us_text">看看要写什么</string>
     <string name="server_declare">服务声明</string>
     <string name="server_declare_text">看看要写什么</string>
+    
+    <string name="homepage">主页面</string>
 
 </resources>

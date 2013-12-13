@@ -2,6 +2,7 @@ package com.example.taupstairs.logic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 import android.app.Activity;
@@ -12,7 +13,9 @@ import android.os.IBinder;
 import android.os.Message;
 
 import com.example.taupstairs.bean.Task;
+import com.example.taupstairs.bean.User;
 import com.example.taupstairs.ui.ItaActivity;
+import com.example.taupstairs.util.HttpClientUtil;
 
 public class MainService extends Service implements Runnable {
 
@@ -28,7 +31,7 @@ public class MainService extends Service implements Runnable {
 			switch (msg.what) {
 			case Task.TA_LOGIN:
 				ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_LOGIN_ACTIVITY);
-				activity.refresh(Task.TA_LOGIN_SUCCESS);
+				activity.refresh(msg.obj);
 				break;
 
 			default:
@@ -77,13 +80,30 @@ public class MainService extends Service implements Runnable {
 		msg.what = task.getTaskId();
 		switch (task.getTaskId()) {
 		case Task.TA_LOGIN:
-			System.out.println("doTask ----->> login");
+			msg.obj = doLoginTask(task);
 			break;
 
 		default:
 			break;
 		}
 		handler.sendMessage(msg);
+	}
+	
+	/*登录任务*/
+	private String doLoginTask(Task task) {
+		String result = Task.TA_LOGIN_ERROR;
+		Map<String, Object> taskParams = task.getTaskParams();
+		User user = (User) taskParams.get(Task.TA_LOGIN_TASKPARAMS);
+		String login_url = HttpClientUtil.BASE_URL + 
+				"Sync?student_id=" + user.getUserStudentId() + 
+				"&pwd=" + user.getUserPassword() + 
+				"&school=" + user.getUserCollegeId();
+		try {
+			result = HttpClientUtil.getRequest(login_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/*将Activity添加到Activity链表中去*/

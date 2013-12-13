@@ -7,9 +7,7 @@
     <RelativeLayout 
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@drawable/actionbar_bg"
-		android:focusable="true"
-		android:focusableInTouchMode="true">
+		android:background="@drawable/actionbar_bg">
 		<Button 
 	        android:id="@+id/btn_back_search"
 	        android:layout_width="wrap_content" 

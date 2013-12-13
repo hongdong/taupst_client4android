@@ -28,7 +28,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	private EditText edit;
 	private ListView list;
 	private ArrayAdapter<String> adapter;
-	private String[] allCollegeNames;
+	private String[] collegeNames;
 	private CollegeService collegeService;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,6 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent intent = new Intent();
 				setResult(IntentInfo.ResultCode.NO_SELECTCOLLEGE, intent);
 				finish();
@@ -52,20 +51,17 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				if (edit.getText().toString().isEmpty()) {
 					showAllCollege();
 				} else {
@@ -90,20 +86,21 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		allCollegeNames = getResources().getStringArray(R.array.college_name);
+		collegeNames = getResources().getStringArray(R.array.college_name);
 		list = (ListView)findViewById(R.id.list_college);
 		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
-				R.layout.college_item, allCollegeNames);
+				R.layout.college_item, collegeNames);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
 				String collegeName = ((TextView)arg1).getText().toString();
+				College college = collegeService.getCollegeByName(collegeName);
 				Intent intent = new Intent();
-				intent.putExtra("collegeName", collegeName);
+				intent.putExtra(College.COLLEGE_ID, college.getCollegeId());
+				intent.putExtra(College.COLLEGE_NAME, collegeName);
 				setResult(IntentInfo.ResultCode.SELECTCOLLEGE_LOGIN, intent);
 				finish();
 			}

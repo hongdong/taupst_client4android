@@ -3,19 +3,31 @@ package com.example.taupstairs.bean;
 public class College {
 
 	private Long id;
+	private String collegeId;
 	private String collegeName;
 	
 	public static final String TB_NAME = "college";
 	
 	public static final String ID = "_id";
+	public static final String COLLEGE_ID = "collegeId";
 	public static final String COLLEGE_NAME = "collegeName";
 	
 	public College() {
-		super();
-		// TODO Auto-generated constructor stub
+		
 	}
-	
-	public College(String collegeName) {
+
+	public College(String collegeId) {
+		this.collegeId = collegeId;
+	}
+
+	public College(String collegeId, String collegeName) {
+		this.collegeId = collegeId;
+		this.collegeName = collegeName;
+	}
+
+	public College(Long id, String collegeId, String collegeName) {
+		this.id = id;
+		this.collegeId = collegeId;
 		this.collegeName = collegeName;
 	}
 
@@ -27,6 +39,14 @@ public class College {
 		this.id = id;
 	}
 	
+	public String getCollegeId() {
+		return collegeId;
+	}
+
+	public void setCollegeId(String collegeId) {
+		this.collegeId = collegeId;
+	}
+
 	public String getCollegeName() {
 		return collegeName;
 	}

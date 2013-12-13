@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="college_id">
+        <item >00001</item>
+        <item >00002</item>
+        <item >00003</item>
+    </string-array>
     <string-array name="college_name">
         <item >福建工程学院</item>
         <item >福建师范大学</item>

@@ -13,7 +13,10 @@ public class Task {
 	public static final int TA_LOGIN = 1;
 	public static final String TA_LOGIN_TASKPARAMS = "login";
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
-	public static final String TA_LOGIN_SUCCESS = "登录成功";
+	public static final String TA_LOGIN_TRUE = "true";
+	public static final String TA_LOGIN_FALSE = "false";
+	public static final String TA_LOGIN_SUCCESS = "login success";
+	public static final String TA_LOGIN_ERROR = "login error";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
