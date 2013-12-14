@@ -8,12 +8,44 @@
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/actionbar_bg">
-		<TextView 
-	        android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:text="@string/homepage"
-	    	android:textSize="20sp"
-	    	android:textColor="@color/white"
-	    	android:layout_centerInParent="true"/>
+		<RadioGroup 
+		    android:id="@+id/rg_homepage"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal">
+		    <RadioButton 
+		        android:id="@+id/btn_task"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:button="@null"
+		        android:background="@drawable/hp_bg_btn_task"
+		        android:checked="true"/>
+		    <RadioButton 
+		        android:id="@+id/btn_info"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:button="@null"
+		        android:background="@drawable/hp_bg_btn_info"/>
+		    <RadioButton 
+		        android:id="@+id/btn_rank"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:button="@null"
+		        android:background="@drawable/hp_bg_btn_rank"/>
+		</RadioGroup>
+		<Button 
+	        android:id="@+id/btn_setting"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="10dp"/>
 	</RelativeLayout>
+	<FrameLayout 
+	    android:id="@+id/hp_fm_content"
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent">
+    </FrameLayout>
 </LinearLayout>

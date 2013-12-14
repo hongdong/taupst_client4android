@@ -77,7 +77,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 
 	private void showSearchCollege() {
 		Cursor cursor = collegeService.getCursorByKeyword(edit.getText().toString());
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.college_item, cursor, 
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.login_college_item, cursor, 
 				new String[] {College.COLLEGE_NAME}, new int[] {R.id.txt_college_item}, 
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		list.setAdapter(adapter);
@@ -89,7 +89,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 		collegeNames = getResources().getStringArray(R.array.college_name);
 		list = (ListView)findViewById(R.id.list_college);
 		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
-				R.layout.college_item, collegeNames);
+				R.layout.login_college_item, collegeNames);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 

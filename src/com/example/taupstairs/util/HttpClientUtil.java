@@ -18,7 +18,7 @@ import org.apache.http.util.EntityUtils;
 public class HttpClientUtil {
 
 	public static HttpClient httpClient = new DefaultHttpClient();
-	public static final String BASE_URL = "http://hongdong.duapp.com/";
+	public static final String BASE_URL = "http://taupst.duapp.com/";
 	
 	/*用GET命令发送请求的URL，返回服务器相应的字符串*/
 	public static String getRequest(final String url) throws Exception {

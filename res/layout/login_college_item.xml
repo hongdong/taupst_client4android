@@ -9,5 +9,5 @@
    	android:paddingRight="10dp"
    	android:paddingTop="8dp"
    	android:paddingBottom="8dp"
-   	android:drawableRight="@drawable/img_select">
+   	android:drawableRight="@drawable/login_img_select">
 </TextView>

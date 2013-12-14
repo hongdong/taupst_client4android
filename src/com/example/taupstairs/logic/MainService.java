@@ -30,9 +30,13 @@ public class MainService extends Service implements Runnable {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case Task.TA_LOGIN:
-				ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_LOGIN_ACTIVITY);
-				activity.refresh(msg.obj);
+				ItaActivity activity_login = (ItaActivity) getActivityByName(Task.TA_LOGIN_ACTIVITY);
+				activity_login.refresh(msg.obj);
 				break;
+				
+			case Task.TA_CHECKNET:
+				ItaActivity activity_checknet = (ItaActivity) getActivityByName(Task.TA_CHECKNET_ACTIVITY);
+				activity_checknet.refresh(msg.obj);
 
 			default:
 				break;
@@ -82,6 +86,10 @@ public class MainService extends Service implements Runnable {
 		case Task.TA_LOGIN:
 			msg.obj = doLoginTask(task);
 			break;
+			
+		case Task.TA_CHECKNET:
+			msg.obj = doCheckNetTask(task);
+			break;
 
 		default:
 			break;
@@ -91,7 +99,7 @@ public class MainService extends Service implements Runnable {
 	
 	/*登录任务*/
 	private String doLoginTask(Task task) {
-		String result = Task.TA_LOGIN_ERROR;
+		String result = Task.TA_ERROR;
 		Map<String, Object> taskParams = task.getTaskParams();
 		User user = (User) taskParams.get(Task.TA_LOGIN_TASKPARAMS);
 		String login_url = HttpClientUtil.BASE_URL + 
@@ -100,6 +108,24 @@ public class MainService extends Service implements Runnable {
 				"&school=" + user.getUserCollegeId();
 		try {
 			result = HttpClientUtil.getRequest(login_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/*检测网络任务*/
+	private String doCheckNetTask(Task task) {
+		String result = Task.TA_NO;
+		Map<String, Object> taskParams = task.getTaskParams();
+		User user = (User) taskParams.get(Task.TA_CHECKNET_TASKPARAMS);
+		System.out.println(user.toString());
+		String checknet_url = HttpClientUtil.BASE_URL + 
+				"Sync?student_id=" + user.getUserStudentId() + 
+				"&pwd=" + user.getUserPassword() + 
+				"&school=" + user.getUserCollegeId();
+		try {
+			result = HttpClientUtil.getRequest(checknet_url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

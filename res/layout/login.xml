@@ -19,14 +19,14 @@
             <include layout="@layout/login_password"/>    
         </LinearLayout>
 	    <Button 
-	        android:id="@+id/bn_login"
+	        android:id="@+id/btn_login"
 	        android:layout_width="match_parent" 
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="20dp"
 	        android:text="@string/login"
 	        android:textSize="26sp"
 	        android:textColor="@color/white"
-	        android:background="@drawable/login_bg_bn"/>
+	        android:background="@drawable/login_bg_btn_login"/>
     </LinearLayout>
     <LinearLayout 
         android:layout_width="wrap_content" 
