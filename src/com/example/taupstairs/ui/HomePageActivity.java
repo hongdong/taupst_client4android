@@ -45,7 +45,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		btn_top_right = (Button)findViewById(R.id.btn_me_write);
 		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 		flag_me_write = ME;
-		getFragmentManager().beginTransaction().replace(R.id.hp_fm_content, new TaskFragment()).commit();
+		getFragmentManager().beginTransaction().replace(R.id.hp_fm_content, new InfoFragment()).commit();
 	}
 	
 	/*进入软件时检测网络*/
@@ -63,23 +63,21 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch (checkedId) {
-				case R.id.btn_task:
+				case R.id.btn_info:
 					getFragmentManager().beginTransaction()
-					.replace(R.id.hp_fm_content, new TaskFragment()).commit();
+					.replace(R.id.hp_fm_content, new InfoFragment()).commit();
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 					flag_me_write = ME;
 					break;
-					
-				case R.id.btn_info:
+				case R.id.btn_task:
 					getFragmentManager().beginTransaction()
-					.replace(R.id.hp_fm_content, new RankFragment()).commit();
+					.replace(R.id.hp_fm_content, new TaskFragment()).commit();
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_write);
 					flag_me_write = WRITE;
 					break;
-				
 				case R.id.btn_rank:
 					getFragmentManager().beginTransaction()
-					.replace(R.id.hp_fm_content, new InfoFragment()).commit();
+					.replace(R.id.hp_fm_content, new RankFragment()).commit();
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 					flag_me_write = ME;
 					break;

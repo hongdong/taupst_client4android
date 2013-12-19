@@ -65,6 +65,7 @@ public class LogoActivity extends Activity implements ItaActivity {
 	private void jumpToLogin() {
 		Intent intent = new Intent(LogoActivity.this, LoginActivity.class);
 		startActivity(intent);
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 		finish();
 	}
 	

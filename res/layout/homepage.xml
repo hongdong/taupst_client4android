@@ -7,6 +7,7 @@
     <RelativeLayout 
 	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
 		android:background="@drawable/actionbar_bg">
 		<RadioGroup 
 		    android:id="@+id/rg_homepage"
@@ -14,20 +15,20 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal">
 		    <RadioButton 
-		        android:id="@+id/btn_task"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="10dp"
-		        android:button="@null"
-		        android:background="@drawable/hp_bg_btn_task"
-		        android:checked="true"/>
-		    <RadioButton 
 		        android:id="@+id/btn_info"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="10dp"
 		        android:button="@null"
-		        android:background="@drawable/hp_bg_btn_info"/>
+		        android:background="@drawable/hp_bg_btn_info"
+		        android:checked="true"/>
+		    <RadioButton 
+		        android:id="@+id/btn_task"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:button="@null"
+		        android:background="@drawable/hp_bg_btn_task"/>
 		    <RadioButton 
 		        android:id="@+id/btn_rank"
 		        android:layout_width="wrap_content"
@@ -36,12 +37,16 @@
 		        android:button="@null"
 		        android:background="@drawable/hp_bg_btn_rank"/>
 		</RadioGroup>
+		<TextView 
+		    android:id="@+id/txt_hp_temp"
+		    android:layout_width="15dp"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"/>
 		<Button 
 		    android:id="@+id/btn_me_write"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="20dp"/>
+	        android:layout_toLeftOf="@id/txt_hp_temp"/>
 	</RelativeLayout>
 	<FrameLayout 
 	    android:id="@+id/hp_fm_content"
