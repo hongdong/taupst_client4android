@@ -5,12 +5,12 @@
     android:orientation="vertical" 
     android:background="@color/common_bg">
     <RelativeLayout 
-	    android:layout_width="match_parent"
+	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="@drawable/actionbar_bg">
 		<RadioGroup 
 		    android:id="@+id/rg_homepage"
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal">
 		    <RadioButton 
@@ -37,11 +37,11 @@
 		        android:background="@drawable/hp_bg_btn_rank"/>
 		</RadioGroup>
 		<Button 
-	        android:id="@+id/btn_setting"
-	        android:layout_width="wrap_content" 
+		    android:id="@+id/btn_me_write"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="10dp"/>
+	        android:layout_marginRight="20dp"/>
 	</RelativeLayout>
 	<FrameLayout 
 	    android:id="@+id/hp_fm_content"

@@ -2,9 +2,7 @@ package com.example.taupstairs.ui;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -25,8 +22,8 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private User defaultUser;
 	private RadioGroup radioGroup;
 	private Button btn_top_right;
-	private int flag_setting_write;
-	private static final int SETTING = 0;
+	private int flag_me_write;
+	private static final int ME = 0;
 	private static final int WRITE = 1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +42,9 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	
 	/*初始化任务界面的UI*/
 	private void initUiTask() {
-		btn_top_right = (Button)findViewById(R.id.btn_setting);
-		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_setting);
-		flag_setting_write = SETTING;
+		btn_top_right = (Button)findViewById(R.id.btn_me_write);
+		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
+		flag_me_write = ME;
 		getFragmentManager().beginTransaction().replace(R.id.hp_fm_content, new TaskFragment()).commit();
 	}
 	
@@ -65,44 +62,44 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 				switch (checkedId) {
 				case R.id.btn_task:
-					TaskFragment taskFragment = new TaskFragment();
-					fragmentTransaction.replace(R.id.hp_fm_content, taskFragment);
-					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_setting);
-					flag_setting_write = SETTING;
+					getFragmentManager().beginTransaction()
+					.replace(R.id.hp_fm_content, new TaskFragment()).commit();
+					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
+					flag_me_write = ME;
 					break;
 					
 				case R.id.btn_info:
-					RankFragment rankFragment = new RankFragment();
-					fragmentTransaction.replace(R.id.hp_fm_content, rankFragment);
+					getFragmentManager().beginTransaction()
+					.replace(R.id.hp_fm_content, new RankFragment()).commit();
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_write);
-					flag_setting_write = WRITE;
+					flag_me_write = WRITE;
 					break;
 				
 				case R.id.btn_rank:
-					InfoFragment infoFragment = new InfoFragment();
-					fragmentTransaction.replace(R.id.hp_fm_content, infoFragment);
-					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_setting);
-					flag_setting_write = SETTING;
+					getFragmentManager().beginTransaction()
+					.replace(R.id.hp_fm_content, new InfoFragment()).commit();
+					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
+					flag_me_write = ME;
 					break;
 
 				default:
 					break;
 				}
-				fragmentTransaction.commit();
 			}
 		});
+		/*初始化右上角按键的监听器*/
 		btn_top_right.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = null;
-				if (SETTING == flag_setting_write) {
-					intent = new Intent(HomePageActivity.this, SettingActivity.class);
-				} else if (WRITE == flag_setting_write){
-					intent = new Intent(HomePageActivity.this, WriteActivity.class);
+				if (ME == flag_me_write) {
+					radioGroup.clearCheck();		//如果跳到MeFragment，则radiobutton都不要check
+					getFragmentManager().beginTransaction()
+					.replace(R.id.hp_fm_content, new MeFragment()).commit();
+				} else if (WRITE == flag_me_write) {
+					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
+					startActivity(intent);
 				}
-				startActivity(intent);
 			}
 		});
 	}

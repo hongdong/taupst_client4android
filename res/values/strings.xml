@@ -25,7 +25,8 @@
     <string name="task">任务</string>
     <string name="info">消息</string>
     <string name="rank">排行</string>
-    <string name="setting">设置</string>
+    <string name="me">我</string>
     <string name="write">写消息</string>
+    <string name="setting">设置</string>
 
 </resources>
