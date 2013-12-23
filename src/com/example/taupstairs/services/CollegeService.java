@@ -27,7 +27,7 @@ public class CollegeService {
 		return college;
 	}
 	
-	/*根据学校名返回学校信息（还没去实现）*/
+	/*根据学校名返回学校信息*/
 	public College getCollegeByName(String collegeName) {
 		College college = null;
 		Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
@@ -38,9 +38,8 @@ public class CollegeService {
 //				College.COLLEGE_NAME + "=?", new String[] {collegeName}, null, null, null);
 		if (null != cursor && cursor.getCount() > 0) {
 			cursor.moveToFirst();		//这一句一定要加，总之我不加就出错了
-			Long id = cursor.getLong(cursor.getColumnIndex(College.ID));
 			String collegeId = cursor.getString(cursor.getColumnIndex(College.COLLEGE_ID));
-			college = new College(id, collegeId, collegeName);
+			college = new College(collegeId, collegeName);
 		}
 		cursor.close();
 		return college;

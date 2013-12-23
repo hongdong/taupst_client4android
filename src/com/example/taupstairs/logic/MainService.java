@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.ui.ItaActivity;
+import com.example.taupstairs.ui.ItaFragment;
 import com.example.taupstairs.util.HttpClientUtil;
+import com.example.taupstairs.util.JsonUtil;
 
 public class MainService extends Service implements Runnable {
 
@@ -25,6 +27,8 @@ public class MainService extends Service implements Runnable {
 	private static Queue<Task> tasks = new LinkedList<Task>();
 	//Activity链表
 	private static ArrayList<Activity> activities = new ArrayList<Activity>();
+	//Fragment链表
+	private static ArrayList<Fragment> fragments = new ArrayList<Fragment>();
 	
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -37,6 +41,12 @@ public class MainService extends Service implements Runnable {
 			case Task.TA_CHECKNET:
 				ItaActivity activity_checknet = (ItaActivity) getActivityByName(Task.TA_CHECKNET_ACTIVITY);
 				activity_checknet.refresh(msg.obj);
+				break;
+				
+			case Task.TA_GETUSERDATA:
+				ItaFragment fragment_getuserdata = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_FRAGMENT);
+				fragment_getuserdata.refresh(msg.obj);
+				break;
 
 			default:
 				break;
@@ -84,11 +94,15 @@ public class MainService extends Service implements Runnable {
 		msg.what = task.getTaskId();
 		switch (task.getTaskId()) {
 		case Task.TA_LOGIN:
-			msg.obj = doLoginTask(task);
+			msg.obj = doLoginTask(task, Task.TA_LOGIN_TASKPARAMS);
 			break;
 			
-		case Task.TA_CHECKNET:
-			msg.obj = doCheckNetTask(task);
+		case Task.TA_CHECKNET:		//检查网络的方式也是用login，看看是否能够成功返回登录数据
+			msg.obj = doLoginTask(task, Task.TA_CHECKNET_TASKPARAMS);
+			break;
+			
+		case Task.TA_GETUSERDATA:
+			msg.obj = doGetUserDataTask(task);
 			break;
 
 		default:
@@ -98,38 +112,35 @@ public class MainService extends Service implements Runnable {
 	}
 	
 	/*登录任务*/
-	private String doLoginTask(Task task) {
-		String result = Task.TA_ERROR;
+	private String doLoginTask(Task task, String taskParamsString) {
+		String result = Task.TA_NO;
 		Map<String, Object> taskParams = task.getTaskParams();
-		User user = (User) taskParams.get(Task.TA_LOGIN_TASKPARAMS);
+		User user = (User) taskParams.get(taskParamsString);
 		String login_url = HttpClientUtil.BASE_URL + 
-				"Sync?student_id=" + user.getUserStudentId() + 
+				"user/login?student_id=" + user.getUserStudentId() + 
 				"&pwd=" + user.getUserPassword() + 
 				"&school=" + user.getUserCollegeId();
 		try {
 			result = HttpClientUtil.getRequest(login_url);
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
 		}
 		return result;
 	}
 	
-	/*检测网络任务*/
-	private String doCheckNetTask(Task task) {
-		String result = Task.TA_NO;
+	/*获取Person信息*/
+	private Person doGetUserDataTask(Task task) {
+		Person person = null;
 		Map<String, Object> taskParams = task.getTaskParams();
-		User user = (User) taskParams.get(Task.TA_CHECKNET_TASKPARAMS);
-		System.out.println(user.toString());
-		String checknet_url = HttpClientUtil.BASE_URL + 
-				"Sync?student_id=" + user.getUserStudentId() + 
-				"&pwd=" + user.getUserPassword() + 
-				"&school=" + user.getUserCollegeId();
+		String personId = (String) taskParams.get(Task.TA_GETUSERDATA_TASKPARAMS);
+		String getuserdata_url = HttpClientUtil.BASE_URL + "user/userInfo?users_id=" + personId;
 		try {
-			result = HttpClientUtil.getRequest(checknet_url);
+			String jsonString = HttpClientUtil.getRequest(getuserdata_url);
+			person = JsonUtil.getPerson(jsonString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return person;		//此处如果未连接网络的话，返回的是null
 	}
 	
 	/*将Activity添加到Activity链表中去*/
@@ -144,6 +155,25 @@ public class MainService extends Service implements Runnable {
 				if (activity != null) {
 					if (activity.getClass().getName().indexOf(name) > 0) {
 						return activity;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	/*将Fragment添加到Fragment链表中去*/
+	public static void addFragment(Fragment fragment) {
+		fragments.add(fragment);
+	}
+	
+	/*根据Fragment的name从Fragment链表中找到它*/
+	private Fragment getFragmentByName(String name) {
+		if (!fragments.isEmpty()) {
+			for (Fragment fragment : fragments) {
+				if (fragment != null) {
+					if (fragment.getClass().getName().indexOf(name) > 0) {
+						return fragment;
 					}
 				}
 			}

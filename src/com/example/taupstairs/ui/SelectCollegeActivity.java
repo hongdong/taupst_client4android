@@ -19,8 +19,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
-import com.example.taupstairs.intent.IntentInfo;
 import com.example.taupstairs.services.CollegeService;
+import com.example.taupstairs.string.IntentString;
 
 public class SelectCollegeActivity extends Activity implements ItaActivity {
 
@@ -42,7 +42,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				setResult(IntentInfo.ResultCode.NO_SELECTCOLLEGE, intent);
+				setResult(IntentString.ResultCode.NO_SELECTCOLLEGE, intent);
 				finish();
 			}
 		});
@@ -77,7 +77,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 
 	private void showSearchCollege() {
 		Cursor cursor = collegeService.getCursorByKeyword(edit.getText().toString());
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.login_college_item, cursor, 
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.common_txt_item, cursor, 
 				new String[] {College.COLLEGE_NAME}, new int[] {R.id.txt_college_item}, 
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		list.setAdapter(adapter);
@@ -89,7 +89,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 		collegeNames = getResources().getStringArray(R.array.college_name);
 		list = (ListView)findViewById(R.id.list_college);
 		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
-				R.layout.login_college_item, collegeNames);
+				R.layout.common_txt_item, collegeNames);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -101,7 +101,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 				Intent intent = new Intent();
 				intent.putExtra(College.COLLEGE_ID, college.getCollegeId());
 				intent.putExtra(College.COLLEGE_NAME, collegeName);
-				setResult(IntentInfo.ResultCode.SELECTCOLLEGE_LOGIN, intent);
+				setResult(IntentString.ResultCode.SELECTCOLLEGE_LOGIN, intent);
 				finish();
 			}
 		});
@@ -117,7 +117,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent();
-		setResult(IntentInfo.ResultCode.NO_SELECTCOLLEGE, intent);
+		setResult(IntentString.ResultCode.NO_SELECTCOLLEGE, intent);
 		finish();
 	}
 	

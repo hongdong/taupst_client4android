@@ -20,6 +20,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		initCollegeDB(db);
+		initPersonDB(db);
 	}
 	
 	private void initCollegeDB(SQLiteDatabase db) {
@@ -28,6 +29,10 @@ public class DBHelper extends SQLiteOpenHelper {
 			db.execSQL("insert into " + College.TB_NAME + " values(null, ?, ?)", 
 					new String[] {collegeIds[i], collegeNames[i]});
 		}
+	}
+	
+	private void initPersonDB(SQLiteDatabase db) {
+		db.execSQL(DBInfo.Table.PERSON_CREATE_STRING);
 	}
 
 	@Override

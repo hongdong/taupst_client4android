@@ -12,7 +12,7 @@
     	android:layout_height="wrap_content"
     	android:inputType="number"
     	android:hint="@string/input_studentid"
-    	android:textSize="20sp"
+    	android:textSize="18sp"
     	android:textColor="@color/black"
     	android:textColorHint="@color/gray"
     	android:layout_marginLeft="15dp"

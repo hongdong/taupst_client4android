@@ -28,6 +28,13 @@ public class User {
 		this.userPassword = userPassword;
 	}
 	
+	public User(String userId, String userCollegeId, String userStudentId, String userPassword) {
+		this.userId = userId;
+		this.userCollegeId = userCollegeId;
+		this.userStudentId = userStudentId;
+		this.userPassword = userPassword;
+	}
+
 	public User(String userId, String userCollegeId, String userCollegeName, 
 			String userStudentId, String userPassword) {
 		this.userId = userId;

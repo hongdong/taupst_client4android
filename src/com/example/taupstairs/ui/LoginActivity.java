@@ -2,6 +2,10 @@ package com.example.taupstairs.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,12 +17,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
-import com.example.taupstairs.intent.IntentInfo;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.IntentString;
+import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class LoginActivity extends Activity implements ItaActivity {
@@ -42,7 +48,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, SelectCollegeActivity.class);
-				startActivityForResult(intent, IntentInfo.RequestCode.LOGIN_SELECTCOLLEGE);
+				startActivityForResult(intent, IntentString.RequestCode.LOGIN_SELECTCOLLEGE);
 			}
 		});
 		txt_college_name = (TextView)findViewById(R.id.txt_college_name);
@@ -96,19 +102,26 @@ public class LoginActivity extends Activity implements ItaActivity {
 	public void refresh(Object... params) {				
 		progressDialog.dismiss();
 		String result = ((String) params[0]).trim();	//这里的字符串要去空格，不然很可能不会equals
-		if (result.equals(Task.TA_ERROR)) {
-			loginError();
-		} else if(result.equals(Task.TA_FALSE)) {
-			loginFalse();
-		} else if (result.equals(Task.TA_TRUE)) {
-			jumpToHomePage();							//如果TA_LOGIN任务执行成功，说明可以跳到主页面去了
+		if (result.equals(Task.TA_NO)) {				//返回no表示没有网络
+			loginNoNet();
 		} else {
-			System.out.println("未知错误");
+			try {
+				JSONObject loginJsonObject = new JSONObject(result);
+				String isLogined = loginJsonObject.getString(JsonString.Login.IS_LOGINED);
+				if(isLogined.equals(Task.TA_FALSE)) {
+					loginFalse();
+				} else if (isLogined.equals(Task.TA_TRUE)) {
+					user.setUserId(loginJsonObject.getString(JsonString.Login.USERS_ID));
+					jumpToHomePage();						//如果TA_LOGIN任务执行成功，说明可以跳到主页面去了
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	/*未连接网络或服务器响应异常*/
-	private void loginError() {
+	private void loginNoNet() {
 		Toast.makeText(LoginActivity.this, 
 				"未连接网络", 
 				Toast.LENGTH_SHORT).show();
@@ -116,8 +129,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 	
 	/*登录信息错误，登录失败*/
 	private void loginFalse() {
-//		txt_college_name.setText("点击选择");
-//		edit_studentid.setText("");
 		edit_password.setText("");
 		Toast.makeText(LoginActivity.this, 
 				"    用户信息错误\n请从新选择与填写", 
@@ -136,8 +147,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 	/*接收Intent返回的数据*/
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (IntentInfo.RequestCode.LOGIN_SELECTCOLLEGE == requestCode) {
-			if (IntentInfo.ResultCode.SELECTCOLLEGE_LOGIN == resultCode) {
+		if (IntentString.RequestCode.LOGIN_SELECTCOLLEGE == requestCode) {
+			if (IntentString.ResultCode.SELECTCOLLEGE_LOGIN == resultCode) {
 				Bundle myData = data.getExtras();
 				userCollegeId = myData.getString(College.COLLEGE_ID);
 				String collegeName = myData.getString(College.COLLEGE_NAME);
@@ -145,6 +156,18 @@ public class LoginActivity extends Activity implements ItaActivity {
 				txt_college_name.setText(collegeName);
 			}
 		}
+	}
+	
+	/*不重写这个方法，在退出的时候杀死进程的话，
+	 * 会导致没有完全杀死程序的，会残留哪些我也不太清楚
+	 * 使得手机在没有清空缓存的时候，再一次打开软件，
+	 * 会出现后台的MainService调用UI线程中的refresh函数不能更新UI的情况*/
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		System.exit(0);			
+//		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 	
 }

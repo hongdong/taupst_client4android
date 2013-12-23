@@ -27,22 +27,15 @@ public class LogoActivity extends Activity implements ItaActivity {
 		img_logo = (ImageView)findViewById(R.id.img_logo);
 		animation = AnimationUtils.loadAnimation(LogoActivity.this, R.anim.logo);
 		animation.setAnimationListener(new AnimationListener() {
-			
-			@Override
 			public void onAnimationStart(Animation animation) {
-				// TODO Auto-generated method stub
 				
 			}
 			
-			@Override
 			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
 				
 			}
 			
-			@Override
 			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
 				defaultUser = SharedPreferencesUtil.getDefaultUser(LogoActivity.this);
 				if (null != defaultUser) {				
 					jumpToHomePage();			//如果已经存在默认登录账户，就直接登录	，跳转到主页面	

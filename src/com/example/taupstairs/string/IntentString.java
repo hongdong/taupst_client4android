@@ -1,6 +1,6 @@
-package com.example.taupstairs.intent;
+package com.example.taupstairs.string;
 
-public class IntentInfo {
+public class IntentString {
 
 	public static class RequestCode {
 		public static final int LOGIN_SELECTCOLLEGE = 0;

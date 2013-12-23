@@ -27,6 +27,10 @@
     <string name="rank">排行</string>
     <string name="me">我</string>
     <string name="write">写消息</string>
+    <string name="drawable">头像:</string>
+    <string name="nickname">昵称:</string>
+    <string name="signatrue">个性签名:</string>
     <string name="setting">设置</string>
-
+    <string name="logout">注    销</string>
+    <string name="get_user_data">更新用户数据</string>
 </resources>
