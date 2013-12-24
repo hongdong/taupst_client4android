@@ -72,6 +72,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 //				startActivity(intent);
 //				finish();
 				SharedPreferencesUtil.saveDefaultUser(SettingActivity.this, new User());
+				//此处也可以删除数据库中的defaultPerson
 				System.exit(0);
 			}
 		});

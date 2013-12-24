@@ -91,7 +91,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 	private void loginTask(User user) {
 		progressDialog = new ProgressDialog(LoginActivity.this);
 		progressDialog.setCancelable(false);
-		progressDialog.setMessage("正在登录...");
+		progressDialog.setMessage("    正在登录...");
 		progressDialog.show();
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Task.TA_LOGIN_TASKPARAMS, user);

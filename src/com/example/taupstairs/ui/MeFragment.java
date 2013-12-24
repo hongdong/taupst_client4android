@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -134,10 +133,12 @@ public class MeFragment extends Fragment implements ItaFragment {
 	@Override
 	public void refresh(Object... params) {
 		defaultPerson = (Person) params[0];
-		displayPerson(defaultPerson);
-		System.out.println(defaultPerson.toString());
-//		personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
-		flag_get_user_data = false;			//更新完之后设为false，表示当前不在更新，可以再次相应按键进行更新
+		if (defaultPerson != null) {
+			displayPerson(defaultPerson);
+			System.out.println(defaultPerson.toString());
+//			personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
+		}
+		flag_get_user_data = false;			//更新完之后设为false，表示当前不在更新，可以再次响应按键进行更新
 	}
 	
 	/*显示Person资料*/
