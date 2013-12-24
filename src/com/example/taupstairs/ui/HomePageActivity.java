@@ -79,6 +79,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		MainService.addTask(task);
 	}
 	
+	
 	/*初始化控件的监听器*/
 	private void initSetListener() {
 		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);

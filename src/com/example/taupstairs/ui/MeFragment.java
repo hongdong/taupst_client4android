@@ -17,7 +17,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.PersonVariableDataAdapter;
 import com.example.taupstairs.bean.Person;
@@ -137,6 +136,8 @@ public class MeFragment extends Fragment implements ItaFragment {
 			displayPerson(defaultPerson);
 			System.out.println(defaultPerson.toString());
 //			personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
+		} else {
+//			Toast.makeText(context, "未连接网络", Toast.LENGTH_LONG).show();
 		}
 		flag_get_user_data = false;			//更新完之后设为false，表示当前不在更新，可以再次响应按键进行更新
 	}
