@@ -30,6 +30,13 @@ public class Person {
 	public static final String PERSON_NAME = "personName";
 	public static final String PERSON_SEX = "personSex";
 	
+	public static final String MALE = "男";
+	public static final String MALE_NICKNAME = "某屌丝男";
+	public static final String MALE_SIGNATRUE = "没签名，没妹子";
+	public static final String FEMALE = "女";
+	public static final String FEMALE_NICKNAME = "女汉子";
+	public static final String FEMALE_SIGNATRUE = "没签名，真汉子";
+	
 	public Person(){
 		
 	} 

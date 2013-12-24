@@ -136,7 +136,7 @@ public class MainService extends Service implements Runnable {
 		String getuserdata_url = HttpClientUtil.BASE_URL + "user/userInfo?users_id=" + personId;
 		try {
 			String jsonString = HttpClientUtil.getRequest(getuserdata_url);
-			person = JsonUtil.getPerson(jsonString);
+			person = JsonUtil.getPerson(MainService.this, jsonString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

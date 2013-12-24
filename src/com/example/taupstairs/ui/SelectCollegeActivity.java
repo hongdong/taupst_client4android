@@ -78,7 +78,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	private void showSearchCollege() {
 		Cursor cursor = collegeService.getCursorByKeyword(edit.getText().toString());
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.common_txt_item, cursor, 
-				new String[] {College.COLLEGE_NAME}, new int[] {R.id.txt_college_item}, 
+				new String[] {College.COLLEGE_NAME}, new int[] {R.id.txt_common}, 
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		list.setAdapter(adapter);
 	}
