@@ -22,8 +22,8 @@
     <string name="server_declare_text">看看要写什么</string>
     
     <string name="homepage">主页面</string>
-    <string name="task">任务</string>
     <string name="info">消息</string>
+    <string name="task">任务</string>
     <string name="rank">排行</string>
     <string name="me">我</string>
     <string name="write">写消息</string>

@@ -18,10 +18,7 @@ public class AboutUsActivity extends Activity implements ItaActivity {
 		setContentView(R.layout.about_us);
 		btn_back = (Button)findViewById(R.id.btn_back_aboutus);
 		btn_back.setOnClickListener(new OnClickListener() {
-			
-			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 		});

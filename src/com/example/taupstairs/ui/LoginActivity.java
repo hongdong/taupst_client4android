@@ -45,16 +45,19 @@ public class LoginActivity extends Activity implements ItaActivity {
 
 	public void init() {
 		View view = findViewById(R.id.layout_login_college);
+		txt_college_name = (TextView)findViewById(R.id.txt_college_name);
+		edit_studentid = (EditText)findViewById(R.id.edit_studentid);
+		edit_password = (EditText)findViewById(R.id.edit_password);
+		btn_login = (Button)findViewById(R.id.btn_login);
+		txt_about = (TextView)findViewById(R.id.txt_about);
+		txt_server = (TextView)findViewById(R.id.txt_server);
+		
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, SelectCollegeActivity.class);
 				startActivityForResult(intent, IntentString.RequestCode.LOGIN_SELECTCOLLEGE);
 			}
 		});
-		txt_college_name = (TextView)findViewById(R.id.txt_college_name);
-		edit_studentid = (EditText)findViewById(R.id.edit_studentid);
-		edit_password = (EditText)findViewById(R.id.edit_password);
-		btn_login = (Button)findViewById(R.id.btn_login);
 		btn_login.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (txt_college_name.getText().toString().equals("点击选择")) {
@@ -71,14 +74,12 @@ public class LoginActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
-		txt_about = (TextView)findViewById(R.id.txt_about);
 		txt_about.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, AboutUsActivity.class);
 				startActivity(intent);
 			}
 		});
-		txt_server = (TextView)findViewById(R.id.txt_server);
 		txt_server.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, ServerDeclareActivity.class);
@@ -167,7 +168,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		System.exit(0);			
-//		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 	
 }

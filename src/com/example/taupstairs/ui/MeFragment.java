@@ -86,6 +86,9 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private void initView() {
 		list_variable = (ListView)view.findViewById(R.id.list_fm_me_variable);
 		list_base = (ListView)view.findViewById(R.id.list_fm_me_base);
+		txt_setting = (TextView)view.findViewById(R.id.txt_fm_me_setting);
+		txt_get_user_data = (TextView)view.findViewById(R.id.txt_fm_me_getuserdata);
+		
 		if (defaultPerson != null) {		//在initData里面已经从数据库中读数据了
 			displayPerson(defaultPerson);	//如果数据库中有数据，就直接显示出来
 		} else {
@@ -106,14 +109,12 @@ public class MeFragment extends Fragment implements ItaFragment {
 				}
 			}
 		});
-		txt_setting = (TextView)view.findViewById(R.id.txt_fm_me_setting);
 		txt_setting.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {		
 				Intent intent = new Intent(context, SettingActivity.class);
 				startActivity(intent);	
 			}
 		});
-		txt_get_user_data = (TextView)view.findViewById(R.id.txt_fm_me_getuserdata);
 		txt_get_user_data.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {	//到时候应该会弄成下拉刷新
 				getUserData();

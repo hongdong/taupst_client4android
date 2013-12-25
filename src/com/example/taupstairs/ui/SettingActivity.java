@@ -15,7 +15,7 @@ import com.example.taupstairs.logic.MainService;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
-	private Button btn_back, btn_logout;
+	private Button btn_back, btn_change_user;
 	private ListView list;
 	private String[] setting = {"关于我们", "服务声名", "检查更新", "用户反馈"};
 	@Override
@@ -28,12 +28,14 @@ public class SettingActivity extends Activity implements ItaActivity {
 	@Override
 	public void init() {
 		btn_back = (Button)findViewById(R.id.btn_back_setting);
+		list = (ListView)findViewById(R.id.list_setting);
+		btn_change_user = (Button)findViewById(R.id.btn_logout);
+		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		list = (ListView)findViewById(R.id.list_setting);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(SettingActivity.this, 
 				R.layout.common_txt_item, setting);
 		list.setAdapter(adapter);
@@ -62,8 +64,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
-		btn_logout = (Button)findViewById(R.id.btn_logout);
-		btn_logout.setOnClickListener(new OnClickListener() {
+		btn_change_user.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				MainService.emptyMainService();				//先清空MainService里面的链表
 				Intent intent_receiver = new Intent();		//再发送主界面关闭的广播

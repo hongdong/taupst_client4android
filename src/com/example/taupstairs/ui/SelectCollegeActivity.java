@@ -36,7 +36,40 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_college);
 		init();
+		
+	}
+	
+	@Override
+	public void init() {
+		initData();
+		initView();
+	}
+	
+	private void initData() {
+		collegeNames = getResources().getStringArray(R.array.college_name);
+		collegeService = new CollegeService(SelectCollegeActivity.this);
+	}
+	
+	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_search);
+		edit = (EditText)findViewById(R.id.edit_college);
+		list = (ListView)findViewById(R.id.list_college);
+		
+		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
+				R.layout.common_txt_item, collegeNames);
+		list.setAdapter(adapter);
+		list.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				String collegeName = ((TextView)arg1).getText().toString();
+				College college = collegeService.getCollegeByName(collegeName);
+				Intent intent = new Intent();
+				intent.putExtra(College.COLLEGE_ID, college.getCollegeId());
+				intent.putExtra(College.COLLEGE_NAME, collegeName);
+				setResult(IntentString.ResultCode.SELECTCOLLEGE_LOGIN, intent);
+				finish();
+			}
+		});
 		btn_back.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -46,21 +79,16 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 				finish();
 			}
 		});
-		edit = (EditText)findViewById(R.id.edit_college);
 		edit.addTextChangedListener(new TextWatcher() {
-			
-			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				
 			}
-			
-			@Override
+
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				
 			}
-			
-			@Override
+
 			public void afterTextChanged(Editable s) {
 				if (edit.getText().toString().isEmpty()) {
 					showAllCollege();
@@ -83,30 +111,6 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 		list.setAdapter(adapter);
 	}
 	
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		collegeNames = getResources().getStringArray(R.array.college_name);
-		list = (ListView)findViewById(R.id.list_college);
-		adapter = new ArrayAdapter<String>(SelectCollegeActivity.this, 
-				R.layout.common_txt_item, collegeNames);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				String collegeName = ((TextView)arg1).getText().toString();
-				College college = collegeService.getCollegeByName(collegeName);
-				Intent intent = new Intent();
-				intent.putExtra(College.COLLEGE_ID, college.getCollegeId());
-				intent.putExtra(College.COLLEGE_NAME, collegeName);
-				setResult(IntentString.ResultCode.SELECTCOLLEGE_LOGIN, intent);
-				finish();
-			}
-		});
-		collegeService = new CollegeService(SelectCollegeActivity.this);
-	}
 	@Override
 	public void refresh(Object... params) {
 		// TODO Auto-generated method stub

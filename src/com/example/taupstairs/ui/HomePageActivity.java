@@ -1,8 +1,9 @@
 package com.example.taupstairs.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -11,13 +12,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -29,14 +33,23 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private User defaultUser;
 	private RadioGroup radioGroup;
 	private Button btn_top_right;
-	private TaskFragment taskFragment;
+	private int[] buttonIds = {R.id.btn_info, R.id.btn_task, R.id.btn_rank};
+	private RadioButton currentButton;
+	
 	private InfoFragment infoFragment;
+	private TaskFragment taskFragment;
 	private RankFragment rankFragment;
 	private MeFragment meFragment;
 	private Fragment currentFragment;
 	private int flag_me_write;
 	private static final int ME = 0;
 	private static final int WRITE = 1;
+	
+	private GestureDetector detector;
+	private static final int GESTURE_DISTANCE = 50;
+	private List<Fragment> listFragments;
+	private int currentIndex;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,6 +62,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	public void init() {
 		initData();
 		initUiTask();
+		initGesture();
 		initCheckNetTask();
 		initReceiver();
 		initSetListener();
@@ -58,14 +72,16 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private void initData() {
 		defaultUser = SharedPreferencesUtil.getDefaultUser(HomePageActivity.this);
 		flag_me_write = ME;
+		currentIndex = 0;
 	}
 	
 	/*初始化UI*/
 	private void initUiTask() {
+		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);
 		btn_top_right = (Button)findViewById(R.id.btn_me_write);
 		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
-		taskFragment = new TaskFragment();
 		infoFragment = new InfoFragment();
+		taskFragment = new TaskFragment();
 		rankFragment = new RankFragment();
 		meFragment = new MeFragment(HomePageActivity.this);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -75,6 +91,65 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		ft.add(R.id.hp_fm_content, meFragment).hide(meFragment);
 		ft.commit();
 		currentFragment = infoFragment;
+	}
+	
+	/*手势*/
+	private void initGesture() {
+		listFragments = new ArrayList<Fragment>();
+		listFragments.add(infoFragment);
+		listFragments.add(taskFragment);
+		listFragments.add(rankFragment);
+		listFragments.add(meFragment);
+		detector = new GestureDetector(HomePageActivity.this, new OnGestureListener() {
+			public boolean onSingleTapUp(MotionEvent e) {
+				return false;
+			}
+			
+			public void onShowPress(MotionEvent e) {
+				
+			}
+			
+			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+					float distanceY) {
+				return false;
+			}
+			
+			public void onLongPress(MotionEvent e) {
+				
+			}
+			
+			/*处理一下将要选中的页面，丢给radioGroup和btn_top_right去处理*/
+			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+					float velocityY) {
+				if (e1.getX() - e2.getX() > GESTURE_DISTANCE) {			//从右向左滑，向右翻页
+					if (currentIndex < 2) {								//只有前三页，才会翻，最后一页不能右翻
+//						radioGroup.check(buttonIds[currentIndex + 1]);
+						//这种方法不能用，会莫名其妙的让onCheckedChanged调用两三次
+						//http://blog.csdn.net/piglovesula/article/details/9820521，这上面看的
+						currentButton = (RadioButton)HomePageActivity.this.findViewById(buttonIds[currentIndex + 1]);
+						currentButton.setChecked(true);
+					} else if (2 == currentIndex) {
+						radioGroup.clearCheck();			//如果跳到MeFragment，则radiobutton都不要check
+						FragmentTransaction ft = getFragmentManager().beginTransaction();
+						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
+						ft.hide(currentFragment).show(meFragment).commit();
+						currentFragment = meFragment;
+						currentIndex = 3;
+					}
+				} else if (e2.getX() - e1.getX() > GESTURE_DISTANCE) {	//从左向右滑，向左翻页
+					if (currentIndex > 0) {								//只有后三页，才会翻，第一页不能左翻页
+//						radioGroup.check(buttonIds[currentIndex - 1]);	//这种方法不能用
+						currentButton = (RadioButton)HomePageActivity.this.findViewById(buttonIds[currentIndex - 1]);
+						currentButton.setChecked(true);
+					} 
+				}
+				return true;
+			}
+			
+			public boolean onDown(MotionEvent e) {
+				return false;
+			}
+		});
 	}
 	
 	/*进入软件时检测网络*/
@@ -95,26 +170,44 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	
 	/*初始化控件的监听器*/
 	private void initSetListener() {
-		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				/*radiobutton不会有重复点击的问题，要check_change才会到这个监听器里面来
+				 * 滑动手势的时候，也要改变check，手势相应函数不做页面改变，
+				 * 这个时候也要到这里面来， 所以这里面的处理会比较麻烦*/
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
 				switch (checkedId) {
-				case R.id.btn_info:			//radiobutton不会有重复点击的问题，要check_change才会到这个监听器里面来
+				case R.id.btn_info:			
+					System.out.println("---------------------info");
+					ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
 					ft.hide(currentFragment).show(infoFragment).commit();
 					currentFragment = infoFragment;
+					currentIndex = 0;
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 					flag_me_write = ME;
 					break;
 				case R.id.btn_task:
+					System.out.println("---------------------task");
+					if (currentIndex < 1) {
+						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
+					} else if (currentIndex > 1) {
+						ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
+					}
 					ft.hide(currentFragment).show(taskFragment).commit();
 					currentFragment = taskFragment;
+					currentIndex = 1;
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_write);
 					flag_me_write = WRITE;
 					break;
 				case R.id.btn_rank:
+					if (currentIndex < 2) {
+						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
+					} else if (currentIndex > 2) {
+						ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
+					}
 					ft.hide(currentFragment).show(rankFragment).commit();
 					currentFragment = rankFragment;
+					currentIndex = 2;
 					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 					flag_me_write = ME;
 					break;
@@ -130,9 +223,11 @@ public class HomePageActivity extends Activity implements ItaActivity {
 				if (ME == flag_me_write) {
 					if (currentFragment != meFragment) {	//避免重复点击时候一直运行下面的代码
 						radioGroup.clearCheck();			//如果跳到MeFragment，则radiobutton都不要check
-						getFragmentManager().beginTransaction()
-						.hide(currentFragment).show(meFragment).commit();
+						FragmentTransaction ft = getFragmentManager().beginTransaction();
+						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
+						ft.hide(currentFragment).show(meFragment).commit();
 						currentFragment = meFragment;
+						currentIndex = 3;
 					}
 				} else if (WRITE == flag_me_write) {		//跳到发布任务的activity
 					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
@@ -150,6 +245,11 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		}
 	}	
 	
+	/*将Touch事件交给手势类处理*/
+	public boolean onTouchEvent(MotionEvent event) {
+		return detector.onTouchEvent(event);
+	}
+	
 	/*不重写这个方法，在退出的时候杀死进程的话，
 	 * 会导致没有完全杀死程序的，会残留哪些我也不太清楚
 	 * 使得手机在没有清空缓存的时候，再一次打开软件，
@@ -164,7 +264,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	}
 	
 	/*接收切换用户时的广播消息，这个时候要结束本activity。
-	 * 如果不结束的话，新用户登录的时候，这个activity还留着，
+	 * 如果不结束的话，新用户登录的时候，这个activity还留着，也就是说有两个HomePageActivity
 	 * 那样就会浪费内存，在更新UI方面，可能也会有麻烦
 	 * 
 	 * 还有一点就是：如果在清单文件中配置使用内部类广播，这里要用static的内部类才行，
