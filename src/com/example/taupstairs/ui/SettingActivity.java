@@ -10,10 +10,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
 import com.example.taupstairs.R;
-import com.example.taupstairs.bean.User;
-import com.example.taupstairs.util.SharedPreferencesUtil;
+import com.example.taupstairs.logic.MainService;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
@@ -22,7 +20,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 	private String[] setting = {"关于我们", "服务声名", "检查更新", "用户反馈"};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting);
 		init();
@@ -68,12 +65,13 @@ public class SettingActivity extends Activity implements ItaActivity {
 		btn_logout = (Button)findViewById(R.id.btn_logout);
 		btn_logout.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-//				Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
-//				startActivity(intent);
-//				finish();
-				SharedPreferencesUtil.saveDefaultUser(SettingActivity.this, new User());
-				//此处也可以删除数据库中的defaultPerson
-				System.exit(0);
+				MainService.emptyMainService();				//先清空MainService里面的链表
+				Intent intent_receiver = new Intent();		//再发送主界面关闭的广播
+				intent_receiver.setAction("com.example.taupstairs.CHANGE_USER");
+				sendBroadcast(intent_receiver);
+				Intent intent_login = new Intent(SettingActivity.this, LoginActivity.class);
+				startActivity(intent_login);				//最后跳到登录界面
+				finish();
 			}
 		});
 	}

@@ -143,6 +143,12 @@ public class MainService extends Service implements Runnable {
 		return person;		//此处如果未连接网络的话，返回的是null
 	}
 	
+	/*清空activitys和fragments链表*/
+	public static void emptyMainService() {
+		activities.clear();
+		fragments.clear();
+	}
+	
 	/*将Activity添加到Activity链表中去*/
 	public static void addActivity(Activity activity) {
 		activities.add(activity);

@@ -2,10 +2,14 @@ package com.example.taupstairs.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -45,6 +50,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		initData();
 		initUiTask();
 		initCheckNetTask();
+		initReceiver();
 		initSetListener();
 	}
 	
@@ -79,6 +85,13 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		MainService.addTask(task);
 	}
 	
+	/*初始化广播接收*/
+	private void initReceiver() {
+		ChangeUserReceiver receiver = new ChangeUserReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("com.example.taupstairs.CHANGE_USER");
+		registerReceiver(receiver, filter);
+	}
 	
 	/*初始化控件的监听器*/
 	private void initSetListener() {
@@ -121,7 +134,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 						.hide(currentFragment).show(meFragment).commit();
 						currentFragment = meFragment;
 					}
-				} else if (WRITE == flag_me_write) {
+				} else if (WRITE == flag_me_write) {		//跳到发布任务的activity
 					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
 					startActivity(intent);
 				}
@@ -133,20 +146,9 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	public void refresh(Object... params) {
 		String result = ((String) params[0]).trim();
 		if (result.equals(Task.TA_NO)) {
-			noNet();
+			Toast.makeText(HomePageActivity.this, "未连接网络", Toast.LENGTH_LONG).show();
 		}
 	}	
-	
-	/*提示连接网络*/
-	private void noNet() {
-		Toast.makeText(HomePageActivity.this, "未连接网络", Toast.LENGTH_LONG).show();
-/*		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			checkNetTask();			//隔三秒钟再检测
-		}	*/
-	}
 	
 	/*不重写这个方法，在退出的时候杀死进程的话，
 	 * 会导致没有完全杀死程序的，会残留哪些我也不太清楚
@@ -154,12 +156,26 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	 * 会出现后台的MainService调用UI线程中的refresh函数不能更新UI的情况*/
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 		System.exit(0);
 //		android.os.Process.killProcess(android.os.Process.myPid());
 //		ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE); 
 //		manager.killBackgroundProcesses(getPackageName());
+	}
+	
+	/*接收切换用户时的广播消息，这个时候要结束本activity。
+	 * 如果不结束的话，新用户登录的时候，这个activity还留着，
+	 * 那样就会浪费内存，在更新UI方面，可能也会有麻烦
+	 * 
+	 * 还有一点就是：如果在清单文件中配置使用内部类广播，这里要用static的内部类才行，
+	 * 可能是因为java语法的原因吧，别人内部的东西如果不是static的可能是不能调的。
+	 * 但如果写成static内部类，HomePageActivity.this.finish();就会报错，不能用父类了。
+	 * 那么只好不用static内部类。这时候注册广播就要在父类HomePageActivity里面去new一个
+	 * 这个类的实体了，再通过代码注册广播的方法注册广播*/
+	public class ChangeUserReceiver extends BroadcastReceiver {
+		public void onReceive(Context context, Intent intent) {
+			HomePageActivity.this.finish();
+		}
 	}
 
 }
