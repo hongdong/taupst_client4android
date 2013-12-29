@@ -22,15 +22,27 @@
     <string name="server_declare_text">看看要写什么</string>
     
     <string name="homepage">主页面</string>
-    <string name="info">消息</string>
-    <string name="task">任务</string>
-    <string name="rank">排行</string>
+    <string name="info">--------消息--------</string>
+    <string name="task">!!!!!!!!任务!!!!!!!!</string>
+    <string name="rank">........排行........</string>
     <string name="me">我</string>
     <string name="write">写消息</string>
+    
+    <string name="reward">报酬</string>
+    
+    
     <string name="drawable">头像:</string>
     <string name="nickname">昵称:</string>
     <string name="signatrue">个性签名:</string>
     <string name="setting">设置</string>
     <string name="change_user">切换用户</string>
     <string name="get_user_data">更新用户数据</string>
+    
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    
 </resources>

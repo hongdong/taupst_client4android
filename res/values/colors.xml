@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="common_bg">#f4f4f7</color><!-- 通用面板背景颜色 -->
+    <color name="common_list_click">#e0e0e0</color>
     <color name="white">#ffffff</color><!--白色 --> 
-    <color name="white_divider">#ededed</color>
+    <color name="white_divider">#ededed</color><!--白色分隔线 --> 
+    <color name="task_divider">#B6BCC4</color><!--任务界面分隔线 --> 
+    <color name="task_reward">#EF4D37</color>
+    <color name="task_text_message_signup">#9ba0aa</color>
+    <color name="task_list_item_click">#ededed</color>
     <color name="click_select">#fafafa</color>
 	<color name="ivory">#fffff0</color><!--象牙色 --> 
 	<color name="lightyellow">#ffffe0</color><!--亮黄色 --> 

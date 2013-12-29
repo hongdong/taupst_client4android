@@ -31,7 +31,7 @@ public class CollegeService {
 	public College getCollegeByName(String collegeName) {
 		College college = null;
 		Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-				"select * from " + College.TB_NAME + " where " + College.COLLEGE_NAME + " like ? ", 
+				"select * from " + College.TB_NAME + " where " + College.COLLEGE_NAME + " = ? ", 
 				new String[] {collegeName, });
 //		Cursor cursor = dbHelper.getReadableDatabase().query(College.TB_NAME, 	//用这个函数也能找得出来
 //				new String[] {College.ID, College.COLLEGE_ID, College.COLLEGE_NAME}, 	//不过还是用sql语句吧

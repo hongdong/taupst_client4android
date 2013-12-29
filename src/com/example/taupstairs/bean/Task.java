@@ -23,6 +23,7 @@ public class Task {
 	public static final int TA_LOGIN = 1;
 	public static final String TA_LOGIN_TASKPARAMS = "login";
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
+	
 	//检测网络
 	public static final int TA_CHECKNET = 2;
 	public static final String TA_CHECKNET_TASKPARAMS = "check_net";
@@ -32,6 +33,11 @@ public class Task {
 	public static final int TA_GETUSERDATA = 3;
 	public static final String TA_GETUSERDATA_TASKPARAMS = "getuserdata";
 	public static final String TA_GETUSERDATA_FRAGMENT = "MeFragment";
+	
+	//获取用户信息
+	public static final int TA_GETSTATUS = 4;
+	public static final String TA_GETSTATUS_TASKPARAMS = "getstatus";
+	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
 	
 	
 	public Task(int taskId, Map<String, Object> taskParams) {

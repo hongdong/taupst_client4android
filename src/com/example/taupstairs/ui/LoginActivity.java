@@ -1,11 +1,8 @@
 package com.example.taupstairs.ui;
 
 import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,12 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SharedPreferencesUtil;
@@ -94,7 +91,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    正在登录...");
 		progressDialog.show();
-		Map<String, Object> taskParams = new HashMap<String, Object>();
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Task.TA_LOGIN_TASKPARAMS, user);
 		Task task = new Task(Task.TA_LOGIN, taskParams);
 		MainService.addTask(task);
@@ -108,9 +105,14 @@ public class LoginActivity extends Activity implements ItaActivity {
 		} else {
 			try {
 				JSONObject loginJsonObject = new JSONObject(result);
-				String isLogined = loginJsonObject.getString(JsonString.Login.IS_LOGINED);
+				String isLogined = loginJsonObject.getString(JsonString.Login.IS_LOGINED).trim();
 				if(isLogined.equals(Task.TA_FALSE)) {
-					loginFalse();
+					String state = loginJsonObject.getString(JsonString.Login.STATE).trim();
+					if (state.equals(JsonString.Login.STATE_OK)) {
+						loginFalse();
+					} else if (state.equals(JsonString.Login.STATE_NO)) {
+						loginServerFalse();
+					}
 				} else if (isLogined.equals(Task.TA_TRUE)) {
 					user.setUserId(loginJsonObject.getString(JsonString.Login.USERS_ID));
 					jumpToHomePage();						//如果TA_LOGIN任务执行成功，说明可以跳到主页面去了
@@ -124,7 +126,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 	/*未连接网络或服务器响应异常*/
 	private void loginNoNet() {
 		Toast.makeText(LoginActivity.this, 
-				"未连接网络", 
+				"没网络啊！！！亲", 
 				Toast.LENGTH_SHORT).show();
 	}
 	
@@ -134,11 +136,27 @@ public class LoginActivity extends Activity implements ItaActivity {
 		Toast.makeText(LoginActivity.this, 
 				"    用户信息错误\n请从新选择与填写", 
 				Toast.LENGTH_SHORT).show();
+
+	}
+	
+	/*服务器网络异常*/
+	private void loginServerFalse() {
+		Toast.makeText(LoginActivity.this, 
+				"我勒个去！网络异常", 
+				Toast.LENGTH_SHORT).show();
+
 	}
 	
 	/*跳转到主页面去*/
 	private void jumpToHomePage() {
-		//跳转前要把登录账户保存为默认账户，下次直接从logo跳到主界面，就不要再次登录了
+		/*跳转前要把登录账户保存为默认账户，下次直接从logo跳到主界面，就不要再次登录了。
+		 *还有一方面是切换账户的时候，新账户登录成功，默认账户要用新的覆盖旧的。
+		 *当然这个时候也可以删除数据库中原来Person的信息 */
+		User oldUser = SharedPreferencesUtil.getDefaultUser(LoginActivity.this);
+		if (oldUser != null) {			//第一次使用软件会为空
+			PersonService personService = new PersonService(LoginActivity.this);
+			personService.deletePerson(oldUser.getUserId());
+		}
 		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);	
 		Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
 		startActivity(intent);

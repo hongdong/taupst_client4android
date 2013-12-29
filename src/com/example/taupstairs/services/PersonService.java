@@ -37,11 +37,18 @@ public class PersonService {
 				person.getPersonSpecialty(), person.getPersonName(), person.getPersonSex()});
 	}
 	
+	/*根据personId删除指定行*/
+	public void deletePerson(String personId) {
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		db.execSQL("delete from " + Person.TB_NAME + " where " + Person.PERSON_ID + " = ? ", 
+				new String[] {personId, });
+	}
+	
 	/*根据PersonId返回学校信息*/
 	public Person getPersonById(String personId) {
 		Person person = null;
 		Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-				"select * from " + Person.TB_NAME + " where " + Person.PERSON_ID + " like ? ", 
+				"select * from " + Person.TB_NAME + " where " + Person.PERSON_ID + " = ? ", 
 				new String[] {personId, });
 		if (null != cursor && cursor.getCount() > 0) {
 			cursor.moveToFirst();		//这一句一定要加，总之我不加就出错了

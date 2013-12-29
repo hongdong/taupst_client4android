@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/fm_task_bg_list_item">
+    
+    <!-- 头像  --> 
+	<ImageView 
+	    android:id="@+id/img_fm_task_photo"
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	    android:layout_marginTop="10dp"
+	    android:layout_marginLeft="8dp"
+	    android:src="@drawable/default_drawable"
+	    android:contentDescription="@string/drawable"
+	    android:clickable="true"/>
+	
+	<LinearLayout 
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+	
+		<!-- 昵称，发布时间 --> 
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp">
+		    <TextView 
+		        android:id="@+id/txt_fm_task_nickname"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:textColor="@color/black"
+				android:textSize="18sp"/>
+		    <TextView 
+		        android:id="@+id/txt_fm_task_releasetime"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="8dp"
+				android:textSize="14sp"
+				android:textColor="@color/black"
+				android:layout_alignParentRight="true"/>
+		</RelativeLayout>
+	
+		<!-- 标题 --> 
+		<LinearLayout 
+		    android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:orientation="horizontal">
+		    <TextView 
+		        android:id="@+id/txt_fm_task_title"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="50dp"
+				android:textColor="@color/black"
+				android:textSize="20sp"/>
+		</LinearLayout>
+	
+		<!-- 报酬 --> 
+		<LinearLayout 
+		    android:layout_width="match_parent"
+		 	android:layout_height="wrap_content"
+		 	android:layout_marginTop="10dp"
+		 	android:orientation="horizontal">
+		    <TextView 
+		        android:id="@+id/txt_fm_task_reward"
+		        android:layout_width="wrap_content"
+		 		android:layout_height="wrap_content"
+		 		android:layout_marginLeft="10dp"
+		 		android:paddingLeft="5dp"
+		 		android:paddingRight="5dp"
+		 		android:text="@string/reward"
+		 		android:textColor="@color/white"
+		 		android:textSize="18sp"
+		 		android:background="@color/task_reward"/>
+	     	<TextView 
+	         	android:id="@+id/txt_fm_task_rewards"
+		        android:layout_width="wrap_content"
+		 		android:layout_height="wrap_content"
+		 		android:layout_marginLeft="10dp"
+		 		android:layout_marginRight="30dp"
+		 		android:textColor="@color/gray"
+		 		android:textSize="18sp"/>
+	 	</LinearLayout>
+    
+		<!-- 来自哪个院系哪个年级，留言数，报名数 --> 
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:layout_marginBottom="10dp">
+		    <TextView 
+		        android:id="@+id/txt_fm_task_department"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:textColor="@color/gray"
+				android:textSize="16sp"/>
+		     <TextView 
+		        android:id="@+id/txt_fm_task_grade"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_toRightOf="@id/txt_fm_task_department"
+				android:layout_marginLeft="10dp"
+				android:textColor="@color/gray"
+				android:textSize="16sp"/>
+		    <TextView 
+		        android:id="@+id/txt_fm_task_signup"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="10dp"
+				android:textSize="14sp"
+				android:textColor="@color/task_text_message_signup"
+				android:layout_alignParentRight="true"
+				android:drawableLeft="@drawable/icon_signup"
+				android:drawablePadding="3dp"
+				android:clickable="true"/>
+		    <TextView 
+		        android:id="@+id/txt_fm_task_message"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="15dp"
+				android:textSize="14sp"
+				android:textColor="@color/task_text_message_signup"
+				android:layout_toLeftOf="@id/txt_fm_task_signup"
+				android:drawableLeft="@drawable/icon_message"
+				android:drawablePadding="3dp"
+				android:clickable="true"/>
+		</RelativeLayout>
+	</LinearLayout>
+</LinearLayout>

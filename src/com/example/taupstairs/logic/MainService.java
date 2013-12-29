@@ -2,6 +2,7 @@ package com.example.taupstairs.logic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import android.app.Activity;
@@ -12,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import com.example.taupstairs.bean.Person;
+import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.ui.ItaActivity;
@@ -47,6 +49,11 @@ public class MainService extends Service implements Runnable {
 				ItaFragment fragment_getuserdata = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_FRAGMENT);
 				fragment_getuserdata.refresh(msg.obj);
 				break;
+				
+			case Task.TA_GETSTATUS:
+				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
+				fragment_getstatus.refresh(msg.obj);
+				break;
 
 			default:
 				break;
@@ -56,7 +63,6 @@ public class MainService extends Service implements Runnable {
 	
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
 		isRun = true;
 		Thread thread = new Thread(this);
@@ -70,8 +76,6 @@ public class MainService extends Service implements Runnable {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
 		Task task;
 		while (isRun) {
 			if (!tasks.isEmpty()) {
@@ -83,7 +87,6 @@ public class MainService extends Service implements Runnable {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -103,6 +106,10 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_GETUSERDATA:
 			msg.obj = doGetUserDataTask(task);
+			break;
+			
+		case Task.TA_GETSTATUS:
+			msg.obj = doGetStatusTask(task);
 			break;
 
 		default:
@@ -141,6 +148,21 @@ public class MainService extends Service implements Runnable {
 			e.printStackTrace();
 		}
 		return person;		//此处如果未连接网络的话，返回的是null
+	}
+	
+	/*
+	 * 获取List<Status>（任务）
+	 */
+	private List<Status> doGetStatusTask(Task task) {
+		List<Status> listStatus = null;
+		String getstatus_url = HttpClientUtil.BASE_URL + "task/taskList2Down";
+		try {
+			String jsonString = HttpClientUtil.getRequest(getstatus_url);
+			listStatus = JsonUtil.getListStatus(jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listStatus;
 	}
 	
 	/*清空activitys和fragments链表*/

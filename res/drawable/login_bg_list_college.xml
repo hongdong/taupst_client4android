@@ -10,7 +10,7 @@
 	<item >
 	    <selector >
 		    <item android:state_pressed="true"
-		        android:drawable="@color/gray"/>
+		        android:drawable="@color/common_list_click"/>
 		</selector>
 	</item>
 </layer-list>

@@ -3,9 +3,9 @@ package com.example.taupstairs.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +22,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -46,9 +47,11 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private static final int WRITE = 1;
 	
 	private GestureDetector detector;
-	private static final int GESTURE_DISTANCE = 50;
+	private static final int GESTURE_DISTANCE = 80;
 	private List<Fragment> listFragments;
 	private int currentIndex;
+	
+	private ChangeUserReceiver receiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	@Override
 	public void init() {
 		initData();
-		initUiTask();
+		initView();
 		initGesture();
 		initCheckNetTask();
 		initReceiver();
@@ -76,12 +79,12 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	}
 	
 	/*初始化UI*/
-	private void initUiTask() {
+	private void initView() {
 		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);
 		btn_top_right = (Button)findViewById(R.id.btn_me_write);
 		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 		infoFragment = new InfoFragment();
-		taskFragment = new TaskFragment();
+		taskFragment = new TaskFragment(HomePageActivity.this);
 		rankFragment = new RankFragment();
 		meFragment = new MeFragment(HomePageActivity.this);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -129,12 +132,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 						currentButton = (RadioButton)HomePageActivity.this.findViewById(buttonIds[currentIndex + 1]);
 						currentButton.setChecked(true);
 					} else if (2 == currentIndex) {
-						radioGroup.clearCheck();			//如果跳到MeFragment，则radiobutton都不要check
-						FragmentTransaction ft = getFragmentManager().beginTransaction();
-						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
-						ft.hide(currentFragment).show(meFragment).commit();
-						currentFragment = meFragment;
-						currentIndex = 3;
+						jumpToMeFragment();
 					}
 				} else if (e2.getX() - e1.getX() > GESTURE_DISTANCE) {	//从左向右滑，向左翻页
 					if (currentIndex > 0) {								//只有后三页，才会翻，第一页不能左翻页
@@ -143,7 +141,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 						currentButton.setChecked(true);
 					} 
 				}
-				return true;
+				return false;
 			}
 			
 			public boolean onDown(MotionEvent e) {
@@ -154,7 +152,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	
 	/*进入软件时检测网络*/
 	private void initCheckNetTask() {
-		Map<String, Object> taskParams = new HashMap<String, Object>();
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Task.TA_CHECKNET_TASKPARAMS, defaultUser);
 		Task task = new Task(Task.TA_CHECKNET, taskParams);
 		MainService.addTask(task);
@@ -162,7 +160,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	
 	/*初始化广播接收*/
 	private void initReceiver() {
-		ChangeUserReceiver receiver = new ChangeUserReceiver();
+		receiver = new ChangeUserReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("com.example.taupstairs.CHANGE_USER");
 		registerReceiver(receiver, filter);
@@ -175,41 +173,15 @@ public class HomePageActivity extends Activity implements ItaActivity {
 				/*radiobutton不会有重复点击的问题，要check_change才会到这个监听器里面来
 				 * 滑动手势的时候，也要改变check，手势相应函数不做页面改变，
 				 * 这个时候也要到这里面来， 所以这里面的处理会比较麻烦*/
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
 				switch (checkedId) {
 				case R.id.btn_info:			
-					System.out.println("---------------------info");
-					ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
-					ft.hide(currentFragment).show(infoFragment).commit();
-					currentFragment = infoFragment;
-					currentIndex = 0;
-					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
-					flag_me_write = ME;
+					setCurrent(0);
 					break;
 				case R.id.btn_task:
-					System.out.println("---------------------task");
-					if (currentIndex < 1) {
-						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
-					} else if (currentIndex > 1) {
-						ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
-					}
-					ft.hide(currentFragment).show(taskFragment).commit();
-					currentFragment = taskFragment;
-					currentIndex = 1;
-					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_write);
-					flag_me_write = WRITE;
+					setCurrent(1);
 					break;
 				case R.id.btn_rank:
-					if (currentIndex < 2) {
-						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
-					} else if (currentIndex > 2) {
-						ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
-					}
-					ft.hide(currentFragment).show(rankFragment).commit();
-					currentFragment = rankFragment;
-					currentIndex = 2;
-					btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
-					flag_me_write = ME;
+					setCurrent(2);
 					break;
 
 				default:
@@ -222,12 +194,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 			public void onClick(View v) {
 				if (ME == flag_me_write) {
 					if (currentFragment != meFragment) {	//避免重复点击时候一直运行下面的代码
-						radioGroup.clearCheck();			//如果跳到MeFragment，则radiobutton都不要check
-						FragmentTransaction ft = getFragmentManager().beginTransaction();
-						ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
-						ft.hide(currentFragment).show(meFragment).commit();
-						currentFragment = meFragment;
-						currentIndex = 3;
+						jumpToMeFragment();
 					}
 				} else if (WRITE == flag_me_write) {		//跳到发布任务的activity
 					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
@@ -236,18 +203,56 @@ public class HomePageActivity extends Activity implements ItaActivity {
 			}
 		});
 	}
+	
+	private void jumpToMeFragment() {
+		radioGroup.clearCheck();			//如果跳到MeFragment，则radiobutton都不要check
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
+		ft.hide(currentFragment).show(meFragment).commit();
+		currentFragment = meFragment;
+		currentIndex = 3;
+	}
+	
+	/*设置当前状态*/
+	private void setCurrent(int index) {
+		FragmentManager fm = getFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		if (currentIndex < index) {
+			ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_left_exit);
+		} else if (currentIndex > index) {
+			ft.setCustomAnimations(R.anim.fragment_slide_right_enter, R.anim.fragment_slide_right_exit);
+		}
+		ft.hide(currentFragment).show(listFragments.get(index)).commit();
+		fm.executePendingTransactions();	//让异步的commit函数立即执行，但界面切太快还是有bug
+		currentIndex = index;
+		currentFragment = listFragments.get(index);
+		if (1 == index) {
+			btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_write);
+			flag_me_write = WRITE;
+		} else {
+			btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
+			flag_me_write = ME;
+		}
+	}
 
 	@Override
 	public void refresh(Object... params) {
 		String result = ((String) params[0]).trim();
 		if (result.equals(Task.TA_NO)) {
-			Toast.makeText(HomePageActivity.this, "未连接网络", Toast.LENGTH_LONG).show();
+			Toast.makeText(HomePageActivity.this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 		}
 	}	
 	
 	/*将Touch事件交给手势类处理*/
 	public boolean onTouchEvent(MotionEvent event) {
 		return detector.onTouchEvent(event);
+	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		detector.onTouchEvent(ev);					//先处理再把事件往下传
+		return super.dispatchTouchEvent(ev);		//事件往下传
 	}
 	
 	/*不重写这个方法，在退出的时候杀死进程的话，
@@ -261,6 +266,12 @@ public class HomePageActivity extends Activity implements ItaActivity {
 //		android.os.Process.killProcess(android.os.Process.myPid());
 //		ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE); 
 //		manager.killBackgroundProcesses(getPackageName());
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(receiver);
 	}
 	
 	/*接收切换用户时的广播消息，这个时候要结束本activity。

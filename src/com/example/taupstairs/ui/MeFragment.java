@@ -3,8 +3,6 @@ package com.example.taupstairs.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +17,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.PersonVariableDataAdapter;
 import com.example.taupstairs.bean.Person;
@@ -34,10 +31,9 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private String defaultPersonId;
 	private Person defaultPerson;
 	private PersonService personService;
-	private boolean flag_get_user_data;
 	private View view;
 	private ListView list_variable, list_base;
-	private TextView txt_setting, txt_get_user_data;
+	private TextView txt_setting;
 	private static final String LIST_LEFT = "left";
 	private static final String LIST_RIGHT = "right";
 	
@@ -79,7 +75,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 		defaultPersonId = SharedPreferencesUtil.getDefaultUser(context).getUserId();
 		personService = new PersonService(context);
 		defaultPerson = personService.getPersonById(defaultPersonId);
-		flag_get_user_data = false;			//为false表示当前不在更新中
 	}
 	
 	/*初始化View组件，list列表显示，设置监听器*/
@@ -87,7 +82,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 		list_variable = (ListView)view.findViewById(R.id.list_fm_me_variable);
 		list_base = (ListView)view.findViewById(R.id.list_fm_me_base);
 		txt_setting = (TextView)view.findViewById(R.id.txt_fm_me_setting);
-		txt_get_user_data = (TextView)view.findViewById(R.id.txt_fm_me_getuserdata);
 		
 		if (defaultPerson != null) {		//在initData里面已经从数据库中读数据了
 			displayPerson(defaultPerson);	//如果数据库中有数据，就直接显示出来
@@ -115,22 +109,14 @@ public class MeFragment extends Fragment implements ItaFragment {
 				startActivity(intent);	
 			}
 		});
-		txt_get_user_data.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {	//到时候应该会弄成下拉刷新
-				getUserData();
-			}
-		});
 	}
 	
 	/*从服务器获取Person信息*/
 	private void getUserData() {
-		if (!flag_get_user_data) {
-			flag_get_user_data = true;		//为true表示当前正在更新，再按这个键不会再新建任务
-			Map<String, Object> taskParams = new HashMap<String, Object>();
-			taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, defaultPersonId);
-			Task task = new Task(Task.TA_GETUSERDATA, taskParams);
-			MainService.addTask(task);
-		}
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, defaultPersonId);
+		Task task = new Task(Task.TA_GETUSERDATA, taskParams);
+		MainService.addTask(task);
 	}
 
 	@Override
@@ -138,12 +124,11 @@ public class MeFragment extends Fragment implements ItaFragment {
 		defaultPerson = (Person) params[0];
 		if (defaultPerson != null) {
 			displayPerson(defaultPerson);
-			System.out.println(defaultPerson.toString());
-//			personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
+//			System.out.println(defaultPerson.toString());
+			personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
 		} else {
-			Toast.makeText(context, "未连接网络", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 		}
-		flag_get_user_data = false;			//更新完之后设为false，表示当前不在更新，可以再次响应按键进行更新
 	}
 	
 	/*显示Person资料*/
@@ -156,9 +141,9 @@ public class MeFragment extends Fragment implements ItaFragment {
 		String[] baseLeft = new String[] {"院系:", "年级:", "专业:", "姓名:", "性别:", };
 		String[] baseRight = new String[] {defaultPerson.getPersonFaculty(), defaultPerson.getPersonYear(),
 				defaultPerson.getPersonSpecialty(), defaultPerson.getPersonName(), defaultPerson.getPersonSex()};
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		List<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		for (int i = 0; i < baseLeft.length; i++) {
-			Map<String, Object> item = new HashMap<String, Object>();
+			HashMap<String, Object> item = new HashMap<String, Object>();
 			item.put(LIST_LEFT, baseLeft[i]);
 			item.put(LIST_RIGHT, baseRight[i]);
 			list.add(item);
@@ -166,6 +151,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 		SimpleAdapter base_adapter = new SimpleAdapter(context, list, R.layout.fm_me_base, 
 				new String[] {LIST_LEFT, LIST_RIGHT, }, new int[] {R.id.txt_base_left, R.id.txt_base_right});
 		list_base.setAdapter(base_adapter);			//把五个基本资料显示出来
+		txt_setting.setVisibility(View.VISIBLE);	//把设置那一行显示出来
 	}
 
 }
