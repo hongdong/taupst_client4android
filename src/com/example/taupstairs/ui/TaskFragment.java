@@ -70,6 +70,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				System.out.println("onItemClick");
 				Intent intent = new Intent(context, TaskDetailActivity.class);
 				startActivity(intent);
 			}

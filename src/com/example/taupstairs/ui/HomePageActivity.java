@@ -133,12 +133,14 @@ public class HomePageActivity extends Activity implements ItaActivity {
 					} else if (2 == currentIndex) {
 						jumpToMeFragment();
 					}
+					return true;
 				} else if (e2.getX() - e1.getX() > GESTURE_DISTANCE) {	//从左向右滑，向左翻页
 					if (currentIndex > 0) {								//只有后三页，才会翻，第一页不能左翻页
 //						radioGroup.check(buttonIds[currentIndex - 1]);	//这种方法不能用
 						currentButton = (RadioButton)HomePageActivity.this.findViewById(buttonIds[currentIndex - 1]);
 						currentButton.setChecked(true);
 					} 
+					return true;
 				}
 				return false;
 			}
@@ -239,19 +241,20 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		String result = ((String) params[0]).trim();
 		if (result.equals(Task.TA_NO)) {
 			Toast.makeText(HomePageActivity.this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
+		} else if (result.equals(Task.TA_USEREXIT_OK)) {
+			System.exit(0);
 		}
 	}	
 	
-	/*将Touch事件交给手势类处理*/
-	public boolean onTouchEvent(MotionEvent event) {
-		return detector.onTouchEvent(event);
-	}
-	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-		// TODO Auto-generated method stub
-		detector.onTouchEvent(ev);					//先处理再把事件往下传
-		return super.dispatchTouchEvent(ev);		//事件往下传
+		boolean ret = false;
+		ret = detector.onTouchEvent(ev);
+		/*如果滑动不成功，才分发事件*/
+		if (!ret) {
+			return super.dispatchTouchEvent(ev);
+		}
+		return true;
 	}
 	
 	/*不重写这个方法，在退出的时候杀死进程的话，
@@ -260,11 +263,10 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	 * 会出现后台的MainService调用UI线程中的refresh函数不能更新UI的情况*/
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
-		System.exit(0);
-//		android.os.Process.killProcess(android.os.Process.myPid());
-//		ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE); 
-//		manager.killBackgroundProcesses(getPackageName());
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
+		Task task = new Task(Task.TA_USEREXIT, taskParams);
+		MainService.addTask(task);
 	}
 	
 	@Override

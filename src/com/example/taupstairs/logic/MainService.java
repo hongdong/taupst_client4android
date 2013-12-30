@@ -54,6 +54,16 @@ public class MainService extends Service implements Runnable {
 				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
 				fragment_getstatus.refresh(msg.obj);
 				break;
+				
+			case Task.TA_USEREXIT:
+				String activity = (String) msg.obj;
+				if (activity.equals(Task.TA_USEREXIT_ACTIVITY_HOMEPAGE)) {
+					ItaActivity activity_userexit = (ItaActivity) getActivityByName(Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
+					activity_userexit.refresh(Task.TA_USEREXIT_OK);
+				} else if (activity.equals(Task.TA_USEREXIT_ACTIVITY_SETTING)) {
+					ItaActivity activity_userexit = (ItaActivity) getActivityByName(Task.TA_USEREXIT_ACTIVITY_SETTING);
+					activity_userexit.refresh(Task.TA_USEREXIT_OK);
+				}
 
 			default:
 				break;
@@ -111,6 +121,13 @@ public class MainService extends Service implements Runnable {
 		case Task.TA_GETSTATUS:
 			msg.obj = doGetStatusTask(task);
 			break;
+		
+		case Task.TA_USEREXIT:
+			doUserExit(); 
+			Map<String, Object> taskParams = task.getTaskParams();
+			String activity = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
+			msg.obj = activity;
+			break;
 
 		default:
 			break;
@@ -163,6 +180,18 @@ public class MainService extends Service implements Runnable {
 			e.printStackTrace();
 		}
 		return listStatus;
+	}
+	
+	/*
+	 * 用户注销
+	 */
+	private void doUserExit() {
+		String userexit_url = HttpClientUtil.BASE_URL + "data/user/exit";
+		try {
+			HttpClientUtil.getRequest(userexit_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*清空activitys和fragments链表*/

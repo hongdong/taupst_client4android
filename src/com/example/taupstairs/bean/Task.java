@@ -34,10 +34,17 @@ public class Task {
 	public static final String TA_GETUSERDATA_TASKPARAMS = "getuserdata";
 	public static final String TA_GETUSERDATA_FRAGMENT = "MeFragment";
 	
-	//获取用户信息
+	//获取任务信息
 	public static final int TA_GETSTATUS = 4;
 	public static final String TA_GETSTATUS_TASKPARAMS = "getstatus";
 	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
+	
+	//用户注销
+	public static final int TA_USEREXIT = 5;
+	public static final String TA_USEREXIT_TASKPARAMS = "userexit";
+	public static final String TA_USEREXIT_ACTIVITY_HOMEPAGE = "HomePageActivity";
+	public static final String TA_USEREXIT_ACTIVITY_SETTING = "SettingActivity";
+	public static final String TA_USEREXIT_OK = "userexit ok";
 	
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
