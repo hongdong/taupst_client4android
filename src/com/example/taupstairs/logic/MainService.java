@@ -188,7 +188,8 @@ public class MainService extends Service implements Runnable {
 	private void doUserExit() {
 		String userexit_url = HttpClientUtil.BASE_URL + "data/user/exit";
 		try {
-			HttpClientUtil.getRequest(userexit_url);
+			String jsonString = HttpClientUtil.getRequest(userexit_url);
+			System.out.println(jsonString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

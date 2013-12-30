@@ -263,6 +263,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	 * 会出现后台的MainService调用UI线程中的refresh函数不能更新UI的情况*/
 	@Override
 	public void onBackPressed() {
+		super.onBackPressed();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
 		Task task = new Task(Task.TA_USEREXIT, taskParams);
