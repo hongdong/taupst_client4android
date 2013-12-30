@@ -71,4 +71,10 @@ public class PersonService {
 		}
 		return person;
 	}
+	
+	/*关闭数据库缓存，一般在activity的onDestroy方法中调用*/
+	public void closeDBHelper() {
+		dbHelper.close();
+	}
+	
 }

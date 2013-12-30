@@ -9,6 +9,7 @@
         android:layout_height="match_parent" 
         android:divider="@color/white_divider"
         android:dividerHeight="1dp"
+        android:cacheColorHint="#00000000"
         android:background="@drawable/fm_task_bg_list">
     </com.example.taupstairs.view.XListView>
 </LinearLayout>

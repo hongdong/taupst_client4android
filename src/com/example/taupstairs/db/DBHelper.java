@@ -21,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		initCollegeDB(db);
 		initPersonDB(db);
+		initStatusDB(db);
 	}
 	
 	private void initCollegeDB(SQLiteDatabase db) {
@@ -33,6 +34,10 @@ public class DBHelper extends SQLiteOpenHelper {
 	
 	private void initPersonDB(SQLiteDatabase db) {
 		db.execSQL(DBInfo.Table.PERSON_CREATE_STRING);
+	}
+	
+	private void initStatusDB(SQLiteDatabase db) {
+		db.execSQL(DBInfo.Table.STATUS_CREATE_STRING);
 	}
 
 	@Override

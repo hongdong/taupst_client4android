@@ -154,4 +154,8 @@ public class MeFragment extends Fragment implements ItaFragment {
 		txt_setting.setVisibility(View.VISIBLE);	//把设置那一行显示出来
 	}
 
+	public void exit() {
+		personService.closeDBHelper();
+	}
+
 }

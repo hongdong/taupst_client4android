@@ -46,7 +46,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private static final int WRITE = 1;
 	
 	private GestureDetector detector;
-	private static final int GESTURE_DISTANCE = 50;
+	private static final int GESTURE_DISTANCE = 120;
 	private List<Fragment> listFragments;
 	private int currentIndex;
 	
@@ -242,6 +242,10 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		if (result.equals(Task.TA_NO)) {
 			Toast.makeText(HomePageActivity.this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 		} else if (result.equals(Task.TA_USEREXIT_OK)) {
+			for (int i = 0; i < listFragments.size(); i++) {
+				ItaFragment fragment = (ItaFragment) listFragments.get(i);
+				fragment.exit();
+			}
 			System.exit(0);
 		}
 	}	
@@ -250,7 +254,9 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		boolean ret = false;
 		ret = detector.onTouchEvent(ev);
-		/*如果滑动不成功，才分发事件*/
+		/*如果滑动不成功，才分发事件。
+		 * 想要响应list的click事件，要先down，再up的时候。
+		 * 如果up的时候，已经被手势捕捉到了滑动，就返回true了，就不分发了*/
 		if (!ret) {
 			return super.dispatchTouchEvent(ev);
 		}
@@ -263,6 +269,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	 * 会出现后台的MainService调用UI线程中的refresh函数不能更新UI的情况*/
 	@Override
 	public void onBackPressed() {
+		super.onBackPressed();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
 		Task task = new Task(Task.TA_USEREXIT, taskParams);

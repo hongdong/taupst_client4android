@@ -3,6 +3,7 @@ package com.example.taupstairs.ui;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 	private Button btn_back, btn_change_user;
 	private ListView list;
 	private String[] setting = {"关于我们", "服务声名", "检查更新", "用户反馈"};
+	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +72,10 @@ public class SettingActivity extends Activity implements ItaActivity {
 		});
 		btn_change_user.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				progressDialog = new ProgressDialog(SettingActivity.this);
+				progressDialog.setCancelable(false);
+				progressDialog.setMessage("    正在注销...");
+				progressDialog.show();
 				HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 				taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_SETTING);
 				Task task = new Task(Task.TA_USEREXIT, taskParams);
@@ -80,6 +86,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
+		progressDialog.dismiss();
 		String result = ((String) params[0]).trim();
 		if (result.equals(Task.TA_USEREXIT_OK)) {
 			MainService.emptyMainService();				//先清空MainService里面的链表

@@ -26,7 +26,9 @@
     <string name="task">!!!!!!!!任务!!!!!!!!</string>
     <string name="rank">........排行........</string>
     <string name="me">我</string>
+    
     <string name="write">写消息</string>
+    <string name="person_data">用户资料</string>
     
     <string name="reward">报酬</string>
     <string name="task_detail">任务详情</string>

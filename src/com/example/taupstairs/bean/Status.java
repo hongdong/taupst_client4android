@@ -22,6 +22,7 @@ public class Status {
 	private String personSex;
 	
 	public static final String TB_NAME = "status";
+	public static final int STATUS_COUNT_PERPAGE = 20;
 	
 	public static final String ID = "_id";
 	

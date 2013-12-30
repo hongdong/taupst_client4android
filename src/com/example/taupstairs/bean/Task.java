@@ -36,7 +36,11 @@ public class Task {
 	
 	//获取任务信息
 	public static final int TA_GETSTATUS = 4;
-	public static final String TA_GETSTATUS_TASKPARAMS = "getstatus";
+	public static final String TA_GETSTATUS_MODE = "getstatus";
+	public static final String TA_GETSTATUS_MODE_FIRSTTIME = "firsttime";
+	public static final String TA_GETSTATUS_MODE_PULLREFRESH = "pullrefresh";
+	public static final String TA_GETSTATUS_MODE_LOADMORE = "loadmore";
+	public static final String TA_GETSTATUS_STATUSID = "statusid";
 	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
 	
 	//用户注销

@@ -1,5 +1,6 @@
 package com.example.taupstairs.util;
 
+import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.User;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 public class SharedPreferencesUtil {
 	
 	private static final String DEFAULT_USER = "default_user";
+	private static final String LASTEST_STATUSID = "lastest_statusid";
 
 	/*存储默认账户（如果先前存储过默认账户，则会覆盖）*/
 	public static void saveDefaultUser(Context context, User user) {
@@ -32,4 +34,23 @@ public class SharedPreferencesUtil {
 		String userPassword = sp.getString(User.USER_PASSWORD, null);
 		return new User(userId, userCollegeId, userStudentId, userPassword);
 	}
+	
+	/*
+	 * 储存最新任务ID
+	 */
+	public static void savaLastestStatusId(Context context, String lastestStatusId) {
+		SharedPreferences sp = context.getSharedPreferences(LASTEST_STATUSID, Context.MODE_PRIVATE);
+		Editor editor = sp.edit();
+		editor.putString(Status.STATUS_ID, lastestStatusId);
+		editor.commit();
+	}
+	
+	/*
+	 * 读取最新任务ID
+	 */
+	public static String getLastestStatusId(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LASTEST_STATUSID, Context.MODE_PRIVATE);
+		return sp.getString(Status.STATUS_ID, null);
+	}
+	
 }

@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -52,7 +53,9 @@ public class MainService extends Service implements Runnable {
 				
 			case Task.TA_GETSTATUS:
 				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
-				fragment_getstatus.refresh(msg.obj);
+				Bundle data = msg.getData();
+				String mode = data.getString(Task.TA_GETSTATUS_MODE);
+				fragment_getstatus.refresh(mode, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -105,6 +108,7 @@ public class MainService extends Service implements Runnable {
 	private void doTask(Task task) {
 		Message msg = new Message();
 		msg.what = task.getTaskId();
+		Map<String, Object> taskParams = task.getTaskParams();
 		switch (task.getTaskId()) {
 		case Task.TA_LOGIN:
 			msg.obj = doLoginTask(task, Task.TA_LOGIN_TASKPARAMS);
@@ -120,11 +124,13 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_GETSTATUS:
 			msg.obj = doGetStatusTask(task);
+			String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
+			Bundle data = msg.getData();
+			data.putString(Task.TA_GETSTATUS_MODE, mode);
 			break;
 		
 		case Task.TA_USEREXIT:
 			doUserExit(); 
-			Map<String, Object> taskParams = task.getTaskParams();
 			String activity = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
 			msg.obj = activity;
 			break;
@@ -169,14 +175,29 @@ public class MainService extends Service implements Runnable {
 	
 	/*
 	 * 获取List<Status>（任务）
+	 * 分为三种，分别是第一次加载，下拉刷新，上拉加载更多
 	 */
 	private List<Status> doGetStatusTask(Task task) {
 		List<Status> listStatus = null;
-		String getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down";
+		String getstatus_url = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
+		if (mode.equals(Task.TA_GETSTATUS_MODE_FIRSTTIME)) {
+			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down";
+		} else if (mode.equals(Task.TA_GETSTATUS_MODE_PULLREFRESH)) {
+			String statusId = (String) taskParams.get(Task.TA_GETSTATUS_STATUSID);
+			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down?task_id=" + statusId;
+		} else if (mode.equals(Task.TA_GETSTATUS_MODE_LOADMORE)) {
+			String statusId = (String) taskParams.get(Task.TA_GETSTATUS_STATUSID);
+			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Up?task_id=" + statusId;
+		}
 		try {
 			String jsonString = HttpClientUtil.getRequest(getstatus_url);
+			/*如果数组长度为0，则链表长度为0，但他不为空，因为在里面已经new了，
+			 * 所以有联网状态下，没有更新与没有更多的时候，0 == listStatus.size() 成立，但listStatus不为空*/
 			listStatus = JsonUtil.getListStatus(jsonString);
 		} catch (Exception e) {
+			/*没网络，会返回null*/
 			e.printStackTrace();
 		}
 		return listStatus;

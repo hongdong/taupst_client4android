@@ -127,7 +127,6 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		collegeService.closeDBHelper();
 	}
