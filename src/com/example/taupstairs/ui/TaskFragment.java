@@ -1,12 +1,17 @@
 package com.example.taupstairs.ui;
 
 import java.util.List;
+
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.bean.Status;
@@ -58,10 +63,17 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	}
 	
 	/*
-	 * 初始化ui
+	 * 初始化ui，以及一些监听器
 	 */
 	private void initView() {
 		xlist_task = (XListView) view.findViewById(R.id.xlist_fm_task);
+		xlist_task.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent intent = new Intent(context, TaskDetailActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 		getStatusTask();
 		

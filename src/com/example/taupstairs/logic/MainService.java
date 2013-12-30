@@ -124,7 +124,7 @@ public class MainService extends Service implements Runnable {
 		Map<String, Object> taskParams = task.getTaskParams();
 		User user = (User) taskParams.get(taskParamsString);
 		String login_url = HttpClientUtil.BASE_URL + 
-				"user/login?student_id=" + user.getUserStudentId() + 
+				"data/user/login?student_id=" + user.getUserStudentId() + 
 				"&pwd=" + user.getUserPassword() + 
 				"&school=" + user.getUserCollegeId();
 		try {
@@ -140,7 +140,7 @@ public class MainService extends Service implements Runnable {
 		Person person = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String personId = (String) taskParams.get(Task.TA_GETUSERDATA_TASKPARAMS);
-		String getuserdata_url = HttpClientUtil.BASE_URL + "user/userInfo?users_id=" + personId;
+		String getuserdata_url = HttpClientUtil.BASE_URL + "data/user/userInfo?users_id=" + personId;
 		try {
 			String jsonString = HttpClientUtil.getRequest(getuserdata_url);
 			person = JsonUtil.getPerson(MainService.this, jsonString);
@@ -155,7 +155,7 @@ public class MainService extends Service implements Runnable {
 	 */
 	private List<Status> doGetStatusTask(Task task) {
 		List<Status> listStatus = null;
-		String getstatus_url = HttpClientUtil.BASE_URL + "task/taskList2Down";
+		String getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down";
 		try {
 			String jsonString = HttpClientUtil.getRequest(getstatus_url);
 			listStatus = JsonUtil.getListStatus(jsonString);
@@ -174,6 +174,10 @@ public class MainService extends Service implements Runnable {
 	/*将Activity添加到Activity链表中去*/
 	public static void addActivity(Activity activity) {
 		activities.add(activity);
+	}
+	
+	public static void removeActivity(Activity activity) {
+		activities.remove(activity);
 	}
 	
 	/*根据Activity的name从Activity链表中找到它*/

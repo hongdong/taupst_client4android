@@ -22,7 +22,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -47,7 +46,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private static final int WRITE = 1;
 	
 	private GestureDetector detector;
-	private static final int GESTURE_DISTANCE = 80;
+	private static final int GESTURE_DISTANCE = 50;
 	private List<Fragment> listFragments;
 	private int currentIndex;
 	
