@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.db.DBHelper;
 
@@ -42,6 +41,10 @@ public class PersonService {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		db.execSQL("delete from " + Person.TB_NAME + " where " + Person.PERSON_ID + " = ? ", 
 				new String[] {personId, });
+	}
+	
+	public void emptyPersonDB() {
+		dbHelper.getReadableDatabase().execSQL("delete from " + Person.TB_NAME);
 	}
 	
 	/*根据PersonId返回学校信息*/

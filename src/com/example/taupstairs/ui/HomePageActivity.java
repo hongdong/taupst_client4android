@@ -36,6 +36,10 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private int[] buttonIds = {R.id.btn_info, R.id.btn_task, R.id.btn_rank};
 	private RadioButton currentButton;
 	
+	private boolean noNet = true;
+	private boolean goCheck = false;
+	private boolean displayNoNet = false;
+	
 	private InfoFragment infoFragment;
 	private TaskFragment taskFragment;
 	private RankFragment rankFragment;
@@ -153,10 +157,24 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	
 	/*进入软件时检测网络*/
 	private void initCheckNetTask() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-		taskParams.put(Task.TA_CHECKNET_TASKPARAMS, defaultUser);
-		Task task = new Task(Task.TA_CHECKNET, taskParams);
-		MainService.addTask(task);
+		new Thread() {
+			public void run() {
+				while (noNet) {
+					if (!goCheck) {
+						goCheck = true;
+						HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+						taskParams.put(Task.TA_CHECKNET_TASKPARAMS, defaultUser);
+						Task task = new Task(Task.TA_CHECKNET, taskParams);
+						MainService.addTask(task);
+						try {
+							sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			};
+		}.start();
 	}
 	
 	/*初始化广播接收*/
@@ -238,15 +256,31 @@ public class HomePageActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
-		String result = ((String) params[0]).trim();
-		if (result.equals(Task.TA_NO)) {
-			Toast.makeText(HomePageActivity.this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
-		} else if (result.equals(Task.TA_USEREXIT_OK)) {
+		int taskId = (Integer) params[0];
+		switch (taskId) {
+		case Task.TA_CHECKNET:
+			String ok = (String) params[1];
+			if (ok.equals(Task.TA_NO)) {
+				if (!displayNoNet) {
+					displayNoNet = true;
+					Toast.makeText(HomePageActivity.this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
+				}
+			} else {
+				noNet = false;
+			}
+			goCheck = false;
+			break;
+			
+		case Task.TA_USEREXIT:
 			for (int i = 0; i < listFragments.size(); i++) {
 				ItaFragment fragment = (ItaFragment) listFragments.get(i);
 				fragment.exit();
 			}
 			System.exit(0);
+			break;
+
+		default:
+			break;
 		}
 	}	
 	

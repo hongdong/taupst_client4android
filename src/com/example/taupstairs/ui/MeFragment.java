@@ -121,13 +121,20 @@ public class MeFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void refresh(Object... params) {
-		defaultPerson = (Person) params[0];
-		if (defaultPerson != null) {
-			displayPerson(defaultPerson);
-//			System.out.println(defaultPerson.toString());
-			personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
-		} else {
-			Toast.makeText(context, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
+		int taskId = (Integer) params[0];
+		switch (taskId) {
+		case Task.TA_GETUSERDATA:
+			defaultPerson = (Person) params[1];
+			if (defaultPerson != null) {
+				displayPerson(defaultPerson);
+				personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
+			} else {
+				Toast.makeText(context, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
 	

@@ -20,6 +20,7 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
+import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SharedPreferencesUtil;
@@ -97,9 +98,24 @@ public class LoginActivity extends Activity implements ItaActivity {
 		MainService.addTask(task);
 	}
 
-	public void refresh(Object... params) {				
-		progressDialog.dismiss();
-		String result = ((String) params[0]).trim();	//这里的字符串要去空格，不然很可能不会equals
+	public void refresh(Object... params) {		
+		int taskId = (Integer) params[0];
+		switch (taskId) {
+		case Task.TA_LOGIN:
+			progressDialog.dismiss();
+			String result = ((String) params[1]).trim();	//这里的字符串要去空格，不然很可能不会equals
+			refreshLogin(result);
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	private void refreshLogin(String result) {
 		if (result.equals(Task.TA_NO)) {				//返回no表示没有网络
 			loginNoNet();
 		} else {
@@ -151,13 +167,18 @@ public class LoginActivity extends Activity implements ItaActivity {
 	private void jumpToHomePage() {
 		/*跳转前要把登录账户保存为默认账户，下次直接从logo跳到主界面，就不要再次登录了。
 		 *还有一方面是切换账户的时候，新账户登录成功，默认账户要用新的覆盖旧的。
-		 *当然这个时候也可以删除数据库中原来Person的信息 */
-		User oldUser = SharedPreferencesUtil.getDefaultUser(LoginActivity.this);
-		if (oldUser != null) {			//第一次使用软件会为空
-			PersonService personService = new PersonService(LoginActivity.this);
-			personService.deletePerson(oldUser.getUserId());
-		}
+		 *当然这个时候也可以删除数据库中的信息 */
+		
+		PersonService personService = new PersonService(LoginActivity.this);
+		personService.emptyPersonDB();
+		personService.closeDBHelper();
 		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);	
+		
+		SharedPreferencesUtil.savaLastestStatusId(LoginActivity.this, null);
+		StatusService statusService = new StatusService(LoginActivity.this);
+		statusService.emptyStatusDb();
+		statusService.closeDBHelper();
+		
 		Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
 		startActivity(intent);
 		finish();

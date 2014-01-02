@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
@@ -154,8 +155,23 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void refresh(Object... params) {
-		String mode = (String) params[0];
-		List<Status> newStatus = (List<Status>) params[1];
+		int taskId = (Integer) params[0];
+		switch (taskId) {
+		case Task.TA_GETSTATUS:
+			String mode = (String) params[1];
+			List<Status> newStatus = (List<Status>) params[2];
+			refreshList(mode, newStatus);
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	/*
+	 * 刷新列表
+	 */
+	private void refreshList(String mode, List<Status> newStatus) {
 		if (newStatus != null) {
 			if (mode.equals(Task.TA_GETSTATUS_MODE_FIRSTTIME)) {
 				currentStatus = newStatus;
@@ -180,7 +196,8 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			}
 			changeListData();
 		} else {
-//			System.out.println("没网络");
+			xlist_task.stopRefresh();
+			Toast.makeText(context, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 		}
 		
 		/*把标志设为false，这样才能再开获取status的网络连接*/

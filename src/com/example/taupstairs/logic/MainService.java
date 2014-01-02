@@ -38,34 +38,34 @@ public class MainService extends Service implements Runnable {
 			switch (msg.what) {
 			case Task.TA_LOGIN:
 				ItaActivity activity_login = (ItaActivity) getActivityByName(Task.TA_LOGIN_ACTIVITY);
-				activity_login.refresh(msg.obj);
+				activity_login.refresh(Task.TA_LOGIN, msg.obj);
 				break;
 				
 			case Task.TA_CHECKNET:
 				ItaActivity activity_checknet = (ItaActivity) getActivityByName(Task.TA_CHECKNET_ACTIVITY);
-				activity_checknet.refresh(msg.obj);
+				activity_checknet.refresh(Task.TA_CHECKNET, msg.obj);
 				break;
 				
 			case Task.TA_GETUSERDATA:
 				ItaFragment fragment_getuserdata = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_FRAGMENT);
-				fragment_getuserdata.refresh(msg.obj);
+				fragment_getuserdata.refresh(Task.TA_GETUSERDATA, msg.obj);
 				break;
 				
 			case Task.TA_GETSTATUS:
 				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
 				Bundle data = msg.getData();
 				String mode = data.getString(Task.TA_GETSTATUS_MODE);
-				fragment_getstatus.refresh(mode, msg.obj);
+				fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
 				String activity = (String) msg.obj;
 				if (activity.equals(Task.TA_USEREXIT_ACTIVITY_HOMEPAGE)) {
 					ItaActivity activity_userexit = (ItaActivity) getActivityByName(Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
-					activity_userexit.refresh(Task.TA_USEREXIT_OK);
+					activity_userexit.refresh(Task.TA_USEREXIT, Task.TA_USEREXIT_OK);
 				} else if (activity.equals(Task.TA_USEREXIT_ACTIVITY_SETTING)) {
 					ItaActivity activity_userexit = (ItaActivity) getActivityByName(Task.TA_USEREXIT_ACTIVITY_SETTING);
-					activity_userexit.refresh(Task.TA_USEREXIT_OK);
+					activity_userexit.refresh(Task.TA_USEREXIT, Task.TA_USEREXIT_OK);
 				}
 
 			default:

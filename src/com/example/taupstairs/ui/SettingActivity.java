@@ -86,16 +86,25 @@ public class SettingActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
-		progressDialog.dismiss();
-		String result = ((String) params[0]).trim();
-		if (result.equals(Task.TA_USEREXIT_OK)) {
-			MainService.emptyMainService();				//先清空MainService里面的链表
-			Intent intent_receiver = new Intent();		//再发送主界面关闭的广播
-			intent_receiver.setAction("com.example.taupstairs.CHANGE_USER");
-			sendBroadcast(intent_receiver);
-			Intent intent_login = new Intent(SettingActivity.this, LoginActivity.class);
-			startActivity(intent_login);				//最后跳到登录界面
-			finish();
+		int taskId = (Integer) params[0];
+		switch (taskId) {
+		case Task.TA_USEREXIT:
+			progressDialog.dismiss();
+			String result = ((String) params[1]).trim();
+			if (result.equals(Task.TA_USEREXIT_OK)) {
+				MainService.emptyMainService();				//先清空MainService里面的链表
+				Intent intent_receiver = new Intent();		//再发送主界面关闭的广播
+				intent_receiver.setAction("com.example.taupstairs.CHANGE_USER");
+				sendBroadcast(intent_receiver);
+				Intent intent_login = new Intent(SettingActivity.this, LoginActivity.class);
+				startActivity(intent_login);				//最后跳到登录界面
+				finish();
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
+	
 }
