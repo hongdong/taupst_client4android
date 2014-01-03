@@ -50,7 +50,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 	private static final int WRITE = 1;
 	
 	private GestureDetector detector;
-	private static final int GESTURE_DISTANCE = 120;
+	private static final int GESTURE_DISTANCE = 80;
 	private List<Fragment> listFragments;
 	private int currentIndex;
 	
@@ -127,6 +127,9 @@ public class HomePageActivity extends Activity implements ItaActivity {
 			/*处理一下将要选中的页面，丢给radioGroup和btn_top_right去处理*/
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 					float velocityY) {
+				if (Math.abs(e1.getY() - e2.getY()) > GESTURE_DISTANCE) {
+					return false;
+				}
 				if (e1.getX() - e2.getX() > GESTURE_DISTANCE) {			//从右向左滑，向右翻页
 					if (currentIndex < 2) {								//只有前三页，才会翻，最后一页不能右翻
 //						radioGroup.check(buttonIds[currentIndex + 1]);
