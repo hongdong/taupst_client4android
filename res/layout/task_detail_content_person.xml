@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 用户的基本信息  --> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="10dp"
+	android:orientation="horizontal"
+	android:background="@color/white">
+  
+     <!-- 头像  --> 
+	<ImageView 
+	    android:id="@+id/img_task_detail_photo"
+	    android:layout_width="60dp"
+	    android:layout_height="60dp"
+	    android:layout_marginTop="10dp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginBottom="10dp"
+	    android:src="@drawable/default_drawable"
+	    android:contentDescription="@string/drawable"
+	    android:clickable="true"/>
+
+	<LinearLayout 
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+	
+		<!-- 昵称，性别，发布时间 --> 
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp">
+		    <TextView 
+		        android:id="@+id/txt_task_detail_nickname"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="10dp"
+				android:textStyle="bold"
+				android:textColor="@color/green"
+				android:textSize="18sp"/>
+		    <ImageView 
+		        android:id="@+id/img_task_detail_sex"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_toRightOf="@id/txt_task_detail_nickname"
+				android:layout_marginLeft="10dp"
+				android:contentDescription="@string/drawable"/>
+		    <TextView 
+		        android:id="@+id/txt_task_detail_releasetime"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="8dp"
+				android:textSize="14sp"
+				android:textColor="@color/black"
+				android:layout_alignParentRight="true"/>
+		</RelativeLayout>
+
+		<!-- 来自哪个院系哪个年级 --> 
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="15dp">
+		    <TextView 
+		        android:id="@+id/txt_task_detail_grade"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:textColor="@color/gray"
+				android:textSize="16sp"/>
+		    <TextView 
+		        android:id="@+id/txt_task_detail_department"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_toRightOf="@id/txt_task_detail_grade"
+				android:layout_marginLeft="10dp"
+				android:textColor="@color/gray"
+				android:textSize="16sp"/>
+		</RelativeLayout>	
+	</LinearLayout>
+</LinearLayout>  

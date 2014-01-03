@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 留言 --> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical"
+    android:background="@color/white">
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"		    
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
+	    android:orientation="horizontal">
+	   	<TextView 
+	        android:id="@+id/txt_task_detail_message"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="15dp"
+			android:text="@string/message"
+			android:textColor="@color/gray"
+			android:textSize="18sp"/>
+	    <TextView 
+	        android:id="@+id/txt_task_detail_messagecount"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="15dp"
+			android:textColor="@color/gray"
+			android:textSize="18sp"/>
+	</LinearLayout>
+	<include layout="@layout/task_detail_divider" />
+    <ListView 
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+           
+    </ListView>
+    <TextView 
+		android:id="@+id/txt_task_detail_person_message"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="15dp"
+		android:layout_marginTop="15dp"
+		android:layout_marginBottom="15dp"
+		android:text="@string/no_message"
+		android:textColor="@color/black"
+		android:textSize="19sp"/>
+    <include layout="@layout/task_detail_divider" />
+</LinearLayout>

@@ -31,7 +31,8 @@
 		        android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="10dp"
-				android:textColor="@color/black"
+				android:textStyle="bold"
+				android:textColor="@color/green"
 				android:textSize="18sp"/>
 		    <TextView 
 		        android:id="@+id/txt_fm_task_releasetime"
@@ -55,6 +56,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="10dp"
 				android:layout_marginRight="50dp"
+				android:ellipsize="end"
 				android:textColor="@color/black"
 				android:textSize="20sp"/>
 		</LinearLayout>
@@ -72,7 +74,7 @@
 		 		android:layout_marginLeft="10dp"
 		 		android:paddingLeft="5dp"
 		 		android:paddingRight="5dp"
-		 		android:text="@string/reward"
+		 		android:text="@string/rewards"
 		 		android:textColor="@color/white"
 		 		android:textSize="18sp"
 		 		android:background="@color/task_reward"/>
@@ -82,6 +84,7 @@
 		 		android:layout_height="wrap_content"
 		 		android:layout_marginLeft="10dp"
 		 		android:layout_marginRight="30dp"
+		 		android:ellipsize="end"
 		 		android:textColor="@color/gray"
 		 		android:textSize="18sp"/>
 	 	</LinearLayout>

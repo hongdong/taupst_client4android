@@ -15,11 +15,13 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
+import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.StatusService;
+import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
@@ -31,6 +33,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	private XListView xlist_task;
 	private TaskAdapter adapter;
 	private List<Status> currentStatus;
+	private int clickPosition;
 	
 	/*是否正在加载任务*/
 	private boolean isRefresh;
@@ -103,15 +106,21 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	}
 	
 	/*
-	 * 列表初始化
+	 * 列表初始化，设置监听器
 	 */
 	private void initListItem() {
 		getStatusFromFile();	
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Intent intent = new Intent(context, TaskDetailActivity.class);
-				startActivity(intent);
+				if (currentStatus.size() >= arg2) {
+					clickPosition = arg2;
+					/*全局变量传递数据*/
+					Intent intent = new Intent(context, TaskDetailActivity.class);
+					TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+					app.setStatus(currentStatus.get(arg2 - 1));
+					startActivityForResult(intent, IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL);
+				}
 			}
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
@@ -244,6 +253,20 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		xlist_task.setRefreshTime(lastestUpdata);
 		lastestStatusId = currentStatus.get(0).getStatusId();
 		oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL == requestCode) {
+			if (IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT == resultCode) {
+				TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+				Status status = app.getStatus();
+				currentStatus.add(clickPosition, status);
+				currentStatus.remove(clickPosition + 1);
+				adapter.notifyDataSetChanged();
+			}
+		}
 	}
 
 	/*

@@ -17,7 +17,7 @@
     <string name="input_studentid">学号</string>
     <string name="input_password">教务系统密码</string>
     <string name="about_us">关于我们</string>
-    <string name="about_us_text">看看要写什么</string>
+    <string name="about_us_text">看看要写什么   </string>
     <string name="server_declare">服务声明</string>
     <string name="server_declare_text">看看要写什么</string>
     
@@ -30,8 +30,15 @@
     <string name="write">写消息</string>
     <string name="person_data">用户资料</string>
     
-    <string name="reward">报酬</string>
     <string name="task_detail">任务详情</string>
+    <string name="rewards">报酬  :</string>
+    <string name="task_rewards">任务报酬</string>
+    <string name="release_time">截止时间  :</string>
+    <string name="signup_count">报名人数  :</string>
+    <string name="signup">猛戳报名</string>
+    <string name="message">留言  :</string>
+    <string name="no_message">暂时还没有</string>
+    
     
     
     <string name="drawable">头像:</string>

@@ -75,7 +75,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				setResult(IntentString.ResultCode.NO_SELECTCOLLEGE, intent);
+				setResult(Activity.RESULT_CANCELED, intent);
 				finish();
 			}
 		});
@@ -121,7 +121,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent();
-		setResult(IntentString.ResultCode.NO_SELECTCOLLEGE, intent);
+		setResult(Activity.RESULT_CANCELED, intent);
 		finish();
 	}
 	
