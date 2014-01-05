@@ -301,6 +301,21 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		return true;
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case IntentString.RequestCode.HOMEPAGE_WRITE:
+			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
+				taskFragment.releaseTaskSuccess();
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+	
 	/*不重写这个方法，在退出的时候杀死进程的话，
 	 * 会导致没有完全杀死程序的，会残留哪些我也不太清楚
 	 * 使得手机在没有清空缓存的时候，再一次打开软件，

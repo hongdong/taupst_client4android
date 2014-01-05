@@ -1,12 +1,10 @@
 package com.example.taupstairs.logic;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import org.apache.http.protocol.HTTP;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
@@ -23,6 +21,7 @@ import com.example.taupstairs.ui.ItaActivity;
 import com.example.taupstairs.ui.ItaFragment;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.JsonUtil;
+import com.example.taupstairs.util.StringUtil;
 
 public class MainService extends Service implements Runnable {
 
@@ -224,13 +223,14 @@ public class MainService extends Service implements Runnable {
 		String content = (String) taskParams.get(Status.STATUS_CONTENT);
 		String rewards = (String) taskParams.get(Status.STATUS_REWARDS);
 		String endtime = (String) taskParams.get(Status.STATUS_ENDTIME);	
+		String release_url = HttpClientUtil.BASE_URL 
+				+ "data/task/save?title=" + title
+				+ "&content=" + content
+				+ "&rewards=" + rewards 
+				+ "&end_of_time=" + endtime 
+				+ "&task_level=1";
+		release_url = StringUtil.replaceBlank(release_url);
 		try {
-			String release_url = HttpClientUtil.BASE_URL 
-					+ "data/task/save?title=" + URLEncoder.encode(title, HTTP.UTF_8)
-					+ "&content=" + URLEncoder.encode(content, HTTP.UTF_8)
-					+ "&rewards=" + URLEncoder.encode(rewards, HTTP.UTF_8) 
-					+ "&end_of_time=" + endtime 
-					+ "&task_level=1";
 			result = HttpClientUtil.getRequest(release_url);
 		} catch (Exception e) {
 			e.printStackTrace();

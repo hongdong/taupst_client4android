@@ -267,8 +267,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			}
 			break;
 			
+		/*这里捕获不到，看来要在homepage捕获到，再调用*/
 		case IntentString.RequestCode.HOMEPAGE_WRITE:
 			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
+				Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
 			}
 			break;
@@ -276,6 +278,11 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		default:
 			break;
 		}
+	}
+	
+	public void releaseTaskSuccess() {
+		Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
+		getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
 	}
 
 	/*

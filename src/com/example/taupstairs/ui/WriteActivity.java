@@ -1,5 +1,6 @@
 package com.example.taupstairs.ui;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -113,7 +114,9 @@ public class WriteActivity extends Activity implements ItaActivity {
 					JSONObject jsonObject = new JSONObject(result);
 					String state = jsonObject.getString(JsonString.Release.STATE).trim();
 					if (state.equals(JsonString.Release.STATE_OK)) {
-						Toast.makeText(WriteActivity.this, "成功发布任务", Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent();
+						setResult(IntentString.ResultCode.WRITE_HOMEPAGE, intent);
+						finish();
 					} else {
 						Toast.makeText(WriteActivity.this, "惊呆了，网络出错了", Toast.LENGTH_SHORT).show();
 					}
@@ -138,8 +141,9 @@ public class WriteActivity extends Activity implements ItaActivity {
 				int day = data.getIntExtra(Time.DAY, 0);
 				int hour = data.getIntExtra(Time.HOUR, 0);
 				int minute = data.getIntExtra(Time.MINUTE, 0);
-				txt_write_display_endtime.setText(year + "年" + month + "月" + day + "日  " + hour + ":" + minute);
 				Time endTime = new Time(year, month, day, hour, minute);
+				txt_write_display_endtime.setText(TimeUtil.getDisplayTime(TimeUtil.getNow(Calendar.getInstance()), 
+						endTime));
 				timeString = TimeUtil.timeToOriginal(endTime);
 			}
 		}

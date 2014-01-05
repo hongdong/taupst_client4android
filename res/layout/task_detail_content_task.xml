@@ -29,12 +29,12 @@
 	<include layout="@layout/task_detail_divider" />
 	
 	<!-- 报酬 --> 
-	<LinearLayout 
+	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="15dp"
-	    android:orientation="horizontal">
+	    android:layout_marginTop="15dp">
 	    <TextView 
+	        android:id="@+id/txt_task_detail_reward_tmp"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="15dp"
@@ -44,15 +44,18 @@
 			android:textSize="19sp"
 			android:drawableLeft="@drawable/img_task_rewards_n"
 			android:drawablePadding="10dp"/>
-	    <TextView 
+        <TextView 
 	        android:id="@+id/txt_task_detail_rewards"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="15dp"
+			android:layout_centerVertical="true"
+			android:layout_toRightOf="@id/txt_task_detail_reward_tmp"
+			android:layout_marginLeft="15dp"	
+			android:layout_marginRight="15dp"
 			android:textStyle="bold"
 			android:textColor="@color/gold"
 			android:textSize="19sp"/>
-	</LinearLayout>
+	</RelativeLayout>
 	
 	<!-- 截止时间 --> 
 	<LinearLayout 

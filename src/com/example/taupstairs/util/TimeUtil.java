@@ -59,6 +59,55 @@ public class TimeUtil {
 		return displayTime;
 	}
 	
+	public static String getDisplayTime(Time now, Time original) {
+		String displayTime = null;
+		String month, day, hour, minute;
+		Time time = original;
+		if (time.getMonth() < 10) {
+			month = "0" + time.getMonth();
+		} else {
+			month = "" + time.getMonth();
+		}
+		if (time.getDay() < 10) {
+			day = "0" + time.getDay();
+		} else {
+			day = "" + time.getDay();
+		}
+		if (time.getHour() < 10) {
+			hour = "0" + time.getHour();
+		} else {
+			hour = "" + time.getHour();
+		}
+		if (time.getMinute() < 10) {
+			minute = "0" + time.getMinute();
+		} else {
+			minute = "" + time.getMinute();
+		}
+		if (time.getYear() != now.getYear()) {
+			displayTime = time.getYear() + "年" + 
+					month + "月" +
+					day + "日  " +
+					hour + ":" +
+					minute;
+		} else {
+			if (time.getMonth() != now.getMonth()) {
+				displayTime = month + "月" +
+						day + "日  " +
+						hour + ":" +
+						minute;
+			} else {
+				if (time.getDay() != now.getDay()) {
+					displayTime = day + "日  " +
+							hour + ":" +
+							minute;
+				} else {
+					displayTime = hour + ":" + minute;
+				}
+			}
+		}
+		return displayTime;
+	}
+	
 	public static Time getNow(Calendar calendar) {
 		calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
@@ -105,7 +154,7 @@ public class TimeUtil {
 		}
 		String original = String.valueOf(time.getYear()) + "-" 
 				+ month + "-" 
-				+ day + "+" 
+				+ day + " " 
 				+ hour + ":"
 				+ minute + ":"
 				+ "00";
