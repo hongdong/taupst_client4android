@@ -26,6 +26,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class HomePageActivity extends Activity implements ItaActivity {
@@ -220,7 +221,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 					}
 				} else if (WRITE == flag_me_write) {		//跳到发布任务的activity
 					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
-					startActivity(intent);
+					startActivityForResult(intent, IntentString.RequestCode.HOMEPAGE_WRITE);
 				}
 			}
 		});

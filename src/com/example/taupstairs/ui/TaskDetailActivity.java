@@ -13,6 +13,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
+import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.util.HttpClientUtil;
@@ -23,6 +24,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private Button btn_back, btn_refresh, btn_signup;
 	private Status status;
 	private Holder holder;
+	private Time now;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -40,6 +42,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private void initData() {
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		status = app.getStatus();
+		now = TimeUtil.getNow(Calendar.getInstance());
 	}
 	
 	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
@@ -115,7 +118,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			holder.img_task_detail_sex.setImageResource(R.drawable.icon_female);
 		}
 		
-		String displayTime = TimeUtil.getDisplayTime(Calendar.getInstance(), status.getStatusReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
 		holder.txt_task_detail_releasetime.setText(displayTime);
 		
 		holder.txt_task_detail_grade.setText(status.getPersonGrade());
@@ -124,10 +127,17 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_content.setText(status.getStatusContent());
 		holder.txt_task_detail_rewards.setText(status.getStatusRewards());
 		
-		String endTime = TimeUtil.getDisplayTime(Calendar.getInstance(), status.getStatusEndTime());
+		String endTime = TimeUtil.getDisplayTime(now, status.getStatusEndTime());
 		holder.txt_task_detail_endtime.setText(endTime);
 		
 		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
+		String messageCount = status.getStatusMessageCount().trim();
+		if (messageCount.equals("0")) {
+			TextView txt_task_detail_no_message = (TextView)findViewById(R.id.txt_task_detail_no_message);
+			txt_task_detail_no_message.setVisibility(View.VISIBLE);
+		} else {
+			//显示留言
+		}
 		holder.txt_task_detail_messagecount.setText(status.getStatusMessageCount());
 		
 		btn_back.setOnClickListener(new OnClickListener() {

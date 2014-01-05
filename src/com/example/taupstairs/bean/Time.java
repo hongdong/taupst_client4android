@@ -8,6 +8,12 @@ public class Time {
 	private int hour;
 	private int minute;
 	
+	public static final String YEAR = "year";
+	public static final String MONTH = "month";
+	public static final String DAY = "day";
+	public static final String HOUR = "hour";
+	public static final String MINUTE = "minute";
+	
 	public Time() {
 		
 	}

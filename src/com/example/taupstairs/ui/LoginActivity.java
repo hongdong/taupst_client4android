@@ -189,9 +189,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (IntentString.RequestCode.LOGIN_SELECTCOLLEGE == requestCode) {
 			if (IntentString.ResultCode.SELECTCOLLEGE_LOGIN == resultCode) {
-				Bundle myData = data.getExtras();
-				userCollegeId = myData.getString(College.COLLEGE_ID);
-				String collegeName = myData.getString(College.COLLEGE_NAME);
+				userCollegeId = data.getStringExtra(College.COLLEGE_ID);
+				String collegeName = data.getStringExtra(College.COLLEGE_NAME);
 				txt_college_name.setTextColor(Color.BLACK);
 				txt_college_name.setText(collegeName);
 			}

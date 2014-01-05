@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
+import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.ui.PersonDataActivity;
 import com.example.taupstairs.util.HttpClientUtil;
@@ -23,11 +24,13 @@ public class TaskAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<Status> listStatus;
+	private Time now;
 
 	public TaskAdapter(Context context, List<Status> listStatus) {
 		super();
 		this.context = context;
 		this.listStatus = listStatus;
+		this.now = TimeUtil.getNow(Calendar.getInstance());
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public class TaskAdapter extends BaseAdapter {
 			}
 		}
 
-		String displayTime = TimeUtil.getDisplayTime(Calendar.getInstance(), status.getStatusReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
 		holder.txt_fm_task_releasetime.setText(displayTime);
 		
 		holder.txt_fm_task_title.setText(status.getStatusTitle());

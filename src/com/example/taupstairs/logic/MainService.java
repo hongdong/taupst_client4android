@@ -1,10 +1,12 @@
 package com.example.taupstairs.logic;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import org.apache.http.protocol.HTTP;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
@@ -56,6 +58,11 @@ public class MainService extends Service implements Runnable {
 				Bundle data = msg.getData();
 				String mode = data.getString(Task.TA_GETSTATUS_MODE);
 				fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
+				break;
+				
+			case Task.TA_RELEASE:
+				ItaActivity activity_release = (ItaActivity) getActivityByName(Task.TA_RELEASE_ACTIVITY);
+				activity_release.refresh(Task.TA_RELEASE, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -127,6 +134,10 @@ public class MainService extends Service implements Runnable {
 			String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
 			Bundle data = msg.getData();
 			data.putString(Task.TA_GETSTATUS_MODE, mode);
+			break;
+			
+		case Task.TA_RELEASE:
+			msg.obj = doReleaseTask(task);
 			break;
 		
 		case Task.TA_USEREXIT:
@@ -204,13 +215,37 @@ public class MainService extends Service implements Runnable {
 	}
 	
 	/*
+	 * 发布任务
+	 */
+	private String doReleaseTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String title = (String) taskParams.get(Status.STATUS_TITLE);
+		String content = (String) taskParams.get(Status.STATUS_CONTENT);
+		String rewards = (String) taskParams.get(Status.STATUS_REWARDS);
+		String endtime = (String) taskParams.get(Status.STATUS_ENDTIME);	
+		try {
+			String release_url = HttpClientUtil.BASE_URL 
+					+ "data/task/save?title=" + URLEncoder.encode(title, HTTP.UTF_8)
+					+ "&content=" + URLEncoder.encode(content, HTTP.UTF_8)
+					+ "&rewards=" + URLEncoder.encode(rewards, HTTP.UTF_8) 
+					+ "&end_of_time=" + endtime 
+					+ "&task_level=1";
+			result = HttpClientUtil.getRequest(release_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return result;
+
+	}
+	
+	/*
 	 * 用户注销
 	 */
 	private void doUserExit() {
 		String userexit_url = HttpClientUtil.BASE_URL + "data/user/exit";
 		try {
-			String jsonString = HttpClientUtil.getRequest(userexit_url);
-			System.out.println(jsonString);
+			HttpClientUtil.getRequest(userexit_url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -248,6 +283,10 @@ public class MainService extends Service implements Runnable {
 	/*将Fragment添加到Fragment链表中去*/
 	public static void addFragment(Fragment fragment) {
 		fragments.add(fragment);
+	}
+	
+	public static void removeFragment(Fragment fragment) {
+		fragments.remove(fragment);
 	}
 	
 	/*根据Fragment的name从Fragment链表中找到它*/

@@ -27,17 +27,27 @@
     <string name="rank">........排行........</string>
     <string name="me">我</string>
     
-    <string name="write">写消息</string>
+    <string name="write">发布任务</string>
+    <string name="release">发  布</string>
+    <string name="write_task_title">标  题（不超过14个字）</string>
+    <string name="write_task_content">正  文（不超过140个字）</string>
+    <string name="write_task_rewards">报  酬（不超过30个字）</string>
+    <string name="write_endtime_hint">选个截止时间吧！</string>
+    <string name="write_go">Go</string>
+    <string name="select_endtime">选择截止时间</string>
+    
     <string name="person_data">用户资料</string>
     
     <string name="task_detail">任务详情</string>
     <string name="rewards">报酬  :</string>
-    <string name="task_rewards">任务报酬</string>
-    <string name="release_time">截止时间  :</string>
+    <string name="task_rewards">任务报酬  :</string>
+    <string name="endtime">截止时间  :</string>
     <string name="signup_count">报名人数  :</string>
     <string name="signup">猛戳报名</string>
-    <string name="message">留言  :</string>
+    <string name="message_count">留言  :</string>
     <string name="no_message">暂时还没有</string>
+    <string name="say_a_little">说几句吧</string>
+    <string name="post_message">发  表</string>
     
     
     

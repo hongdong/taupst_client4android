@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:layout_gravity="bottom"
+	android:background="@color/common_bg">
+	<ImageView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:src="@color/task_detail_img"
+	    android:contentDescription="@string/hello_world"/>
+	<include layout="@layout/request_focus"/>
+    <RelativeLayout 
+        android:layout_width="match_parent"
+ 		android:layout_height="wrap_content"
+ 		android:layout_marginTop="5dp"
+ 		android:layout_marginBottom="5dp">
+ 		<Button 
+			android:id="@+id/btn_task_detail_message"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:layout_marginRight="10dp"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:text="@string/post_message"
+			android:textSize="17sp"
+			android:textColor="@color/white"
+			android:background="@drawable/task_detail_btn_post_message_bg"/>
+        <EditText 
+            android:id="@+id/edit_task_detail_message"
+            android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="5dp"
+			android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@id/btn_task_detail_message"
+			android:hint="@string/say_a_little"
+			android:textColorHint="@color/gray"
+			android:background="@drawable/task_detail_message_bg"/>
+    </RelativeLayout>
+</LinearLayout>

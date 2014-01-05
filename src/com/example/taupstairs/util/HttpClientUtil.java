@@ -21,6 +21,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import android.graphics.drawable.Drawable;
 import com.example.taupstairs.bean.Person;
@@ -31,7 +32,7 @@ public class HttpClientUtil {
 	private static final String SCHEME_NAME = "http";
 	public static final String BASE_URL = "http://taupst.duapp.com/";
 	public static final String PHOTO_BASE_URL = "http://bcs.duapp.com/taupst/photo/";
-	private static final String DEFAULT_CHARSET = "GBK";// httpclient读取内容时使用的字符集，为了读汉字
+	private static final String DEFAULT_CHARSET = HTTP.UTF_8;// httpclient读取内容时使用的字符集，为了读汉字
 	
 	/*
 	 * 私有的，空的，构造函数。因为用httpclient有很多好处。
@@ -83,7 +84,7 @@ public class HttpClientUtil {
 				for (String key : rawParams.keySet()) {					//参数比较多的话可以封装起来
 					params.add(new BasicNameValuePair(key, rawParams.get(key)));
 				}
-				post.setEntity(new UrlEncodedFormEntity(params, "taupstairs"));
+				post.setEntity(new UrlEncodedFormEntity(params, DEFAULT_CHARSET));
 				HttpClient httpClient = getHttpClient();
 				HttpResponse response = httpClient.execute(post);
 				if (200 == response.getStatusLine().getStatusCode()) {

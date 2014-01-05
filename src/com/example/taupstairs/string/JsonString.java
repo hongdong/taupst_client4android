@@ -39,4 +39,9 @@ public class JsonString {
 		public static final String PERSON_GRADE = "grade";
 		public static final String PERSON_SEX = "sex";
 	}
+	
+	public static class Release {
+		public static final String STATE = "state";
+		public static final String STATE_OK = "0";
+	}
 }

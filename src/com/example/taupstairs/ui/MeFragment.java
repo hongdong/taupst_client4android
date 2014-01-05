@@ -23,6 +23,7 @@ import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
+import com.example.taupstairs.util.ListViewUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class MeFragment extends Fragment implements ItaFragment {
@@ -144,6 +145,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 				new PersonVariableDataAdapter(context, defaultPerson.getPersonDrawable(), 
 				defaultPerson.getPersonNickname(), defaultPerson.getPersonSignatrue());
 		list_variable.setAdapter(variable_adapter);	//把三个可改变资料显示出来
+		ListViewUtil.setListViewHeightBasedOnChildren(list_variable);
 		
 		String[] baseLeft = new String[] {"院系:", "年级:", "专业:", "姓名:", "性别:", };
 		String[] baseRight = new String[] {defaultPerson.getPersonFaculty(), defaultPerson.getPersonYear(),
@@ -158,6 +160,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 		SimpleAdapter base_adapter = new SimpleAdapter(context, list, R.layout.fm_me_base, 
 				new String[] {LIST_LEFT, LIST_RIGHT, }, new int[] {R.id.txt_base_left, R.id.txt_base_right});
 		list_base.setAdapter(base_adapter);			//把五个基本资料显示出来
+		ListViewUtil.setListViewHeightBasedOnChildren(list_base);
 		txt_setting.setVisibility(View.VISIBLE);	//把设置那一行显示出来
 	}
 

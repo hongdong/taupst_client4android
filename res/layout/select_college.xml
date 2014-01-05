@@ -41,7 +41,7 @@
 		    	android:layout_height="wrap_content"
 		    	android:paddingLeft="20dp"
 		    	android:drawablePadding="20dp"
-		    	android:background="@drawable/login_edit_search"
+		    	android:background="@drawable/task_detail_edit_message_bg"
 				android:drawableLeft="@drawable/login_img_search"
 		    	android:hint="@string/input_college"
 		    	android:textColorHint="@color/gray"

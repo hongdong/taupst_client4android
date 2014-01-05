@@ -7,21 +7,38 @@
     
     <include layout="@layout/task_detail_head"/>
     
-    <LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="10dp"
-		android:layout_marginRight="10dp"
-	    android:orientation="vertical">
+    <FrameLayout 
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent">
 	    
-        <!-- 用户的基本信息  --> 
-        <include layout="@layout/task_detail_content_person"/>
-        
-        <!-- 标题，内容，报酬，截止时间，报名人数，报名 --> 
-        <include layout="@layout/task_detail_content_task"/>
-        
-        <!-- 留言 --> 
-        <include layout="@layout/task_detail_message"/>
-        
-    </LinearLayout> 
+	    <ScrollView 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content">   
+		    <LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+			    android:orientation="vertical">
+			    
+		        <!-- 用户的基本信息  --> 
+		        <include layout="@layout/task_detail_content_person"/>
+		        
+		        <!-- 标题，内容，报酬，截止时间，报名人数，报名 --> 
+		        <include layout="@layout/task_detail_content_task"/>
+		        
+		        <!-- 留言 --> 
+		        <include layout="@layout/task_detail_message"/>
+		        <TextView 
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="100dp"/>
+		    </LinearLayout> 
+		</ScrollView>
+		    
+	    <!-- 发表留言 -->
+	    <include layout="@layout/task_detail_post_message"/>
+	       
+    </FrameLayout>
+    
 </LinearLayout>

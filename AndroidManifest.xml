@@ -16,6 +16,8 @@
         android:icon="@drawable/taupstairs"
         android:label="@string/app_name"
         android:theme="@style/Common_Theme" >
+        
+        <!--  
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name" >
@@ -25,7 +27,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LogoActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        -->
+        
+        <activity android:name=".ui.LogoActivity" 
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
         <activity android:name=".ui.LoginActivity" android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity android:name=".ui.SelectCollegeActivity" android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".ui.AboutUsActivity"></activity>
@@ -33,8 +45,9 @@
         <activity android:name=".ui.HomePageActivity"></activity>
         <activity android:name=".ui.SettingActivity"></activity>
         <activity android:name=".ui.WriteActivity"></activity>
+        <activity android:name=".ui.SelectEndtimeActivity"></activity>
         <activity android:name=".ui.PersonDataActivity"></activity>
-        <activity android:name=".ui.TaskDetailActivity"></activity>
+        <activity android:name=".ui.TaskDetailActivity" android:windowSoftInputMode="stateHidden"></activity>
         
         <service android:name=".logic.MainService"></service>
 

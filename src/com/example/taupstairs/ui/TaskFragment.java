@@ -23,6 +23,7 @@ import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.util.SharedPreferencesUtil;
+import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
 
@@ -43,7 +44,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	private String oldestStatusId;
 	
 	private String lastestUpdata;
-	private Time lastestRefreshTime, now;
+	private Time lastestRefreshTime;
 	
 	public TaskFragment() {
 		super();
@@ -191,9 +192,15 @@ public class TaskFragment extends Fragment implements ItaFragment {
 				setLastestUpdata();
 			} else if (mode.equals(Task.TA_GETSTATUS_MODE_PULLREFRESH)) {
 				if (newStatus.size() < 20) {
-					/*这里一定要放到最头部，那样显示才不会乱*/
-					currentStatus.addAll(0, newStatus);
-					adapter.notifyDataSetChanged();
+					if (currentStatus != null) {
+						/*这里一定要放到最头部，那样显示才不会乱*/
+						currentStatus.addAll(0, newStatus);
+						adapter.notifyDataSetChanged();
+					} else {	/*读取数据库可能失败。或许是上次没保存好*/
+						currentStatus = newStatus;
+						adapter = new TaskAdapter(context, currentStatus);
+						xlist_task.setAdapter(adapter);
+					}
 				} else {
 					currentStatus = newStatus;
 					adapter.notifyDataSetInvalidated();
@@ -217,30 +224,21 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * lastestUpdata上次更新时间的设置。是给下次下拉的时候显示的
 	 */
 	private void setLastestUpdata() {
-		now = getNow();
-		/*刚刚打开软件，这个是为空的*/
-		if (null == lastestRefreshTime) {
-			lastestRefreshTime = now;
-		}
-		if (now.getDay() != lastestRefreshTime.getDay()) {
-			lastestUpdata = "昨天    " + lastestRefreshTime.getHour() + ":" + lastestRefreshTime.getMinute();
-		}
-		lastestUpdata = lastestRefreshTime.getHour() + ":" + lastestRefreshTime.getMinute();
-		lastestRefreshTime = now;
-	}
-	
-	/*
-	 * 获取当前时间的：天，时，分
-	 */
-	private Time getNow() {
-		Time time = null;
-		Calendar calendar = Calendar.getInstance();
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		int minute = calendar.get(Calendar.MINUTE);
-		time = new Time(day, hour, minute);
+		String hour, minute;
+		lastestRefreshTime = TimeUtil.getNow(Calendar.getInstance());
 		
-		return time;
+		if (lastestRefreshTime.getHour() < 10) {
+			hour = "0" + lastestRefreshTime.getHour();
+		} else {
+			hour = "" + lastestRefreshTime.getHour();
+		}
+		if (lastestRefreshTime.getMinute() < 10) {
+			minute = "0" + lastestRefreshTime.getMinute();
+		} else {
+			minute = "" + lastestRefreshTime.getMinute();
+		}
+		
+		lastestUpdata = hour + ":" + minute;
 	}
 	
 	/*
@@ -258,7 +256,8 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL == requestCode) {
+		switch (requestCode) {
+		case IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL:
 			if (IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT == resultCode) {
 				TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
 				Status status = app.getStatus();
@@ -266,6 +265,16 @@ public class TaskFragment extends Fragment implements ItaFragment {
 				currentStatus.remove(clickPosition + 1);
 				adapter.notifyDataSetChanged();
 			}
+			break;
+			
+		case IntentString.RequestCode.HOMEPAGE_WRITE:
+			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
+				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
 

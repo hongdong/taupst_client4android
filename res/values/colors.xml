@@ -12,6 +12,7 @@
     <color name="click_select">#fafafa</color>
     <color name="simple_blue">#7996DE</color>
     <color name="task_detail_bg">#E2E2E2</color>
+    <color name="task_detail_img">#8FBC8F</color>
     
 	<color name="ivory">#fffff0</color><!--象牙色 --> 
 	<color name="lightyellow">#ffffe0</color><!--亮黄色 --> 

@@ -5,40 +5,64 @@ import java.util.Calendar;
 import com.example.taupstairs.bean.Time;
 
 public class TimeUtil {
+	
+	public static final int LARGE = 1; 
+	public static final int EQULE = 0;
+	public static final int SMALL = -1;
 
-	public static String getDisplayTime(Calendar calendar, String original) {
+	public static String getDisplayTime(Time now, String original) {
 		String displayTime = null;
-		Time now = getNow(calendar);
-		Time time = getOriginal(original);
+		String month, day, hour, minute;
+		Time time = originalToTime(original);
+		if (time.getMonth() < 10) {
+			month = "0" + time.getMonth();
+		} else {
+			month = "" + time.getMonth();
+		}
+		if (time.getDay() < 10) {
+			day = "0" + time.getDay();
+		} else {
+			day = "" + time.getDay();
+		}
+		if (time.getHour() < 10) {
+			hour = "0" + time.getHour();
+		} else {
+			hour = "" + time.getHour();
+		}
+		if (time.getMinute() < 10) {
+			minute = "0" + time.getMinute();
+		} else {
+			minute = "" + time.getMinute();
+		}
 		if (time.getYear() != now.getYear()) {
 			displayTime = time.getYear() + "年" + 
-					time.getMonth() + "月" +
-					time.getDay() + "日    " +
-					time.getHour() + ":" +
-					time.getMinute();
+					month + "月" +
+					day + "日  " +
+					hour + ":" +
+					minute;
 		} else {
 			if (time.getMonth() != now.getMonth()) {
-				displayTime = time.getMonth() + "月" +
-						time.getDay() + "日    " +
-						time.getHour() + ":" +
-						time.getMinute();
+				displayTime = month + "月" +
+						day + "日  " +
+						hour + ":" +
+						minute;
 			} else {
 				if (time.getDay() != now.getDay()) {
-					displayTime = time.getDay() + "日    " +
-							time.getHour() + ":" +
-							time.getMinute();
+					displayTime = day + "日  " +
+							hour + ":" +
+							minute;
 				} else {
-					displayTime = time.getHour() + ":" + time.getMinute();
+					displayTime = hour + ":" + minute;
 				}
 			}
 		}
 		return displayTime;
 	}
 	
-	private static Time getNow(Calendar calendar) {
+	public static Time getNow(Calendar calendar) {
 		calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
+		int month = calendar.get(Calendar.MONTH) + 1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
@@ -46,7 +70,7 @@ public class TimeUtil {
 		return now;
 	}
 	
-	private static Time getOriginal(String original) {
+	public static Time originalToTime(String original) {
 		char[] time = original.toCharArray();
 		int year = Integer.parseInt(String.copyValueOf(time, 0, 4));
 		int month = Integer.parseInt(String.copyValueOf(time, 5, 2));
@@ -55,5 +79,61 @@ public class TimeUtil {
 		int minute = Integer.parseInt(String.copyValueOf(time, 14, 2));
 		Time result = new Time(year, month, day, hour, minute);
 		return result;
+	}
+	
+	public static String timeToOriginal(Time time) {
+		String month, day, hour, minute;
+		if (time.getMonth() < 10) {
+			month = "0" + time.getMonth();
+		} else {
+			month = "" + time.getMonth();
+		}
+		if (time.getDay() < 10) {
+			day = "0" + time.getDay();
+		} else {
+			day = "" + time.getDay();
+		}
+		if (time.getHour() < 10) {
+			hour = "0" + time.getHour();
+		} else {
+			hour = "" + time.getHour();
+		}
+		if (time.getMinute() < 10) {
+			minute = "0" + time.getMinute();
+		} else {
+			minute = "" + time.getMinute();
+		}
+		String original = String.valueOf(time.getYear()) + "-" 
+				+ month + "-" 
+				+ day + "+" 
+				+ hour + ":"
+				+ minute + ":"
+				+ "00";
+		return original;
+	}
+	
+	public static int compare(Time large, Time small) {
+		if (large.getYear() > small.getYear()) {
+			return LARGE;
+		} else if (large.getYear() == small.getYear()) {
+			if (large.getMonth() > small.getMonth()) {
+				return LARGE;
+			} else if (large.getMonth() == small.getMonth()) {
+				if (large.getDay() > small.getDay()) {
+					return LARGE;
+				} else if (large.getDay() == small.getDay()) {
+					if (large.getHour() > small.getHour()) {
+						return LARGE;
+					} else if (large.getHour() == small.getHour()) {
+						if (large.getMinute() > small.getMinute()) {
+							return LARGE;
+						} else if (large.getMinute() == small.getMinute()) {
+							return EQULE;
+						}
+					}
+				}
+			}
+		}
+		return SMALL;
 	}
 }

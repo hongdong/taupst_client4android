@@ -44,7 +44,12 @@ public class Task {
 	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
 	
 	//用户注销
-	public static final int TA_USEREXIT = 5;
+	public static final int TA_RELEASE = 5;
+	public static final String TA_RELEASE_TASKPARAMS = "release";
+	public static final String TA_RELEASE_ACTIVITY = "WriteActivity";
+	
+	//用户注销
+	public static final int TA_USEREXIT = 6;
 	public static final String TA_USEREXIT_TASKPARAMS = "userexit";
 	public static final String TA_USEREXIT_ACTIVITY_HOMEPAGE = "HomePageActivity";
 	public static final String TA_USEREXIT_ACTIVITY_SETTING = "SettingActivity";
