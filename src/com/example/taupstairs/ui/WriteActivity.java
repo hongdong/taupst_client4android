@@ -109,7 +109,6 @@ public class WriteActivity extends Activity implements ItaActivity {
 			if (null == result) {
 				Toast.makeText(WriteActivity.this, "没网络啊！！！亲", Toast.LENGTH_SHORT).show();
 			} else {
-				System.out.println(result);
 				try {
 					JSONObject jsonObject = new JSONObject(result);
 					String state = jsonObject.getString(JsonString.Release.STATE).trim();
