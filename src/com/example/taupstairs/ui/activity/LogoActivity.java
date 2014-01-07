@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,8 +7,10 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.User;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
@@ -19,7 +21,6 @@ public class LogoActivity extends Activity implements ItaActivity {
 	private Animation animation;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.logo);
 		Intent intent = new Intent(LogoActivity.this, MainService.class);

@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.logic;
 
 /*Activity 公用接口*/
 public interface ItaActivity {

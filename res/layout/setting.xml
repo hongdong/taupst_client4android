@@ -30,10 +30,20 @@
         android:layout_marginRight="10dp"
         android:orientation="vertical">
         <ListView 
-	        android:id="@+id/list_setting"
+	        android:id="@+id/list_setting_user"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
+	        android:layout_marginTop="15dp"
+	        android:divider="@color/white_divider"
+	        android:dividerHeight="1dp"
+	        android:background="@drawable/common_list_bg">
+        
+    	</ListView>
+        <ListView 
+	        android:id="@+id/list_setting_soft"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="15dp"
 	        android:divider="@color/white_divider"
 	        android:dividerHeight="1dp"
 	        android:background="@drawable/common_list_bg">

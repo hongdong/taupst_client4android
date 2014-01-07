@@ -6,6 +6,7 @@
     <string name="hello_world">Hello world!</string>
     
     <string name="ver001">Version 001</string>
+    <string name="ver002">Version 002</string>
     
     <string name="logo">logo</string>
     <string name="login">登    录</string>
@@ -20,6 +21,19 @@
     <string name="about_us_text">看看要写什么   </string>
     <string name="server_declare">服务声明</string>
     <string name="server_declare_text">看看要写什么</string>
+    
+    <string name="complete_userdata">完善用户信息</string>
+    <string name="userdata_base">基本资料：（完善信息，让更多的人认识你吧）</string>
+    <string name="userdata_nickname">用户昵称:</string>
+    <string name="nickname_hint">昵称不能超过八个字哦</string>
+    <string name="signatrue_hint">写下属于你自己的签名</string>
+    <string name="userdata_optional">可选资料：（仅由您选择性公开给任务接受者）</string>
+    <string name="qq">QQ 号:</string>
+    <string name="qq_hint">可输入您的企鹅号</string>
+    <string name="email">Email:</string>
+    <string name="email_hint">可输入您的伊妹儿</string>
+    <string name="phone">Phone:</string>
+    <string name="phone_hint">可输入您的爪机号</string>
     
     <string name="homepage">主页面</string>
     <string name="info">--------消息--------</string>

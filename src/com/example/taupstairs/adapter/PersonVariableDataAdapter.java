@@ -61,7 +61,7 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 		
 		case 2:
 			view = LayoutInflater.from(context).inflate(R.layout.fm_me_variable_signatrue, null);
-			TextView signatrueTextView = (TextView)view.findViewById(R.id.txt_variable_signatrue);
+			TextView signatrueTextView = (TextView)view.findViewById(R.id.txt_variable_signatrue);		
 			signatrueTextView.setText(signatrue);
 			break;
 

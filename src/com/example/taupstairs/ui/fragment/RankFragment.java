@@ -1,6 +1,8 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.fragment;
 
 import com.example.taupstairs.R;
+import com.example.taupstairs.logic.ItaFragment;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

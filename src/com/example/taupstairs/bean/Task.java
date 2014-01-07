@@ -43,7 +43,7 @@ public class Task {
 	public static final String TA_GETSTATUS_STATUSID = "statusid";
 	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
 	
-	//用户注销
+	//发布任务
 	public static final int TA_RELEASE = 5;
 	public static final String TA_RELEASE_TASKPARAMS = "release";
 	public static final String TA_RELEASE_ACTIVITY = "WriteActivity";
@@ -54,6 +54,12 @@ public class Task {
 	public static final String TA_USEREXIT_ACTIVITY_HOMEPAGE = "HomePageActivity";
 	public static final String TA_USEREXIT_ACTIVITY_SETTING = "SettingActivity";
 	public static final String TA_USEREXIT_OK = "userexit ok";
+	
+	//更新用户资料
+	public static final int TA_UPDATAUSERDATA = 7;
+	public static final String TA_UPDATAUSERDATA_URL = "updatauserdata";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY = "activity";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
 	
 	
 	public Task(int taskId, Map<String, Object> taskParams) {

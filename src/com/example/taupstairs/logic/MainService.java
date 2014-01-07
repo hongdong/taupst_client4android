@@ -17,8 +17,6 @@ import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
-import com.example.taupstairs.ui.ItaActivity;
-import com.example.taupstairs.ui.ItaFragment;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.JsonUtil;
 import com.example.taupstairs.util.StringUtil;
@@ -54,14 +52,25 @@ public class MainService extends Service implements Runnable {
 				
 			case Task.TA_GETSTATUS:
 				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
-				Bundle data = msg.getData();
-				String mode = data.getString(Task.TA_GETSTATUS_MODE);
+				Bundle data_getstatus = msg.getData();
+				String mode = data_getstatus.getString(Task.TA_GETSTATUS_MODE);
 				fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
 				break;
 				
 			case Task.TA_RELEASE:
 				ItaActivity activity_release = (ItaActivity) getActivityByName(Task.TA_RELEASE_ACTIVITY);
 				activity_release.refresh(Task.TA_RELEASE, msg.obj);
+				break;
+			
+			case Task.TA_UPDATAUSERDATA:
+				Bundle data_updata_userdata = msg.getData();
+				String activity_updata_userdata = data_updata_userdata.getString(Task.TA_UPDATAUSERDATA_ACTIVITY);
+				if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_COMPLETE)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_UPDATAUSERDATA_ACTIVITY_COMPLETE);
+					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
+				} else if (activity_updata_userdata.equals("")) {
+					
+				}
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -131,18 +140,25 @@ public class MainService extends Service implements Runnable {
 		case Task.TA_GETSTATUS:
 			msg.obj = doGetStatusTask(task);
 			String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
-			Bundle data = msg.getData();
-			data.putString(Task.TA_GETSTATUS_MODE, mode);
+			Bundle data_getuserdata = msg.getData();
+			data_getuserdata.putString(Task.TA_GETSTATUS_MODE, mode);
 			break;
 			
 		case Task.TA_RELEASE:
 			msg.obj = doReleaseTask(task);
 			break;
+			
+		case Task.TA_UPDATAUSERDATA:
+			msg.obj = doUpdataUserdata(task);
+			String activity_updata_userdata = (String) taskParams.get(Task.TA_UPDATAUSERDATA_ACTIVITY);
+			Bundle data_updata_userdata = msg.getData();
+			data_updata_userdata.putString(Task.TA_UPDATAUSERDATA_ACTIVITY, activity_updata_userdata);
+			break;
 		
 		case Task.TA_USEREXIT:
 			doUserExit(); 
-			String activity = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
-			msg.obj = activity;
+			String activity_userexit = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
+			msg.obj = activity_userexit;
 			break;
 
 		default:
@@ -237,6 +253,23 @@ public class MainService extends Service implements Runnable {
 		}	
 		return result;
 
+	}
+	
+	/*
+	 * 更新用户数据
+	 */
+	private String doUpdataUserdata(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String url = (String) taskParams.get(Task.TA_UPDATAUSERDATA_URL);
+		String updata_userdata_url = HttpClientUtil.BASE_URL + "data/user/update?" + url;
+		updata_userdata_url = StringUtil.replaceBlank(updata_userdata_url);
+		try {
+			result = HttpClientUtil.getRequest(updata_userdata_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/*

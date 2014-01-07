@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +25,14 @@ import android.widget.Toast;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
+import com.example.taupstairs.logic.ItaActivity;
+import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.string.IntentString;
+import com.example.taupstairs.ui.fragment.InfoFragment;
+import com.example.taupstairs.ui.fragment.MeFragment;
+import com.example.taupstairs.ui.fragment.RankFragment;
+import com.example.taupstairs.ui.fragment.TaskFragment;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class HomePageActivity extends Activity implements ItaActivity {

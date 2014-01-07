@@ -10,6 +10,7 @@ public class SharedPreferencesUtil {
 	
 	private static final String DEFAULT_USER = "default_user";
 	private static final String LASTEST_STATUSID = "lastest_statusid";
+	
 
 	/*存储默认账户（如果先前存储过默认账户，则会覆盖）*/
 	public static void saveDefaultUser(Context context, User user) {

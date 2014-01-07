@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.logic;
 
 /*Fragment公用接口*/
 public interface ItaFragment {

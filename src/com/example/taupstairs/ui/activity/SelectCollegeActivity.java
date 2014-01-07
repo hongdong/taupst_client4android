@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.services.CollegeService;
 import com.example.taupstairs.string.IntentString;
 

@@ -52,7 +52,7 @@ public class TimeUtil {
 							hour + ":" +
 							minute;
 				} else {
-					displayTime = hour + ":" + minute;
+					displayTime = "今天  " + hour + ":" + minute;
 				}
 			}
 		}
@@ -101,7 +101,7 @@ public class TimeUtil {
 							hour + ":" +
 							minute;
 				} else {
-					displayTime = hour + ":" + minute;
+					displayTime = "今天  " + hour + ":" + minute;
 				}
 			}
 		}

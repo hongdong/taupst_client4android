@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 
@@ -15,13 +15,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
 	private Button btn_back, btn_change_user;
-	private ListView list;
-	private String[] setting = {"关于我们", "服务声名", "检查更新", "用户反馈"};
+	private ListView list_user, list_soft;
+	private String[] setting_user = {"联系资料", "清除缓存", };
+	private String[] setting_soft = {"关于我们", "服务声名", "检查更新", "用户反馈"};
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,8 @@ public class SettingActivity extends Activity implements ItaActivity {
 	@Override
 	public void init() {
 		btn_back = (Button)findViewById(R.id.btn_back_setting);
-		list = (ListView)findViewById(R.id.list_setting);
+		list_user = (ListView)findViewById(R.id.list_setting_user);
+		list_soft = (ListView)findViewById(R.id.list_setting_soft);
 		btn_change_user = (Button)findViewById(R.id.btn_change_user);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
@@ -42,13 +45,33 @@ public class SettingActivity extends Activity implements ItaActivity {
 				finish();
 			}
 		});
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(SettingActivity.this, 
-				R.layout.common_txt_item, setting);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
+		
+		ArrayAdapter<String> adapter_user = new ArrayAdapter<String>(SettingActivity.this, 
+				R.layout.common_txt_item, setting_user);
+		list_user.setAdapter(adapter_user);
+		list_user.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				switch (arg2) {
+				switch (arg2) {			
+				case 0:
+					break;
+
+				case 1:
+					break;
+					
+				default:
+					break;
+				}
+			}
+		});
+		
+		ArrayAdapter<String> adapter_soft = new ArrayAdapter<String>(SettingActivity.this, 
+				R.layout.common_txt_item, setting_soft);
+		list_soft.setAdapter(adapter_soft);
+		list_soft.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				switch (arg2) {			
 				case 0:
 					Intent intent1 = new Intent(SettingActivity.this, AboutUsActivity.class);
 					startActivity(intent1);
@@ -70,6 +93,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
+		
 		btn_change_user.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				progressDialog = new ProgressDialog(SettingActivity.this);

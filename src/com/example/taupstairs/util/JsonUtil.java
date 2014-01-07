@@ -48,12 +48,12 @@ public class JsonUtil {
 			}
 			if (jsonObject.isNull(JsonString.Person.PERSON_SIGNATRUE)) {	//如果没有个性签名，就用默认的
 				if (person.getPersonSex().trim().equals(Person.MALE)) {
-					person.setPersonSignatrue(Person.MALE_SIGNATRUE);
+					person.setPersonSignature(Person.MALE_SIGNATRUE);
 				} else if (person.getPersonSex().trim().equals(Person.FEMALE)){
-					person.setPersonSignatrue(Person.FEMALE_SIGNATRUE);
+					person.setPersonSignature(Person.FEMALE_SIGNATRUE);
 				}
 			} else {
-				person.setPersonSignatrue(jsonObject.getString(JsonString.Person.PERSON_SIGNATRUE));
+				person.setPersonSignature(jsonObject.getString(JsonString.Person.PERSON_SIGNATRUE));
 			}
 			person.setPersonFaculty(jsonObject.getString(JsonString.Person.PERSON_FACULTY));
 			person.setPersonYear(jsonObject.getString(JsonString.Person.PERSON_YEAR));

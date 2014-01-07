@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import java.util.Calendar;
 
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Time;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.util.TimeUtil;
 

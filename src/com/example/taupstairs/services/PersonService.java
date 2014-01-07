@@ -32,7 +32,7 @@ public class PersonService {
 		bitmap.compress(CompressFormat.JPEG, 100, os);
 		db.execSQL("insert into " + Person.TB_NAME + " values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 				new Object[] {person.getPersonId(), os.toByteArray(), person.getPersonNickname(), 
-				person.getPersonSignatrue(), person.getPersonFaculty(), person.getPersonYear(), 
+				person.getPersonSignature(), person.getPersonFaculty(), person.getPersonYear(), 
 				person.getPersonSpecialty(), person.getPersonName(), person.getPersonSex()});
 	}
 	
@@ -63,13 +63,13 @@ public class PersonService {
 			ByteArrayInputStream is = new ByteArrayInputStream(drawableByte);
 			Drawable personDrawable = Drawable.createFromStream(is, Person.PERSON_DRAWABLE);
 			String personNickname = cursor.getString(cursor.getColumnIndex(Person.PERSON_NICKNAME));
-			String personSignatrue = cursor.getString(cursor.getColumnIndex(Person.PERSON_SIGNATRUE));
+			String personSignature = cursor.getString(cursor.getColumnIndex(Person.PERSON_SIGNATURE));
 			String personFaculty = cursor.getString(cursor.getColumnIndex(Person.PERSON_FACULTY));
 			String personYear = cursor.getString(cursor.getColumnIndex(Person.PERSON_YEAR));
 			String personSpecialty = cursor.getString(cursor.getColumnIndex(Person.PERSON_SPECIALTY));
 			String personName = cursor.getString(cursor.getColumnIndex(Person.PERSON_NAME));
 			String personSex = cursor.getString(cursor.getColumnIndex(Person.PERSON_SEX));
-			person = new Person(personDrawable, personNickname, personSignatrue, 
+			person = new Person(personDrawable, personNickname, personSignature, 
 					personFaculty, personYear, personSpecialty, personName, personSex);
 		}
 		return person;

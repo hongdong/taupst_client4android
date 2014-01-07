@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -21,6 +21,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
@@ -112,8 +113,8 @@ public class WriteActivity extends Activity implements ItaActivity {
 			} else {
 				try {
 					JSONObject jsonObject = new JSONObject(result);
-					String state = jsonObject.getString(JsonString.Release.STATE).trim();
-					if (state.equals(JsonString.Release.STATE_OK)) {
+					String state = jsonObject.getString(JsonString.Return.STATE).trim();
+					if (state.equals(JsonString.Return.STATE_OK)) {
 						Intent intent = new Intent();
 						setResult(IntentString.ResultCode.WRITE_HOMEPAGE, intent);
 						finish();

@@ -9,6 +9,8 @@
         android:targetSdkVersion="18" />
     
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name="com.example.taupstairs.app.TaUpstairsApplication"
@@ -17,19 +19,7 @@
         android:label="@string/app_name"
         android:theme="@style/Common_Theme" >
         
-        <!--  
-        <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
-        
-        <activity android:name=".ui.LogoActivity" 
+        <activity android:name="com.example.taupstairs.ui.activity.LogoActivity" 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,16 +28,20 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".ui.LoginActivity" android:windowSoftInputMode="stateHidden|adjustResize"></activity>
-        <activity android:name=".ui.SelectCollegeActivity" android:windowSoftInputMode="stateHidden"></activity>
-        <activity android:name=".ui.AboutUsActivity"></activity>
-        <activity android:name=".ui.ServerDeclareActivity"></activity>
-        <activity android:name=".ui.HomePageActivity"></activity>
-        <activity android:name=".ui.SettingActivity"></activity>
-        <activity android:name=".ui.WriteActivity"></activity>
-        <activity android:name=".ui.SelectEndtimeActivity"></activity>
-        <activity android:name=".ui.PersonDataActivity"></activity>
-        <activity android:name=".ui.TaskDetailActivity" android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.LoginActivity" 
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.SelectCollegeActivity" 
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.AboutUsActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.ServerDeclareActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.CompleteUserdataActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.HomePageActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.SettingActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.WriteActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.SelectEndtimeActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.PersonDataActivity"></activity>
+        <activity android:name="com.example.taupstairs.ui.activity.TaskDetailActivity" 
+            android:windowSoftInputMode="stateHidden"></activity>
         
         <service android:name=".logic.MainService"></service>
 

@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +21,10 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.PersonVariableDataAdapter;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
+import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
+import com.example.taupstairs.ui.activity.SettingActivity;
 import com.example.taupstairs.util.ListViewUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
@@ -94,11 +96,15 @@ public class MeFragment extends Fragment implements ItaFragment {
 					long arg3) {
 				switch (arg2) {				//arg2为组件的位置，这个是系统定的，从0开始
 				case 0: 
-					break;					
+					
+					break;		
+					
 				case 1:
-					break;			
+					break;	
+					
 				case 2:
 					break;
+					
 				default:
 					break;
 				}
@@ -143,7 +149,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private void displayPerson(Person defaultPerson) {
 		PersonVariableDataAdapter variable_adapter = 
 				new PersonVariableDataAdapter(context, defaultPerson.getPersonDrawable(), 
-				defaultPerson.getPersonNickname(), defaultPerson.getPersonSignatrue());
+				defaultPerson.getPersonNickname(), defaultPerson.getPersonSignature());
 		list_variable.setAdapter(variable_adapter);	//把三个可改变资料显示出来
 		ListViewUtil.setListViewHeightBasedOnChildren(list_variable);
 		

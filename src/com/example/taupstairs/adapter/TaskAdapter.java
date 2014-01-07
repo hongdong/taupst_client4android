@@ -16,7 +16,7 @@ import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
-import com.example.taupstairs.ui.PersonDataActivity;
+import com.example.taupstairs.ui.activity.PersonDataActivity;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.TimeUtil;
 

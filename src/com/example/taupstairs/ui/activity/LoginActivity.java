@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import org.json.JSONException;
@@ -18,6 +18,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.services.StatusService;
@@ -169,19 +170,29 @@ public class LoginActivity extends Activity implements ItaActivity {
 		 *还有一方面是切换账户的时候，新账户登录成功，默认账户要用新的覆盖旧的。
 		 *当然这个时候也可以删除数据库中的信息 */
 		
-		PersonService personService = new PersonService(LoginActivity.this);
-		personService.emptyPersonDB();
-		personService.closeDBHelper();
-		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);	
+		boolean first_use = false;
+		if (null == SharedPreferencesUtil.getDefaultUser(LoginActivity.this)) {
+			first_use = true;
+		}
 		
+		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);		
 		SharedPreferencesUtil.savaLastestStatusId(LoginActivity.this, null);
 		StatusService statusService = new StatusService(LoginActivity.this);
 		statusService.emptyStatusDb();
 		statusService.closeDBHelper();
+		PersonService personService = new PersonService(LoginActivity.this);
+		personService.emptyPersonDB();
+		personService.closeDBHelper();
 		
-		Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-		startActivity(intent);
-		finish();
+		if (first_use) {
+			Intent intent = new Intent(LoginActivity.this, CompleteUserdataActivity.class);
+			startActivity(intent);
+			finish();
+		} else {
+			Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+			startActivity(intent);
+			finish();
+		}
 	}
 	
 	/*接收Intent返回的数据*/

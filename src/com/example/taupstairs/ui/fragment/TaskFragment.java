@@ -1,4 +1,4 @@
-package com.example.taupstairs.ui;
+package com.example.taupstairs.ui.fragment;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,9 +19,11 @@ import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
+import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
+import com.example.taupstairs.ui.activity.TaskDetailActivity;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;

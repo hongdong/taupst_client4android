@@ -9,7 +9,7 @@ public class Person {
 	//头像，昵称，个性签名
 	private Drawable personDrawable;
 	private String personNickname;
-	private String personSignatrue;
+	private String personSignature;
 	//院系，年级，专业，姓名，性别
 	private String personFaculty;
 	private String personYear;
@@ -23,7 +23,7 @@ public class Person {
 	public static final String PERSON_ID = "personId";
 	public static final String PERSON_DRAWABLE = "personDrawable";
 	public static final String PERSON_NICKNAME = "personNickname";
-	public static final String PERSON_SIGNATRUE = "personSignatrue";
+	public static final String PERSON_SIGNATURE = "personSignature";
 	public static final String PERSON_FACULTY = "personFaculty";
 	public static final String PERSON_YEAR = "personYear";
 	public static final String PERSON_SPECIALTY = "personSpecialty";
@@ -41,12 +41,12 @@ public class Person {
 		
 	} 
 
-	public Person(Drawable personDrawable, String personNickname, String personSignatrue,
+	public Person(Drawable personDrawable, String personNickname, String personSignature,
 			String personFaculty, String personYear, String personSpecialty,
 			String personName, String personSex) {
 		this.personDrawable = personDrawable;
 		this.personNickname = personNickname;
-		this.personSignatrue = personSignatrue;
+		this.personSignature = personSignature;
 		this.personFaculty = personFaculty;
 		this.personYear = personYear;
 		this.personSpecialty = personSpecialty;
@@ -55,13 +55,13 @@ public class Person {
 	}
 	
 	public Person(String personId, Drawable personDrawable,
-			String personNickname, String personSignatrue,
+			String personNickname, String personSignature,
 			String personFaculty, String personYear, String personSpecialty,
 			String personName, String personSex) {
 		this.personId = personId;
 		this.personDrawable = personDrawable;
 		this.personNickname = personNickname;
-		this.personSignatrue = personSignatrue;
+		this.personSignature = personSignature;
 		this.personFaculty = personFaculty;
 		this.personYear = personYear;
 		this.personSpecialty = personSpecialty;
@@ -93,11 +93,11 @@ public class Person {
 	public void setPersonNickname(String personNickname) {
 		this.personNickname = personNickname;
 	}
-	public String getPersonSignatrue() {
-		return personSignatrue;
+	public String getPersonSignature() {
+		return personSignature;
 	}
-	public void setPersonSignatrue(String personSignatrue) {
-		this.personSignatrue = personSignatrue;
+	public void setPersonSignature(String personSignature) {
+		this.personSignature = personSignature;
 	}
 	public String getPersonFaculty() {
 		return personFaculty;
@@ -133,7 +133,7 @@ public class Person {
 	@Override
 	public String toString() {
 		return "Person [personId=" + personId + ", personNickname="
-				+ personNickname + ", personSignatrue=" + personSignatrue
+				+ personNickname + ", personSignatrue=" + personSignature
 				+ ", personFaculty=" + personFaculty + ", personYear="
 				+ personYear + ", personSpecialty=" + personSpecialty
 				+ ", personName=" + personName + ", personSex=" + personSex

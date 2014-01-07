@@ -7,7 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.taupstairs.ui.HomePageActivity;
+import com.example.taupstairs.ui.activity.HomePageActivity;
 
 public class DialogUtil {
 
