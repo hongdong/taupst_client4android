@@ -54,6 +54,8 @@ public class SettingActivity extends Activity implements ItaActivity {
 					long arg3) {
 				switch (arg2) {			
 				case 0:
+					Intent intent = new Intent(SettingActivity.this, UpdataUserdataOptionalActivity.class);
+					startActivity(intent);
 					break;
 
 				case 1:

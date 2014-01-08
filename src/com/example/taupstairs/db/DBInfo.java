@@ -15,8 +15,9 @@ public class DBInfo {
 		
 		public static final String PERSON_TB_NAME = "person";
 		public static final String PERSON_CREATE_STRING = "create table if not exists " + PERSON_TB_NAME + 
-				" (_id integer primary key autoincrement, personId, personDrawable BLOB, personNickname, " + 
-				" personSignature, personFaculty, personYear, personSpecialty, personName, personSex)";
+				" (_id integer primary key autoincrement, personId, personPhotoUrl, personNickname, " +
+				" personSignature, personQq, personEmail, personPhone, personFaculty, personYear, " +
+				" personSpecialty, personName, personSex)";
 		public static final String PERSON_DROP_STRING = "drop table " + PERSON_TB_NAME;
 		
 		public static final String STATUS_TB_NAME = "status";

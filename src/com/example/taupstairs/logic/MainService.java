@@ -68,8 +68,17 @@ public class MainService extends Service implements Runnable {
 				if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_COMPLETE)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_UPDATAUSERDATA_ACTIVITY_COMPLETE);
 					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
-				} else if (activity_updata_userdata.equals("")) {
-					
+				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_FRAGMENT_ME)) {
+					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_UPDATAUSERDATA_FRAGMENT_ME);
+					fragment.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
+				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(
+							Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE);
+					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
+				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(
+							Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL);
+					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
 				}
 				break;
 				
@@ -192,7 +201,7 @@ public class MainService extends Service implements Runnable {
 		String getuserdata_url = HttpClientUtil.BASE_URL + "data/user/userInfo?users_id=" + personId;
 		try {
 			String jsonString = HttpClientUtil.getRequest(getuserdata_url);
-			person = JsonUtil.getPerson(MainService.this, jsonString);
+			person = JsonUtil.getPerson(jsonString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

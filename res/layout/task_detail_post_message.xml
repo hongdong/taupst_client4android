@@ -39,6 +39,6 @@
 			android:layout_toLeftOf="@id/btn_task_detail_message"
 			android:hint="@string/say_a_little"
 			android:textColorHint="@color/gray"
-			android:background="@drawable/task_detail_message_bg"/>
+			android:background="@drawable/edit_42"/>
     </RelativeLayout>
 </LinearLayout>

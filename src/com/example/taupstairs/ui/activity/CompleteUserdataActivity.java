@@ -29,8 +29,10 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SdCardUtil;
+import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.UploadToBCS;
 
 public class CompleteUserdataActivity extends Activity implements ItaActivity {
@@ -42,9 +44,6 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	private String[] items = new String[] { "选择本地图片", "拍照" };
 	private static final int MSG_WHAT_OK = 0x123;
 	private static final int MSG_WHAT_NO = 0x456;
-	private static final int IMAGE_REQUEST_CODE = 1;
-	private static final int CAMERA_REQUEST_CODE = 2;
-	private static final int RESULT_REQUEST_CODE = 3;
 	private static final String IMAGE_FILE_NAME = "userPhoto.jpg";
 	private boolean flag_img;
 	private Bitmap userPhoto;
@@ -65,7 +64,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	
 	private void initData() {
 		flag_img = false;
-		userId = "";
+		userId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 	}
 	
 	private void initView() {
@@ -77,6 +76,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		edit_qq = (EditText) findViewById(R.id.edit_complete_userdata_qq);
 		edit_email = (EditText) findViewById(R.id.edit_complete_userdata_email);
 		edit_phone = (EditText) findViewById(R.id.edit_complete_userdata_phone);
+		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -121,7 +121,6 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 					&& qq.equals("") && email.equals("") && phone.equals("")) {
 			Toast.makeText(CompleteUserdataActivity.this, "亲，你什么都没填写", Toast.LENGTH_SHORT).show();
 		} else {
-			progressDialog = new ProgressDialog(CompleteUserdataActivity.this);
 			progressDialog.setCancelable(false);
 			progressDialog.setMessage("    稍等片刻...");
 			progressDialog.show();
@@ -224,7 +223,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 							Intent intentFromGallery = new Intent();
 							intentFromGallery.setType("image/*"); // 设置文件类型
 							intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-							startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
+							startActivityForResult(intentFromGallery, IntentString.RequestCode.IMAGE_REQUEST_CODE);
 							break;
 						case 1:
 							Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -234,7 +233,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 										Uri.fromFile(new File(Environment.getExternalStorageDirectory(), 
 												IMAGE_FILE_NAME)));
 							}
-							startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+							startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
 							break;
 						}
 					}
@@ -252,10 +251,10 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		// 结果码不等于取消时候
 		if (resultCode != Activity.RESULT_CANCELED) {
 			switch (requestCode) {
-			case IMAGE_REQUEST_CODE:
+			case IntentString.RequestCode.IMAGE_REQUEST_CODE:
 				startPhotoZoom(data.getData());
 				break;
-			case CAMERA_REQUEST_CODE:
+			case IntentString.RequestCode.CAMERA_REQUEST_CODE:
 				if (SdCardUtil.hasSdcard()) {
 					File tempFile = new File(
 							Environment.getExternalStorageDirectory() + "/" + IMAGE_FILE_NAME);
@@ -265,7 +264,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 							Toast.LENGTH_LONG).show();
 				}
 				break;
-			case RESULT_REQUEST_CODE:
+			case IntentString.RequestCode.PHOTO_REQUEST_CODE:
 				if (data != null) {
 					getImageToView(data);
 					flag_img = true;
@@ -291,7 +290,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		intent.putExtra("outputX", 320);
 		intent.putExtra("outputY", 320);
 		intent.putExtra("return-data", true);
-		startActivityForResult(intent, RESULT_REQUEST_CODE);
+		startActivityForResult(intent, IntentString.RequestCode.PHOTO_REQUEST_CODE);
 	}
 	
 	/*
@@ -307,13 +306,13 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
-		progressDialog.dismiss();
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_UPDATAUSERDATA:
+			progressDialog.dismiss();
 			String result = (String) params[1];
 			if (null == result) {
-				Toast.makeText(CompleteUserdataActivity.this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
+				Toast.makeText(CompleteUserdataActivity.this, "未连接网络", Toast.LENGTH_SHORT).show();
 			} else {
 				try {
 					JSONObject jsonObject = new JSONObject(result);

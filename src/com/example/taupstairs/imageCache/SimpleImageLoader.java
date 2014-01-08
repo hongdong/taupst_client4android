@@ -15,11 +15,8 @@ public class SimpleImageLoader {
 		 * 这个时候就显示一张默认图片。
 		 * 它什么时候更新呢？他下载完了，处理完一系列事情后就会调用下面的callback了*/
 		if (drawable != null) {
-//			System.out.println("888888888888888888");
 			imageView.setImageDrawable(drawable);
-		} else {
-//			System.out.println("--------------null");
-		}
+		} 
 	}
 	
 	/*

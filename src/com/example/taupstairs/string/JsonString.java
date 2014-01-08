@@ -12,9 +12,15 @@ public class JsonString {
 	
 	public static class Person {
 		public static final String PERSON_ID = "users_id";
-		public static final String PERSON_DRAWABLE = "photo";
+		
+		public static final String PERSON_PHOTOURL = "photo";
 		public static final String PERSON_NICKNAME = "username";
-		public static final String PERSON_SIGNATRUE = "signature";
+		public static final String PERSON_SIGNATRUE = "signature";	
+		
+		public static final String PERSON_QQ = "qq";
+		public static final String PERSON_EMAIL = "email";
+		public static final String PERSON_PHONE = "phone";
+		
 		public static final String PERSON_FACULTY = "department";
 		public static final String PERSON_YEAR = "grade";
 		public static final String PERSON_SPECIALTY = "special";

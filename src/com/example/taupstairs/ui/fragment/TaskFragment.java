@@ -251,8 +251,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		xlist_task.stopLoadMore();
 		xlist_task.setPullLoadEnable(true);
 		xlist_task.setRefreshTime(lastestUpdata);
-		lastestStatusId = currentStatus.get(0).getStatusId();
-		oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
+		if (currentStatus.size() > 0) {
+			lastestStatusId = currentStatus.get(0).getStatusId();
+			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
+		}
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.example.taupstairs.util;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +22,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import android.graphics.drawable.Drawable;
-import com.example.taupstairs.bean.Person;
 
 public class HttpClientUtil {
 
@@ -98,18 +95,4 @@ public class HttpClientUtil {
 		return task.get();
 	}
 	
-	/*专门写了一个方法用于获取Person的头像的*/
-	public static Drawable getPersonDrawable(final String url) {
-		Drawable drawable = null;
-		HttpGet get = new HttpGet(url);
-		try {
-			HttpClient httpClient = getHttpClient();
-			HttpResponse response = httpClient.execute(get);
-			InputStream is = response.getEntity().getContent();
-			drawable = Drawable.createFromStream(is, Person.PERSON_DRAWABLE);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return drawable;
-	}
 }

@@ -60,6 +60,9 @@ public class Task {
 	public static final String TA_UPDATAUSERDATA_URL = "updatauserdata";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY = "activity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
+	public static final String TA_UPDATAUSERDATA_FRAGMENT_ME = "MeFragment";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE = "UpdataUserdataBaseActivity";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL = "UpdataUserdataOptionalActivity";
 	
 	
 	public Task(int taskId, Map<String, Object> taskParams) {

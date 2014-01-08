@@ -42,6 +42,10 @@
         <activity android:name="com.example.taupstairs.ui.activity.PersonDataActivity"></activity>
         <activity android:name="com.example.taupstairs.ui.activity.TaskDetailActivity" 
             android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".ui.activity.UpdataUserdataBaseActivity"
+            android:windowSoftInputMode="stateVisible"></activity>
+        <activity android:name=".ui.activity.UpdataUserdataOptionalActivity"
+            android:windowSoftInputMode="stateVisible"></activity>
         
         <service android:name=".logic.MainService"></service>
 

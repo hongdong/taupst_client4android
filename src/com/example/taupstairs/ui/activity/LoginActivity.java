@@ -20,7 +20,6 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
-import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
@@ -50,6 +49,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		btn_login = (Button)findViewById(R.id.btn_login);
 		txt_about = (TextView)findViewById(R.id.txt_about);
 		txt_server = (TextView)findViewById(R.id.txt_server);
+		progressDialog = new ProgressDialog(this);
 		
 		view.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -89,7 +89,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 	
 	/*登录放到后台处理*/
 	private void loginTask(User user) {
-		progressDialog = new ProgressDialog(LoginActivity.this);
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    正在登录...");
 		progressDialog.show();
@@ -180,9 +179,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 		StatusService statusService = new StatusService(LoginActivity.this);
 		statusService.emptyStatusDb();
 		statusService.closeDBHelper();
-		PersonService personService = new PersonService(LoginActivity.this);
-		personService.emptyPersonDB();
-		personService.closeDBHelper();
 		
 		if (first_use) {
 			Intent intent = new Intent(LoginActivity.this, CompleteUserdataActivity.class);
