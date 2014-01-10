@@ -3,6 +3,8 @@ package com.example.taupstairs.ui.fragment;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +18,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.app.TaUpstairsApplication;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.StatusService;
+import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.ui.activity.TaskDetailActivity;
 import com.example.taupstairs.util.SharedPreferencesUtil;
@@ -117,7 +121,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentStatus.size() >= arg2) {
-					clickPosition = arg2;
+					clickPosition = arg2 - 1;
 					/*全局变量传递数据*/
 					Intent intent = new Intent(context, TaskDetailActivity.class);
 					TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
@@ -173,6 +177,37 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			String mode = (String) params[1];
 			List<Status> newStatus = (List<Status>) params[2];
 			refreshList(mode, newStatus);
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	/*
+	 * HomePage的本地回调
+	 */
+	public void localRefresh(int id, Map<String, Object> params) {
+		switch (id) {
+		case HomePageString.UPDATA_PHOTO:
+			String personId_p = (String) params.get(Person.PERSON_ID);
+			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
+			for (Status status : currentStatus) {
+				if (personId_p.equals(status.getPersonId())) {
+					status.setPersonPhotoUrl(personPhotoUrl);
+				}
+			}
+			adapter.notifyDataSetChanged();
+			break;
+		case HomePageString.UPDATA_NICKNAME:
+			String personId_n = (String) params.get(Person.PERSON_ID);
+			String personNickname = (String) params.get(Person.PERSON_NICKNAME);
+			for (Status status : currentStatus) {
+				if (personId_n.equals(status.getPersonId())) {
+					status.setPersonNickname(personNickname);
+				}
+			}
+			adapter.notifyDataSetChanged();
 			break;
 
 		default:
@@ -263,6 +298,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		switch (requestCode) {
 		case IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL:
 			if (IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT == resultCode) {
+				System.out.println("--------------------");
 				TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
 				Status status = app.getStatus();
 				currentStatus.add(clickPosition, status);

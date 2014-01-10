@@ -1,8 +1,10 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
@@ -54,6 +57,7 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 		btn_back = (Button)findViewById(R.id.btn_back_updata_userdata_base);
 		btn_ok = (Button)findViewById(R.id.btn_ok_updata_userdata_base);
 		edit_userdata = (EditText)findViewById(R.id.edit_updata_userdata_base);
+		progressDialog = new ProgressDialog(this);
 		
 		edit_userdata.setText(content);
 		if (type.equals(Person.PERSON_NICKNAME)) {
@@ -72,13 +76,17 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				updata = edit_userdata.getText().toString();
+				updata = edit_userdata.getText().toString().trim();
 				if (updata.equals(content)) {
 					finish();
 				} else {			
 					if (type.equals(Person.PERSON_NICKNAME)) {	
-						String url = "users_id=" + personId + "&username=" + updata;
-						doUpdataUserDataTask(url);				
+						if (updata.equals("")) {
+							Toast.makeText(UpdataUserdataBaseActivity.this, "昵称不能为空", Toast.LENGTH_SHORT).show();
+						} else {
+							String url = "users_id=" + personId + "&username=" + updata;
+							doUpdataUserDataTask(url);
+						}					
 					} else if (type.equals(Person.PERSON_SIGNATURE)) {
 						String url = "users_id=" + personId + "&signature=" + updata;
 						doUpdataUserDataTask(url);	
@@ -92,7 +100,6 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 	 * 网络任务
 	 */
 	private void doUpdataUserDataTask(String url) {
-		progressDialog = new ProgressDialog(this);
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    稍等片刻...");
 		progressDialog.show();

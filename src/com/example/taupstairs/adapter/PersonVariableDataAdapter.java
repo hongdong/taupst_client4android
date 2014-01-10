@@ -51,13 +51,13 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 			view = LayoutInflater.from(context).inflate(R.layout.fm_me_variable_drawable, null);
 			ImageView imageView = (ImageView)view.findViewById(R.id.img_fm_me_drawable);
 			/*头像和昵称可能是空的。空的时候还要分男女，用上默认的*/
-			if (photoUrl != null) {
+			if (photoUrl != null && !photoUrl.equals("")) {
 				SimpleImageLoader.showImage(imageView, HttpClientUtil.PHOTO_BASE_URL + photoUrl);
 			} else {
 				if (sex.equals(Person.MALE)) {
-					imageView.setImageResource(R.drawable.default_drawable);
+					imageView.setImageResource(R.drawable.default_drawable_male);
 				} else if (sex.equals(Person.FEMALE)) {
-					imageView.setImageResource(R.drawable.default_drawable);
+					imageView.setImageResource(R.drawable.default_drawable_female);
 				}
 			}
 			break;
@@ -83,9 +83,9 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 				signatrueTextView.setText(signatrue);
 			} else {
 				if (sex.equals(Person.MALE)) {
-					signatrueTextView.setText(Person.MALE_NICKNAME);
+					signatrueTextView.setText(Person.MALE_SIGNATRUE);
 				} else if (sex.equals(Person.FEMALE)) {
-					signatrueTextView.setText(Person.FEMALE_NICKNAME);
+					signatrueTextView.setText(Person.FEMALE_SIGNATRUE);
 				}
 			}
 			break;

@@ -7,13 +7,14 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,18 +42,19 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
+import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
+import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.SettingActivity;
 import com.example.taupstairs.ui.activity.UpdataUserdataBaseActivity;
-import com.example.taupstairs.util.ListViewUtil;
 import com.example.taupstairs.util.SdCardUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.UploadToBCS;
 
 public class MeFragment extends Fragment implements ItaFragment {
 
-	private Context context;
+	private HomePageActivity context;
 	private String defaultPersonId;
 	private Person defaultPerson;
 	private PersonService personService;
@@ -80,7 +82,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 
 	/*传入上下文的构造方法
 	 * 因为如果用getActivity()的话，有时候会为null，就会出现空指针异常*/
-	public MeFragment(Context context) {
+	public MeFragment(HomePageActivity context) {
 		super();
 		this.context = context;
 	}
@@ -121,7 +123,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 		
 		if (defaultPerson != null) {		//在initData里面已经从数据库中读数据了
 			displayPerson(defaultPerson);	//如果数据库中有数据，就直接显示出来
-			System.out.println(defaultPerson);
 		} else {
 			getUserData();					//没有的话，就从服务器获取
 		}
@@ -162,7 +163,8 @@ public class MeFragment extends Fragment implements ItaFragment {
 	
 	/*从服务器获取Person信息*/
 	private void getUserData() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+		taskParams.put(Task.TA_GETUSERDATA_ACTIVITY, Task.TA_GETUSERDATA_ACTIVITY_ME);
 		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, defaultPersonId);
 		Task task = new Task(Task.TA_GETUSERDATA, taskParams);
 		MainService.addTask(task);
@@ -236,6 +238,10 @@ public class MeFragment extends Fragment implements ItaFragment {
 					defaultPerson.setPersonNickname(nickname);
 					displayPersonVariable(defaultPerson);
 					Toast.makeText(context, "更新昵称成功", Toast.LENGTH_SHORT).show();
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put(Person.PERSON_ID, defaultPersonId);
+					map.put(Person.PERSON_NICKNAME, nickname);
+					context.localRefresh(HomePageString.UPDATA_NICKNAME, map);
 					personService.updataPersonInfo(defaultPersonId, Person.PERSON_NICKNAME, nickname);
 				} else if (IntentString.ResultCode.UPDATAUSERDATABASE_MEFRAGMENT_SIGNATURE == resultCode) {
 					signature = data.getStringExtra(Person.PERSON_SIGNATURE);
@@ -369,6 +375,10 @@ public class MeFragment extends Fragment implements ItaFragment {
 						defaultPerson.setPersonPhotoUrl(fileName);
 						displayPersonVariable(defaultPerson);
 						Toast.makeText(context, "更新头像成功", Toast.LENGTH_SHORT).show();	
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put(Person.PERSON_ID, defaultPersonId);
+						map.put(Person.PERSON_PHOTOURL, fileName);
+						context.localRefresh(HomePageString.UPDATA_PHOTO, map);
 						personService.updataPersonInfo(defaultPersonId, Person.PERSON_PHOTOURL, fileName);
 					} else {
 						Toast.makeText(context, "网络竟然出错了", Toast.LENGTH_SHORT).show();
@@ -393,7 +403,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private void displayPersonVariable(Person defaultPerson) {
 		variable_adapter = new PersonVariableDataAdapter(context, defaultPerson);
 		list_variable.setAdapter(variable_adapter);	//把三个可改变资料显示出来
-		ListViewUtil.setListViewHeightBasedOnChildren(list_variable);
 	}
 	
 	private void displayPersonBase(Person defaultPerson) {
@@ -410,7 +419,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 		SimpleAdapter base_adapter = new SimpleAdapter(context, list, R.layout.fm_me_base, 
 				new String[] {LIST_LEFT, LIST_RIGHT, }, new int[] {R.id.txt_base_left, R.id.txt_base_right});
 		list_base.setAdapter(base_adapter);			//把五个基本资料显示出来
-		ListViewUtil.setListViewHeightBasedOnChildren(list_base);
 	}
 
 	public void exit() {

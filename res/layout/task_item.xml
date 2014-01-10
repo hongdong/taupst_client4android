@@ -12,7 +12,6 @@
 	    android:layout_height="40dp"
 	    android:layout_marginTop="10dp"
 	    android:layout_marginLeft="8dp"
-	    android:src="@drawable/default_drawable"
 	    android:contentDescription="@string/drawable"
 	    android:clickable="true"/>
 	
@@ -116,7 +115,7 @@
 				android:textSize="14sp"
 				android:textColor="@color/task_text_message_signup"
 				android:layout_alignParentRight="true"
-				android:drawableLeft="@drawable/icon_signup"
+				android:drawableLeft="@drawable/icon_message"
 				android:drawablePadding="3dp"
 				android:clickable="true"/>
 		    <TextView 
@@ -127,7 +126,7 @@
 				android:textSize="14sp"
 				android:textColor="@color/task_text_message_signup"
 				android:layout_toLeftOf="@id/txt_fm_task_signup"
-				android:drawableLeft="@drawable/icon_message"
+				android:drawableLeft="@drawable/icon_signup"
 				android:drawablePadding="3dp"
 				android:clickable="true"/>
 		</RelativeLayout>

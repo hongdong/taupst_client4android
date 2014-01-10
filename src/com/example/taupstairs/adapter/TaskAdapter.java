@@ -24,13 +24,11 @@ public class TaskAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<Status> listStatus;
-	private Time now;
 
 	public TaskAdapter(Context context, List<Status> listStatus) {
 		super();
 		this.context = context;
 		this.listStatus = listStatus;
-		this.now = TimeUtil.getNow(Calendar.getInstance());
 	}
 
 	@Override
@@ -56,16 +54,9 @@ public class TaskAdapter extends BaseAdapter {
 		View view = null;
 		view = LayoutInflater.from(context).inflate(R.layout.task_item, null);	
 		Status status = listStatus.get(position);
+		
 		Holder holder = new Holder();
-		
-		holder.img_fm_task_photo = (ImageView) view.findViewById(R.id.img_fm_task_photo);
-		holder.img_fm_task_photo.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(context, PersonDataActivity.class);
-				context.startActivity(intent);
-			}
-		});
-		
+		holder.img_fm_task_photo = (ImageView) view.findViewById(R.id.img_fm_task_photo);	
 		holder.txt_fm_task_nickname = (TextView) view.findViewById(R.id.txt_fm_task_nickname);
 		holder.txt_fm_task_releasetime = (TextView) view.findViewById(R.id.txt_fm_task_releasetime);
 		holder.txt_fm_task_title = (TextView) view.findViewById(R.id.txt_fm_task_title);
@@ -78,19 +69,21 @@ public class TaskAdapter extends BaseAdapter {
 		String personSex = status.getPersonSex().trim();
 		
 		/*头像和昵称可能是空的。空的时候还要分男女，用上默认的*/
-		if (status.getPersonPhotoUrl() != null) {
+		String url = status.getPersonPhotoUrl();
+		if (url != null && !url.equals("")) {
 			SimpleImageLoader.showImage(holder.img_fm_task_photo, 
-					HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
+					HttpClientUtil.PHOTO_BASE_URL + url);
 		} else {
 			if (personSex.equals(Person.MALE)) {
-				holder.img_fm_task_photo.setImageResource(R.drawable.default_drawable);
+				holder.img_fm_task_photo.setImageResource(R.drawable.default_drawable_male);
 			} else if (personSex.equals(Person.FEMALE)) {
-				holder.img_fm_task_photo.setImageResource(R.drawable.default_drawable);
+				holder.img_fm_task_photo.setImageResource(R.drawable.default_drawable_female);
 			}
 		}
 		
-		if (status.getPersonNickname() != null) {
-			holder.txt_fm_task_nickname.setText(status.getPersonNickname());
+		String nickName = status.getPersonNickname();
+		if (nickName != null) {
+			holder.txt_fm_task_nickname.setText(nickName);
 		} else {
 			if (personSex.equals(Person.MALE)) {
 				holder.txt_fm_task_nickname.setText(Person.MALE_NICKNAME);
@@ -98,7 +91,15 @@ public class TaskAdapter extends BaseAdapter {
 				holder.txt_fm_task_nickname.setText(Person.FEMALE_NICKNAME);
 			}
 		}
+		
+		holder.img_fm_task_photo.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(context, PersonDataActivity.class);
+				context.startActivity(intent);
+			}
+		});
 
+		Time now = TimeUtil.getNow(Calendar.getInstance());
 		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
 		holder.txt_fm_task_releasetime.setText(displayTime);
 		

@@ -3,6 +3,8 @@ package com.example.taupstairs.ui.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -22,12 +24,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.ui.fragment.InfoFragment;
 import com.example.taupstairs.ui.fragment.MeFragment;
@@ -293,6 +297,23 @@ public class HomePageActivity extends Activity implements ItaActivity {
 			break;
 		}
 	}	
+	
+	/*
+	 * 本地回调
+	 */
+	public void localRefresh(int id, Map<String, Object> params) {
+		switch (id) {
+		case HomePageString.UPDATA_PHOTO:
+			taskFragment.localRefresh(id, params);
+			break;
+		case HomePageString.UPDATA_NICKNAME:
+			taskFragment.localRefresh(id, params);
+			break;
+
+		default:
+			break;
+		}
+	}
 	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {

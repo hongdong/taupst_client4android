@@ -32,7 +32,9 @@ public class Task {
 	//获取用户信息
 	public static final int TA_GETUSERDATA = 3;
 	public static final String TA_GETUSERDATA_TASKPARAMS = "getuserdata";
-	public static final String TA_GETUSERDATA_FRAGMENT = "MeFragment";
+	public static final String TA_GETUSERDATA_ACTIVITY = "activity";
+	public static final String TA_GETUSERDATA_ACTIVITY_LOGIN = "LoginActivity";
+	public static final String TA_GETUSERDATA_ACTIVITY_ME = "MeFragment";
 	
 	//获取任务信息
 	public static final int TA_GETSTATUS = 4;
@@ -63,6 +65,22 @@ public class Task {
 	public static final String TA_UPDATAUSERDATA_FRAGMENT_ME = "MeFragment";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE = "UpdataUserdataBaseActivity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL = "UpdataUserdataOptionalActivity";
+	
+	//检查任务
+	public static final int TA_CHECKSTATUS = 8;
+	public static final String TA_CHECKSTATUS_ACTIVITY = "TaskDetailActivity";
+	
+	//获取留言
+	public static final int TA_GETMESSAGE = 9;
+	public static final String TA_GETMESSAGE_ACTIVITY = "TaskDetailActivity";
+	
+	//发布留言
+	public static final int TA_MESSAGE = 10;
+	public static final String TA_MESSAGE_ACTIVITY = "TaskDetailActivity";
+	public static final String TA_MESSAGE_MODE = "signup_mode";
+	public static final String TA_MESSAGE_MODE_ROOT = "signup_mode_root";
+	public static final String TA_MESSAGE_MODE_CHILD = "signup_mode_child";
+	
 	
 	
 	public Task(int taskId, Map<String, Object> taskParams) {

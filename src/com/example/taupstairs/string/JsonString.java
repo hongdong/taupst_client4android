@@ -46,10 +46,30 @@ public class JsonString {
 		public static final String PERSON_SEX = "sex";
 	}
 	
+	public static class Message {
+		public static final String MESSAGE_ID = "message_id";
+		public static final String PERSON_ID = "users_id";
+		public static final String PERSON_SEX = "sex";
+		public static final String PERSON_PHOTOURL = "photo";
+		public static final String PERSON_NICKNAME = "username";
+		public static final String MESSAGE_TIME = "message_time";
+		public static final String MESSAGE_CONTENTS = "content";
+	}
+	
+	public static class MessageContent {
+		public static final String CONTENT_ID = "contentId";
+		public static final String REPLY_ID = "reply_id";
+		public static final String REPLY_NICKNAME = "reply";
+		public static final String RECEIVE_ID = "replied_id";
+		public static final String RECEIVE_NICKNAME = "replied";
+		public static final String CONTENT = "message_content";
+	}
+	
 	public static class Return {
 		public static final String STATE = "state";
 		public static final String STATE_OK = "0";
 		public static final String SUCCESS = "success";
 		public static final String SUCCESS_STRING = "true";
+		public static final String MSG = "msg";
 	}
 }

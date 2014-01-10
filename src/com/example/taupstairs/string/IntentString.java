@@ -11,6 +11,7 @@ public class IntentString {
 		public static final int CAMERA_REQUEST_CODE = 6;
 		public static final int PHOTO_REQUEST_CODE = 7;
 		public static final int MEFRAGMENT_UPDATAUSERDATABASE = 8;
+		public static final int TASKDETAIL_SIGNUP = 10;
 	}
 	
 	public static class ResultCode {
@@ -20,6 +21,7 @@ public class IntentString {
 		public static final int SELECTENDTIME_WRITE = 4;
 		public static final int UPDATAUSERDATABASE_MEFRAGMENT_NICKNAME = 8;
 		public static final int UPDATAUSERDATABASE_MEFRAGMENT_SIGNATURE = 9;
+		public static final int SIGNUP_TASKDETAIL = 10;
 	}
 	
 	public static class Extra {

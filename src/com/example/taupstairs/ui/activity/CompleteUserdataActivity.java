@@ -26,13 +26,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.taupstairs.R;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SdCardUtil;
-import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.UploadToBCS;
 
 public class CompleteUserdataActivity extends Activity implements ItaActivity {
@@ -48,6 +48,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	private boolean flag_img;
 	private Bitmap userPhoto;
 	private ProgressDialog progressDialog;
+	private Intent intent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,7 +65,8 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	
 	private void initData() {
 		flag_img = false;
-		userId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
+		intent = getIntent();
+		userId = intent.getStringExtra(Person.PERSON_ID);
 	}
 	
 	private void initView() {
@@ -80,9 +82,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(CompleteUserdataActivity.this, HomePageActivity.class);
-				startActivity(intent);
-				finish();
+				updataUserData();
 			}
 		});
 		btn_ok.setOnClickListener(new OnClickListener() {
@@ -117,18 +117,13 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	 */
 	private void updataUserData() {
 		getEditString();
-		if (!flag_img && nickname.equals("") && signatrue.equals("") 
-					&& qq.equals("") && email.equals("") && phone.equals("")) {
-			Toast.makeText(CompleteUserdataActivity.this, "亲，你什么都没填写", Toast.LENGTH_SHORT).show();
-		} else {
-			progressDialog.setCancelable(false);
-			progressDialog.setMessage("    稍等片刻...");
-			progressDialog.show();
-			if (flag_img) {			
-				updataUserPhoto();
-			} else {			
-				doUpdataUserDataTask();
-			}
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("    稍等片刻...");
+		progressDialog.show();
+		if (flag_img) {			
+			updataUserPhoto();
+		} else {			
+			doUpdataUserDataTask();
 		}
 	}
 	
@@ -142,6 +137,9 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		}
 		if (!nickname.equals("")) {
 			url += "&username=" + nickname;
+		} else {
+			String personNickname = intent.getStringExtra(Person.PERSON_NICKNAME);
+			url += "&username=" + personNickname;
 		}
 		if (!signatrue.equals("")) {
 			url += "&signature=" + signatrue;

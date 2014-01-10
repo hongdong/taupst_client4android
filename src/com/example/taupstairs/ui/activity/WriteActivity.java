@@ -53,6 +53,7 @@ public class WriteActivity extends Activity implements ItaActivity {
 		edit_write_content = (EditText)findViewById(R.id.edit_write_content);
 		edit_write_rewards = (EditText)findViewById(R.id.edit_write_rewards);
 		txt_write_display_endtime = (TextView)findViewById(R.id.txt_write_display_endtime);
+		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -88,7 +89,6 @@ public class WriteActivity extends Activity implements ItaActivity {
 	 * 发布任务
 	 */
 	private void doReleaseTask() {
-		progressDialog = new ProgressDialog(WriteActivity.this);
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    正在发布...");
 		progressDialog.show();

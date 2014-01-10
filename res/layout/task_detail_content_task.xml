@@ -108,16 +108,30 @@
 			android:layout_toRightOf="@id/txt_task_detail_signup"
 			android:textColor="@color/black"
 			android:textSize="19sp"/>
-	    <Button 
-	        android:id="@+id/btn_task_detail_signup"
-	        android:layout_width="wrap_content" 
+	    <FrameLayout 
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="20dp"
-	        android:text="@string/signup"
-	        android:textSize="16sp"
-	        android:textColor="@color/white"
-	        android:background="@drawable/task_detail_btn_signup_bg"/>
+	        android:layout_centerVertical="true">
+	        <Button 
+		        android:id="@+id/btn_task_detail_signup"
+		        android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_marginRight="20dp"
+		        android:text="@string/signup"
+		        android:textSize="16sp"
+		        android:textColor="@color/white"
+		        android:background="@drawable/task_detail_btn_signup_bg"
+		        android:visibility="gone"/>
+	        <TextView 
+	            android:id="@+id/txt_task_detail_multi"
+	            android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_marginRight="20dp"
+		        android:textSize="18sp"
+		        android:textColor="@color/black"
+		        android:visibility="gone"/>
+	    </FrameLayout>   
 	</RelativeLayout>
 	<include layout="@layout/task_detail_divider" />
 </LinearLayout>

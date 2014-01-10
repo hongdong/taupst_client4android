@@ -59,11 +59,12 @@
     <string name="signup_count">报名人数  :</string>
     <string name="signup">猛戳报名</string>
     <string name="message_count">留言  :</string>
+    <string name="reply">回复</string>
     <string name="no_message">暂时还没有</string>
     <string name="say_a_little">说几句吧</string>
     <string name="post_message">发  表</string>
     
-    
+    <string name="signup_activity">报名</string>
     
     <string name="drawable">头像:</string>
     <string name="nickname">昵称:</string>

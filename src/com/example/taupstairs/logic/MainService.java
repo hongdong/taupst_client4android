@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
@@ -13,6 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+
+import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
@@ -46,8 +49,15 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_GETUSERDATA:
-				ItaFragment fragment_getuserdata = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_FRAGMENT);
-				fragment_getuserdata.refresh(Task.TA_GETUSERDATA, msg.obj);
+				Bundle data_getuserdata = msg.getData();
+				String activity_getuserdata = data_getuserdata.getString(Task.TA_GETUSERDATA_ACTIVITY);
+				if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_LOGIN)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETUSERDATA_ACTIVITY_LOGIN);
+					activity.refresh(Task.TA_GETUSERDATA, msg.obj);
+				} else if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_ME)) {
+					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_ACTIVITY_ME);
+					fragment.refresh(Task.TA_GETUSERDATA, msg.obj);
+				}
 				break;
 				
 			case Task.TA_GETSTATUS:
@@ -80,6 +90,25 @@ public class MainService extends Service implements Runnable {
 							Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL);
 					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
 				}
+				break;
+				
+			case Task.TA_CHECKSTATUS:
+				ItaActivity activity_checkstatus = (ItaActivity) getActivityByName(Task.TA_CHECKSTATUS_ACTIVITY);
+				if (activity_checkstatus != null) {
+					activity_checkstatus.refresh(Task.TA_CHECKSTATUS, msg.obj);
+				}
+				break;
+				
+			case Task.TA_GETMESSAGE:
+				ItaActivity activity_getmessage = (ItaActivity) getActivityByName(Task.TA_GETMESSAGE_ACTIVITY);
+				if (activity_getmessage != null) {
+					activity_getmessage.refresh(Task.TA_GETMESSAGE, msg.obj);
+				}
+				break;
+				
+			case Task.TA_MESSAGE:
+				ItaActivity activity_signup = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY);
+				activity_signup.refresh(Task.TA_MESSAGE, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -144,13 +173,16 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_GETUSERDATA:
 			msg.obj = doGetUserDataTask(task);
+			String activity_getuserdata = (String) taskParams.get(Task.TA_GETUSERDATA_ACTIVITY);
+			Bundle data_getuserdata = msg.getData();
+			data_getuserdata.putString(Task.TA_GETUSERDATA_ACTIVITY, activity_getuserdata);
 			break;
 			
 		case Task.TA_GETSTATUS:
 			msg.obj = doGetStatusTask(task);
 			String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
-			Bundle data_getuserdata = msg.getData();
-			data_getuserdata.putString(Task.TA_GETSTATUS_MODE, mode);
+			Bundle data_getstatus = msg.getData();
+			data_getstatus.putString(Task.TA_GETSTATUS_MODE, mode);
 			break;
 			
 		case Task.TA_RELEASE:
@@ -162,6 +194,18 @@ public class MainService extends Service implements Runnable {
 			String activity_updata_userdata = (String) taskParams.get(Task.TA_UPDATAUSERDATA_ACTIVITY);
 			Bundle data_updata_userdata = msg.getData();
 			data_updata_userdata.putString(Task.TA_UPDATAUSERDATA_ACTIVITY, activity_updata_userdata);
+			break;
+			
+		case Task.TA_CHECKSTATUS:
+			msg.obj = doCheckStatusTask(task);
+			break;
+			
+		case Task.TA_GETMESSAGE:
+			msg.obj = doGetMessageTask(task);
+			break;
+			
+		case Task.TA_MESSAGE:
+			msg.obj = doSignupTask(task);
 			break;
 		
 		case Task.TA_USEREXIT:
@@ -280,6 +324,59 @@ public class MainService extends Service implements Runnable {
 		}
 		return result;
 	}
+	
+	private String doCheckStatusTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String check_status_url = HttpClientUtil.BASE_URL + "data/sign/issign?task_id=" + statusId;
+		try {
+			result = HttpClientUtil.getRequest(check_status_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	} 
+	
+	/*
+	 * 获取留言
+	 */
+	private List<com.example.taupstairs.bean.Message> doGetMessageTask(Task task) {
+		List<com.example.taupstairs.bean.Message> messages = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String get_message_url = HttpClientUtil.BASE_URL + "data/taskmsg/taskMsgList2Down?task_id=" + statusId;
+		try {
+			String jsonString = HttpClientUtil.getRequest(get_message_url);
+			messages = JsonUtil.getMessages(jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return messages;
+	}
+	
+	private String doSignupTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String content = (String) taskParams.get(MessageContent.CONTENT);
+		String signup_url = HttpClientUtil.BASE_URL + "data/taskmsg/save?task_id=" + statusId 
+				+ "&message_content=" + content;
+		String mode = (String) taskParams.get(Task.TA_MESSAGE_MODE);
+		if (mode.equals(Task.TA_MESSAGE_MODE_ROOT)) {
+			
+		} else if (mode.equals(Task.TA_MESSAGE_MODE_CHILD)) {
+			String messageId = (String) taskParams.get(com.example.taupstairs.bean.Message.MESSAGE_ID);
+			String replyId = (String) taskParams.get(MessageContent.REPLY_ID);
+			signup_url += "&to_user=" + replyId + "&root_id=" + messageId;
+		} 
+		try {
+			result= HttpClientUtil.getRequest(signup_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	} 
 	
 	/*
 	 * 用户注销

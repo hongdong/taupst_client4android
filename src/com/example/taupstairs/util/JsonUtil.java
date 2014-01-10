@@ -5,6 +5,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.example.taupstairs.bean.Message;
+import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.string.JsonString;
@@ -84,6 +86,55 @@ public class JsonUtil {
 			e.printStackTrace();
 		}
 		return listStatus;
+	}
+	
+	public static List<Message> getMessages(String jsonString) {
+		List<Message> messages = new ArrayList<Message>();
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				Message message = new Message();
+				message.setMessageId(jsonObject.getString(JsonString.Message.MESSAGE_ID));
+				message.setPersonId(jsonObject.getString(JsonString.Message.PERSON_ID));
+				message.setPersonSex(jsonObject.getString(JsonString.Message.PERSON_SEX));
+				message.setPersonPhotoUrl(jsonObject.getString(JsonString.Message.PERSON_PHOTOURL));
+				message.setPersonNickname(jsonObject.getString(JsonString.Message.PERSON_NICKNAME));
+				message.setMessageTime(jsonObject.getString(JsonString.Message.MESSAGE_TIME));
+				String content = jsonObject.getString(JsonString.Message.MESSAGE_CONTENTS);
+				List<MessageContent> contents = getMessageContents(content);
+				message.setMessageContents(contents);
+				messages.add(message);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return messages;
+	}
+	
+	public static List<MessageContent> getMessageContents(String jsonString) {
+		List<MessageContent> contents = new ArrayList<MessageContent>();
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				MessageContent content = new MessageContent();
+				if (i > 0) {
+					content.setReplyId(jsonObject.getString(JsonString.MessageContent.REPLY_ID));
+					content.setReplyNickname(jsonObject.getString(JsonString.MessageContent.REPLY_NICKNAME));
+					content.setReceiveId(jsonObject.getString(JsonString.MessageContent.RECEIVE_ID));
+					content.setReceiveNickname(jsonObject.getString(JsonString.MessageContent.RECEIVE_NICKNAME));
+					content.setContent(jsonObject.getString(JsonString.MessageContent.CONTENT));
+				} else {
+					content.setContent(jsonObject.getString(JsonString.MessageContent.CONTENT));
+				}
+				
+				contents.add(content);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return contents;
 	}
 	
 }

@@ -22,7 +22,7 @@ public class StatusService {
 	public List<Status> getListStatus() {
 		List<Status> listStatus = new ArrayList<Status>(Status.STATUS_COUNT_PERPAGE);
 		Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + Status.TB_NAME, null);
-		if (null == cursor || cursor.getCount() != 20) {
+		if (null == cursor) {
 			return null;
 		}
 		while (cursor.moveToNext()) {

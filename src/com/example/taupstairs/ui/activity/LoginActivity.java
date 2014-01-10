@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
@@ -102,9 +103,18 @@ public class LoginActivity extends Activity implements ItaActivity {
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_LOGIN:
-			progressDialog.dismiss();
 			String result = ((String) params[1]).trim();	//这里的字符串要去空格，不然很可能不会equals
 			refreshLogin(result);
+			break;
+			
+		case Task.TA_GETUSERDATA:
+			progressDialog.dismiss();
+			Person person = (Person) params[1];
+			if (person.getPersonNickname() != null) {
+				jumpToHomePage();
+			} else {
+				jumpToCompleteUserdata(person.getPersonSex());
+			}
 			break;
 
 		default:
@@ -117,12 +127,14 @@ public class LoginActivity extends Activity implements ItaActivity {
 	 */
 	private void refreshLogin(String result) {
 		if (result.equals(Task.TA_NO)) {				//返回no表示没有网络
+			progressDialog.dismiss();
 			loginNoNet();
 		} else {
 			try {
 				JSONObject loginJsonObject = new JSONObject(result);
 				String isLogined = loginJsonObject.getString(JsonString.Login.IS_LOGINED).trim();
 				if(isLogined.equals(Task.TA_FALSE)) {
+					progressDialog.dismiss();
 					String state = loginJsonObject.getString(JsonString.Login.STATE).trim();
 					if (state.equals(JsonString.Login.STATE_OK)) {
 						loginFalse();
@@ -131,7 +143,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 					}
 				} else if (isLogined.equals(Task.TA_TRUE)) {
 					user.setUserId(loginJsonObject.getString(JsonString.Login.USERS_ID));
-					jumpToHomePage();						//如果TA_LOGIN任务执行成功，说明可以跳到主页面去了
+					/*至关重要的一步，保存后下次会自动跳到主页面*/
+					SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);
+					getUserData();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -163,32 +177,42 @@ public class LoginActivity extends Activity implements ItaActivity {
 
 	}
 	
+	/*从服务器获取Person信息*/
+	private void getUserData() {
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		taskParams.put(Task.TA_GETUSERDATA_ACTIVITY, Task.TA_GETUSERDATA_ACTIVITY_LOGIN);
+		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, user.getUserId());
+		Task task = new Task(Task.TA_GETUSERDATA, taskParams);
+		MainService.addTask(task);
+	}
+	
 	/*跳转到主页面去*/
-	private void jumpToHomePage() {
-		/*跳转前要把登录账户保存为默认账户，下次直接从logo跳到主界面，就不要再次登录了。
-		 *还有一方面是切换账户的时候，新账户登录成功，默认账户要用新的覆盖旧的。
-		 *当然这个时候也可以删除数据库中的信息 */
-		
-		boolean first_use = false;
-		if (null == SharedPreferencesUtil.getDefaultUser(LoginActivity.this)) {
-			first_use = true;
-		}
-		
-		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);		
+	private void jumpToHomePage() {	
 		SharedPreferencesUtil.savaLastestStatusId(LoginActivity.this, null);
 		StatusService statusService = new StatusService(LoginActivity.this);
 		statusService.emptyStatusDb();
 		statusService.closeDBHelper();
 		
-		if (first_use) {
-			Intent intent = new Intent(LoginActivity.this, CompleteUserdataActivity.class);
-			startActivity(intent);
-			finish();
-		} else {
-			Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-			startActivity(intent);
-			finish();
+		Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+		startActivity(intent);
+		finish();
+	}
+	
+	/*
+	 * 
+	 */
+	private void jumpToCompleteUserdata(String personSex) {
+		String personNickname = null;
+		if (personSex.equals(Person.MALE)) {
+			personNickname = Person.MALE_NICKNAME;
+		} else if (personSex.equals(Person.FEMALE)) {
+			personNickname = Person.FEMALE_NICKNAME;
 		}
+		Intent intent = new Intent(LoginActivity.this, CompleteUserdataActivity.class);
+		intent.putExtra(Person.PERSON_ID, user.getUserId());
+		intent.putExtra(Person.PERSON_NICKNAME, personNickname);
+		startActivity(intent);
+		finish();
 	}
 	
 	/*接收Intent返回的数据*/
@@ -213,6 +237,12 @@ public class LoginActivity extends Activity implements ItaActivity {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		System.exit(0);			
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MainService.removeActivity(this);
 	}
 	
 }
