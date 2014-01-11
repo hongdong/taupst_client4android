@@ -4,17 +4,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.app.TaUpstairsApplication;
@@ -298,7 +297,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		switch (requestCode) {
 		case IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL:
 			if (IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT == resultCode) {
-				System.out.println("--------------------");
 				TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
 				Status status = app.getStatus();
 				currentStatus.add(clickPosition, status);

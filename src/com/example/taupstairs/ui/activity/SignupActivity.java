@@ -202,7 +202,6 @@ public class SignupActivity extends Activity implements ItaActivity {
 		case Task.TA_SIGNUP:
 			progressDialog.dismiss();
 			String result = (String) params[1];
-			System.out.println(result);
 			if (result != null) {
 				try {
 					JSONObject jsonObject = new JSONObject(result);

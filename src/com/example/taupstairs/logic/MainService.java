@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.Queue;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
@@ -405,7 +405,6 @@ public class MainService extends Service implements Runnable {
 				"&open_mes=" + contact + "&message=" + message;
 		try {
 			signup_url = StringUtil.replaceBlank(signup_url);
-			System.out.println(signup_url);
 			result = HttpClientUtil.getRequest(signup_url);
 		} catch (Exception e) {
 			e.printStackTrace();
