@@ -42,8 +42,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private User defaultUser;
 	private RadioGroup radioGroup;
 	private Button btn_top_right;
-	private RadioButton currentButton;
-	private int[] buttonIds = {R.id.btn_info, R.id.btn_task, R.id.btn_rank};
+	private RadioButton btn_info, btn_task, btn_rank;
+	private List<RadioButton> buttons;
 	
 	private boolean noNet = true;
 	private boolean goCheck = false;
@@ -92,6 +92,13 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);
 		btn_top_right = (Button)findViewById(R.id.btn_me_write);
 		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
+		btn_info = (RadioButton)findViewById(R.id.btn_info);
+		btn_task = (RadioButton)findViewById(R.id.btn_task);
+		btn_rank = (RadioButton)findViewById(R.id.btn_rank);
+		buttons = new ArrayList<RadioButton>();
+		buttons.add(btn_info);
+		buttons.add(btn_task);
+		buttons.add(btn_rank);
 		infoFragment = new InfoFragment();
 		taskFragment = new TaskFragment(HomePageActivity.this);
 		rankFragment = new RankFragment();
@@ -185,8 +192,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 					 * 最后灵活的设置了一个标志，问题解决了*/
 					radioGroup.clearCheck();
 				} else {
-					currentButton = (RadioButton)HomePageActivity.this.findViewById(buttonIds[currentIndex]);
-					currentButton.setChecked(true);
+					buttons.get(currentIndex).setChecked(true);
 				}
 			}
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
