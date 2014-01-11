@@ -52,7 +52,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private String edit_text;
 	private String messageId, replyId;
 	private ProgressDialog progressDialog;
-	private boolean flag_message;
+	private boolean flag_message_or_signup;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -70,9 +70,22 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private void initData() {
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		status = app.getStatus();
-		doCheckStatusTask();
 		now = TimeUtil.getNow(Calendar.getInstance());
-		flag_message = false;
+		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
+		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
+		if (personId.equals(status.getPersonId())) {
+			txt_multi.setText("是我发布的");
+			txt_multi.setVisibility(View.VISIBLE);
+		} else {
+			Time end = TimeUtil.originalToTime(status.getStatusEndTime());
+			if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
+				txt_multi.setText("已过期");
+				txt_multi.setVisibility(View.VISIBLE);	
+			} else {
+				doCheckStatusTask();
+			}
+		}
+		flag_message_or_signup = false;
 	}
 	
 	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
@@ -99,7 +112,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		btn_refresh = (Button)findViewById(R.id.btn_refresh_task_detail);
 		btn_signup = (Button)findViewById(R.id.btn_task_detail_signup);
 		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
-		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
 		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
 		progressDialog = new ProgressDialog(this);
 		
@@ -173,7 +185,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (flag_message) {
+				if (flag_message_or_signup) {
 					Intent intent = new Intent();
 					setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
 				}
@@ -296,15 +308,14 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 						postMessage(newMessageId);	
 						replyId = null;
 						edit_message.setHint("说几句吧");
-						progressDialog.dismiss();
 						KeyBoardUtil.dismiss(this, edit_message);
-					} else {
-						progressDialog.dismiss();
+					} else {		
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				progressDialog.dismiss();
 			}	
 
 		default:
@@ -314,18 +325,17 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	
 	private void testState(int state) {
 		switch (state) {
-		case 0:
+		case 0:	//正常
 			btn_signup.setVisibility(View.VISIBLE);
 			break;
-		case 1:
+		case 1:	//报过名了，当然可以再报名
 			btn_signup.setVisibility(View.VISIBLE);
 			break;
 		case 2:
 			Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 			break;
 		case 3:
-			txt_multi.setText("是我发布的");
-			txt_multi.setVisibility(View.VISIBLE);
+			//是我发布的
 			break;
 		case 4:
 			//已过期，我来处理
@@ -337,15 +347,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 
 		default:
 			break;
-		}
-
-		Time end = TimeUtil.originalToTime(status.getStatusEndTime());
-		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
-			if (state != 3 && state != 5) {
-				btn_signup.setVisibility(View.GONE);
-				txt_multi.setText("已过期");
-				txt_multi.setVisibility(View.VISIBLE);	
-			}
 		}
 	}
 	
@@ -402,12 +403,32 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		String messageCount = String.valueOf(count);
 		holder.txt_task_detail_messagecount.setText(messageCount);
 		status.setStatusMessageCount(messageCount);
-		flag_message = true;
+		flag_message_or_signup = true;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case IntentString.RequestCode.TASKDETAIL_SIGNUP:
+			if (IntentString.ResultCode.SIGNUP_TASKDETAIL == resultCode) {
+				Toast.makeText(this, "报名成功", Toast.LENGTH_SHORT).show();
+				int count = Integer.valueOf(status.getStatusSignUpCount()) + 1;
+				String signupCount = String.valueOf(count);
+				holder.txt_task_detail_signupcount.setText(signupCount);
+				status.setStatusSignUpCount(signupCount);
+				flag_message_or_signup = true;
+			}
+			break;
+
+		default:
+			break;
+		}
 	}
 	
 	@Override
 	public void onBackPressed() {
-		if (flag_message) {
+		if (flag_message_or_signup) {
 			Intent intent = new Intent();
 			setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
 		}

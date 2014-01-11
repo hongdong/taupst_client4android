@@ -204,7 +204,7 @@ public class HomePageActivity extends Activity implements ItaActivity {
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				/*radiobutton不会有重复点击的问题，要check_change才会到这个监听器里面来
-				 * 滑动手势的时候，也要改变check，手势相应函数不做页面改变，
+				 * 滑动手势的时候，也要改变check，手势监听函数间接调用此函数做页面改变，
 				 * 这个时候也要到这里面来， 所以这里面的处理会比较麻烦*/
 				switch (checkedId) {
 				case R.id.btn_info:			

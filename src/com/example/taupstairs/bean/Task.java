@@ -81,7 +81,10 @@ public class Task {
 	public static final String TA_MESSAGE_MODE_ROOT = "signup_mode_root";
 	public static final String TA_MESSAGE_MODE_CHILD = "signup_mode_child";
 	
-	
+	public static final int TA_SIGNUP = 11;
+	public static final String TA_SIGNUP_ACTIVITY = "SignupActivity";
+	public static final String TA_SIGNUP_CONTACT = "contact";
+	public static final String TA_SIGNUP_MESSAGE = "message";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

@@ -65,6 +65,10 @@
     <string name="post_message">发  表</string>
     
     <string name="signup_activity">报名</string>
+    <string name="select_optional">选择提供给对方的联系方式，仅对方可见</string>
+    <string name="no_optional">还未填写联系方式？</string>
+    <string name="signup_setting">点击前去填写</string>
+    <string name="private_message">顺便说几句悄悄话</string>
     
     <string name="drawable">头像:</string>
     <string name="nickname">昵称:</string>

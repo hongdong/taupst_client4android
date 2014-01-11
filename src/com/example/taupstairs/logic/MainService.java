@@ -107,8 +107,13 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_MESSAGE:
-				ItaActivity activity_signup = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY);
-				activity_signup.refresh(Task.TA_MESSAGE, msg.obj);
+				ItaActivity activity_message = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY);
+				activity_message.refresh(Task.TA_MESSAGE, msg.obj);
+				break;
+				
+			case Task.TA_SIGNUP:
+				ItaActivity activity_signup = (ItaActivity) getActivityByName(Task.TA_SIGNUP_ACTIVITY);
+				activity_signup.refresh(Task.TA_SIGNUP, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -205,6 +210,10 @@ public class MainService extends Service implements Runnable {
 			break;
 			
 		case Task.TA_MESSAGE:
+			msg.obj = doMessageTask(task);
+			break;
+			
+		case Task.TA_SIGNUP:
 			msg.obj = doSignupTask(task);
 			break;
 		
@@ -230,6 +239,7 @@ public class MainService extends Service implements Runnable {
 				"&pwd=" + user.getUserPassword() + 
 				"&school=" + user.getUserCollegeId();
 		try {
+			login_url = StringUtil.replaceBlank(login_url);
 			result = HttpClientUtil.getRequest(login_url);
 		} catch (Exception e) {
 			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
@@ -292,14 +302,10 @@ public class MainService extends Service implements Runnable {
 		String content = (String) taskParams.get(Status.STATUS_CONTENT);
 		String rewards = (String) taskParams.get(Status.STATUS_REWARDS);
 		String endtime = (String) taskParams.get(Status.STATUS_ENDTIME);	
-		String release_url = HttpClientUtil.BASE_URL 
-				+ "data/task/save?title=" + title
-				+ "&content=" + content
-				+ "&rewards=" + rewards 
-				+ "&end_of_time=" + endtime 
-				+ "&task_level=1";
-		release_url = StringUtil.replaceBlank(release_url);
+		String release_url = HttpClientUtil.BASE_URL + "data/task/save?title=" + title
+				+ "&content=" + content + "&rewards=" + rewards + "&end_of_time=" + endtime + "&task_level=1";
 		try {
+			release_url = StringUtil.replaceBlank(release_url);
 			result = HttpClientUtil.getRequest(release_url);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -325,6 +331,9 @@ public class MainService extends Service implements Runnable {
 		return result;
 	}
 	
+	/*
+	 * 检测任务状态
+	 */
 	private String doCheckStatusTask(Task task) {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
@@ -347,6 +356,7 @@ public class MainService extends Service implements Runnable {
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
 		String get_message_url = HttpClientUtil.BASE_URL + "data/taskmsg/taskMsgList2Down?task_id=" + statusId;
 		try {
+			get_message_url = StringUtil.replaceBlank(get_message_url);
 			String jsonString = HttpClientUtil.getRequest(get_message_url);
 			messages = JsonUtil.getMessages(jsonString);
 		} catch (Exception e) {
@@ -355,12 +365,15 @@ public class MainService extends Service implements Runnable {
 		return messages;
 	}
 	
-	private String doSignupTask(Task task) {
+	/*
+	 * 留言
+	 */
+	private String doMessageTask(Task task) {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
 		String content = (String) taskParams.get(MessageContent.CONTENT);
-		String signup_url = HttpClientUtil.BASE_URL + "data/taskmsg/save?task_id=" + statusId 
+		String message_url = HttpClientUtil.BASE_URL + "data/taskmsg/save?task_id=" + statusId 
 				+ "&message_content=" + content;
 		String mode = (String) taskParams.get(Task.TA_MESSAGE_MODE);
 		if (mode.equals(Task.TA_MESSAGE_MODE_ROOT)) {
@@ -368,15 +381,37 @@ public class MainService extends Service implements Runnable {
 		} else if (mode.equals(Task.TA_MESSAGE_MODE_CHILD)) {
 			String messageId = (String) taskParams.get(com.example.taupstairs.bean.Message.MESSAGE_ID);
 			String replyId = (String) taskParams.get(MessageContent.REPLY_ID);
-			signup_url += "&to_user=" + replyId + "&root_id=" + messageId;
+			message_url += "&to_user=" + replyId + "&root_id=" + messageId;
 		} 
 		try {
-			result= HttpClientUtil.getRequest(signup_url);
+			message_url = StringUtil.replaceBlank(message_url);
+			result= HttpClientUtil.getRequest(message_url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	} 
+	
+	/*
+	 * 报名
+	 */
+	private String doSignupTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String contact = (String) taskParams.get(Task.TA_SIGNUP_CONTACT);
+		String message = (String) taskParams.get(Task.TA_SIGNUP_MESSAGE);
+		String signup_url = HttpClientUtil.BASE_URL + "/data/sign/save?task_id=" + statusId + 
+				"&open_mes=" + contact + "&message=" + message;
+		try {
+			signup_url = StringUtil.replaceBlank(signup_url);
+			System.out.println(signup_url);
+			result = HttpClientUtil.getRequest(signup_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	/*
 	 * 用户注销

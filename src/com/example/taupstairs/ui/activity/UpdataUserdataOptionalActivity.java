@@ -155,6 +155,7 @@ public class UpdataUserdataOptionalActivity extends Activity implements ItaActiv
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(this);
+		personService.closeDBHelper();
 	}
 	
 }
