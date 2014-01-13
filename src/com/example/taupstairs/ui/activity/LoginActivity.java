@@ -21,6 +21,7 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.RankService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
@@ -145,7 +146,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 					user.setUserId(loginJsonObject.getString(JsonString.Login.USERS_ID));
 					/*至关重要的一步，保存后下次会自动跳到主页面*/
 					SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);
-					getUserData();
+					doGetUserDataTask();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -178,7 +179,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 	
 	/*从服务器获取Person信息*/
-	private void getUserData() {
+	private void doGetUserDataTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Task.TA_GETUSERDATA_ACTIVITY, Task.TA_GETUSERDATA_ACTIVITY_LOGIN);
 		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, user.getUserId());
@@ -192,6 +193,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 		StatusService statusService = new StatusService(LoginActivity.this);
 		statusService.emptyStatusDb();
 		statusService.closeDBHelper();
+		RankService rankService = new RankService(LoginActivity.this);
+		rankService.emptyRankDb();
+		rankService.closeDBHelper();
 		
 		Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
 		startActivity(intent);

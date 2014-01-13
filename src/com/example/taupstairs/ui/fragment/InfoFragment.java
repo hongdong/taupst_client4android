@@ -8,17 +8,44 @@ import android.view.ViewGroup;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.logic.ItaFragment;
+import com.example.taupstairs.ui.activity.HomePageActivity;
 
 public class InfoFragment extends Fragment implements ItaFragment {
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fm_info, container, false);
+	private View view;
+//	private HomePageActivity context;
+	
+	public InfoFragment() {
+		super();
+	}
+	
+	public InfoFragment(HomePageActivity context) {
+		super();
+//		this.context = context;
 	}
 
 	@Override
-	public void init() {
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		initData();
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		view = inflater.inflate(R.layout.fm_info, container, false);
+		initView();
+		return view;
+	}
+	
+	@Override
+	public void initData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initView() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -34,4 +61,5 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

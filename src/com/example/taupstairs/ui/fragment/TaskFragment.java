@@ -64,58 +64,37 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		MainService.addFragment(TaskFragment.this);
+		initData();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view =  inflater.inflate(R.layout.fm_task, container, false);
-		init();
+		initView();
 		return view;
 	}
-
+	
 	@Override
-	public void init() {
-		initData();
-		initView();
-	}
-	
-	/*
-	 * 初始化数据
-	 */
-	private void initData() {
+	public void initData() {
 		isRefresh = false;
-		statusService = new StatusService(context);	
 		lastestStatusId = SharedPreferencesUtil.getLastestStatusId(context);
-	}
-	
-	/*
-	 * 初始化ui，以及一些监听器
-	 */
-	private void initView() {
-		xlist_task = (XListView) view.findViewById(R.id.xlist_fm_task);	
-		
-		initLoad();
-		initListItem();	
-		
-	}
-	
-	/*
-	 * 每一次打开都要联网加载
-	 */
-	private void initLoad() {
 		if (null == lastestStatusId) {
 			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);		
 		} else {
 			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);	
 		}
+		statusService = new StatusService(context);	
+		currentStatus = statusService.getListStatus();
 	}
-	
-	/*
-	 * 列表初始化，设置监听器
-	 */
-	private void initListItem() {
-		getStatusFromFile();	
+
+	@Override
+	public void initView() {
+		xlist_task = (XListView) view.findViewById(R.id.xlist_fm_task);	
+		if (currentStatus != null) {
+			adapter = new TaskAdapter(context, currentStatus);
+			xlist_task.setAdapter(adapter);
+		}
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
@@ -133,23 +112,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			public void onRefresh() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
 			}
-			
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
 			}
 		});
-	}
-	
-	/*
-	 * 上次获取到的任务保存在文件中，这次刚打开要先显示出来
-	 */
-	private void getStatusFromFile() {
-		/*考虑到这一步的时间比较长，就不放到initData里面去初始化了，要先打开网络任务*/
-		currentStatus = statusService.getListStatus();
-		if (currentStatus != null) {
-			adapter = new TaskAdapter(context, currentStatus);
-			xlist_task.setAdapter(adapter);
-		}
 	}
 	
 	/*
@@ -222,7 +188,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			if (mode.equals(Task.TA_GETSTATUS_MODE_FIRSTTIME)) {
 				currentStatus = newStatus;
 				/*第一次上面不会设置这个，所以这里要设置*/
-				xlist_task.setPullLoadEnable(true);
 				adapter = new TaskAdapter(context, currentStatus);
 				xlist_task.setAdapter(adapter);
 				setLastestUpdata();

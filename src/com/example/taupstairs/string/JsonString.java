@@ -65,6 +65,17 @@ public class JsonString {
 		public static final String CONTENT = "message_content";
 	}
 	
+	public static class Rank {
+		public static final String MY_RANK = "mRank";
+		public static final String RANK_LIST = "rankList";
+		public static final String PERSON_ID = "users_id";
+		public static final String PERSON_PHOTOURL = "photo";
+		public static final String PERSON_NICKNAME = "username";
+		public static final String PERSON_SEX = "sex";
+		public static final String RANK_PRAISE = "total_praise";
+		public static final String RANK_RANK = "pm";
+	}
+	
 	public static class Return {
 		public static final String STATE = "state";
 		public static final String STATE_OK = "0";

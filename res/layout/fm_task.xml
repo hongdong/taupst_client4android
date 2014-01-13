@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/common_bg">
     <com.example.taupstairs.view.XListView 
         android:id="@+id/xlist_fm_task"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
-        android:divider="@color/white_divider"
-        android:dividerHeight="1dp"
-        android:cacheColorHint="#00000000"
-        android:background="@drawable/fm_task_bg_list">
+        android:layout_marginLeft="0.5dp"
+       	android:layout_marginRight="0.5dp"
+        android:divider="@null"
+        android:cacheColorHint="#00000000">
     </com.example.taupstairs.view.XListView>
 </LinearLayout>

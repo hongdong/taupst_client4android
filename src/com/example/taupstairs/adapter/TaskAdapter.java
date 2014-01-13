@@ -51,8 +51,7 @@ public class TaskAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = null;
-		view = LayoutInflater.from(context).inflate(R.layout.task_item, null);	
+		View view = LayoutInflater.from(context).inflate(R.layout.task_item, null);	
 		Status status = listStatus.get(position);
 		
 		Holder holder = new Holder();

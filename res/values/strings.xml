@@ -70,6 +70,9 @@
     <string name="signup_setting">点击前去填写</string>
     <string name="private_message">顺便说几句悄悄话</string>
     
+    <string name="praise">被赞:</string>
+    <string name="my_rank">我的排名:</string>
+    
     <string name="drawable">头像:</string>
     <string name="nickname">昵称:</string>
     <string name="signatrue">个性签名:</string>

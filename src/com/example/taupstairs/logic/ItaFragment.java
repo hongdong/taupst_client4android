@@ -4,9 +4,14 @@ package com.example.taupstairs.logic;
 public interface ItaFragment {
 
 	/*
-	 * 初始化操作
+	 * 初始化数据
 	 */
-	void init();
+	void initData();
+	
+	/*
+	 * 初始化UI
+	 */
+	void initView();
 	
 	/*
 	 * 更新UI

@@ -92,31 +92,26 @@ public class MeFragment extends Fragment implements ItaFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		MainService.addFragment(MeFragment.this);
+		initData();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fm_me, container, false);
-		init();
+		initView();
 		return view;
 	}
-
-	@Override
-	public void init() {
-		initData();
-		initView();
-	}
 	
-	/*初始化一些全局变量*/
-	private void initData() {
+	@Override
+	public void initData() {
 		defaultPersonId = SharedPreferencesUtil.getDefaultUser(context).getUserId();
 		personService = new PersonService(context);
 		defaultPerson = personService.getPersonById(defaultPersonId);
 	}
-	
-	/*初始化View组件，list列表显示，设置监听器*/
-	private void initView() {
+
+	@Override
+	public void initView() {
 		list_variable = (ListView)view.findViewById(R.id.list_fm_me_variable);
 		list_base = (ListView)view.findViewById(R.id.list_fm_me_base);
 		txt_setting = (TextView)view.findViewById(R.id.txt_fm_me_setting);
@@ -125,7 +120,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 		if (defaultPerson != null) {		//在initData里面已经从数据库中读数据了
 			displayPerson(defaultPerson);	//如果数据库中有数据，就直接显示出来
 		} else {
-			getUserData();					//没有的话，就从服务器获取
+			doGetUserDataTask();					//没有的话，就从服务器获取
 		}
 		list_variable.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -163,7 +158,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 	}
 	
 	/*从服务器获取Person信息*/
-	private void getUserData() {
+	private void doGetUserDataTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
 		taskParams.put(Task.TA_GETUSERDATA_ACTIVITY, Task.TA_GETUSERDATA_ACTIVITY_ME);
 		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, defaultPersonId);

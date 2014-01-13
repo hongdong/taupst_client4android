@@ -99,9 +99,9 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		buttons.add(btn_info);
 		buttons.add(btn_task);
 		buttons.add(btn_rank);
-		infoFragment = new InfoFragment();
+		infoFragment = new InfoFragment(HomePageActivity.this);
 		taskFragment = new TaskFragment(HomePageActivity.this);
-		rankFragment = new RankFragment();
+		rankFragment = new RankFragment(HomePageActivity.this);
 		meFragment = new MeFragment(HomePageActivity.this);
 		fragments = new ArrayList<Fragment>();
 		fragments.add(infoFragment);
@@ -148,7 +148,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {	
 				if (flag_clear) {
-					System.out.println("check: " + checkedId);
 					flag_clear = false;
 				} else {
 					switch (checkedId) {

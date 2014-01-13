@@ -67,6 +67,7 @@
 				android:paddingBottom="10dp"
 				android:gravity="top"
 				android:maxLength="50"
+				android:maxLines="5"
 				android:textSize="16sp"
 				android:hint="@string/write_task_content"
 				android:textColorHint="@color/gray"
@@ -82,6 +83,7 @@
 				android:paddingBottom="10dp"
 				android:gravity="top"
 				android:maxLength="20"
+				android:maxLines="3"
 				android:textSize="16sp"
 				android:hint="@string/write_task_rewards"
 				android:textColorHint="@color/gray"
@@ -110,7 +112,7 @@
 				android:hint="@string/write_endtime_hint"
 				android:textColorHint="@color/gray"
 				android:textColor="@color/black"
-				android:textSize="18sp"
+				android:textSize="16sp"
 				android:background="@drawable/common_txt_bg"/>
 		    <Button 
 		        android:id="@+id/btn_write_endtime"

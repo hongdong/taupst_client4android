@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
+import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.string.JsonString;
 
@@ -135,6 +136,32 @@ public class JsonUtil {
 			e.printStackTrace();
 		}
 		return contents;
+	}
+	
+	public static List<Rank> getRanks(String jsonString) {
+		List<Rank> ranks = new ArrayList<Rank>();
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);	
+			String myString = jsonObject.getString(JsonString.Rank.MY_RANK);
+			JSONObject myObject = new JSONObject(myString);
+			String rankList = jsonObject.getString(JsonString.Rank.RANK_LIST);
+			JSONArray jsonArray = new JSONArray(rankList);
+			jsonArray.put(myObject);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject rankObject = jsonArray.getJSONObject(i);
+				Rank rank = new Rank();
+				rank.setPersonId(rankObject.getString(JsonString.Rank.PERSON_ID));
+				rank.setPersonPhotoUrl(rankObject.getString(JsonString.Rank.PERSON_PHOTOURL));
+				rank.setPersonNickname(rankObject.getString(JsonString.Rank.PERSON_NICKNAME));
+				rank.setPersonSex(rankObject.getString(JsonString.Rank.PERSON_SEX));
+				rank.setRankPraise(rankObject.getString(JsonString.Rank.RANK_PRAISE));
+				rank.setRankRank(rankObject.getString(JsonString.Rank.RANK_RANK));
+				ranks.add(rank);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return ranks;
 	}
 	
 }

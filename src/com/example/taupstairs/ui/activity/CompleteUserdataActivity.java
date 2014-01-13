@@ -30,9 +30,12 @@ import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.RankService;
+import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SdCardUtil;
+import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.UploadToBCS;
 
 public class CompleteUserdataActivity extends Activity implements ItaActivity {
@@ -316,6 +319,13 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 					JSONObject jsonObject = new JSONObject(result);
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
 					if (state.equals(JsonString.Return.STATE_OK)) {
+						SharedPreferencesUtil.savaLastestStatusId(CompleteUserdataActivity.this, null);
+						StatusService statusService = new StatusService(CompleteUserdataActivity.this);
+						statusService.emptyStatusDb();
+						statusService.closeDBHelper();
+						RankService rankService = new RankService(CompleteUserdataActivity.this);
+						rankService.emptyRankDb();
+						rankService.closeDBHelper();
 						Intent intent = new Intent(CompleteUserdataActivity.this, HomePageActivity.class);
 						startActivity(intent);
 						finish();

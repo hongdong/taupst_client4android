@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/fm_task_bg_list_item">
+    android:background="@drawable/fm_bg_list_item">
     
     <!-- 头像  --> 
 	<ImageView 
@@ -32,13 +32,13 @@
 				android:layout_marginLeft="10dp"
 				android:textStyle="bold"
 				android:textColor="@color/green"
-				android:textSize="18sp"/>
+				android:textSize="16sp"/>
 		    <TextView 
 		        android:id="@+id/txt_fm_task_releasetime"
 		        android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginRight="8dp"
-				android:textSize="14sp"
+				android:textSize="12sp"
 				android:textColor="@color/black"
 				android:layout_alignParentRight="true"/>
 		</RelativeLayout>
@@ -56,7 +56,7 @@
 				android:layout_marginLeft="10dp"
 				android:layout_marginRight="50dp"
 				android:textColor="@color/black"
-				android:textSize="20sp"/>
+				android:textSize="18sp"/>
 		</LinearLayout>
 	
 		<!-- 报酬 --> 
@@ -74,7 +74,7 @@
 		 		android:paddingRight="5dp"
 		 		android:text="@string/rewards"
 		 		android:textColor="@color/white"
-		 		android:textSize="18sp"
+		 		android:textSize="16sp"
 		 		android:background="@color/task_reward"/>
 	     	<TextView 
 	         	android:id="@+id/txt_fm_task_rewards"
@@ -83,7 +83,7 @@
 		 		android:layout_marginLeft="10dp"
 		 		android:layout_marginRight="30dp"
 		 		android:textColor="@color/gray"
-		 		android:textSize="18sp"/>
+		 		android:textSize="16sp"/>
 	 	</LinearLayout>
     
 		<!-- 来自哪个院系哪个年级，留言数，报名数 --> 
@@ -98,7 +98,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="10dp"
 				android:textColor="@color/gray"
-				android:textSize="16sp"/>
+				android:textSize="14sp"/>
 		     <TextView 
 		        android:id="@+id/txt_fm_task_grade"
 		        android:layout_width="wrap_content"
@@ -106,13 +106,13 @@
 				android:layout_toRightOf="@id/txt_fm_task_department"
 				android:layout_marginLeft="10dp"
 				android:textColor="@color/gray"
-				android:textSize="16sp"/>
+				android:textSize="14sp"/>
 		    <TextView 
 		        android:id="@+id/txt_fm_task_signup"
 		        android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginRight="10dp"
-				android:textSize="14sp"
+				android:textSize="12sp"
 				android:textColor="@color/task_text_message_signup"
 				android:layout_alignParentRight="true"
 				android:drawableLeft="@drawable/icon_message"
@@ -123,7 +123,7 @@
 		        android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginRight="15dp"
-				android:textSize="14sp"
+				android:textSize="12sp"
 				android:textColor="@color/task_text_message_signup"
 				android:layout_toLeftOf="@id/txt_fm_task_signup"
 				android:drawableLeft="@drawable/icon_signup"

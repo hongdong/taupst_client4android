@@ -86,6 +86,12 @@ public class Task {
 	public static final String TA_SIGNUP_CONTACT = "contact";
 	public static final String TA_SIGNUP_MESSAGE = "message";
 	
+	public static final int TA_GETRANK = 12;
+	public static final String TA_GETRANK_ACTIVITY = "RankFragment";
+	public static final String TA_GETRANK_MODE = "getrank_mode";
+	public static final String TA_GETRANK_MODE_OVERALL = "1";
+	public static final String TA_GETRANK_MODE_MONTH = "2";
+	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
 		this.taskId = taskId;

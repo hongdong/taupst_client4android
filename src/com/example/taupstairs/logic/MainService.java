@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
+import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -114,6 +115,11 @@ public class MainService extends Service implements Runnable {
 			case Task.TA_SIGNUP:
 				ItaActivity activity_signup = (ItaActivity) getActivityByName(Task.TA_SIGNUP_ACTIVITY);
 				activity_signup.refresh(Task.TA_SIGNUP, msg.obj);
+				break;
+				
+			case Task.TA_GETRANK:
+				ItaFragment fragment_getrank = (ItaFragment) getFragmentByName(Task.TA_GETRANK_ACTIVITY);
+				fragment_getrank.refresh(Task.TA_GETRANK, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -215,6 +221,10 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_SIGNUP:
 			msg.obj = doSignupTask(task);
+			break;
+			
+		case Task.TA_GETRANK:
+			msg.obj = doGetRankTask(task);
 			break;
 		
 		case Task.TA_USEREXIT:
@@ -410,6 +420,20 @@ public class MainService extends Service implements Runnable {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	private List<Rank> doGetRankTask(Task task) {
+		List<Rank> ranks = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String mode = (String) taskParams.get(Task.TA_GETRANK_MODE);
+		String get_rank_url = HttpClientUtil.BASE_URL + "data/ranking/list?type=" + mode;
+		try {
+			String jsonString = HttpClientUtil.getRequest(get_rank_url);
+			ranks = JsonUtil.getRanks(jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ranks;
 	}
 	
 	/*

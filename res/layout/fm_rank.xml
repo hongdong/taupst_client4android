@@ -2,15 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    <TextView 
-        android:id="@+id/txt_fm_rank"
+    android:background="@color/common_bg">
+	<com.example.taupstairs.view.XListView 
+        android:id="@+id/xlist_fm_rank"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:background="@color/white"
-        android:text="@string/rank"
-        android:textSize="30sp"
-        android:textColor="@color/black"/>
+        android:layout_height="match_parent" 
+        android:divider="@null"
+        android:cacheColorHint="#00000000">
+	</com.example.taupstairs.view.XListView>
 </LinearLayout>

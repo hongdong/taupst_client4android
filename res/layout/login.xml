@@ -24,7 +24,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="20dp"
 	        android:text="@string/login"
-	        android:textSize="20sp"
+	        android:textSize="18sp"
 	        android:textColor="@color/white"
 	        android:background="@drawable/login_bg_btn_login"/>
     </LinearLayout>
@@ -40,7 +40,7 @@
 	        android:layout_width="wrap_content" 
 	        android:layout_height="wrap_content"
 	        android:text="@string/about_us"
-	        android:textSize="16sp"
+	        android:textSize="14sp"
 	        android:textColor="@color/blue"
 	        android:clickable="true"
 	        android:background="@drawable/login_bg_txt"/>
@@ -57,7 +57,7 @@
 	        android:layout_width="wrap_content" 
 	        android:layout_height="wrap_content"
 	        android:text="@string/server_declare"
-	        android:textSize="16sp"
+	        android:textSize="14sp"
 	        android:textColor="@color/blue"
 	        android:clickable="true"
 	        android:background="@drawable/login_bg_txt"/>

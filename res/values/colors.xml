@@ -10,7 +10,7 @@
     <color name="task_divider">#B6BCC4</color><!--任务界面分隔线 --> 
     <color name="task_reward">#EF4D37</color>
     <color name="task_text_message_signup">#9ba0aa</color>
-    <color name="task_list_item_click">#ededed</color>
+    <color name="fm_list_item_click">#ededed</color>
     <color name="click_select">#fafafa</color>
     <color name="simple_blue">#7996DE</color>
     <color name="task_detail_bg">#E2E2E2</color>

@@ -26,5 +26,11 @@ public class DBInfo {
 				" statusReleaseTime, statusEndTime, statusRewards, statusMessageCount, statusSignUpCount, " +
 				" personId, personPhotoUrl, personNickname, personDepartment, personGrade, personSex)";
 		public static final String STATUS_DROP_STRING = "drop table " + STATUS_TB_NAME;
+		
+		public static final String RANK_TB_NAME = "rank";
+		public static final String RANK_CREATE_STRING = "create table if not exists " + RANK_TB_NAME + 
+				" (_id integer primary key autoincrement, rankId, personId, personPhotoUrl, " + 
+				" personNickname, personSex, rankPraise, rankRank) ";
+		public static final String RANK_DROP_STRING = "drop table " + RANK_TB_NAME;
 	}
 }
