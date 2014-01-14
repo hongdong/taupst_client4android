@@ -5,16 +5,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-
+import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
@@ -38,7 +38,7 @@ public class MainService extends Service implements Runnable {
 	
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
+			switch (msg.what) {	
 			case Task.TA_LOGIN:
 				ItaActivity activity_login = (ItaActivity) getActivityByName(Task.TA_LOGIN_ACTIVITY);
 				activity_login.refresh(Task.TA_LOGIN, msg.obj);
@@ -131,6 +131,17 @@ public class MainService extends Service implements Runnable {
 					ItaActivity activity_userexit = (ItaActivity) getActivityByName(Task.TA_USEREXIT_ACTIVITY_SETTING);
 					activity_userexit.refresh(Task.TA_USEREXIT, Task.TA_USEREXIT_OK);
 				}
+			
+			case Task.TA_CHECKUSER:
+				ItaActivity activity_checkuser = (ItaActivity) getActivityByName(Task.TA_CHECKUSER_ACTIVITY);
+				activity_checkuser.refresh(Task.TA_CHECKUSER, msg.obj);
+				break;
+				
+			case Task.TA_GETCOLLEGECAPTCHA:
+				ItaActivity activity_getcollegecaptcha = 
+				(ItaActivity) getActivityByName(Task.TA_GETCOLLEGECAPTCHA_ACTIVITY);
+				activity_getcollegecaptcha.refresh(Task.TA_GETCOLLEGECAPTCHA, msg.obj);
+				break;
 
 			default:
 				break;
@@ -173,13 +184,13 @@ public class MainService extends Service implements Runnable {
 		Message msg = new Message();
 		msg.what = task.getTaskId();
 		Map<String, Object> taskParams = task.getTaskParams();
-		switch (task.getTaskId()) {
+		switch (task.getTaskId()) {		
 		case Task.TA_LOGIN:
-			msg.obj = doLoginTask(task, Task.TA_LOGIN_TASKPARAMS);
+			msg.obj = doLoginTask(task);
 			break;
 			
 		case Task.TA_CHECKNET:		//检查网络的方式也是用login，看看是否能够成功返回登录数据
-			msg.obj = doLoginTask(task, Task.TA_CHECKNET_TASKPARAMS);
+			msg.obj = doLoginTask(task);
 			break;
 			
 		case Task.TA_GETUSERDATA:
@@ -232,6 +243,14 @@ public class MainService extends Service implements Runnable {
 			String activity_userexit = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
 			msg.obj = activity_userexit;
 			break;
+			
+		case Task.TA_CHECKUSER:
+			msg.obj = doCheckUserTask(task);
+			break;
+			
+		case Task.TA_GETCOLLEGECAPTCHA:
+			msg.obj = doGetCollegeCaptchaTask(task);
+			break;
 
 		default:
 			break;
@@ -239,15 +258,47 @@ public class MainService extends Service implements Runnable {
 		handler.sendMessage(msg);
 	}
 	
+	private String doCheckUserTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String collegeId = (String) taskParams.get(College.COLLEGE_ID);
+		String studentId = (String) taskParams.get(User.USER_STUDENTID);
+		String check_user_url = HttpClientUtil.BASE_URL + "data/user/issysn?school=" +
+				collegeId + "&student_id=" + studentId;
+		try {
+			result = HttpClientUtil.getRequest(check_user_url);
+		} catch (Exception e) {
+			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
+		}
+		return result;
+	}
+	
+	private Drawable doGetCollegeCaptchaTask(Task task) {
+		Drawable drawable = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String collegeCaptchaUrl = (String) taskParams.get(College.COLLEGE_CAPTCHAURL);
+		try {
+			drawable = HttpClientUtil.getCollegeCaptcha(collegeCaptchaUrl);
+		} catch (Exception e) {
+			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
+		}
+		return drawable;
+	}
+	
 	/*登录任务*/
-	private String doLoginTask(Task task, String taskParamsString) {
+	private String doLoginTask(Task task) {
 		String result = Task.TA_NO;
 		Map<String, Object> taskParams = task.getTaskParams();
-		User user = (User) taskParams.get(taskParamsString);
-		String login_url = HttpClientUtil.BASE_URL + 
-				"data/user/login?student_id=" + user.getUserStudentId() + 
-				"&pwd=" + user.getUserPassword() + 
-				"&school=" + user.getUserCollegeId();
+		String collegeId = (String) taskParams.get(User.USER_COLLEGEID);
+		String studentId = (String) taskParams.get(User.USER_STUDENTID);
+		String password = (String) taskParams.get(User.USER_PASSWORD);
+		String collegeCaptcha = (String) taskParams.get(Task.TA_LOGIN_COLLEGECAPTCHA);
+		String cookie = (String) taskParams.get(Task.TA_LOGIN_COOKIE);
+		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
+				+ "&pwd=" + password + "&school=" + collegeId;
+		if (collegeCaptcha != null && cookie != null) {
+			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie;
+		}
 		try {
 			login_url = StringUtil.replaceBlank(login_url);
 			result = HttpClientUtil.getRequest(login_url);

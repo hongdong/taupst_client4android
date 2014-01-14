@@ -120,10 +120,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 				while (noNet) {
 					if (!goCheck) {
 						goCheck = true;
-						HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-						taskParams.put(Task.TA_CHECKNET_TASKPARAMS, defaultUser);
-						Task task = new Task(Task.TA_CHECKNET, taskParams);
-						MainService.addTask(task);
+						doCheckNetTask();
 						try {
 							sleep(1000);
 						} catch (InterruptedException e) {
@@ -212,6 +209,22 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 			btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
 		}	
 	}
+	
+	private void doCheckNetTask() {
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		taskParams.put(User.USER_COLLEGEID, defaultUser.getUserCollegeId());
+		taskParams.put(User.USER_STUDENTID, defaultUser.getUserStudentId());
+		taskParams.put(User.USER_PASSWORD, defaultUser.getUserPassword());
+		Task task = new Task(Task.TA_CHECKNET, taskParams);
+		MainService.addTask(task);
+	}
+	
+	private void doUsetExitTask() {
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
+		Task task = new Task(Task.TA_USEREXIT, taskParams);
+		MainService.addTask(task);
+	}
 
 	@Override
 	public void refresh(Object... params) {
@@ -278,10 +291,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
-		Task task = new Task(Task.TA_USEREXIT, taskParams);
-		MainService.addTask(task);
+		doUsetExitTask();
 	}
 	
 	@Override

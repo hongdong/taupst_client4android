@@ -101,9 +101,13 @@ public class SignupActivity extends Activity implements ItaActivity {
 				if (box_phone.isChecked()) {
 					optional[2] = '1';
 				}
-				String contact = new String(optional);
-				String message = edit_signup.getText().toString().trim();
-				doSingupTask(contact, message);
+				String contact = new String(optional);		
+				if (contact.equals("000")) {
+					Toast.makeText(SignupActivity.this, "至少提供一种联系方式", Toast.LENGTH_SHORT).show();
+				} else {
+					String message = edit_signup.getText().toString().trim();
+					doSingupTask(contact, message);
+				}
 			}
 		});
 		

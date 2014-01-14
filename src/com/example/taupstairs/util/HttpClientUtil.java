@@ -1,5 +1,6 @@
 package com.example.taupstairs.util;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import android.graphics.drawable.Drawable;
 
 public class HttpClientUtil {
 
@@ -93,6 +95,20 @@ public class HttpClientUtil {
 		});
 		new Thread(task).start();
 		return task.get();
+	}
+	
+	public static Drawable getCollegeCaptcha(String collegeCaptchaUrl) {
+		Drawable drawable = null;
+		HttpGet get = new HttpGet(collegeCaptchaUrl);
+		try {
+			HttpClient httpClient = getHttpClient();
+			HttpResponse response = httpClient.execute(get);
+			InputStream is = response.getEntity().getContent();
+			drawable = Drawable.createFromStream(is, collegeCaptchaUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return drawable;
 	}
 	
 }

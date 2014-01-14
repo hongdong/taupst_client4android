@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.taupstairs.R;
-import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
@@ -51,7 +50,6 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	private boolean flag_img;
 	private Bitmap userPhoto;
 	private ProgressDialog progressDialog;
-	private Intent intent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,8 +66,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	
 	private void initData() {
 		flag_img = false;
-		intent = getIntent();
-		userId = intent.getStringExtra(Person.PERSON_ID);
+		userId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 	}
 	
 	private void initView() {
@@ -85,7 +82,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				updataUserData();
+				jumpToHomePage();
 			}
 		});
 		btn_ok.setOnClickListener(new OnClickListener() {
@@ -140,10 +137,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		}
 		if (!nickname.equals("")) {
 			url += "&username=" + nickname;
-		} else {
-			String personNickname = intent.getStringExtra(Person.PERSON_NICKNAME);
-			url += "&username=" + personNickname;
-		}
+		} 
 		if (!signatrue.equals("")) {
 			url += "&signature=" + signatrue;
 		}
@@ -319,16 +313,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 					JSONObject jsonObject = new JSONObject(result);
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
 					if (state.equals(JsonString.Return.STATE_OK)) {
-						SharedPreferencesUtil.savaLastestStatusId(CompleteUserdataActivity.this, null);
-						StatusService statusService = new StatusService(CompleteUserdataActivity.this);
-						statusService.emptyStatusDb();
-						statusService.closeDBHelper();
-						RankService rankService = new RankService(CompleteUserdataActivity.this);
-						rankService.emptyRankDb();
-						rankService.closeDBHelper();
-						Intent intent = new Intent(CompleteUserdataActivity.this, HomePageActivity.class);
-						startActivity(intent);
-						finish();
+						jumpToHomePage();
 					} else {
 						Toast.makeText(CompleteUserdataActivity.this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 					}
@@ -341,6 +326,12 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		default:
 			break;
 		}
+	}
+	
+	private void jumpToHomePage() {
+		Intent intent = new Intent(CompleteUserdataActivity.this, HomePageActivity.class);
+		startActivity(intent);
+		finish();
 	}
 	
 	@Override

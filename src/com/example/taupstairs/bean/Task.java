@@ -23,6 +23,8 @@ public class Task {
 	public static final int TA_LOGIN = 1;
 	public static final String TA_LOGIN_TASKPARAMS = "login";
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
+	public static final String TA_LOGIN_COLLEGECAPTCHA = "collegeCaptcha";
+	public static final String TA_LOGIN_COOKIE = "cookie";
 	
 	//检测网络
 	public static final int TA_CHECKNET = 2;
@@ -91,6 +93,12 @@ public class Task {
 	public static final String TA_GETRANK_MODE = "getrank_mode";
 	public static final String TA_GETRANK_MODE_OVERALL = "1";
 	public static final String TA_GETRANK_MODE_MONTH = "2";
+	
+	public static final int TA_CHECKUSER = 13;
+	public static final String TA_CHECKUSER_ACTIVITY = "LoginActivity";
+	
+	public static final int TA_GETCOLLEGECAPTCHA = 14;
+	public static final String TA_GETCOLLEGECAPTCHA_ACTIVITY = "LoginActivity";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
