@@ -131,6 +131,7 @@ public class MainService extends Service implements Runnable {
 					ItaActivity activity_userexit = (ItaActivity) getActivityByName(Task.TA_USEREXIT_ACTIVITY_SETTING);
 					activity_userexit.refresh(Task.TA_USEREXIT, Task.TA_USEREXIT_OK);
 				}
+				break;
 			
 			case Task.TA_CHECKUSER:
 				ItaActivity activity_checkuser = (ItaActivity) getActivityByName(Task.TA_CHECKUSER_ACTIVITY);

@@ -29,8 +29,6 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
-import com.example.taupstairs.services.RankService;
-import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SdCardUtil;
