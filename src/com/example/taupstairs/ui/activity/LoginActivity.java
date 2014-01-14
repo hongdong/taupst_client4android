@@ -31,7 +31,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 
 	private User user;
 	private Button btn_login;
-	private String userCollegeId;
+	private String collegeId, collegeName, collegeCaptchaUrl;
 	private ProgressDialog progressDialog;
 	private TextView txt_college_name, txt_about, txt_server;
 	private EditText edit_studentid, edit_password;
@@ -70,7 +70,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 				} else {
 					String userStudentId = edit_studentid.getText().toString();
 					String userPassword = edit_password.getText().toString();
-					user = new User(userCollegeId, userStudentId, userPassword);
+					user = new User(collegeId, userStudentId, userPassword);
 					loginTask(user);
 				}
 			}
@@ -224,8 +224,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (IntentString.RequestCode.LOGIN_SELECTCOLLEGE == requestCode) {
 			if (IntentString.ResultCode.SELECTCOLLEGE_LOGIN == resultCode) {
-				userCollegeId = data.getStringExtra(College.COLLEGE_ID);
-				String collegeName = data.getStringExtra(College.COLLEGE_NAME);
+				collegeId = data.getStringExtra(College.COLLEGE_ID);
+				collegeName = data.getStringExtra(College.COLLEGE_NAME);
+				collegeCaptchaUrl = data.getStringExtra(College.COLLEGE_CAPTCHAURL);
 				txt_college_name.setTextColor(Color.BLACK);
 				txt_college_name.setText(collegeName);
 			}

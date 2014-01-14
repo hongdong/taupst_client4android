@@ -39,8 +39,8 @@
 	            android:id="@+id/edit_college"
 		        android:layout_width="match_parent"
 		    	android:layout_height="wrap_content"
-		    	android:paddingLeft="20dp"
-		    	android:drawablePadding="20dp"
+		    	android:paddingLeft="15dp"
+		    	android:drawablePadding="15dp"
 		    	android:background="@drawable/edit_47"
 				android:drawableLeft="@drawable/login_img_search"
 		    	android:hint="@string/input_college"
@@ -56,7 +56,8 @@
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
 	        android:divider="@color/white_divider"
-    		android:dividerHeight="2dp"
+    		android:dividerHeight="1dp"
+    		android:cacheColorHint="#00000000"
 	        android:background="@drawable/login_bg_searchlist">
 	    </ListView>
     </LinearLayout>

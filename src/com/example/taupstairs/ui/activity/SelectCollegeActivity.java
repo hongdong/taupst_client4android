@@ -1,5 +1,6 @@
 package com.example.taupstairs.ui.activity;
 
+import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,7 +30,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	private EditText edit;
 	private ListView list;
 	private ArrayAdapter<String> adapter;
-	private String[] collegeNames;
+	private List<String> collegeNames;
 	private CollegeService collegeService;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,8 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 	}
 	
 	private void initData() {
-		collegeNames = getResources().getStringArray(R.array.college_name);
 		collegeService = new CollegeService(SelectCollegeActivity.this);
+		collegeNames = collegeService.getCollegeNames();
 	}
 	
 	private void initView() {
@@ -67,13 +68,12 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 				Intent intent = new Intent();
 				intent.putExtra(College.COLLEGE_ID, college.getCollegeId());
 				intent.putExtra(College.COLLEGE_NAME, collegeName);
+				intent.putExtra(College.COLLEGE_CAPTCHAURL, college.getCollegeCaptchaUrl());
 				setResult(IntentString.ResultCode.SELECTCOLLEGE_LOGIN, intent);
 				finish();
 			}
 		});
 		btn_back.setOnClickListener(new OnClickListener() {
-			
-			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				setResult(Activity.RESULT_CANCELED, intent);
@@ -84,12 +84,10 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				
 			}
-
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				
 			}
-
 			public void afterTextChanged(Editable s) {
 				if (edit.getText().toString().isEmpty()) {
 					showAllCollege();
