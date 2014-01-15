@@ -13,10 +13,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.PersonService;
+import com.example.taupstairs.util.FileUtil;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
@@ -39,6 +43,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 		list_user = (ListView)findViewById(R.id.list_setting_user);
 		list_soft = (ListView)findViewById(R.id.list_setting_soft);
 		btn_change_user = (Button)findViewById(R.id.btn_change_user);
+		progressDialog = new ProgressDialog(SettingActivity.this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -59,6 +64,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 					break;
 
 				case 1:
+					emptyCacheMemory();
 					break;
 					
 				default:
@@ -97,8 +103,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 		});
 		
 		btn_change_user.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				progressDialog = new ProgressDialog(SettingActivity.this);
+			public void onClick(View v) {	
 				progressDialog.setCancelable(false);
 				progressDialog.setMessage("    正在注销...");
 				progressDialog.show();
@@ -108,6 +113,18 @@ public class SettingActivity extends Activity implements ItaActivity {
 				MainService.addTask(task);
 			}
 		});
+	}
+	
+	private void emptyCacheMemory() {
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("    正在清除...");
+		progressDialog.show();
+		FileUtil.deletePhoto(getFilesDir().getAbsolutePath());
+		PersonService personService = new PersonService(SettingActivity.this);
+		personService.emptyPersonDB();
+		personService.closeDBHelper();
+		progressDialog.dismiss();
+		Toast.makeText(SettingActivity.this, "清除完成", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

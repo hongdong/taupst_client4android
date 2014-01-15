@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,6 +47,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private Button btn_top_right;
 	private RadioButton btn_info, btn_task, btn_rank;
 	private List<RadioButton> buttons;
+	private boolean isExit = false;
 	
 	private boolean noNet = true;
 	private boolean goCheck = false;
@@ -289,10 +293,47 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		doUsetExitTask();
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.home_page, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.exit:
+			finish();
+			doUsetExitTask();
+			break;
+
+		default:
+			break;
+		}
+		return true;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		exitByTwoClick();
+	}
+	
+	private void exitByTwoClick() {  
+	    Timer tExit = null;  
+	    if (isExit == false) {  
+	        isExit = true; // 准备退出  
+	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();  
+	        tExit = new Timer();  
+	        tExit.schedule(new TimerTask() {  
+	            public void run() {  
+	                isExit = false; // 取消退出  
+	            }  
+	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
+	  
+	    } else {  
+	    	finish();
+	        doUsetExitTask();
+	    }  
+	}  
 	
 	@Override
 	protected void onDestroy() {

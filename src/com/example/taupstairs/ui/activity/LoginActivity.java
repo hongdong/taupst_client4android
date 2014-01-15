@@ -1,13 +1,12 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
-import java.util.List;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.AbstractHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -38,13 +37,17 @@ import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class LoginActivity extends Activity implements ItaActivity {
 
-	private Button btn_login;
-	private String userId, studentId, password, collegeId, collegeName, collegeCaptchaUrl;
+	private Button btn_login, btn_captcha;
+	private String userId, studentId, password;
+	private String collegeId, collegeName, collegeCaptchaUrl, eduCode;
 	private ProgressDialog progressDialog;
 	private TextView txt_college_name, txt_about, txt_server;
-	private EditText edit_studentid, edit_password;
+	private EditText edit_studentid, edit_password, edit_captcha;
+	private ImageView img_captcha;
 	private boolean hasGetCaptcha = false;
 	private boolean isExist = false;
+	private boolean isRefresh = false;
+	private boolean haGetEduCode = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,6 +62,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 		edit_studentid = (EditText)findViewById(R.id.edit_studentid);
 		edit_password = (EditText)findViewById(R.id.edit_password);
 		btn_login = (Button)findViewById(R.id.btn_login);
+		img_captcha = (ImageView)findViewById(R.id.img_college_captcha);
+		btn_captcha = (Button)findViewById(R.id.btn_refresh_college_captcha);
+		edit_captcha = (EditText)findViewById(R.id.edit_college_captcha);
 		txt_about = (TextView)findViewById(R.id.txt_about);
 		txt_server = (TextView)findViewById(R.id.txt_server);
 		progressDialog = new ProgressDialog(this);
@@ -96,6 +102,11 @@ public class LoginActivity extends Activity implements ItaActivity {
 				startActivity(intent);
 			}
 		});
+		btn_captcha.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				doGetCollegeCaptchaTask();
+			}
+		});
 	}
 	
 	private void showProgressDialog() {
@@ -109,44 +120,62 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 	
 	private void doCheckUserTask() {
-		showProgressDialog();
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
-		taskParams.put(College.COLLEGE_ID, collegeId);
-		taskParams.put(User.USER_STUDENTID, studentId);
-		Task task = new Task(Task.TA_CHECKUSER, taskParams);
-		MainService.addTask(task);
+		if (!isRefresh) {
+			isRefresh = true;
+			showProgressDialog();
+			HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+			taskParams.put(College.COLLEGE_ID, collegeId);
+			taskParams.put(User.USER_STUDENTID, studentId);
+			Task task = new Task(Task.TA_CHECKUSER, taskParams);
+			MainService.addTask(task);
+		}
+	}
+	
+	private void doGetEduCodeTask() {
+		if (!isRefresh) {
+			isRefresh = true;
+			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+			taskParams.put("eduCode", "http://jwgl.mju.edu.cn/default2.aspx");
+			Task task = new Task(Task.TA_GETEDUCODE, taskParams);
+			MainService.addTask(task);
+		}
 	}
 	
 	private void doGetCollegeCaptchaTask() {
-		showProgressDialog();
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-		taskParams.put(College.COLLEGE_CAPTCHAURL, collegeCaptchaUrl);
-		Task task = new Task(Task.TA_GETCOLLEGECAPTCHA, taskParams);
-		MainService.addTask(task);
+		if (!isRefresh) {
+			isRefresh = true;
+			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+			taskParams.put(College.COLLEGE_CAPTCHAURL, collegeCaptchaUrl);
+			Task task = new Task(Task.TA_GETCOLLEGECAPTCHA, taskParams);
+			MainService.addTask(task);
+		}
 	}
 	
 	/*登录放到后台处理*/
 	private void doLoginTask() {
-		showProgressDialog();
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-		taskParams.put(User.USER_COLLEGEID, collegeId);
-		taskParams.put(User.USER_STUDENTID, studentId);
-		taskParams.put(User.USER_PASSWORD, password);
-		if (!isExist && hasGetCaptcha) {
-			EditText editText = (EditText) findViewById(R.id.edit_college_captcha);
-			String collegeCaptcha = editText.getText().toString().trim();
-			HttpClient httpClient = HttpClientUtil.getHttpClient();
-			List<Cookie> cookies = ((AbstractHttpClient) httpClient).getCookieStore().getCookies();
-			Cookie cookie = cookies.get(0);
-			String cookieString = cookie.getName() + "=" + cookie.getValue();
-			taskParams.put(Task.TA_LOGIN_COLLEGECAPTCHA, collegeCaptcha);
-			taskParams.put(Task.TA_LOGIN_COOKIE, cookieString);
+		if (!isRefresh) {
+			isRefresh = true;
+			showProgressDialog();
+			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+			taskParams.put(User.USER_COLLEGEID, collegeId);
+			taskParams.put(User.USER_STUDENTID, studentId);
+			taskParams.put(User.USER_PASSWORD, password);
+			if (!isExist && hasGetCaptcha) {
+				EditText editText = (EditText) findViewById(R.id.edit_college_captcha);
+				String collegeCaptcha = editText.getText().toString().trim();
+				String cookieString = HttpClientUtil.cookieString.split(";")[0];
+				System.out.println("login: " + cookieString);
+				taskParams.put(Task.TA_LOGIN_COLLEGECAPTCHA, collegeCaptcha);
+				taskParams.put(Task.TA_LOGIN_COOKIE, cookieString);
+				taskParams.put("eduCode", eduCode);
+			}
+			Task task = new Task(Task.TA_LOGIN, taskParams);
+			MainService.addTask(task);
 		}
-		Task task = new Task(Task.TA_LOGIN, taskParams);
-		MainService.addTask(task);
 	}
 
-	public void refresh(Object... params) {		
+	public void refresh(Object... params) {	
+		isRefresh = false;
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_CHECKUSER:
@@ -155,8 +184,15 @@ public class LoginActivity extends Activity implements ItaActivity {
 			refreshCheckUser(checkuser);
 			break;
 			
+		case Task.TA_GETEDUCODE:
+			String html = (String) params[1];
+			Document d = Jsoup.parse(html);
+			Elements es = d.select("input[name=__VIEWSTATE]");
+			eduCode = es.val();
+			doGetCollegeCaptchaTask();
+			break;
+			
 		case Task.TA_GETCOLLEGECAPTCHA:
-			dismissProgressDialog();
 			Drawable drawable = (Drawable) params[1];
 			refreshGetCollegeCaptcha(drawable);
 			break;
@@ -185,7 +221,13 @@ public class LoginActivity extends Activity implements ItaActivity {
 					if (collegeCaptchaUrl.equals("") || hasGetCaptcha) {
 						doLoginTask();
 					} else {
-						hasGetCaptcha = true;
+						Toast.makeText(LoginActivity.this, 
+								"第一次登录需同步教务系统\n请填写验证码后再点击登录", 
+								Toast.LENGTH_LONG).show();
+						if (!haGetEduCode) {
+							haGetEduCode = true;
+							doGetEduCodeTask();
+						}
 						doGetCollegeCaptchaTask();
 					}
 				}
@@ -199,14 +241,14 @@ public class LoginActivity extends Activity implements ItaActivity {
 	
 	private void refreshGetCollegeCaptcha(Drawable drawable) {
 		if (drawable != null) {
-			ImageView imageView = (ImageView) findViewById(R.id.img_college_captcha);
-			EditText editText = (EditText) findViewById(R.id.edit_college_captcha);
-			imageView.setImageDrawable(drawable);
-			imageView.setVisibility(View.VISIBLE);
-			editText.setVisibility(View.VISIBLE);
-			Toast.makeText(LoginActivity.this, 
-					"第一次登录需同步教务系统\n请填写验证码后再点击登录", 
-					Toast.LENGTH_LONG).show();
+			hasGetCaptcha = true;
+			img_captcha = (ImageView) findViewById(R.id.img_college_captcha);
+			edit_captcha = (EditText) findViewById(R.id.edit_college_captcha);
+			edit_captcha.setText(null);
+			img_captcha.setImageDrawable(drawable);
+			img_captcha.setVisibility(View.VISIBLE);
+			btn_captcha.setVisibility(View.VISIBLE);
+			edit_captcha.setVisibility(View.VISIBLE);
 		} else {
 			Toast.makeText(LoginActivity.this, 
 					"教务系统崩溃!!", 
@@ -222,6 +264,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 				hasGetCaptcha = false;
 				int state = Integer.parseInt(loginJsonObject.getString(JsonString.Login.STATE).trim());
 				testState(state);
+				doGetCollegeCaptchaTask();
 			} else if (isLogined.equals(Task.TA_TRUE)) {
 				userId = loginJsonObject.getString(JsonString.Login.USERS_ID);
 				beforeJump();

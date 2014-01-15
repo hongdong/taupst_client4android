@@ -32,6 +32,7 @@ public class HttpClientUtil {
 	public static final String BASE_URL = "http://taupst.duapp.com/";
 	public static final String PHOTO_BASE_URL = "http://bcs.duapp.com/taupst/photo/";
 	private static final String DEFAULT_CHARSET = HTTP.UTF_8;// httpclient读取内容时使用的字符集，为了读汉字
+	public static String cookieString;
 	
 	/*
 	 * 私有的，空的，构造函数。因为用httpclient有很多好处。
@@ -101,8 +102,9 @@ public class HttpClientUtil {
 		Drawable drawable = null;
 		HttpGet get = new HttpGet(collegeCaptchaUrl);
 		try {
-			HttpClient httpClient = getHttpClient();
+			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(get);
+			cookieString = response.getFirstHeader("set-Cookie").getValue();
 			InputStream is = response.getEntity().getContent();
 			drawable = Drawable.createFromStream(is, collegeCaptchaUrl);
 		} catch (Exception e) {

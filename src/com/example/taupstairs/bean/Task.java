@@ -100,6 +100,9 @@ public class Task {
 	public static final int TA_GETCOLLEGECAPTCHA = 14;
 	public static final String TA_GETCOLLEGECAPTCHA_ACTIVITY = "LoginActivity";
 	
+	public static final int TA_GETEDUCODE = 15;
+	public static final String TA_GETEDUCODE_ACTIVITY = "LoginActivity";
+	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
 		this.taskId = taskId;

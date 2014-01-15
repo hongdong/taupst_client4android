@@ -143,6 +143,11 @@ public class MainService extends Service implements Runnable {
 				(ItaActivity) getActivityByName(Task.TA_GETCOLLEGECAPTCHA_ACTIVITY);
 				activity_getcollegecaptcha.refresh(Task.TA_GETCOLLEGECAPTCHA, msg.obj);
 				break;
+				
+			case Task.TA_GETEDUCODE:
+				ItaActivity activity_geteducode = (ItaActivity) getActivityByName(Task.TA_GETEDUCODE_ACTIVITY);
+				activity_geteducode.refresh(Task.TA_GETEDUCODE, msg.obj);
+				break;
 
 			default:
 				break;
@@ -249,6 +254,10 @@ public class MainService extends Service implements Runnable {
 			msg.obj = doCheckUserTask(task);
 			break;
 			
+		case Task.TA_GETEDUCODE:
+			msg.obj = doGetEduCodeTask(task);
+			break;
+			
 		case Task.TA_GETCOLLEGECAPTCHA:
 			msg.obj = doGetCollegeCaptchaTask(task);
 			break;
@@ -274,6 +283,18 @@ public class MainService extends Service implements Runnable {
 		return result;
 	}
 	
+	private String doGetEduCodeTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String get_educode_url = (String) taskParams.get("eduCode");
+		try {
+			result = HttpClientUtil.getRequest(get_educode_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	private Drawable doGetCollegeCaptchaTask(Task task) {
 		Drawable drawable = null;
 		Map<String, Object> taskParams = task.getTaskParams();
@@ -295,13 +316,15 @@ public class MainService extends Service implements Runnable {
 		String password = (String) taskParams.get(User.USER_PASSWORD);
 		String collegeCaptcha = (String) taskParams.get(Task.TA_LOGIN_COLLEGECAPTCHA);
 		String cookie = (String) taskParams.get(Task.TA_LOGIN_COOKIE);
+		String eduCode = (String) taskParams.get("eduCode");
 		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
 				+ "&pwd=" + password + "&school=" + collegeId;
 		if (collegeCaptcha != null && cookie != null) {
-			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie;
+			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie + "&vs" + eduCode;
 		}
 		try {
 			login_url = StringUtil.replaceBlank(login_url);
+//			System.out.println("url: " + login_url);
 			result = HttpClientUtil.getRequest(login_url);
 		} catch (Exception e) {
 			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
