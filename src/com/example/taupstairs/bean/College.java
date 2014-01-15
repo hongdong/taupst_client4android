@@ -6,13 +6,16 @@ public class College {
 	private String collegeId;
 	private String collegeName;
 	private String collegeCaptchaUrl;
+	private String collegeWeb;
 	
 	public static final String TB_NAME = "college";
+	public static final String VIEWSTATE = "input[name=__VIEWSTATE]";
 	
 	public static final String ID = "_id";
 	public static final String COLLEGE_ID = "collegeId";
 	public static final String COLLEGE_NAME = "collegeName";
 	public static final String COLLEGE_CAPTCHAURL = "collegeCaptchaUrl";
+	public static final String COLLEGE_WEB = "collegeWeb";
 	
 	public College() {
 		
@@ -63,6 +66,14 @@ public class College {
 
 	public void setCollegeCaptchaUrl(String collegeCaptchaUrl) {
 		this.collegeCaptchaUrl = collegeCaptchaUrl;
+	}
+
+	public String getCollegeWeb() {
+		return collegeWeb;
+	}
+	
+	public void setCollegeWeb(String collegeWeb) {
+		this.collegeWeb = collegeWeb;
 	}
 	
 }

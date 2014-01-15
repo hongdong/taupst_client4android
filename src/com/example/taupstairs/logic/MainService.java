@@ -286,7 +286,7 @@ public class MainService extends Service implements Runnable {
 	private String doGetEduCodeTask(Task task) {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
-		String get_educode_url = (String) taskParams.get("eduCode");
+		String get_educode_url = (String) taskParams.get(College.COLLEGE_WEB);
 		try {
 			result = HttpClientUtil.getRequest(get_educode_url);
 		} catch (Exception e) {
@@ -316,15 +316,14 @@ public class MainService extends Service implements Runnable {
 		String password = (String) taskParams.get(User.USER_PASSWORD);
 		String collegeCaptcha = (String) taskParams.get(Task.TA_LOGIN_COLLEGECAPTCHA);
 		String cookie = (String) taskParams.get(Task.TA_LOGIN_COOKIE);
-		String eduCode = (String) taskParams.get("eduCode");
+		String eduCode = (String) taskParams.get(Task.TA_LOGIN_EDUCODE);
 		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
 				+ "&pwd=" + password + "&school=" + collegeId;
 		if (collegeCaptcha != null && cookie != null) {
-			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie + "&vs" + eduCode;
+			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie + "&vs=" + eduCode;
 		}
 		try {
 			login_url = StringUtil.replaceBlank(login_url);
-//			System.out.println("url: " + login_url);
 			result = HttpClientUtil.getRequest(login_url);
 		} catch (Exception e) {
 			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no

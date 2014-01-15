@@ -102,7 +102,7 @@ public class HttpClientUtil {
 		Drawable drawable = null;
 		HttpGet get = new HttpGet(collegeCaptchaUrl);
 		try {
-			HttpClient httpClient = new DefaultHttpClient();
+			HttpClient httpClient = getHttpClient();
 			HttpResponse response = httpClient.execute(get);
 			cookieString = response.getFirstHeader("set-Cookie").getValue();
 			InputStream is = response.getEntity().getContent();

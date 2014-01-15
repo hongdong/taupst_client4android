@@ -39,7 +39,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 
 	private Button btn_login, btn_captcha;
 	private String userId, studentId, password;
-	private String collegeId, collegeName, collegeCaptchaUrl, eduCode;
+	private String collegeId, collegeName, collegeCaptchaUrl, collegeWeb, eduCode;
 	private ProgressDialog progressDialog;
 	private TextView txt_college_name, txt_about, txt_server;
 	private EditText edit_studentid, edit_password, edit_captcha;
@@ -135,7 +135,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		if (!isRefresh) {
 			isRefresh = true;
 			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-			taskParams.put("eduCode", "http://jwgl.mju.edu.cn/default2.aspx");
+			taskParams.put(College.COLLEGE_WEB, collegeWeb);
 			Task task = new Task(Task.TA_GETEDUCODE, taskParams);
 			MainService.addTask(task);
 		}
@@ -163,11 +163,14 @@ public class LoginActivity extends Activity implements ItaActivity {
 			if (!isExist && hasGetCaptcha) {
 				EditText editText = (EditText) findViewById(R.id.edit_college_captcha);
 				String collegeCaptcha = editText.getText().toString().trim();
+				if (collegeCaptcha.equals("")) {
+					Toast.makeText(LoginActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				String cookieString = HttpClientUtil.cookieString.split(";")[0];
-				System.out.println("login: " + cookieString);
 				taskParams.put(Task.TA_LOGIN_COLLEGECAPTCHA, collegeCaptcha);
 				taskParams.put(Task.TA_LOGIN_COOKIE, cookieString);
-				taskParams.put("eduCode", eduCode);
+				taskParams.put(Task.TA_LOGIN_EDUCODE, eduCode);
 			}
 			Task task = new Task(Task.TA_LOGIN, taskParams);
 			MainService.addTask(task);
@@ -187,7 +190,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		case Task.TA_GETEDUCODE:
 			String html = (String) params[1];
 			Document d = Jsoup.parse(html);
-			Elements es = d.select("input[name=__VIEWSTATE]");
+			Elements es = d.select(College.VIEWSTATE);
 			eduCode = es.val();
 			doGetCollegeCaptchaTask();
 			break;
@@ -227,8 +230,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 						if (!haGetEduCode) {
 							haGetEduCode = true;
 							doGetEduCodeTask();
+						} else {
+							doGetCollegeCaptchaTask();
 						}
-						doGetCollegeCaptchaTask();
 					}
 				}
 			} catch (JSONException e) {
@@ -350,6 +354,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 				collegeId = data.getStringExtra(College.COLLEGE_ID);
 				collegeName = data.getStringExtra(College.COLLEGE_NAME);
 				collegeCaptchaUrl = data.getStringExtra(College.COLLEGE_CAPTCHAURL);
+				collegeWeb = "http://jwgl.mju.edu.cn/default2.aspx";
 				txt_college_name.setTextColor(Color.BLACK);
 				txt_college_name.setText(collegeName);
 			}

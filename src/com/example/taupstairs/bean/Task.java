@@ -25,6 +25,7 @@ public class Task {
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
 	public static final String TA_LOGIN_COLLEGECAPTCHA = "collegeCaptcha";
 	public static final String TA_LOGIN_COOKIE = "cookie";
+	public static final String TA_LOGIN_EDUCODE = "eduCode";
 	
 	//检测网络
 	public static final int TA_CHECKNET = 2;
