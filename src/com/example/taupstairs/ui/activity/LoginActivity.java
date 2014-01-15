@@ -1,13 +1,11 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.Task;
@@ -47,7 +44,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 	private boolean hasGetCaptcha = false;
 	private boolean isExist = false;
 	private boolean isRefresh = false;
-	private boolean haGetEduCode = false;
+	private boolean hasGetEduCode = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -168,6 +165,17 @@ public class LoginActivity extends Activity implements ItaActivity {
 					return;
 				}
 				String cookieString = HttpClientUtil.cookieString.split(";")[0];
+//				HttpClient httpClient = HttpClientUtil.loginClient;
+//				List<Cookie> cookies = ((AbstractHttpClient)httpClient).getCookieStore().getCookies();
+//				String cookieString = null;
+//				for (int i = 0; i < cookies.size(); i++) {
+//					Cookie cookie = cookies.get(i);
+//					if (cookie.getDomain().equals("jwgl.mju.edu.cn")) {
+//						cookieString = cookie.getName() + "=" + cookie.getValue();
+//						break;
+//					}
+//				}
+				System.out.println("login: " + cookieString);
 				taskParams.put(Task.TA_LOGIN_COLLEGECAPTCHA, collegeCaptcha);
 				taskParams.put(Task.TA_LOGIN_COOKIE, cookieString);
 				taskParams.put(Task.TA_LOGIN_EDUCODE, eduCode);
@@ -227,8 +235,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 						Toast.makeText(LoginActivity.this, 
 								"第一次登录需同步教务系统\n请填写验证码后再点击登录", 
 								Toast.LENGTH_LONG).show();
-						if (!haGetEduCode) {
-							haGetEduCode = true;
+						if (!hasGetEduCode) {
+							hasGetEduCode = true;
 							doGetEduCodeTask();
 						} else {
 							doGetCollegeCaptchaTask();

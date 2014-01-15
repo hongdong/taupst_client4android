@@ -288,7 +288,7 @@ public class MainService extends Service implements Runnable {
 		Map<String, Object> taskParams = task.getTaskParams();
 		String get_educode_url = (String) taskParams.get(College.COLLEGE_WEB);
 		try {
-			result = HttpClientUtil.getRequest(get_educode_url);
+			result = HttpClientUtil.getEduCode(get_educode_url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -323,6 +323,7 @@ public class MainService extends Service implements Runnable {
 			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie + "&vs=" + eduCode;
 		}
 		try {
+			System.out.println("login: " + login_url);
 			login_url = StringUtil.replaceBlank(login_url);
 			result = HttpClientUtil.getRequest(login_url);
 		} catch (Exception e) {

@@ -23,11 +23,13 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+
 import android.graphics.drawable.Drawable;
 
 public class HttpClientUtil {
 
 	private static HttpClient httpClient;
+	public static HttpClient loginClient = new DefaultHttpClient();
 	private static final String SCHEME_NAME = "http";
 	public static final String BASE_URL = "http://taupst.duapp.com/";
 	public static final String PHOTO_BASE_URL = "http://bcs.duapp.com/taupst/photo/";
@@ -98,13 +100,24 @@ public class HttpClientUtil {
 		return task.get();
 	}
 	
+	public static String getEduCode(String url) throws Exception {
+		HttpGet get = new HttpGet(url);							//创建HttpGet对象用于GET请求
+		HttpResponse response = loginClient.execute(get);		//发送GET请求
+		cookieString = response.getFirstHeader("set-Cookie").getValue();
+		System.out.println("httpclient: " + cookieString);
+		if (200 == response.getStatusLine().getStatusCode()) {	//code为200表示成功返回
+			String result = EntityUtils.toString(response.getEntity(), DEFAULT_CHARSET);
+			return result;										//response.getEntity()可获取服务器返回的字符串
+		}
+		return null;
+	}
+	
 	public static Drawable getCollegeCaptcha(String collegeCaptchaUrl) {
 		Drawable drawable = null;
 		HttpGet get = new HttpGet(collegeCaptchaUrl);
 		try {
-			HttpClient httpClient = getHttpClient();
-			HttpResponse response = httpClient.execute(get);
-			cookieString = response.getFirstHeader("set-Cookie").getValue();
+			HttpResponse response = loginClient.execute(get);
+//			cookieString = response.getFirstHeader("set-Cookie").getValue();
 			InputStream is = response.getEntity().getContent();
 			drawable = Drawable.createFromStream(is, collegeCaptchaUrl);
 		} catch (Exception e) {
