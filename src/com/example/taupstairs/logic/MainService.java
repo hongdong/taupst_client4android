@@ -138,15 +138,10 @@ public class MainService extends Service implements Runnable {
 				activity_checkuser.refresh(Task.TA_CHECKUSER, msg.obj);
 				break;
 				
-			case Task.TA_GETCOLLEGECAPTCHA:
+			case Task.TA_GETCAPTCHA:
 				ItaActivity activity_getcollegecaptcha = 
-				(ItaActivity) getActivityByName(Task.TA_GETCOLLEGECAPTCHA_ACTIVITY);
-				activity_getcollegecaptcha.refresh(Task.TA_GETCOLLEGECAPTCHA, msg.obj);
-				break;
-				
-			case Task.TA_GETEDUCODE:
-				ItaActivity activity_geteducode = (ItaActivity) getActivityByName(Task.TA_GETEDUCODE_ACTIVITY);
-				activity_geteducode.refresh(Task.TA_GETEDUCODE, msg.obj);
+				(ItaActivity) getActivityByName(Task.TA_GETCAPTCHA_ACTIVITY);
+				activity_getcollegecaptcha.refresh(Task.TA_GETCAPTCHA, msg.obj);
 				break;
 
 			default:
@@ -254,12 +249,8 @@ public class MainService extends Service implements Runnable {
 			msg.obj = doCheckUserTask(task);
 			break;
 			
-		case Task.TA_GETEDUCODE:
-			msg.obj = doGetEduCodeTask(task);
-			break;
-			
-		case Task.TA_GETCOLLEGECAPTCHA:
-			msg.obj = doGetCollegeCaptchaTask(task);
+		case Task.TA_GETCAPTCHA:
+			msg.obj = doGetCaptchaTask(task);
 			break;
 
 		default:
@@ -276,6 +267,7 @@ public class MainService extends Service implements Runnable {
 		String check_user_url = HttpClientUtil.BASE_URL + "data/user/issysn?school=" +
 				collegeId + "&student_id=" + studentId;
 		try {
+			check_user_url = StringUtil.replaceBlank(check_user_url);
 			result = HttpClientUtil.getRequest(check_user_url);
 		} catch (Exception e) {
 			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
@@ -283,24 +275,14 @@ public class MainService extends Service implements Runnable {
 		return result;
 	}
 	
-	private String doGetEduCodeTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String get_educode_url = (String) taskParams.get(College.COLLEGE_WEB);
-		try {
-			result = HttpClientUtil.getEduCode(get_educode_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	private Drawable doGetCollegeCaptchaTask(Task task) {
+	private Drawable doGetCaptchaTask(Task task) {
 		Drawable drawable = null;
 		Map<String, Object> taskParams = task.getTaskParams();
-		String collegeCaptchaUrl = (String) taskParams.get(College.COLLEGE_CAPTCHAURL);
+		String captchaUrl = (String) taskParams.get(Task.TA_GETCAPTCHA_CAPTCHAURL);
+		String get_captcha_url = HttpClientUtil.BASE_URL + "image/code/" + captchaUrl;
 		try {
-			drawable = HttpClientUtil.getCollegeCaptcha(collegeCaptchaUrl);
+			get_captcha_url = StringUtil.replaceBlank(get_captcha_url);
+			drawable = HttpClientUtil.getCaptcha(get_captcha_url);
 		} catch (Exception e) {
 			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
 		}
@@ -314,13 +296,11 @@ public class MainService extends Service implements Runnable {
 		String collegeId = (String) taskParams.get(User.USER_COLLEGEID);
 		String studentId = (String) taskParams.get(User.USER_STUDENTID);
 		String password = (String) taskParams.get(User.USER_PASSWORD);
-		String collegeCaptcha = (String) taskParams.get(Task.TA_LOGIN_COLLEGECAPTCHA);
-		String cookie = (String) taskParams.get(Task.TA_LOGIN_COOKIE);
-		String eduCode = (String) taskParams.get(Task.TA_LOGIN_EDUCODE);
+		String captcha = (String) taskParams.get(Task.TA_LOGIN_CAPTCHA);
 		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
 				+ "&pwd=" + password + "&school=" + collegeId;
-		if (collegeCaptcha != null && cookie != null) {
-			login_url += "&code=" + collegeCaptcha + "&ck=" + cookie + "&vs=" + eduCode;
+		if (captcha != null) {
+			login_url += "&code=" + captcha;
 		}
 		try {
 			System.out.println("login: " + login_url);

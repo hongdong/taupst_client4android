@@ -3,13 +3,9 @@ package com.example.taupstairs.ui.activity;
 import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -29,14 +25,13 @@ import com.example.taupstairs.services.RankService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
-import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class LoginActivity extends Activity implements ItaActivity {
 
 	private Button btn_login, btn_captcha;
 	private String userId, studentId, password;
-	private String collegeId, collegeName, collegeCaptchaUrl, collegeWeb, eduCode;
+	private String collegeId, collegeName, captchaUrl;
 	private ProgressDialog progressDialog;
 	private TextView txt_college_name, txt_about, txt_server;
 	private EditText edit_studentid, edit_password, edit_captcha;
@@ -44,7 +39,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 	private boolean hasGetCaptcha = false;
 	private boolean isExist = false;
 	private boolean isRefresh = false;
-	private boolean hasGetEduCode = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,7 +68,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		});
 		btn_login.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (txt_college_name.getText().toString().equals("点击选择")) {
+				if (txt_college_name.getText().toString().equals("")) {
 					Toast.makeText(LoginActivity.this, "请选择学校", Toast.LENGTH_SHORT).show();
 				} else if (edit_studentid.getText().toString().equals("")) {
 					Toast.makeText(LoginActivity.this, "请输入学号", Toast.LENGTH_SHORT).show();
@@ -101,7 +95,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		});
 		btn_captcha.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				doGetCollegeCaptchaTask();
+				doCheckUserTask();
 			}
 		});
 	}
@@ -127,23 +121,13 @@ public class LoginActivity extends Activity implements ItaActivity {
 			MainService.addTask(task);
 		}
 	}
-	
-	private void doGetEduCodeTask() {
+
+	private void doGetCaptchaTask() {
 		if (!isRefresh) {
 			isRefresh = true;
 			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-			taskParams.put(College.COLLEGE_WEB, collegeWeb);
-			Task task = new Task(Task.TA_GETEDUCODE, taskParams);
-			MainService.addTask(task);
-		}
-	}
-	
-	private void doGetCollegeCaptchaTask() {
-		if (!isRefresh) {
-			isRefresh = true;
-			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-			taskParams.put(College.COLLEGE_CAPTCHAURL, collegeCaptchaUrl);
-			Task task = new Task(Task.TA_GETCOLLEGECAPTCHA, taskParams);
+			taskParams.put(Task.TA_GETCAPTCHA_CAPTCHAURL, captchaUrl);
+			Task task = new Task(Task.TA_GETCAPTCHA, taskParams);
 			MainService.addTask(task);
 		}
 	}
@@ -159,26 +143,13 @@ public class LoginActivity extends Activity implements ItaActivity {
 			taskParams.put(User.USER_PASSWORD, password);
 			if (!isExist && hasGetCaptcha) {
 				EditText editText = (EditText) findViewById(R.id.edit_college_captcha);
-				String collegeCaptcha = editText.getText().toString().trim();
-				if (collegeCaptcha.equals("")) {
+				String captcha = editText.getText().toString().trim();
+				if (captcha.equals("")) {
+					dismissProgressDialog();
 					Toast.makeText(LoginActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				String cookieString = HttpClientUtil.cookieString.split(";")[0];
-//				HttpClient httpClient = HttpClientUtil.loginClient;
-//				List<Cookie> cookies = ((AbstractHttpClient)httpClient).getCookieStore().getCookies();
-//				String cookieString = null;
-//				for (int i = 0; i < cookies.size(); i++) {
-//					Cookie cookie = cookies.get(i);
-//					if (cookie.getDomain().equals("jwgl.mju.edu.cn")) {
-//						cookieString = cookie.getName() + "=" + cookie.getValue();
-//						break;
-//					}
-//				}
-				System.out.println("login: " + cookieString);
-				taskParams.put(Task.TA_LOGIN_COLLEGECAPTCHA, collegeCaptcha);
-				taskParams.put(Task.TA_LOGIN_COOKIE, cookieString);
-				taskParams.put(Task.TA_LOGIN_EDUCODE, eduCode);
+				taskParams.put(Task.TA_LOGIN_CAPTCHA, captcha);
 			}
 			Task task = new Task(Task.TA_LOGIN, taskParams);
 			MainService.addTask(task);
@@ -187,85 +158,67 @@ public class LoginActivity extends Activity implements ItaActivity {
 
 	public void refresh(Object... params) {	
 		isRefresh = false;
-		int taskId = (Integer) params[0];
-		switch (taskId) {
-		case Task.TA_CHECKUSER:
-			dismissProgressDialog();
-			String checkuser = ((String) params[1]).trim();
-			refreshCheckUser(checkuser);
-			break;
-			
-		case Task.TA_GETEDUCODE:
-			String html = (String) params[1];
-			Document d = Jsoup.parse(html);
-			Elements es = d.select(College.VIEWSTATE);
-			eduCode = es.val();
-			doGetCollegeCaptchaTask();
-			break;
-			
-		case Task.TA_GETCOLLEGECAPTCHA:
-			Drawable drawable = (Drawable) params[1];
-			refreshGetCollegeCaptcha(drawable);
-			break;
-			
-		case Task.TA_LOGIN:
-			dismissProgressDialog();
-			String login = ((String) params[1]).trim();	//这里的字符串要去空格，不然很可能不会equals
-			refreshLogin(login);
-			break;
+		if (null == params[1]) {
+			Toast.makeText(LoginActivity.this, "没网络啊！！！亲", Toast.LENGTH_SHORT).show();
+		} else {
+			int taskId = (Integer) params[0];
+			switch (taskId) {
+			case Task.TA_CHECKUSER:
+				dismissProgressDialog();
+				String checkuser = ((String) params[1]).trim();
+				refreshCheckUser(checkuser);
+				break;
+				
+			case Task.TA_GETCAPTCHA:
+				Drawable drawable = (Drawable) params[1];
+				refreshGetCaptcha(drawable);
+				break;
+				
+			case Task.TA_LOGIN:
+				dismissProgressDialog();
+				String login = ((String) params[1]).trim();	//这里的字符串要去空格，不然很可能不会equals
+				refreshLogin(login);
+				break;
 
-		default:
-			break;
+			default:
+				break;
+			}
 		}
 	}
 	
 	private void refreshCheckUser(String checkuser) {
-		if (checkuser != null) {
-			try {
-				JSONObject jsonObject = new JSONObject(checkuser);
-				String state = jsonObject.getString(JsonString.Return.STATE).trim();
-				if (state.equals(JsonString.Return.STATE_OK)) {
-					isExist = true;
+		try {
+			JSONObject jsonObject = new JSONObject(checkuser);
+			String state = jsonObject.getString(JsonString.Return.STATE).trim();
+			if (state.equals(JsonString.Return.STATE_OK)) {
+				isExist = true;
+				doLoginTask();
+			} else {
+				isExist = false;	
+				if (jsonObject.isNull(JsonString.Login.CAPTCHA) || hasGetCaptcha) {
 					doLoginTask();
 				} else {
-					isExist = false;
-					if (collegeCaptchaUrl.equals("") || hasGetCaptcha) {
-						doLoginTask();
-					} else {
-						Toast.makeText(LoginActivity.this, 
-								"第一次登录需同步教务系统\n请填写验证码后再点击登录", 
-								Toast.LENGTH_LONG).show();
-						if (!hasGetEduCode) {
-							hasGetEduCode = true;
-							doGetEduCodeTask();
-						} else {
-							doGetCollegeCaptchaTask();
-						}
-					}
+					captchaUrl = jsonObject.getString(JsonString.Login.CAPTCHA).trim();
+					Toast.makeText(LoginActivity.this, 
+							"第一次登录需同步教务系统\n请填写验证码后再点击登录", 
+							Toast.LENGTH_LONG).show();
+					doGetCaptchaTask();
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
 			}
-		} else {
-			Toast.makeText(LoginActivity.this, "没网络啊！！！亲", Toast.LENGTH_SHORT).show();
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private void refreshGetCollegeCaptcha(Drawable drawable) {
-		if (drawable != null) {
-			hasGetCaptcha = true;
-			img_captcha = (ImageView) findViewById(R.id.img_college_captcha);
-			edit_captcha = (EditText) findViewById(R.id.edit_college_captcha);
-			edit_captcha.setText(null);
-			img_captcha.setImageDrawable(drawable);
-			img_captcha.setVisibility(View.VISIBLE);
-			btn_captcha.setVisibility(View.VISIBLE);
-			edit_captcha.setVisibility(View.VISIBLE);
-		} else {
-			Toast.makeText(LoginActivity.this, 
-					"教务系统崩溃!!", 
-					Toast.LENGTH_SHORT).show();
-		}
+	private void refreshGetCaptcha(Drawable drawable) {
+		hasGetCaptcha = true;
+		img_captcha = (ImageView) findViewById(R.id.img_college_captcha);
+		edit_captcha = (EditText) findViewById(R.id.edit_college_captcha);
+		edit_captcha.setText(null);
+		img_captcha.setImageDrawable(drawable);
+		img_captcha.setVisibility(View.VISIBLE);
+		btn_captcha.setVisibility(View.VISIBLE);
+		edit_captcha.setVisibility(View.VISIBLE);
 	}
 	
 	private void refreshLogin(String result) {
@@ -276,7 +229,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 				hasGetCaptcha = false;
 				int state = Integer.parseInt(loginJsonObject.getString(JsonString.Login.STATE).trim());
 				testState(state);
-				doGetCollegeCaptchaTask();
+				doCheckUserTask();
 			} else if (isLogined.equals(Task.TA_TRUE)) {
 				userId = loginJsonObject.getString(JsonString.Login.USERS_ID);
 				beforeJump();
@@ -361,9 +314,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 			if (IntentString.ResultCode.SELECTCOLLEGE_LOGIN == resultCode) {
 				collegeId = data.getStringExtra(College.COLLEGE_ID);
 				collegeName = data.getStringExtra(College.COLLEGE_NAME);
-				collegeCaptchaUrl = data.getStringExtra(College.COLLEGE_CAPTCHAURL);
-				collegeWeb = "http://jwgl.mju.edu.cn/default2.aspx";
-				txt_college_name.setTextColor(Color.BLACK);
 				txt_college_name.setText(collegeName);
 			}
 		}

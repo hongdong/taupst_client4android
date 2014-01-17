@@ -23,9 +23,7 @@ public class Task {
 	public static final int TA_LOGIN = 1;
 	public static final String TA_LOGIN_TASKPARAMS = "login";
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
-	public static final String TA_LOGIN_COLLEGECAPTCHA = "collegeCaptcha";
-	public static final String TA_LOGIN_COOKIE = "cookie";
-	public static final String TA_LOGIN_EDUCODE = "eduCode";
+	public static final String TA_LOGIN_CAPTCHA = "captcha";
 	
 	//检测网络
 	public static final int TA_CHECKNET = 2;
@@ -98,11 +96,9 @@ public class Task {
 	public static final int TA_CHECKUSER = 13;
 	public static final String TA_CHECKUSER_ACTIVITY = "LoginActivity";
 	
-	public static final int TA_GETCOLLEGECAPTCHA = 14;
-	public static final String TA_GETCOLLEGECAPTCHA_ACTIVITY = "LoginActivity";
-	
-	public static final int TA_GETEDUCODE = 15;
-	public static final String TA_GETEDUCODE_ACTIVITY = "LoginActivity";
+	public static final int TA_GETCAPTCHA = 14;
+	public static final String TA_GETCAPTCHA_ACTIVITY = "LoginActivity";
+	public static final String TA_GETCAPTCHA_CAPTCHAURL = "captchaName";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

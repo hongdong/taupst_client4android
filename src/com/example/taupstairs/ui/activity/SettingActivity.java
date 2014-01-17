@@ -20,7 +20,9 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
+import com.example.taupstairs.services.RankService;
 import com.example.taupstairs.util.FileUtil;
+import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
@@ -119,10 +121,14 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    正在清除...");
 		progressDialog.show();
+		SharedPreferencesUtil.savaLastestStatusId(SettingActivity.this, null);
 		FileUtil.deletePhoto(getFilesDir().getAbsolutePath());
 		PersonService personService = new PersonService(SettingActivity.this);
 		personService.emptyPersonDB();
 		personService.closeDBHelper();
+		RankService rankService = new RankService(SettingActivity.this);
+		rankService.emptyRankDb();
+		rankService.closeDBHelper();
 		progressDialog.dismiss();
 		Toast.makeText(SettingActivity.this, "清除完成", Toast.LENGTH_SHORT).show();
 	}

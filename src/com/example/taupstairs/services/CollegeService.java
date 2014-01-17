@@ -20,8 +20,8 @@ public class CollegeService {
 	/*添加学校*/
 	public void insertCollege(College college) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		db.execSQL("insert into " + College.TB_NAME + " values(null, ?, ?, ?)", 
-				new String[] {college.getCollegeId(), college.getCollegeName(), college.getCollegeCaptchaUrl()});
+		db.execSQL("insert into " + College.TB_NAME + " values(null, ?, ?)", 
+				new String[] {college.getCollegeId(), college.getCollegeName()});
 	}
 	
 	/*根据学校ID返回学校信息（还没去实现）*/
@@ -56,8 +56,7 @@ public class CollegeService {
 		if (null != cursor && cursor.getCount() > 0) {
 			cursor.moveToFirst();		//这一句一定要加，总之我不加就出错了
 			String collegeId = cursor.getString(cursor.getColumnIndex(College.COLLEGE_ID));
-			String collegeCaptchaUrl = cursor.getString(cursor.getColumnIndex(College.COLLEGE_CAPTCHAURL));
-			college = new College(collegeId, collegeName, collegeCaptchaUrl);
+			college = new College(collegeId, collegeName);
 		}
 		cursor.close();
 		return college;

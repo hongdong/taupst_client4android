@@ -68,7 +68,6 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 				Intent intent = new Intent();
 				intent.putExtra(College.COLLEGE_ID, college.getCollegeId());
 				intent.putExtra(College.COLLEGE_NAME, collegeName);
-				intent.putExtra(College.COLLEGE_CAPTCHAURL, college.getCollegeCaptchaUrl());
 				setResult(IntentString.ResultCode.SELECTCOLLEGE_LOGIN, intent);
 				finish();
 			}
