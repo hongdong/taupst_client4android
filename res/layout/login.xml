@@ -25,13 +25,13 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical">
             <ImageView 
-                android:id="@+id/img_college_captcha"
+                android:id="@+id/img_captcha"
                 android:layout_width="60dp"
                 android:layout_height="35dp"
                 android:contentDescription="@string/hello_world"
                 android:visibility="gone"/>
             <Button 
-		        android:id="@+id/btn_refresh_college_captcha"
+		        android:id="@+id/btn_refresh_captcha"
 		        android:layout_width="wrap_content" 
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="20dp"
@@ -41,7 +41,7 @@
 		        android:background="@drawable/login_bg_btn_captcha"
 		        android:visibility="gone"/>
             <EditText 
-                android:id="@+id/edit_college_captcha"
+                android:id="@+id/edit_captcha"
                 android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
 		    	android:layout_marginLeft="20dp"
@@ -49,11 +49,11 @@
 		    	android:paddingRight="10dp"
 		    	android:paddingTop="5dp"
 		    	android:paddingBottom="5dp"
-		    	android:hint="@string/college_captcha"
+		    	android:hint="@string/captcha"
 		    	android:textSize="18sp"
 		    	android:textColor="@color/black"
 		    	android:textColorHint="@color/gray"
-		    	android:background="@drawable/login_bg_college_captcha"
+		    	android:background="@drawable/login_bg_captcha"
 		    	android:visibility="gone"/>
         </LinearLayout>
 	    <Button 

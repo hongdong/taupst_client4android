@@ -18,7 +18,7 @@
     <string name="input_college">请输入大学名称</string>
     <string name="input_studentid">学号</string>
     <string name="input_password">教务系统密码</string>
-    <string name="college_captcha">验证码填这里</string>
+    <string name="captcha">验证码填这里</string>
     <string name="refresh_college_captcha">换一张</string>
     <string name="about_us">关于我们</string>
     <string name="about_us_text">看看要写什么   </string>

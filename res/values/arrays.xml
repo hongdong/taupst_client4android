@@ -50,29 +50,4 @@
         <item >龙岩学院</item>
         <item >莆田学院</item>
     </string-array>
-    <string-array name="college_captchaurl">
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item >http://jwgl.fjnu.edu.cn/CheckCode.aspx</item>
-        <item ></item>
-        <item ></item>
-        <item >http://jiaowu1.fjut.edu.cn/CheckCode.aspx</item>
-        <item ></item>
-        <item >http://jwgl.mju.edu.cn/CheckCode.aspx</item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-        <item ></item>
-    </string-array>
 </resources>

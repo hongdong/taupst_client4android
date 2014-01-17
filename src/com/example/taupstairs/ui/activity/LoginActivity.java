@@ -53,9 +53,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 		edit_studentid = (EditText)findViewById(R.id.edit_studentid);
 		edit_password = (EditText)findViewById(R.id.edit_password);
 		btn_login = (Button)findViewById(R.id.btn_login);
-		img_captcha = (ImageView)findViewById(R.id.img_college_captcha);
-		btn_captcha = (Button)findViewById(R.id.btn_refresh_college_captcha);
-		edit_captcha = (EditText)findViewById(R.id.edit_college_captcha);
+		img_captcha = (ImageView)findViewById(R.id.img_captcha);
+		btn_captcha = (Button)findViewById(R.id.btn_refresh_captcha);
+		edit_captcha = (EditText)findViewById(R.id.edit_captcha);
 		txt_about = (TextView)findViewById(R.id.txt_about);
 		txt_server = (TextView)findViewById(R.id.txt_server);
 		progressDialog = new ProgressDialog(this);
@@ -77,7 +77,11 @@ public class LoginActivity extends Activity implements ItaActivity {
 				} else {
 					studentId = edit_studentid.getText().toString();
 					password = edit_password.getText().toString();
-					doCheckUserTask();
+					if (hasGetCaptcha) {
+						doLoginTask();
+					} else {
+						doCheckUserTask();
+					}	
 				}
 			}
 		});
@@ -142,7 +146,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 			taskParams.put(User.USER_STUDENTID, studentId);
 			taskParams.put(User.USER_PASSWORD, password);
 			if (!isExist && hasGetCaptcha) {
-				EditText editText = (EditText) findViewById(R.id.edit_college_captcha);
+				EditText editText = (EditText) findViewById(R.id.edit_captcha);
 				String captcha = editText.getText().toString().trim();
 				if (captcha.equals("")) {
 					dismissProgressDialog();
@@ -195,7 +199,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 				doLoginTask();
 			} else {
 				isExist = false;	
-				if (jsonObject.isNull(JsonString.Login.CAPTCHA) || hasGetCaptcha) {
+				if (jsonObject.isNull(JsonString.Login.CAPTCHA)) {
 					doLoginTask();
 				} else {
 					captchaUrl = jsonObject.getString(JsonString.Login.CAPTCHA).trim();
@@ -212,8 +216,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 	
 	private void refreshGetCaptcha(Drawable drawable) {
 		hasGetCaptcha = true;
-		img_captcha = (ImageView) findViewById(R.id.img_college_captcha);
-		edit_captcha = (EditText) findViewById(R.id.edit_college_captcha);
 		edit_captcha.setText(null);
 		img_captcha.setImageDrawable(drawable);
 		img_captcha.setVisibility(View.VISIBLE);
