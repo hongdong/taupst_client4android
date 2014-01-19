@@ -1,5 +1,9 @@
 package com.example.taupstairs.logic;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +12,7 @@ import java.util.Queue;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +29,7 @@ import com.example.taupstairs.bean.User;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.JsonUtil;
 import com.example.taupstairs.util.StringUtil;
+import com.example.taupstairs.util.UploadToBCS;
 
 public class MainService extends Service implements Runnable {
 
@@ -52,8 +58,8 @@ public class MainService extends Service implements Runnable {
 			case Task.TA_GETUSERDATA:
 				Bundle data_getuserdata = msg.getData();
 				String activity_getuserdata = data_getuserdata.getString(Task.TA_GETUSERDATA_ACTIVITY);
-				if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_LOGIN)) {
-					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETUSERDATA_ACTIVITY_LOGIN);
+				if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_PERSONDATA)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETUSERDATA_ACTIVITY_PERSONDATA);
 					activity.refresh(Task.TA_GETUSERDATA, msg.obj);
 				} else if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_ME)) {
 					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_ACTIVITY_ME);
@@ -142,6 +148,18 @@ public class MainService extends Service implements Runnable {
 				ItaActivity activity_getcollegecaptcha = 
 				(ItaActivity) getActivityByName(Task.TA_GETCAPTCHA_ACTIVITY);
 				activity_getcollegecaptcha.refresh(Task.TA_GETCAPTCHA, msg.obj);
+				break;
+				
+			case Task.TA_UPLOADPHOTO:
+				Bundle data_upload_photo = msg.getData();
+				String activity_upload_photo = data_upload_photo.getString(Task.TA_UPLOADPHOTO_ACTIVITY);
+				if (activity_upload_photo.equals(Task.TA_UPLOADPHOTO_ACTIVITY_COMPLETE)) {
+					ItaActivity activity_upload = (ItaActivity) getActivityByName(Task.TA_UPLOADPHOTO_ACTIVITY_COMPLETE);
+					activity_upload.refresh(Task.TA_UPLOADPHOTO, msg.obj);
+				} else if (activity_upload_photo.equals(Task.TA_UPLOADPHOTO_ACTIVITY_ME)) {
+					ItaFragment activity_upload = (ItaFragment) getFragmentByName(Task.TA_UPLOADPHOTO_ACTIVITY_ME);
+					activity_upload.refresh(Task.TA_UPLOADPHOTO, msg.obj);
+				}
 				break;
 
 			default:
@@ -252,6 +270,13 @@ public class MainService extends Service implements Runnable {
 		case Task.TA_GETCAPTCHA:
 			msg.obj = doGetCaptchaTask(task);
 			break;
+			
+		case Task.TA_UPLOADPHOTO:
+			msg.obj = doUploadPhotoTask(task);
+			String activity_upload_photo = (String) taskParams.get(Task.TA_UPLOADPHOTO_ACTIVITY);
+			Bundle data_upload_photo = msg.getData();
+			data_upload_photo.putString(Task.TA_UPDATAUSERDATA_ACTIVITY, activity_upload_photo);
+			break;
 
 		default:
 			break;
@@ -303,7 +328,6 @@ public class MainService extends Service implements Runnable {
 			login_url += "&code=" + captcha;
 		}
 		try {
-			System.out.println("login: " + login_url);
 			login_url = StringUtil.replaceBlank(login_url);
 			result = HttpClientUtil.getRequest(login_url);
 		} catch (Exception e) {
@@ -489,6 +513,36 @@ public class MainService extends Service implements Runnable {
 			e.printStackTrace();
 		}
 		return ranks;
+	}
+	
+	/*
+	 * 上传照片
+	 */
+	private String doUploadPhotoTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		Bitmap bitmap = (Bitmap) taskParams.get(Task.TA_UPLOADPHOTO_BITMAP);
+		try {	/*先把图片写到cache里面，再读出来以流的方式上传*/
+			File file = getFilesDir();
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+			byte[] byteArray = stream.toByteArray();
+			final String fileName = System.currentTimeMillis() + ".jpeg";
+			File imageFile = new File(file, fileName);
+			FileOutputStream fstream = new FileOutputStream(imageFile);
+			BufferedOutputStream bStream = new BufferedOutputStream(fstream);
+			bStream.write(byteArray);
+			if (bStream != null) {
+				bStream.close();
+			}
+			UploadToBCS ub = new UploadToBCS();
+			File f = new File(file.getAbsolutePath() + "/" + fileName);
+			ub.putObjectByInputStream(f, "/" + fileName);
+			result = fileName;						
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/*

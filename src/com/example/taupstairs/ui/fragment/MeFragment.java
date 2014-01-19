@@ -1,17 +1,12 @@
 package com.example.taupstairs.ui.fragment;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,8 +16,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,7 +28,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.PersonVariableDataAdapter;
 import com.example.taupstairs.bean.Person;
@@ -51,7 +43,6 @@ import com.example.taupstairs.ui.activity.SettingActivity;
 import com.example.taupstairs.ui.activity.UpdataUserdataBaseActivity;
 import com.example.taupstairs.util.SdCardUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
-import com.example.taupstairs.util.UploadToBCS;
 
 public class MeFragment extends Fragment implements ItaFragment {
 
@@ -69,10 +60,8 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private Bitmap userPhoto;
 	private String nickname, signature;
 	private static final String IMAGE_FILE_NAME = "userPhoto.jpg";
+	private static String[] items = new String[] { "选择本地图片", "拍照" };
 	private String fileName;
-	private String[] items = new String[] { "选择本地图片", "拍照" };
-	private static final int MSG_WHAT_OK = 0x123;
-	private static final int MSG_WHAT_NO = 0x456;
 	private ProgressDialog progressDialog;
 	
 	/*若Fragement定义有带参构造函数，则一定要定义public的默认的构造函数，
@@ -157,6 +146,57 @@ public class MeFragment extends Fragment implements ItaFragment {
 		});
 	}
 	
+	private void showDialog() {
+		new AlertDialog.Builder(context)
+		.setTitle("设置头像")
+		.setItems(items, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					Intent intentFromGallery = new Intent();
+					intentFromGallery.setType("image/*"); // 设置文件类型
+					intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
+					startActivityForResult(intentFromGallery, IntentString.RequestCode.IMAGE_REQUEST_CODE);
+					break;
+				case 1:
+					Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					// 判断存储卡是否可以用，可用进行存储
+					if (SdCardUtil.hasSdcard()) {
+						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
+								Uri.fromFile(new File(Environment.getExternalStorageDirectory(), 
+										IMAGE_FILE_NAME)));
+					}
+					startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
+					break;
+				}
+			}
+		})
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		}).show();
+	}
+	
+	/*
+	 * 调用系统的裁剪图片的Intent
+	 */
+	private void startPhotoZoom(Uri uri) {
+
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		// 设置裁剪
+		intent.putExtra("crop", "true");
+		// aspectX aspectY 是宽高的比例
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		// outputX outputY 是裁剪图片宽高
+		intent.putExtra("outputX", 320);
+		intent.putExtra("outputY", 320);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, IntentString.RequestCode.PHOTO_REQUEST_CODE);
+	}
+	
 	/*从服务器获取Person信息*/
 	private void doGetUserDataTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
@@ -164,41 +204,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, defaultPersonId);
 		Task task = new Task(Task.TA_GETUSERDATA, taskParams);
 		MainService.addTask(task);
-	}
-	
-	/*
-	 * 显示选择对话框
-	 */
-	private void showDialog() {
-		new AlertDialog.Builder(context)
-				.setTitle("设置头像")
-				.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						switch (which) {
-						case 0:
-							Intent intentFromGallery = new Intent();
-							intentFromGallery.setType("image/*"); // 设置文件类型
-							intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-							startActivityForResult(intentFromGallery, IntentString.RequestCode.IMAGE_REQUEST_CODE);
-							break;
-						case 1:
-							Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-							// 判断存储卡是否可以用，可用进行存储
-							if (SdCardUtil.hasSdcard()) {
-								intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
-										Uri.fromFile(new File(Environment.getExternalStorageDirectory(), 
-												IMAGE_FILE_NAME)));
-							}
-							startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
-							break;
-						}
-					}
-				})
-				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				}).show();
 	}
 	
 	@Override
@@ -225,7 +230,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 					if (extras != null) {
 						userPhoto = extras.getParcelable("data");
 					}
-					updataUserPhoto();	
+					doUpdataUserPhotoTask();	
 				}
 				break;
 			case IntentString.RequestCode.MEFRAGMENT_UPDATAUSERDATABASE:
@@ -251,41 +256,6 @@ public class MeFragment extends Fragment implements ItaFragment {
 		}
 	}
 	
-	/*
-	 * 调用系统的裁剪图片的Intent
-	 */
-	public void startPhotoZoom(Uri uri) {
-
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		// 设置裁剪
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 320);
-		intent.putExtra("outputY", 320);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, IntentString.RequestCode.PHOTO_REQUEST_CODE);
-	}
-	
-	/*
-	 * 头像上传完后通知主线程
-	 */
-	Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			if (MSG_WHAT_OK == msg.what) {
-				String photoUrl = (String) msg.obj;
-				String url = "users_id=" + defaultPersonId + "&photo=" + photoUrl;
-				doUpdataUserDataTask(url);
-			} else if (MSG_WHAT_NO == msg.what) {
-				progressDialog.dismiss();
-				Toast.makeText(context, "网络竟然出错了", Toast.LENGTH_SHORT).show();
-			}
-		};
-	};
-	
 	private void progressShow() {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    稍等片刻...");
@@ -295,42 +265,13 @@ public class MeFragment extends Fragment implements ItaFragment {
 	/*
 	 * 上传照片
 	 */
-	private void updataUserPhoto() {
+	private void doUpdataUserPhotoTask() {
 		progressShow();
-		try {	/*先把图片写到file里面，再读出来以流的方式上传*/
-			final File file = context.getFilesDir();
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			userPhoto.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-			byte[] byteArray = stream.toByteArray();
-			fileName = System.currentTimeMillis() + ".jpeg";
-			File imageFile = new File(file, fileName);
-			FileOutputStream fstream = new FileOutputStream(imageFile);
-			BufferedOutputStream bStream = new BufferedOutputStream(fstream);
-			bStream.write(byteArray);
-			if (bStream != null) {
-				bStream.close();
-			}
-
-			new Thread(new Runnable() {
-				public void run() {
-					UploadToBCS ub = new UploadToBCS();
-					Message msg = new Message();
-					try {
-						File f = new File(file.getAbsolutePath() + "/" + fileName);
-						ub.putObjectByInputStream(f, "/" + fileName);
-						msg.what = MSG_WHAT_OK;
-						msg.obj = fileName;
-					} catch (Exception e) {
-						e.printStackTrace();
-						msg.what = MSG_WHAT_NO;
-					}							
-					handler.sendMessage(msg);
-				}
-			}).start();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+		taskParams.put(Task.TA_UPLOADPHOTO_ACTIVITY, Task.TA_UPLOADPHOTO_ACTIVITY_ME);
+		taskParams.put(Task.TA_UPLOADPHOTO_BITMAP, userPhoto);
+		Task task = new Task(Task.TA_UPLOADPHOTO, taskParams);
+		MainService.addTask(task);
 	}
 	
 	/*
@@ -346,24 +287,18 @@ public class MeFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void refresh(Object... params) {
-		int taskId = (Integer) params[0];
-		switch (taskId) {
-		case Task.TA_GETUSERDATA:
-			defaultPerson = (Person) params[1];
-			if (defaultPerson != null) {
+		progressDialog.dismiss();
+		if (params[1] != null) {
+			int taskId = (Integer) params[0];
+			switch (taskId) {
+			case Task.TA_GETUSERDATA:
+				defaultPerson = (Person) params[1];
 				displayPerson(defaultPerson);		
 				personService.insertPerson(defaultPerson);	//更新数据库中的默认Person
-			} else {
-				Toast.makeText(context, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
-			}
-			break;
-			
-		case Task.TA_UPDATAUSERDATA:
-			progressDialog.dismiss();
-			String result = (String) params[1];
-			if (null == result) {
-				Toast.makeText(context, "未连接网络", Toast.LENGTH_SHORT).show();
-			} else {
+				break;
+				
+			case Task.TA_UPDATAUSERDATA:
+				String result = (String) params[1];
 				try {
 					JSONObject jsonObject = new JSONObject(result);
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
@@ -382,10 +317,19 @@ public class MeFragment extends Fragment implements ItaFragment {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}	
+				break;
+				
+			case Task.TA_UPLOADPHOTO:
+				fileName = (String) params[1];
+				String url = "users_id=" + defaultPersonId + "&photo=" + fileName;
+				doUpdataUserDataTask(url);
+				break;
 
-		default:
-			break;
+			default:
+				break;
+			}
+		} else {
+			Toast.makeText(context, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -412,7 +356,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 			item.put(LIST_RIGHT, baseRight[i]);
 			list.add(item);
 		}
-		SimpleAdapter base_adapter = new SimpleAdapter(context, list, R.layout.fm_me_base, 
+		SimpleAdapter base_adapter = new SimpleAdapter(context, list, R.layout.person_data_base, 
 				new String[] {LIST_LEFT, LIST_RIGHT, }, new int[] {R.id.txt_base_left, R.id.txt_base_right});
 		list_base.setAdapter(base_adapter);			//把五个基本资料显示出来
 	}

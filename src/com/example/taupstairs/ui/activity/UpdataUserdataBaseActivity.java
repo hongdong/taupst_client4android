@@ -64,7 +64,7 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 			edit_userdata.setSingleLine();
 			edit_userdata.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
 		} else if (type.equals(Person.PERSON_SIGNATURE)) {
-			edit_userdata.setMaxLines(5);
+			edit_userdata.setMaxLines(3);
 			edit_userdata.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
 		}
 		

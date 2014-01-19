@@ -3,10 +3,8 @@ package com.example.taupstairs.adapter;
 import java.util.Calendar;
 import java.util.List;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -16,7 +14,7 @@ import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
-import com.example.taupstairs.ui.activity.PersonDataActivity;
+import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.TimeUtil;
 
@@ -33,19 +31,16 @@ public class TaskAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return listStatus.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return listStatus.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -67,7 +62,7 @@ public class TaskAdapter extends BaseAdapter {
 		
 		String personSex = status.getPersonSex().trim();
 		
-		/*头像和昵称可能是空的。空的时候还要分男女，用上默认的*/
+		/*头像可能是空的。空的时候还要分男女，用上默认的*/
 		String url = status.getPersonPhotoUrl();
 		if (url != null && !url.equals("")) {
 			SimpleImageLoader.showImage(holder.img_fm_task_photo, 
@@ -80,23 +75,10 @@ public class TaskAdapter extends BaseAdapter {
 			}
 		}
 		
-		String nickName = status.getPersonNickname();
-		if (nickName != null) {
-			holder.txt_fm_task_nickname.setText(nickName);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.txt_fm_task_nickname.setText(Person.MALE_NICKNAME);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.txt_fm_task_nickname.setText(Person.FEMALE_NICKNAME);
-			}
-		}
+		holder.txt_fm_task_nickname.setText(status.getPersonNickname());
 		
-		holder.img_fm_task_photo.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(context, PersonDataActivity.class);
-				context.startActivity(intent);
-			}
-		});
+		PersonDataListener personDataListener = new PersonDataListener(context, status.getPersonId());
+		holder.img_fm_task_photo.setOnClickListener(personDataListener);
 
 		Time now = TimeUtil.getNow(Calendar.getInstance());
 		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());

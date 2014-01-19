@@ -62,7 +62,7 @@ public class PersonService {
 			String personSpecialty = cursor.getString(cursor.getColumnIndex(Person.PERSON_SPECIALTY));
 			String personName = cursor.getString(cursor.getColumnIndex(Person.PERSON_NAME));
 			String personSex = cursor.getString(cursor.getColumnIndex(Person.PERSON_SEX));
-			person = new Person(personPhotoUrl, personNickname, personSignature, 
+			person = new Person(personId, personPhotoUrl, personNickname, personSignature, null, 
 					personFaculty, personYear, personSpecialty, personName, personSex);
 		}
 		return person;

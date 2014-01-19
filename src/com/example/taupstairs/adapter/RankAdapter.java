@@ -2,10 +2,8 @@ package com.example.taupstairs.adapter;
 
 import java.util.List;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -14,7 +12,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
-import com.example.taupstairs.ui.activity.PersonDataActivity;
+import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.util.HttpClientUtil;
 
 public class RankAdapter extends BaseAdapter {
@@ -73,12 +71,8 @@ public class RankAdapter extends BaseAdapter {
 			textView.setVisibility(View.VISIBLE);
 		}
 		
-		holder.img_photo.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(context, PersonDataActivity.class);
-				context.startActivity(intent);
-			}
-		});
+		PersonDataListener personDataListener = new PersonDataListener(context, rank.getPersonId());
+		holder.img_photo.setOnClickListener(personDataListener);
 		
 		return view;
 	}

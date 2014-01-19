@@ -29,6 +29,7 @@ import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
+import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
@@ -132,7 +133,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		
 		String personSex = status.getPersonSex().trim();
 		
-		/*头像和昵称可能是空的。空的时候还要分男女，用上默认的*/
+		/*头像可能是空的。空的时候还要分男女，用上默认的*/
 		String url = status.getPersonPhotoUrl();
 		if (url != null && !url.equals("")) {
 			SimpleImageLoader.showImage(holder.img_task_detail_photo, 
@@ -145,16 +146,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			}
 		}
 		
-		String nickname = status.getPersonNickname();
-		if (nickname != null) {
-			holder.txt_task_detail_nickname.setText(status.getPersonNickname());
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.txt_task_detail_nickname.setText(Person.MALE_NICKNAME);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.txt_task_detail_nickname.setText(Person.FEMALE_NICKNAME);
-			}
-		}
+		holder.txt_task_detail_nickname.setText(status.getPersonNickname());
 		
 		if (personSex.equals(Person.MALE)) {
 			holder.img_task_detail_sex.setImageResource(R.drawable.icon_male);
@@ -220,12 +212,8 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			}
 		});
 		
-		holder.img_task_detail_photo.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(TaskDetailActivity.this, PersonDataActivity.class);
-				startActivity(intent);
-			}
-		});
+		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
+		holder.img_task_detail_photo.setOnClickListener(personDataListener);
 	}
 	
 	public void changeEditHint(String messageId, String replyId, String replyNickname) {

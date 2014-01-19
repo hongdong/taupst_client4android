@@ -3,6 +3,7 @@ package com.example.taupstairs.ui.fragment;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.RankAdapter;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.RankService;
+import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
@@ -84,6 +87,39 @@ public class RankFragment extends Fragment implements ItaFragment {
 				
 			}
 		});
+	}
+	
+	/*
+	 * HomePage的本地回调
+	 */
+	public void localRefresh(int id, Map<String, Object> params) {
+		switch (id) {
+		case HomePageString.UPDATA_PHOTO:
+			hasRefresh = true;
+			String personId_p = (String) params.get(Person.PERSON_ID);
+			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
+			for (Rank rank : ranks) {
+				if (personId_p.equals(rank.getPersonId())) {
+					rank.setPersonPhotoUrl(personPhotoUrl);
+				}
+			}
+			adapter.notifyDataSetChanged();
+			break;
+		case HomePageString.UPDATA_NICKNAME:
+			hasRefresh = true;
+			String personId_n = (String) params.get(Person.PERSON_ID);
+			String personNickname = (String) params.get(Person.PERSON_NICKNAME);
+			for (Rank rank : ranks) {
+				if (personId_n.equals(rank.getPersonId())) {
+					rank.setPersonNickname(personNickname);
+				}
+			}
+			adapter.notifyDataSetChanged();
+			break;
+
+		default:
+			break;
+		}
 	}
 	
 	private void doGetRankTask() {

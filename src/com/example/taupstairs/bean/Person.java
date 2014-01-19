@@ -4,10 +4,11 @@ public class Person {
 
 	private Long id;
 	private String personId;
-	//头像，昵称，个性签名，qq，emali，phone
+	//头像，昵称，个性签名，qq，emali，phone，被赞数
 	private String personPhotoUrl;
 	private String personNickname;
 	private String personSignature;
+	private String personPraise;
 	private String personQq;
 	private String personEmail;
 	private String personPhone;
@@ -25,9 +26,11 @@ public class Person {
 	public static final String PERSON_PHOTOURL = "personPhotoUrl";
 	public static final String PERSON_NICKNAME = "personNickname";
 	public static final String PERSON_SIGNATURE = "personSignature";
+	public static final String PERSON_PRAISE = "personPraise";
 	public static final String PERSON_QQ = "personQq";
 	public static final String PERSON_EMAIL = "personEmail";
 	public static final String PERSON_PHONE = "personPhone";
+	
 	public static final String PERSON_FACULTY = "personFaculty";
 	public static final String PERSON_YEAR = "personYear";
 	public static final String PERSON_SPECIALTY = "personSpecialty";
@@ -43,22 +46,7 @@ public class Person {
 	
 	public Person(){
 		
-	} 
-
-	public Person(String personPhotoUrl, String personNickname, String personSignature,
-			String personFaculty, String personYear, String personSpecialty,
-			String personName, String personSex) {
-		this.personPhotoUrl = personPhotoUrl;
-		this.personNickname = personNickname;
-		this.personSignature = personSignature;
-		this.personFaculty = personFaculty;
-		this.personYear = personYear;
-		this.personSpecialty = personSpecialty;
-		this.personName = personName;
-		this.personSex = personSex;
-	}
-	
-	
+	} 	
 	
 	public Person(String personQq, String personEmail, String personPhone) {
 		this.personQq = personQq;
@@ -67,13 +55,14 @@ public class Person {
 	}
 
 	public Person(String personId, String personPhotoUrl,
-			String personNickname, String personSignature,
+			String personNickname, String personSignature, String personPraise,
 			String personFaculty, String personYear, String personSpecialty,
 			String personName, String personSex) {
 		this.personId = personId;
 		this.personPhotoUrl = personPhotoUrl;
 		this.personNickname = personNickname;
 		this.personSignature = personSignature;
+		this.personPraise = personPraise;
 		this.personFaculty = personFaculty;
 		this.personYear = personYear;
 		this.personSpecialty = personSpecialty;
@@ -81,8 +70,8 @@ public class Person {
 		this.personSex = personSex;
 	}
 	
-	public Person(String personId, String personPhotoUrl,
-			String personNickname, String personSignature, String personQq,
+	public Person(String personId, String personPhotoUrl, String personNickname, 
+			String personSignature, String personPraise, String personQq,
 			String personEmail, String personPhone, String personFaculty,
 			String personYear, String personSpecialty, String personName,
 			String personSex) {
@@ -90,6 +79,7 @@ public class Person {
 		this.personPhotoUrl = personPhotoUrl;
 		this.personNickname = personNickname;
 		this.personSignature = personSignature;
+		this.personPraise = personPraise;
 		this.personQq = personQq;
 		this.personEmail = personEmail;
 		this.personPhone = personPhone;
@@ -148,6 +138,12 @@ public class Person {
 	public void setPersonPhone(String personPhone) {
 		this.personPhone = personPhone;
 	}
+	public String getPersonPraise() {
+		return personPraise;
+	}
+	public void setPersonPraise(String personPraise) {
+		this.personPraise = personPraise;
+	}
 	public String getPersonFaculty() {
 		return personFaculty;
 	}
@@ -181,13 +177,15 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return "Person [personId=" + personId + ", personNickname="
-				+ personNickname + ", personSignature=" + personSignature
-				+ ", personQq=" + personQq + ", personEmail=" + personEmail
-				+ ", personPhone=" + personPhone + ", personFaculty="
-				+ personFaculty + ", personYear=" + personYear
-				+ ", personSpecialty=" + personSpecialty + ", personName="
-				+ personName + ", personSex=" + personSex + "]";
+		return "Person [personId=" + personId + ", personPhotoUrl="
+				+ personPhotoUrl + ", personNickname=" + personNickname
+				+ ", personSignature=" + personSignature + ", personPraise="
+				+ personPraise + ", personQq=" + personQq + ", personEmail="
+				+ personEmail + ", personPhone=" + personPhone
+				+ ", personFaculty=" + personFaculty + ", personYear="
+				+ personYear + ", personSpecialty=" + personSpecialty
+				+ ", personName=" + personName + ", personSex=" + personSex
+				+ "]";
 	}
 	
 }

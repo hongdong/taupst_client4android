@@ -117,7 +117,7 @@
 				                android:layout_height="wrap_content"
 				                android:layout_marginLeft="10dp"
 				                android:background="@null"
-				                android:maxLines="2"
+				                android:maxLines="3"
 				                android:maxLength="30"
 				                android:hint="@string/signatrue_hint"
 				                android:textSize="15sp" />

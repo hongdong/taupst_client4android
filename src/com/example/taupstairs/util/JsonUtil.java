@@ -39,6 +39,7 @@ public class JsonUtil {
 			if (!jsonObject.isNull(JsonString.Person.PERSON_PHONE)) {
 				person.setPersonPhone(jsonObject.getString(JsonString.Person.PERSON_PHONE));
 			}
+			person.setPersonPraise(jsonObject.getString(JsonString.Person.PERSON_PRAISE));
 			person.setPersonFaculty(jsonObject.getString(JsonString.Person.PERSON_FACULTY));
 			person.setPersonYear(jsonObject.getString(JsonString.Person.PERSON_YEAR));
 			person.setPersonSpecialty(jsonObject.getString(JsonString.Person.PERSON_SPECIALTY));

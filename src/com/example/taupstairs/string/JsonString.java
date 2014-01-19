@@ -16,7 +16,8 @@ public class JsonString {
 		
 		public static final String PERSON_PHOTOURL = "photo";
 		public static final String PERSON_NICKNAME = "username";
-		public static final String PERSON_SIGNATRUE = "signature";	
+		public static final String PERSON_SIGNATRUE = "signature";
+		public static final String PERSON_PRAISE = "total_praise";
 		
 		public static final String PERSON_QQ = "qq";
 		public static final String PERSON_EMAIL = "email";

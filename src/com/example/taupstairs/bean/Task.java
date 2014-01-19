@@ -34,7 +34,7 @@ public class Task {
 	public static final int TA_GETUSERDATA = 3;
 	public static final String TA_GETUSERDATA_TASKPARAMS = "getuserdata";
 	public static final String TA_GETUSERDATA_ACTIVITY = "activity";
-	public static final String TA_GETUSERDATA_ACTIVITY_LOGIN = "LoginActivity";
+	public static final String TA_GETUSERDATA_ACTIVITY_PERSONDATA = "PersonDataActivity";
 	public static final String TA_GETUSERDATA_ACTIVITY_ME = "MeFragment";
 	
 	//获取任务信息
@@ -99,6 +99,12 @@ public class Task {
 	public static final int TA_GETCAPTCHA = 14;
 	public static final String TA_GETCAPTCHA_ACTIVITY = "LoginActivity";
 	public static final String TA_GETCAPTCHA_CAPTCHAURL = "captchaName";
+	
+	public static final int TA_UPLOADPHOTO = 15;
+	public static final String TA_UPLOADPHOTO_ACTIVITY = "activity";
+	public static final String TA_UPLOADPHOTO_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
+	public static final String TA_UPLOADPHOTO_ACTIVITY_ME = "MeFragment";
+	public static final String TA_UPLOADPHOTO_BITMAP = "bitmap";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

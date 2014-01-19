@@ -267,9 +267,11 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		switch (id) {
 		case HomePageString.UPDATA_PHOTO:
 			taskFragment.localRefresh(id, params);
+			rankFragment.localRefresh(id, params);
 			break;
 		case HomePageString.UPDATA_NICKNAME:
 			taskFragment.localRefresh(id, params);
+			rankFragment.localRefresh(id, params);
 			break;
 
 		default:

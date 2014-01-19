@@ -25,6 +25,7 @@ import com.example.taupstairs.services.RankService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
+import com.example.taupstairs.toast.LoginToast;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class LoginActivity extends Activity implements ItaActivity {
@@ -230,8 +231,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 			if(isLogined.equals(Task.TA_FALSE)) {
 				hasGetCaptcha = false;
 				int state = Integer.parseInt(loginJsonObject.getString(JsonString.Login.STATE).trim());
-				testState(state);
-				doCheckUserTask();
+				LoginToast.testState(LoginActivity.this, state);
 			} else if (isLogined.equals(Task.TA_TRUE)) {
 				userId = loginJsonObject.getString(JsonString.Login.USERS_ID);
 				beforeJump();
@@ -243,38 +243,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-		}
-	}
-	
-	private void testState(int state) {
-		switch (state) {
-		case 1:
-			Toast.makeText(LoginActivity.this, "请登录教务系统完成教师评价后在登录", Toast.LENGTH_SHORT).show();
-			break;
-
-		case 2:
-			Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
-			break;
-			
-		case 3:
-			Toast.makeText(LoginActivity.this, "验证码不正确", Toast.LENGTH_SHORT).show();
-			break;
-			
-		case 4:
-			Toast.makeText(LoginActivity.this, "用户名不存在或未按照要求参加教学活动", Toast.LENGTH_SHORT).show();
-			break;
-			
-		case 5:
-			Toast.makeText(LoginActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
-			break;
-			
-		case 6:
-			Toast.makeText(LoginActivity.this, "信息填写错误或教务系统奔溃!!", Toast.LENGTH_SHORT).show();
-			break;
-
-		default:
-			Toast.makeText(LoginActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
-			break;
 		}
 	}
 	
@@ -327,7 +295,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 	 * 会出现后台的MainService调用UI线程中的refresh函数不能更新UI的情况*/
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 		System.exit(0);			
 	}
