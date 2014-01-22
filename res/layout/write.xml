@@ -82,7 +82,7 @@
 				android:paddingTop="10dp"
 				android:paddingBottom="10dp"
 				android:gravity="top"
-				android:maxLength="20"
+				android:maxLength="30"
 				android:maxLines="3"
 				android:textSize="16sp"
 				android:hint="@string/write_task_rewards"

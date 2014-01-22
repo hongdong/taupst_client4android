@@ -3,6 +3,8 @@
     android:id="@+id/txt_message_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" 
+    android:maxLines="5"
+	android:maxLength="50"
     android:textColor="@color/black"
     android:textSize="14sp"
     android:paddingTop="0.5dp"

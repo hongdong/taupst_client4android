@@ -37,6 +37,8 @@
 			android:layout_marginRight="5dp"
 			android:layout_alignParentLeft="true"
 			android:layout_toLeftOf="@id/btn_task_detail_message"
+			android:maxLines="5"
+			android:maxLength="50"
 			android:textSize="16sp"
 			android:hint="@string/say_a_little"
 			android:textColorHint="@color/gray"

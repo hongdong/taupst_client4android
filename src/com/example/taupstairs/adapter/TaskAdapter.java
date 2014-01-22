@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.taupstairs.R;
-import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
@@ -60,26 +59,13 @@ public class TaskAdapter extends BaseAdapter {
 		holder.txt_fm_task_message = (TextView) view.findViewById(R.id.txt_fm_task_message);
 		holder.txt_fm_task_signup = (TextView) view.findViewById(R.id.txt_fm_task_signup);
 		
-		String personSex = status.getPersonSex().trim();
-		
-		/*头像可能是空的。空的时候还要分男女，用上默认的*/
-		String url = status.getPersonPhotoUrl();
-		if (url != null && !url.equals("")) {
-			SimpleImageLoader.showImage(holder.img_fm_task_photo, 
-					HttpClientUtil.PHOTO_BASE_URL + url);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.img_fm_task_photo.setImageResource(R.drawable.default_drawable_male);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.img_fm_task_photo.setImageResource(R.drawable.default_drawable_female);
-			}
-		}
+		SimpleImageLoader.showImage(holder.img_fm_task_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
+		PersonDataListener personDataListener = new PersonDataListener(context, status.getPersonId());
+		holder.img_fm_task_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_fm_task_nickname.setText(status.getPersonNickname());
 		
-		PersonDataListener personDataListener = new PersonDataListener(context, status.getPersonId());
-		holder.img_fm_task_photo.setOnClickListener(personDataListener);
-
 		Time now = TimeUtil.getNow(Calendar.getInstance());
 		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
 		holder.txt_fm_task_releasetime.setText(displayTime);

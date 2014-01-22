@@ -100,32 +100,10 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 		holder.txt_nickname = (TextView) findViewById(R.id.txt_person_data_nickname);
 		holder.txt_praise = (TextView) findViewById(R.id.txt_person_data_praise);
 		holder.txt_signature = (TextView) findViewById(R.id.txt_person_data_signature);
-		
-		String personSex = person.getPersonSex().trim();
-		
-		String url = person.getPersonPhotoUrl();
-		if (url != null && !url.equals("")) {
-			SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + url);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.img_photo.setImageResource(R.drawable.default_drawable_male);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.img_photo.setImageResource(R.drawable.default_drawable_female);
-			}
-		}
+		SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + person.getPersonPhotoUrl());
 		holder.txt_nickname.setText(person.getPersonNickname());
 		holder.txt_praise.setText(person.getPersonPraise() + "  ");
-		
-		String signature = person.getPersonSignature();
-		if (signature != null && !signature.equals("")) {
-			holder.txt_signature.setText(signature);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.txt_signature.setText(Person.MALE_SIGNATRUE);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.txt_signature.setText(Person.FEMALE_SIGNATRUE);
-			}
-		}
+		holder.txt_signature.setText(person.getPersonSignature());
 	}
 	
 	private void displayPersonBase(Person person) {

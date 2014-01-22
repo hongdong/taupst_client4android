@@ -19,16 +19,9 @@ public class JsonUtil {
 		try {
 			JSONObject jsonObject = new JSONObject(jsonString);
 			person.setPersonId(jsonObject.getString(JsonString.Person.PERSON_ID));			
-			/*这三个可能是空的*/
-			if (!jsonObject.isNull(JsonString.Person.PERSON_PHOTOURL)) {
-				person.setPersonPhotoUrl(jsonObject.getString(JsonString.Person.PERSON_PHOTOURL));
-			} 
-			if (!jsonObject.isNull(JsonString.Person.PERSON_NICKNAME)) {
-				person.setPersonNickname(jsonObject.getString(JsonString.Person.PERSON_NICKNAME));
-			}
-			if (!jsonObject.isNull(JsonString.Person.PERSON_SIGNATRUE)) {
-				person.setPersonSignature(jsonObject.getString(JsonString.Person.PERSON_SIGNATRUE));
-			}
+			person.setPersonPhotoUrl(jsonObject.getString(JsonString.Person.PERSON_PHOTOURL));
+			person.setPersonNickname(jsonObject.getString(JsonString.Person.PERSON_NICKNAME));
+			person.setPersonSignature(jsonObject.getString(JsonString.Person.PERSON_SIGNATRUE));
 			/*这三个很可能是空的*/
 			if (!jsonObject.isNull(JsonString.Person.PERSON_QQ)) {
 				person.setPersonQq(jsonObject.getString(JsonString.Person.PERSON_QQ));
@@ -68,16 +61,8 @@ public class JsonUtil {
 				status.setStatusSignUpCount(jsonObject.getString(JsonString.Status.STATUS_SIGNUPCOUNT));
 				
 				status.setPersonId(jsonObject.getString(JsonString.Status.PERSON_ID));
-				
-				/*任务里面的头像和昵称可能是为空的*/
-				if (!jsonObject.isNull(JsonString.Status.PERSON_PHOTOURL)) {
-					status.setPersonPhotoUrl(jsonObject.getString(JsonString.Status.PERSON_PHOTOURL));
-				}
-				
-				if (!jsonObject.isNull(JsonString.Status.PERSON_NICKNAME)) {
-					status.setPersonNickname(jsonObject.getString(JsonString.Status.PERSON_NICKNAME));
-				}
-				
+				status.setPersonPhotoUrl(jsonObject.getString(JsonString.Status.PERSON_PHOTOURL));
+				status.setPersonNickname(jsonObject.getString(JsonString.Status.PERSON_NICKNAME));
 				status.setPersonDepartment(jsonObject.getString(JsonString.Status.PERSON_DEPARTMENT));
 				status.setPersonGrade(jsonObject.getString(JsonString.Status.PERSON_GRADE));
 				status.setPersonSex(jsonObject.getString(JsonString.Status.PERSON_SEX));

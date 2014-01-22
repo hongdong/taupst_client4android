@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.taupstairs.R;
-import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
@@ -52,17 +51,10 @@ public class RankAdapter extends BaseAdapter {
 		holder.txt_praise = (TextView) view.findViewById(R.id.txt_fm_rank_praise);
 		holder.txt_rank = (TextView) view.findViewById(R.id.txt_fm_rank_rank);
 		
-		String personSex = rank.getPersonSex().trim();
-		String url = rank.getPersonPhotoUrl();
-		if (url != null && !url.equals("")) {
-			SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + url);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.img_photo.setImageResource(R.drawable.default_drawable_male);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.img_photo.setImageResource(R.drawable.default_drawable_female);
-			}
-		}
+		SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + rank.getPersonPhotoUrl());
+		PersonDataListener personDataListener = new PersonDataListener(context, rank.getPersonId());
+		holder.img_photo.setOnClickListener(personDataListener);
+		
 		holder.txt_nickname.setText(rank.getPersonNickname());
 		holder.txt_praise.setText(rank.getRankPraise());
 		holder.txt_rank.setText("第" + rank.getRankRank() + "名");
@@ -70,9 +62,6 @@ public class RankAdapter extends BaseAdapter {
 			TextView textView = (TextView) view.findViewById(R.id.txt_fm_rank_me);
 			textView.setVisibility(View.VISIBLE);
 		}
-		
-		PersonDataListener personDataListener = new PersonDataListener(context, rank.getPersonId());
-		holder.img_photo.setOnClickListener(personDataListener);
 		
 		return view;
 	}

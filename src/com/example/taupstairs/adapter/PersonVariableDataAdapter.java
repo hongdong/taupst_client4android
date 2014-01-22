@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class PersonVariableDataAdapter extends BaseAdapter {
 
 	private Context context;
-	private String photoUrl, nickname, signature, sex;
+	private String photoUrl, nickname, signature;
 	private static final int COUNT = 3;
 
 	public PersonVariableDataAdapter(Context context, Person person) {
@@ -24,7 +24,6 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 		this.photoUrl = person.getPersonPhotoUrl();
 		this.nickname = person.getPersonNickname();
 		this.signature = person.getPersonSignature();
-		this.sex = person.getPersonSex();
 	}
 
 	@Override
@@ -49,16 +48,7 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 		case 0:
 			view = LayoutInflater.from(context).inflate(R.layout.fm_me_variable_drawable, null);
 			ImageView imageView = (ImageView)view.findViewById(R.id.img_fm_me_drawable);
-			/*头像可能是空的。空的时候还要分男女，用上默认的*/
-			if (photoUrl != null && !photoUrl.equals("")) {
-				SimpleImageLoader.showImage(imageView, HttpClientUtil.PHOTO_BASE_URL + photoUrl);
-			} else {
-				if (sex.equals(Person.MALE)) {
-					imageView.setImageResource(R.drawable.default_drawable_male);
-				} else if (sex.equals(Person.FEMALE)) {
-					imageView.setImageResource(R.drawable.default_drawable_female);
-				}
-			}
+			SimpleImageLoader.showImage(imageView, HttpClientUtil.PHOTO_BASE_URL + photoUrl);
 			break;
 		
 		case 1:
@@ -70,15 +60,7 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 		case 2:
 			view = LayoutInflater.from(context).inflate(R.layout.fm_me_variable_signatrue, null);
 			TextView signatrueTextView = (TextView)view.findViewById(R.id.txt_variable_signatrue);		
-			if (signature != null && !signature.equals("")) {
-				signatrueTextView.setText(signature);
-			} else {
-				if (sex.equals(Person.MALE)) {
-					signatrueTextView.setText(Person.MALE_SIGNATRUE);
-				} else if (sex.equals(Person.FEMALE)) {
-					signatrueTextView.setText(Person.FEMALE_SIGNATRUE);
-				}
-			}
+			signatrueTextView.setText(signature);
 			break;
 
 		default:

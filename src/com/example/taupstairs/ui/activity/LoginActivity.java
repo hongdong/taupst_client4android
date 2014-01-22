@@ -146,6 +146,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 			taskParams.put(User.USER_COLLEGEID, collegeId);
 			taskParams.put(User.USER_STUDENTID, studentId);
 			taskParams.put(User.USER_PASSWORD, password);
+			taskParams.put(JsonString.Login.IS_EXIST, isExist ? "1" : "0");
 			if (!isExist && hasGetCaptcha) {
 				EditText editText = (EditText) findViewById(R.id.edit_captcha);
 				String captcha = editText.getText().toString().trim();

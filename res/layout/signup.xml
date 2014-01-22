@@ -181,6 +181,7 @@
 						android:padding="10dp"
 						android:gravity="top"
 						android:maxLines="5"
+						android:maxLength="50"
 						android:hint="@string/private_message"
 						android:textSize="16sp"
 						android:background="@drawable/common_edit_bg"/>

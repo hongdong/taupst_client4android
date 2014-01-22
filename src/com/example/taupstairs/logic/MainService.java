@@ -26,6 +26,7 @@ import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
+import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.JsonUtil;
 import com.example.taupstairs.util.StringUtil;
@@ -321,9 +322,10 @@ public class MainService extends Service implements Runnable {
 		String collegeId = (String) taskParams.get(User.USER_COLLEGEID);
 		String studentId = (String) taskParams.get(User.USER_STUDENTID);
 		String password = (String) taskParams.get(User.USER_PASSWORD);
+		String isExist = (String) taskParams.get(JsonString.Login.IS_EXIST);
 		String captcha = (String) taskParams.get(Task.TA_LOGIN_CAPTCHA);
 		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
-				+ "&pwd=" + password + "&school=" + collegeId;
+				+ "&pwd=" + password + "&school=" + collegeId + "&issysn=" + isExist;
 		if (captcha != null) {
 			login_url += "&code=" + captcha;
 		}

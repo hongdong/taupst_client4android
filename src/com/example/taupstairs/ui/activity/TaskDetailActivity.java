@@ -131,23 +131,15 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_messagecount = (TextView)findViewById(R.id.txt_task_detail_messagecount);
 		holder.txt_task_detail_no_message = (TextView)findViewById(R.id.txt_task_detail_no_message);
 		
-		String personSex = status.getPersonSex().trim();
 		
-		/*头像可能是空的。空的时候还要分男女，用上默认的*/
-		String url = status.getPersonPhotoUrl();
-		if (url != null && !url.equals("")) {
-			SimpleImageLoader.showImage(holder.img_task_detail_photo, 
-					HttpClientUtil.PHOTO_BASE_URL + url);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.img_task_detail_photo.setImageResource(R.drawable.default_drawable_male);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.img_task_detail_photo.setImageResource(R.drawable.default_drawable_female);
-			}
-		}
+		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
+					HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
+		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
+		holder.img_task_detail_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_task_detail_nickname.setText(status.getPersonNickname());
 		
+		String personSex = status.getPersonSex().trim();
 		if (personSex.equals(Person.MALE)) {
 			holder.img_task_detail_sex.setImageResource(R.drawable.icon_male);
 		} else if (personSex.equals(Person.FEMALE)) {
@@ -211,9 +203,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
-		
-		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
-		holder.img_task_detail_photo.setOnClickListener(personDataListener);
 	}
 	
 	public void changeEditHint(String messageId, String replyId, String replyNickname) {

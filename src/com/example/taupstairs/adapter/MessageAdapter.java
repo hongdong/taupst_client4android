@@ -5,10 +5,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -17,12 +15,11 @@ import android.widget.TextView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
-import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
+import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.listener.ReplyListMessageListener;
 import com.example.taupstairs.listener.ReplyMessageListener;
-import com.example.taupstairs.ui.activity.PersonDataActivity;
 import com.example.taupstairs.ui.activity.TaskDetailActivity;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.TimeUtil;
@@ -65,28 +62,12 @@ public class MessageAdapter extends BaseAdapter {
 		holder.txt_message_time = (TextView)view.findViewById(R.id.txt_message_releasetime);
 		holder.list_message_content = (ListView)view.findViewById(R.id.list_message_content);
 		
-		String personSex = message.getPersonSex().trim();
-		String url = message.getPersonPhotoUrl();
-		if (url != null && !url.equals("")) {
-			SimpleImageLoader.showImage(holder.img_message_photo, HttpClientUtil.PHOTO_BASE_URL + url);
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.img_message_photo.setImageResource(R.drawable.default_drawable_male);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.img_message_photo.setImageResource(R.drawable.default_drawable_female);
-			}
-		}
+		SimpleImageLoader.showImage(holder.img_message_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + message.getPersonPhotoUrl());
+		PersonDataListener personDataListener = new PersonDataListener(context, message.getPersonId());
+		holder.img_message_photo.setOnClickListener(personDataListener);
 		
-		String nickname = message.getPersonNickname();
-		if (nickname != null) {
-			holder.txt_message_nickname.setText(message.getPersonNickname());
-		} else {
-			if (personSex.equals(Person.MALE)) {
-				holder.txt_message_nickname.setText(Person.MALE_NICKNAME);
-			} else if (personSex.equals(Person.FEMALE)) {
-				holder.txt_message_nickname.setText(Person.FEMALE_NICKNAME);
-			}
-		}
+		holder.txt_message_nickname.setText(message.getPersonNickname());
 		
 		Time now = TimeUtil.getNow(Calendar.getInstance());
 		String displayTime = TimeUtil.getDisplayTime(now, message.getMessageTime());
@@ -121,13 +102,6 @@ public class MessageAdapter extends BaseAdapter {
 		
 		MessageContentAdapter adapter = new MessageContentAdapter(context, list);
 		holder.list_message_content.setAdapter(adapter);
-		
-		holder.img_message_photo.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(context, PersonDataActivity.class);
-				context.startActivity(intent);
-			}
-		});
 		
 		String messageId = message.getMessageId();
 		String replyId = message.getPersonId();

@@ -34,6 +34,7 @@ import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
+import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.ui.fragment.InfoFragment;
 import com.example.taupstairs.ui.fragment.MeFragment;
 import com.example.taupstairs.ui.fragment.RankFragment;
@@ -219,6 +220,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		taskParams.put(User.USER_COLLEGEID, defaultUser.getUserCollegeId());
 		taskParams.put(User.USER_STUDENTID, defaultUser.getUserStudentId());
 		taskParams.put(User.USER_PASSWORD, defaultUser.getUserPassword());
+		taskParams.put(JsonString.Login.IS_EXIST, "1");
 		Task task = new Task(Task.TA_CHECKNET, taskParams);
 		MainService.addTask(task);
 	}
