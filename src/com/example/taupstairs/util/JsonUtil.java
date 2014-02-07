@@ -2,9 +2,12 @@ package com.example.taupstairs.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
@@ -148,6 +151,26 @@ public class JsonUtil {
 			e.printStackTrace();
 		}
 		return ranks;
+	}
+	
+	public static List<Info> getInfos(String jsonString) {
+		List<Info> infos = new ArrayList<Info>();
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				Info info = new Info();
+				info.setInfoId(jsonObject.getString(JsonString.Info.INFO_ID));
+				info.setPersonPhotoUrl(jsonObject.getString(JsonString.Info.PERSON_PHOTOURL));
+				info.setPersonNickname(jsonObject.getString(JsonString.Info.PERSON_NICKNAME));
+				info.setInfoReleaseTime(jsonObject.getString(JsonString.Info.INFO_RELEASETIME));
+				info.setInfoContent(jsonObject.getString(JsonString.Info.INFO_CONTENT));
+				infos.add(info);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return infos;
 	}
 	
 }

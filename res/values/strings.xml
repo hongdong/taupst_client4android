@@ -78,7 +78,7 @@
     
     <string name="drawable">头像:</string>
     <string name="nickname">昵称:</string>
-    <string name="signatrue">个性签名:</string>
+    <string name="signature">个性签名:</string>
     <string name="setting">设置</string>
     <string name="change_user">切换用户</string>
     

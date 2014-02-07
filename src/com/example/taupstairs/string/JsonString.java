@@ -79,6 +79,14 @@ public class JsonString {
 		public static final String RANK_RANK = "pm";
 	}
 	
+	public static class Info {
+		public static final String INFO_ID = "news_id";
+		public static final String PERSON_PHOTOURL = "photo";
+		public static final String PERSON_NICKNAME = "username";
+		public static final String INFO_RELEASETIME = "time";
+		public static final String INFO_CONTENT = "content";
+	}
+	
 	public static class Return {
 		public static final String STATE = "state";
 		public static final String STATE_OK = "0";

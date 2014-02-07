@@ -256,7 +256,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		user.setUserCollegeName(collegeName);
 		/*至关重要的一步，保存后下次会自动跳到主页面*/
 		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);
-		SharedPreferencesUtil.savaLastestStatusId(LoginActivity.this, null);
+		SharedPreferencesUtil.savaLastestId(LoginActivity.this, SharedPreferencesUtil.LASTEST_STATUSID, null);
 		StatusService statusService = new StatusService(LoginActivity.this);
 		statusService.emptyStatusDb();
 		statusService.closeDBHelper();

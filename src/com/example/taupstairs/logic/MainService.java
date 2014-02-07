@@ -1,36 +1,18 @@
 package com.example.taupstairs.logic;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import com.example.taupstairs.bean.College;
-import com.example.taupstairs.bean.MessageContent;
-import com.example.taupstairs.bean.Person;
-import com.example.taupstairs.bean.Rank;
-import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.bean.User;
-import com.example.taupstairs.string.JsonString;
-import com.example.taupstairs.util.HttpClientUtil;
-import com.example.taupstairs.util.JsonUtil;
-import com.example.taupstairs.util.StringUtil;
-import com.example.taupstairs.util.UploadToBCS;
 
 public class MainService extends Service implements Runnable {
 
@@ -42,6 +24,8 @@ public class MainService extends Service implements Runnable {
 	private static ArrayList<Activity> activities = new ArrayList<Activity>();
 	//Fragment链表
 	private static ArrayList<Fragment> fragments = new ArrayList<Fragment>();
+	//执行各种任务的方法
+	private DoTaskService doTaskService = new DoTaskService(MainService.this);
 	
 	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -71,7 +55,7 @@ public class MainService extends Service implements Runnable {
 			case Task.TA_GETSTATUS:
 				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
 				Bundle data_getstatus = msg.getData();
-				String mode = data_getstatus.getString(Task.TA_GETSTATUS_MODE);
+				int mode = data_getstatus.getInt(Task.TA_GETSTATUS_MODE);
 				fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
 				break;
 				
@@ -162,6 +146,13 @@ public class MainService extends Service implements Runnable {
 					activity_upload.refresh(Task.TA_UPLOADPHOTO, msg.obj);
 				}
 				break;
+				
+			case Task.TA_GETINFO:
+				ItaFragment fragment_getinfo = (ItaFragment) getFragmentByName(Task.TA_GETINFO_FRAGMENT);
+				Bundle data_getinfo = msg.getData();
+				int mode_getinfo = data_getinfo.getInt(Task.TA_GETINFO_MODE);
+				fragment_getinfo.refresh(Task.TA_GETINFO, mode_getinfo, msg.obj);
+				break;
 
 			default:
 				break;
@@ -206,357 +197,90 @@ public class MainService extends Service implements Runnable {
 		Map<String, Object> taskParams = task.getTaskParams();
 		switch (task.getTaskId()) {		
 		case Task.TA_LOGIN:
-			msg.obj = doLoginTask(task);
+			msg.obj = doTaskService.doLoginTask(task);
 			break;
 			
 		case Task.TA_CHECKNET:		//检查网络的方式也是用login，看看是否能够成功返回登录数据
-			msg.obj = doLoginTask(task);
+			msg.obj = doTaskService.doLoginTask(task);
 			break;
 			
 		case Task.TA_GETUSERDATA:
-			msg.obj = doGetUserDataTask(task);
+			msg.obj = doTaskService.doGetUserDataTask(task);
 			String activity_getuserdata = (String) taskParams.get(Task.TA_GETUSERDATA_ACTIVITY);
 			Bundle data_getuserdata = msg.getData();
 			data_getuserdata.putString(Task.TA_GETUSERDATA_ACTIVITY, activity_getuserdata);
 			break;
 			
 		case Task.TA_GETSTATUS:
-			msg.obj = doGetStatusTask(task);
-			String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
+			msg.obj = doTaskService.doGetStatusTask(task);
+			int mode = (Integer) taskParams.get(Task.TA_GETSTATUS_MODE);
 			Bundle data_getstatus = msg.getData();
-			data_getstatus.putString(Task.TA_GETSTATUS_MODE, mode);
+			data_getstatus.putInt(Task.TA_GETSTATUS_MODE, mode);
 			break;
 			
 		case Task.TA_RELEASE:
-			msg.obj = doReleaseTask(task);
+			msg.obj = doTaskService.doReleaseTask(task);
 			break;
 			
 		case Task.TA_UPDATAUSERDATA:
-			msg.obj = doUpdataUserdata(task);
+			msg.obj = doTaskService.doUpdataUserdata(task);
 			String activity_updata_userdata = (String) taskParams.get(Task.TA_UPDATAUSERDATA_ACTIVITY);
 			Bundle data_updata_userdata = msg.getData();
 			data_updata_userdata.putString(Task.TA_UPDATAUSERDATA_ACTIVITY, activity_updata_userdata);
 			break;
 			
 		case Task.TA_CHECKSTATUS:
-			msg.obj = doCheckStatusTask(task);
+			msg.obj = doTaskService.doCheckStatusTask(task);
 			break;
 			
 		case Task.TA_GETMESSAGE:
-			msg.obj = doGetMessageTask(task);
+			msg.obj = doTaskService.doGetMessageTask(task);
 			break;
 			
 		case Task.TA_MESSAGE:
-			msg.obj = doMessageTask(task);
+			msg.obj = doTaskService.doMessageTask(task);
 			break;
 			
 		case Task.TA_SIGNUP:
-			msg.obj = doSignupTask(task);
+			msg.obj = doTaskService.doSignupTask(task);
 			break;
 			
 		case Task.TA_GETRANK:
-			msg.obj = doGetRankTask(task);
+			msg.obj = doTaskService.doGetRankTask(task);
 			break;
 		
 		case Task.TA_USEREXIT:
-			doUserExit(); 
+			doTaskService.doUserExit(); 
 			String activity_userexit = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
 			msg.obj = activity_userexit;
 			break;
 			
 		case Task.TA_CHECKUSER:
-			msg.obj = doCheckUserTask(task);
+			msg.obj = doTaskService.doCheckUserTask(task);
 			break;
 			
 		case Task.TA_GETCAPTCHA:
-			msg.obj = doGetCaptchaTask(task);
+			msg.obj = doTaskService.doGetCaptchaTask(task);
 			break;
 			
 		case Task.TA_UPLOADPHOTO:
-			msg.obj = doUploadPhotoTask(task);
+			msg.obj = doTaskService.doUploadPhotoTask(task);
 			String activity_upload_photo = (String) taskParams.get(Task.TA_UPLOADPHOTO_ACTIVITY);
 			Bundle data_upload_photo = msg.getData();
 			data_upload_photo.putString(Task.TA_UPDATAUSERDATA_ACTIVITY, activity_upload_photo);
+			break;
+			
+		case Task.TA_GETINFO:
+			msg.obj = doTaskService.doGetInfoTask(task);
+			int mode_info = (Integer) taskParams.get(Task.TA_GETINFO_MODE);
+			Bundle data_getinfo = msg.getData();
+			data_getinfo.putInt(Task.TA_GETINFO_MODE, mode_info);
 			break;
 
 		default:
 			break;
 		}
 		handler.sendMessage(msg);
-	}
-	
-	private String doCheckUserTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String collegeId = (String) taskParams.get(College.COLLEGE_ID);
-		String studentId = (String) taskParams.get(User.USER_STUDENTID);
-		String check_user_url = HttpClientUtil.BASE_URL + "data/user/issysn?school=" +
-				collegeId + "&student_id=" + studentId;
-		try {
-			check_user_url = StringUtil.replaceBlank(check_user_url);
-			result = HttpClientUtil.getRequest(check_user_url);
-		} catch (Exception e) {
-			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
-		}
-		return result;
-	}
-	
-	private Drawable doGetCaptchaTask(Task task) {
-		Drawable drawable = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String captchaUrl = (String) taskParams.get(Task.TA_GETCAPTCHA_CAPTCHAURL);
-		String get_captcha_url = HttpClientUtil.BASE_URL + "image/code/" + captchaUrl;
-		try {
-			get_captcha_url = StringUtil.replaceBlank(get_captcha_url);
-			drawable = HttpClientUtil.getCaptcha(get_captcha_url);
-		} catch (Exception e) {
-			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
-		}
-		return drawable;
-	}
-	
-	/*登录任务*/
-	private String doLoginTask(Task task) {
-		String result = Task.TA_NO;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String collegeId = (String) taskParams.get(User.USER_COLLEGEID);
-		String studentId = (String) taskParams.get(User.USER_STUDENTID);
-		String password = (String) taskParams.get(User.USER_PASSWORD);
-		String isExist = (String) taskParams.get(JsonString.Login.IS_EXIST);
-		String captcha = (String) taskParams.get(Task.TA_LOGIN_CAPTCHA);
-		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
-				+ "&pwd=" + password + "&school=" + collegeId + "&issysn=" + isExist;
-		if (captcha != null) {
-			login_url += "&code=" + captcha;
-		}
-		try {
-			login_url = StringUtil.replaceBlank(login_url);
-			result = HttpClientUtil.getRequest(login_url);
-		} catch (Exception e) {
-			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
-		}
-		return result;
-	}
-	
-	/*获取Person信息*/
-	private Person doGetUserDataTask(Task task) {
-		Person person = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String personId = (String) taskParams.get(Task.TA_GETUSERDATA_TASKPARAMS);
-		String getuserdata_url = HttpClientUtil.BASE_URL + "data/user/userInfo?users_id=" + personId;
-		try {
-			String jsonString = HttpClientUtil.getRequest(getuserdata_url);
-			person = JsonUtil.getPerson(jsonString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return person;		//此处如果未连接网络的话，返回的是null
-	}
-	
-	/*
-	 * 获取List<Status>（任务）
-	 * 分为三种，分别是第一次加载，下拉刷新，上拉加载更多
-	 */
-	private List<Status> doGetStatusTask(Task task) {
-		List<Status> listStatus = null;
-		String getstatus_url = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String mode = (String) taskParams.get(Task.TA_GETSTATUS_MODE);
-		if (mode.equals(Task.TA_GETSTATUS_MODE_FIRSTTIME)) {
-			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down";
-		} else if (mode.equals(Task.TA_GETSTATUS_MODE_PULLREFRESH)) {
-			String statusId = (String) taskParams.get(Task.TA_GETSTATUS_STATUSID);
-			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down?task_id=" + statusId;
-		} else if (mode.equals(Task.TA_GETSTATUS_MODE_LOADMORE)) {
-			String statusId = (String) taskParams.get(Task.TA_GETSTATUS_STATUSID);
-			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Up?task_id=" + statusId;
-		}
-		try {
-			String jsonString = HttpClientUtil.getRequest(getstatus_url);
-			/*如果数组长度为0，则链表长度为0，但他不为空，因为在里面已经new了，
-			 * 所以有联网状态下，没有更新与没有更多的时候，0 == listStatus.size() 成立，但listStatus不为空*/
-			listStatus = JsonUtil.getListStatus(jsonString);
-		} catch (Exception e) {
-			/*没网络，会返回null*/
-			e.printStackTrace();
-		}
-		return listStatus;
-	}
-	
-	/*
-	 * 发布任务
-	 */
-	private String doReleaseTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String title = (String) taskParams.get(Status.STATUS_TITLE);
-		String content = (String) taskParams.get(Status.STATUS_CONTENT);
-		String rewards = (String) taskParams.get(Status.STATUS_REWARDS);
-		String endtime = (String) taskParams.get(Status.STATUS_ENDTIME);	
-		String release_url = HttpClientUtil.BASE_URL + "data/task/save?title=" + title
-				+ "&content=" + content + "&rewards=" + rewards + "&end_of_time=" + endtime + "&task_level=1";
-		try {
-			release_url = StringUtil.replaceBlank(release_url);
-			result = HttpClientUtil.getRequest(release_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
-		return result;
-
-	}
-	
-	/*
-	 * 更新用户数据
-	 */
-	private String doUpdataUserdata(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String url = (String) taskParams.get(Task.TA_UPDATAUSERDATA_URL);
-		String updata_userdata_url = HttpClientUtil.BASE_URL + "data/user/update?" + url;
-		updata_userdata_url = StringUtil.replaceBlank(updata_userdata_url);
-		try {
-			result = HttpClientUtil.getRequest(updata_userdata_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	/*
-	 * 检测任务状态
-	 */
-	private String doCheckStatusTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String check_status_url = HttpClientUtil.BASE_URL + "data/sign/issign?task_id=" + statusId;
-		try {
-			result = HttpClientUtil.getRequest(check_status_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	} 
-	
-	/*
-	 * 获取留言
-	 */
-	private List<com.example.taupstairs.bean.Message> doGetMessageTask(Task task) {
-		List<com.example.taupstairs.bean.Message> messages = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String get_message_url = HttpClientUtil.BASE_URL + "data/taskmsg/taskMsgList2Down?task_id=" + statusId;
-		try {
-			get_message_url = StringUtil.replaceBlank(get_message_url);
-			String jsonString = HttpClientUtil.getRequest(get_message_url);
-			messages = JsonUtil.getMessages(jsonString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return messages;
-	}
-	
-	/*
-	 * 留言
-	 */
-	private String doMessageTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String content = (String) taskParams.get(MessageContent.CONTENT);
-		String message_url = HttpClientUtil.BASE_URL + "data/taskmsg/save?task_id=" + statusId 
-				+ "&message_content=" + content;
-		String mode = (String) taskParams.get(Task.TA_MESSAGE_MODE);
-		if (mode.equals(Task.TA_MESSAGE_MODE_ROOT)) {
-			
-		} else if (mode.equals(Task.TA_MESSAGE_MODE_CHILD)) {
-			String messageId = (String) taskParams.get(com.example.taupstairs.bean.Message.MESSAGE_ID);
-			String replyId = (String) taskParams.get(MessageContent.REPLY_ID);
-			message_url += "&to_user=" + replyId + "&root_id=" + messageId;
-		} 
-		try {
-			message_url = StringUtil.replaceBlank(message_url);
-			result= HttpClientUtil.getRequest(message_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	} 
-	
-	/*
-	 * 报名
-	 */
-	private String doSignupTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String contact = (String) taskParams.get(Task.TA_SIGNUP_CONTACT);
-		String message = (String) taskParams.get(Task.TA_SIGNUP_MESSAGE);
-		String signup_url = HttpClientUtil.BASE_URL + "/data/sign/save?task_id=" + statusId + 
-				"&open_mes=" + contact + "&message=" + message;
-		try {
-			signup_url = StringUtil.replaceBlank(signup_url);
-			result = HttpClientUtil.getRequest(signup_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	private List<Rank> doGetRankTask(Task task) {
-		List<Rank> ranks = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		String mode = (String) taskParams.get(Task.TA_GETRANK_MODE);
-		String get_rank_url = HttpClientUtil.BASE_URL + "data/ranking/list?type=" + mode;
-		try {
-			String jsonString = HttpClientUtil.getRequest(get_rank_url);
-			ranks = JsonUtil.getRanks(jsonString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ranks;
-	}
-	
-	/*
-	 * 上传照片
-	 */
-	private String doUploadPhotoTask(Task task) {
-		String result = null;
-		Map<String, Object> taskParams = task.getTaskParams();
-		Bitmap bitmap = (Bitmap) taskParams.get(Task.TA_UPLOADPHOTO_BITMAP);
-		try {	/*先把图片写到cache里面，再读出来以流的方式上传*/
-			File file = getFilesDir();
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-			byte[] byteArray = stream.toByteArray();
-			final String fileName = System.currentTimeMillis() + ".jpeg";
-			File imageFile = new File(file, fileName);
-			FileOutputStream fstream = new FileOutputStream(imageFile);
-			BufferedOutputStream bStream = new BufferedOutputStream(fstream);
-			bStream.write(byteArray);
-			if (bStream != null) {
-				bStream.close();
-			}
-			UploadToBCS ub = new UploadToBCS();
-			File f = new File(file.getAbsolutePath() + "/" + fileName);
-			ub.putObjectByInputStream(f, "/" + fileName);
-			result = fileName;						
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	/*
-	 * 用户注销
-	 */
-	private void doUserExit() {
-		String userexit_url = HttpClientUtil.BASE_URL + "data/user/exit";
-		try {
-			HttpClientUtil.getRequest(userexit_url);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/*清空activitys和fragments链表*/

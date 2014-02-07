@@ -1,6 +1,5 @@
 package com.example.taupstairs.ui.fragment;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import com.example.taupstairs.adapter.RankAdapter;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.RankService;
@@ -34,7 +32,6 @@ public class RankFragment extends Fragment implements ItaFragment {
 	private boolean isRefresh;
 	private boolean hasRefresh;
 	private String lastestUpdata;
-	private Time lastestRefreshTime;
 	private RankService rankService;
 	
 	public RankFragment() {
@@ -144,34 +141,16 @@ public class RankFragment extends Fragment implements ItaFragment {
 				adapter = new RankAdapter(context, ranks);
 				xlist_rank.setAdapter(adapter);
 				xlist_rank.stopRefresh();
-				setLastestUpdata();
+				lastestUpdata = TimeUtil.setLastestUpdata();
+				xlist_rank.setRefreshTime(lastestUpdata);
 				hasRefresh = true;
 			}
-			isRefresh = false;
 			break;
 
 		default:
 			break;
 		}
-	}
-	
-	private void setLastestUpdata() {
-		String hour, minute;
-		lastestRefreshTime = TimeUtil.getNow(Calendar.getInstance());
-		
-		if (lastestRefreshTime.getHour() < 10) {
-			hour = "0" + lastestRefreshTime.getHour();
-		} else {
-			hour = "" + lastestRefreshTime.getHour();
-		}
-		if (lastestRefreshTime.getMinute() < 10) {
-			minute = "0" + lastestRefreshTime.getMinute();
-		} else {
-			minute = "" + lastestRefreshTime.getMinute();
-		}
-		
-		lastestUpdata = hour + ":" + minute;
-		xlist_rank.setRefreshTime(lastestUpdata);
+		isRefresh = false;
 	}
 
 	@Override

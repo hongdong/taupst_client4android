@@ -40,9 +40,9 @@ public class Task {
 	//获取任务信息
 	public static final int TA_GETSTATUS = 4;
 	public static final String TA_GETSTATUS_MODE = "getstatus";
-	public static final String TA_GETSTATUS_MODE_FIRSTTIME = "firsttime";
-	public static final String TA_GETSTATUS_MODE_PULLREFRESH = "pullrefresh";
-	public static final String TA_GETSTATUS_MODE_LOADMORE = "loadmore";
+	public static final int TA_GETSTATUS_MODE_FIRSTTIME = 1;
+	public static final int TA_GETSTATUS_MODE_PULLREFRESH = 2;
+	public static final int TA_GETSTATUS_MODE_LOADMORE = 3;
 	public static final String TA_GETSTATUS_STATUSID = "statusid";
 	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
 	
@@ -105,6 +105,15 @@ public class Task {
 	public static final String TA_UPLOADPHOTO_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
 	public static final String TA_UPLOADPHOTO_ACTIVITY_ME = "MeFragment";
 	public static final String TA_UPLOADPHOTO_BITMAP = "bitmap";
+	
+	//获取任务信息
+	public static final int TA_GETINFO = 16;
+	public static final String TA_GETINFO_MODE = "getinfo";
+	public static final int TA_GETINFO_MODE_FIRSTTIME = 1;
+	public static final int TA_GETINFO_MODE_PULLREFRESH = 2;
+	public static final int TA_GETINFO_MODE_LOADMORE = 3;
+	public static final String TA_GETINFO_INFOID = "infoid";
+	public static final String TA_GETINFO_FRAGMENT = "InfoFragment";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

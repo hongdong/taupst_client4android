@@ -121,7 +121,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    正在清除...");
 		progressDialog.show();
-		SharedPreferencesUtil.savaLastestStatusId(SettingActivity.this, null);
+		SharedPreferencesUtil.savaLastestId(SettingActivity.this, SharedPreferencesUtil.LASTEST_STATUSID, null);
 		FileUtil.deletePhoto(getFilesDir().getAbsolutePath());
 		PersonService personService = new PersonService(SettingActivity.this);
 		personService.emptyPersonDB();

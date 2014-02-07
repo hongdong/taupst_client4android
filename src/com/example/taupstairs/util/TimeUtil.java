@@ -185,4 +185,23 @@ public class TimeUtil {
 		}
 		return SMALL;
 	}
+	
+	public static String setLastestUpdata() {
+		String hour, minute;
+		Time lastestRefreshTime = getNow(Calendar.getInstance());
+		
+		if (lastestRefreshTime.getHour() < 10) {
+			hour = "0" + lastestRefreshTime.getHour();
+		} else {
+			hour = "" + lastestRefreshTime.getHour();
+		}
+		if (lastestRefreshTime.getMinute() < 10) {
+			minute = "0" + lastestRefreshTime.getMinute();
+		} else {
+			minute = "" + lastestRefreshTime.getMinute();
+		}
+		
+		return hour + ":" + minute;
+	}
+	
 }

@@ -1,6 +1,5 @@
 package com.example.taupstairs.ui.fragment;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,6 @@ import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.StatusService;
@@ -47,9 +45,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	private StatusService statusService;
 	private String lastestStatusId;
 	private String oldestStatusId;
-	
 	private String lastestUpdata;
-	private Time lastestRefreshTime;
 	
 	public TaskFragment() {
 		super();
@@ -78,7 +74,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	@Override
 	public void initData() {
 		isRefresh = false;
-		lastestStatusId = SharedPreferencesUtil.getLastestStatusId(context);
+		lastestStatusId = SharedPreferencesUtil.getLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID);
 		if (null == lastestStatusId) {
 			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);		
 		} else {
@@ -122,7 +118,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * 加载任务。
 	 * 参数标志着是不是第一次加载，下拉刷新，上拉加载更多
 	 */
-	private void getStatusFromTask(String mode, String statusId) {
+	private void getStatusFromTask(int mode, String statusId) {
 		if (!isRefresh) {
 			isRefresh = true;
 			HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
@@ -139,7 +135,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_GETSTATUS:
-			String mode = (String) params[1];
+			int mode = (Integer) params[1];
 			List<Status> newStatus = (List<Status>) params[2];
 			refreshList(mode, newStatus);
 			break;
@@ -183,15 +179,18 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	/*
 	 * 刷新列表
 	 */
-	private void refreshList(String mode, List<Status> newStatus) {
+	private void refreshList(int mode, List<Status> newStatus) {
 		if (newStatus != null) {
-			if (mode.equals(Task.TA_GETSTATUS_MODE_FIRSTTIME)) {
+			switch (mode) {
+			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;
 				/*第一次上面不会设置这个，所以这里要设置*/
 				adapter = new TaskAdapter(context, currentStatus);
 				xlist_task.setAdapter(adapter);
-				setLastestUpdata();
-			} else if (mode.equals(Task.TA_GETSTATUS_MODE_PULLREFRESH)) {
+				lastestUpdata = TimeUtil.setLastestUpdata();
+				break;
+				
+			case Task.TA_GETSTATUS_MODE_PULLREFRESH:
 				if (newStatus.size() < 20) {
 					if (currentStatus != null) {
 						/*这里一定要放到最头部，那样显示才不会乱*/
@@ -206,40 +205,25 @@ public class TaskFragment extends Fragment implements ItaFragment {
 					currentStatus = newStatus;
 					adapter.notifyDataSetInvalidated();
 				}
-				setLastestUpdata();
-			} else if (mode.equals(Task.TA_GETSTATUS_MODE_LOADMORE)) {
+				lastestUpdata = TimeUtil.setLastestUpdata();
+				break;
+				
+			case Task.TA_GETSTATUS_MODE_LOADMORE:
 				currentStatus.addAll(newStatus);
 				adapter.notifyDataSetChanged();
+				break;
+
+			default:
+				break;
 			}
+			
 			changeListData();
 		} else {
 			xlist_task.stopRefresh();
-			Toast.makeText(context, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 		}
 		
 		/*把标志设为false，这样才能再开获取status的网络连接*/
 		isRefresh = false;
-	}
-	
-	/*
-	 * lastestUpdata上次更新时间的设置。是给下次下拉的时候显示的
-	 */
-	private void setLastestUpdata() {
-		String hour, minute;
-		lastestRefreshTime = TimeUtil.getNow(Calendar.getInstance());
-		
-		if (lastestRefreshTime.getHour() < 10) {
-			hour = "0" + lastestRefreshTime.getHour();
-		} else {
-			hour = "" + lastestRefreshTime.getHour();
-		}
-		if (lastestRefreshTime.getMinute() < 10) {
-			minute = "0" + lastestRefreshTime.getMinute();
-		} else {
-			minute = "" + lastestRefreshTime.getMinute();
-		}
-		
-		lastestUpdata = hour + ":" + minute;
 	}
 	
 	/*
@@ -272,10 +256,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			
 		/*这里捕获不到，看来要在homepage捕获到，再调用*/
 		case IntentString.RequestCode.HOMEPAGE_WRITE:
-			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
-				Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
-			}
+//			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
+//				Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
+//				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
+//			}
 			break;
 
 		default:
@@ -293,7 +277,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * 保存的方法里面只会保存一页（20条）的内容
 	 */
 	public void exit() {
-		SharedPreferencesUtil.savaLastestStatusId(context, lastestStatusId);
+		SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestStatusId);
 		statusService.emptyStatusDb();
 		statusService.insertListStatus(currentStatus);
 		statusService.closeDBHelper();

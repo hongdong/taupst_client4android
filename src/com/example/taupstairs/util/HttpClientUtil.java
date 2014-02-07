@@ -23,6 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
@@ -34,6 +35,7 @@ public class HttpClientUtil {
 	private static HttpClient httpClient;
 	private static final int DEFAULT_HOST_CONNECTIONS = 30; 
 	private static final int DEFAULT_MAX_CONNECTIONS = 30; 
+	private static final int DEFAULT_SOCKET_TIMEOUT = 5000;
 	private static final String SCHEME_NAME = "http";
 	public static final String BASE_URL = "http://taupst.duapp.com/";
 	public static final String PHOTO_BASE_URL = "http://bcs.duapp.com/taupst/photo/";
@@ -53,6 +55,9 @@ public class HttpClientUtil {
 	public static synchronized HttpClient getHttpClient() {
 		if (null == httpClient) {
 			final HttpParams httpParams = new BasicHttpParams();   
+			ConnManagerParams.setTimeout(httpParams, 3000);    
+	        HttpConnectionParams.setConnectionTimeout(httpParams, DEFAULT_SOCKET_TIMEOUT);  
+	        HttpConnectionParams.setSoTimeout(httpParams, DEFAULT_SOCKET_TIMEOUT);   
 			ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new ConnPerRouteBean(DEFAULT_HOST_CONNECTIONS));     
 	        ConnManagerParams.setMaxTotalConnections(httpParams, DEFAULT_MAX_CONNECTIONS);  
 	        SchemeRegistry schemeRegistry = new SchemeRegistry();    
