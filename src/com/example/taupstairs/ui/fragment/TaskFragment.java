@@ -192,9 +192,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 				adapter = new TaskAdapter(context, currentStatus);
 				xlist_task.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
-				if (newStatus.size() > 0) {	
-					xlist_task.setPullLoadEnable(true);
-				}
 				break;
 				
 			case Task.TA_GETSTATUS_MODE_PULLREFRESH:
@@ -243,6 +240,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		if (currentStatus.size() > 0) {
 			lastestStatusId = currentStatus.get(0).getStatusId();
 			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
+			xlist_task.setPullLoadEnable(true);
 		}
 	}
 	

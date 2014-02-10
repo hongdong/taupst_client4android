@@ -166,9 +166,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 				adapter = new InfoAdapter(context, currentInfos);
 				xlist_info.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
-				if (newInfos.size() > 0) {
-					xlist_info.setPullLoadEnable(true);
-				}
 				break;
 				
 			case Task.TA_GETINFO_MODE_PULLREFRESH:
@@ -210,6 +207,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		if (currentInfos.size() > 0) {
 			lastestInfoId = currentInfos.get(0).getInfoId();
 			oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
+			xlist_info.setPullLoadEnable(true);
 		}
 	}
 
