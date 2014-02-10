@@ -109,7 +109,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 		if (defaultPerson != null) {		//在initData里面已经从数据库中读数据了
 			displayPerson(defaultPerson);	//如果数据库中有数据，就直接显示出来
 		} else {
-			doGetUserDataTask();					//没有的话，就从服务器获取
+			doGetUserDataTask();			//没有的话，就从服务器获取
 		}
 		list_variable.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,

@@ -12,7 +12,6 @@ public class HomePageFragmentPagerAdapter extends FragmentPagerAdapter {
 	
 	public HomePageFragmentPagerAdapter(FragmentManager fm) {
 		super(fm);
-		// TODO Auto-generated constructor stub
 	}
 
 	public HomePageFragmentPagerAdapter(FragmentManager fm,
@@ -24,13 +23,11 @@ public class HomePageFragmentPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int arg0) {
-		// TODO Auto-generated method stub
 		return fragments.get(arg0);
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return fragments.size();
 	}
 

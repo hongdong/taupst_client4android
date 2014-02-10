@@ -131,7 +131,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_messagecount = (TextView)findViewById(R.id.txt_task_detail_messagecount);
 		holder.txt_task_detail_no_message = (TextView)findViewById(R.id.txt_task_detail_no_message);
 		
-		
+		/*以下进行任务详情基本部分的显示*/
 		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
 					HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
 		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
@@ -187,6 +187,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
 				intent.putExtra(Status.STATUS_ID, status.getStatusId());
+				intent.putExtra(Status.PERSON_ID, status.getPersonId());
 				startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
 			}
 		});
@@ -214,6 +215,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		KeyBoardUtil.show(this, edit_message); 
 	}
 	
+	/**
+	 * 检测任务
+	 */
 	private void doCheckStatusTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Status.STATUS_ID, status.getStatusId());
@@ -221,6 +225,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		MainService.addTask(task);
 	}
 	
+	/**
+	 * 获取留言
+	 */
 	private void doGetMessageTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Status.STATUS_ID, status.getStatusId());
@@ -229,6 +236,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		MainService.addTask(task);
 	}
 	
+	/**
+	 * 进行留言
+	 */
 	private void doMessageTask() {
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Task.TA_MESSAGE_ACTIVITY, Task.TA_MESSAGE_ACTIVITY_TASK);
@@ -297,6 +307,10 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		}
 	}
 	
+	/**
+	 * 检测任务后测试状态
+	 * @param state	
+	 */
 	private void testState(int state) {
 		switch (state) {
 		case 0:	//正常
@@ -325,14 +339,14 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		}
 	}
 	
-	/*
-	 * 留言之后更新列表与存储
+	/**
+	 * 留言之后更新列表与任务留言数的存储
 	 */
 	private void postMessage(String newMessageId) {
 		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		PersonService service = new PersonService(this);
 		Person person = service.getPersonById(personId);
-		if (replyId != null) {	//已有留言上添加子留言
+		if (replyId != null) {	//已有留言上添加子留言，需要遍历找出所回复的那条留言
 			Message clickMessage = null;
 			for (Message message : messages) {
 				if (message.getMessageId().equals(messageId)) {
@@ -347,7 +361,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			content.setContent(edit_text);
 			clickMessage.getMessageContents().add(content);
 			adapter.notifyDataSetChanged();
-		} else {	//一条新留言
+		} else {	//一条新留言，有些东西没有创建时要先创建
 			Message message = new Message();	
 			message.setMessageId(newMessageId);
 			message.setPersonId(personId);
@@ -373,6 +387,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				listView.setVisibility(View.VISIBLE);
 			}
 		}
+		/*改变任务留言数*/
 		int count = Integer.valueOf(status.getStatusMessageCount()) + 1;
 		String messageCount = String.valueOf(count);
 		holder.txt_task_detail_messagecount.setText(messageCount);
@@ -387,6 +402,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		case IntentString.RequestCode.TASKDETAIL_SIGNUP:
 			if (IntentString.ResultCode.SIGNUP_TASKDETAIL == resultCode) {
 				Toast.makeText(this, "报名成功", Toast.LENGTH_SHORT).show();
+				btn_signup.setVisibility(View.GONE);
+				txt_multi.setText("已报名");
+				txt_multi.setVisibility(View.VISIBLE);
 				int count = Integer.valueOf(status.getStatusSignUpCount()) + 1;
 				String signupCount = String.valueOf(count);
 				holder.txt_task_detail_signupcount.setText(signupCount);

@@ -46,7 +46,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 	private PersonService personService;
 	private Person person;
 	private String qq, email, phone;
-	private String statusId;
+	private String statusId, statusPersonId;
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +66,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 		personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		personService = new PersonService(this);
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
+		statusPersonId = getIntent().getStringExtra(Status.PERSON_ID);
 	} 
 	
 	private void initView() {
@@ -193,6 +194,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 		progressDialog.show();
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Status.STATUS_ID, statusId);
+		taskParams.put(Status.PERSON_ID, statusPersonId);
 		taskParams.put(Task.TA_SIGNUP_CONTACT, contact);
 		taskParams.put(Task.TA_SIGNUP_MESSAGE, message);
 		Task task = new Task(Task.TA_SIGNUP, taskParams);

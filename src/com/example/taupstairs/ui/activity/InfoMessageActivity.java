@@ -69,6 +69,43 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		initView();
 	}
 	
+	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
+	 * 留言内容，任务发布人，任务标题*/
+	private class Holder {
+		public ImageView img_photo;
+		public TextView txt_nickname;
+		public ImageView img_sex;
+		public TextView txt_releasetime;
+		public TextView txt_grade;
+		public TextView txt_department;
+		
+		public TextView txt_message;
+		public TextView txt_message_reply;
+		public View view;
+		public TextView txt_status_nickname;
+		public TextView txt_status_title;
+		
+		public ListView list_message;
+	}
+	
+	private void initHolder() {
+		holder = new Holder();
+		holder.img_photo = (ImageView)findViewById(R.id.img_photo);
+		holder.txt_nickname = (TextView)findViewById(R.id.txt_nickname);
+		holder.img_sex = (ImageView)findViewById(R.id.img_sex);
+		holder.txt_releasetime = (TextView)findViewById(R.id.txt_releasetime);
+		holder.txt_grade = (TextView)findViewById(R.id.txt_grade);
+		holder.txt_department = (TextView)findViewById(R.id.txt_department);	
+		
+		holder.txt_message = (TextView)findViewById(R.id.txt_info_message_message);
+		holder.txt_message_reply = (TextView)findViewById(R.id.txt_info_message_reply);
+		holder.view = findViewById(R.id.layout_info_message_task);
+		holder.txt_status_nickname = (TextView)findViewById(R.id.txt_info_message_nickname);
+		holder.txt_status_title = (TextView)findViewById(R.id.txt_info_message_title);
+		
+		holder.list_message = (ListView)findViewById(R.id.list_info_message_message);
+	}
+	
 	private void initData() {
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		info = app.getInfo();
@@ -123,8 +160,20 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
+		
+		holder.view.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				//跳转到任务详情
+			}
+		});
 	}
 	
+	/**
+	 * 改变留言edit，并为留言做好参数准备
+	 * @param messageId
+	 * @param replyId
+	 * @param replyNickname
+	 */
 	public void changeEditHint(String messageId, String replyId, String replyNickname) {
 		this.messageId = messageId;
 		this.replyId = replyId;
@@ -134,6 +183,9 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		KeyBoardUtil.show(this, edit_message);
 	}
 	
+	/**
+	 * 获取消息详情
+	 */
 	private void doGetInfoMessageTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Info.INFO_SOURCE, info.getInfoSource());
@@ -143,6 +195,9 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		MainService.addTask(task);
 	}
 	
+	/**
+	 * 进行回复
+	 */
 	private void doMessageTask() {
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Task.TA_MESSAGE_ACTIVITY, Task.TA_MESSAGE_ACTIVITY_INFO);
@@ -191,6 +246,9 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		}
 	}
 	
+	/**
+	 * 显示留言消息基本部分
+	 */
 	private void displayMessage() {
 		holder.txt_message.setText(info.getInfoMessage().getCurrentMessage());
 		holder.txt_status_nickname.setText(info.getInfoMessage().getStatusPersonNickname());
@@ -198,6 +256,9 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		displayMessageList();
 	}
 	
+	/**
+	 * 显示留言列表，注册监听器
+	 */
 	private void displayMessageList() {
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		List<MessageContent> contents = info.getInfoMessage().getContents();
@@ -221,7 +282,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		adapter = new InfoMessageAdapter(this, list);
 		holder.list_message.setAdapter(adapter);
 		
-		String messageId = info.getInfoMessage().getMessageId();
+		String messageId = info.getInfoMessage().getMessageId();	
 		/*这两个在消息详情里面没传过来，要从外面拿
 		 * 在点击回复按钮的时候，要回复这个人，需要用到*/
 		String replyId = info.getPersonId();
@@ -235,41 +296,9 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		holder.list_message.setOnItemClickListener(replyListInfoMessageListener);
 	}
 	
-	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
-	 * 留言内容，任务发布人，任务标题*/
-	private class Holder {
-		public ImageView img_photo;
-		public TextView txt_nickname;
-		public ImageView img_sex;
-		public TextView txt_releasetime;
-		public TextView txt_grade;
-		public TextView txt_department;
-		
-		public TextView txt_message;
-		public TextView txt_message_reply;
-		public TextView txt_status_nickname;
-		public TextView txt_status_title;
-		
-		public ListView list_message;
-	}
-	
-	private void initHolder() {
-		holder = new Holder();
-		holder.img_photo = (ImageView)findViewById(R.id.img_photo);
-		holder.txt_nickname = (TextView)findViewById(R.id.txt_nickname);
-		holder.img_sex = (ImageView)findViewById(R.id.img_sex);
-		holder.txt_releasetime = (TextView)findViewById(R.id.txt_releasetime);
-		holder.txt_grade = (TextView)findViewById(R.id.txt_grade);
-		holder.txt_department = (TextView)findViewById(R.id.txt_department);	
-		
-		holder.txt_message = (TextView)findViewById(R.id.txt_info_message_message);
-		holder.txt_message_reply = (TextView)findViewById(R.id.txt_info_message_reply);
-		holder.txt_status_nickname = (TextView)findViewById(R.id.txt_info_message_nickname);
-		holder.txt_status_title = (TextView)findViewById(R.id.txt_info_message_title);
-		
-		holder.list_message = (ListView)findViewById(R.id.list_info_message_message);
-	}
-	
+	/**
+	 * 留言成功后改变列表
+	 */
 	private void postMessage() {
 		MessageContent content = new MessageContent();
 		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();

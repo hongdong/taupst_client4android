@@ -246,10 +246,11 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String personId = (String) taskParams.get(Status.PERSON_ID);
 		String contact = (String) taskParams.get(Task.TA_SIGNUP_CONTACT);
 		String message = (String) taskParams.get(Task.TA_SIGNUP_MESSAGE);
 		String signup_url = HttpClientUtil.BASE_URL + "/data/sign/save?task_id=" + statusId + 
-				"&open_mes=" + contact + "&message=" + message;
+				"&task_user=" + personId + "&open_mes=" + contact + "&message=" + message;
 		try {
 			signup_url = StringUtil.replaceBlank(signup_url);
 			result = HttpClientUtil.getRequest(signup_url);

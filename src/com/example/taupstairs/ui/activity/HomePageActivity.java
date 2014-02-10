@@ -27,11 +27,13 @@ import android.widget.Toast;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.HomePageFragmentPagerAdapter;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
@@ -116,6 +118,20 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		viewPager = (ViewPager) findViewById(R.id.hp_viewpager);
 		HomePageFragmentPagerAdapter adapter = new HomePageFragmentPagerAdapter(getSupportFragmentManager(), fragments);
 		viewPager.setAdapter(adapter);
+		checkPerson();
+	}
+	
+	/**
+	 * 检测数据库中是否存在person信息，如果不存在，就要先加载。
+	 * 不然有些地方用到了就会空指针异常
+	 */
+	private void checkPerson() {
+		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
+		PersonService personService = new PersonService(this);
+		Person person = personService.getPersonById(personId);
+		if (null == person) {
+			viewPager.setOffscreenPageLimit(fragments.size());
+		}
 	}
 	
 	/*进入软件时检测网络*/
