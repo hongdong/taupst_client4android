@@ -188,11 +188,11 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			switch (mode) {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;
+				/*第一次上面不会设置这个，所以这里要设置*/
+				adapter = new TaskAdapter(context, currentStatus);
+				xlist_task.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
-				if (newStatus.size() > 0) {
-					/*第一次上面不会设置这个，所以这里要设置*/
-					adapter = new TaskAdapter(context, currentStatus);
-					xlist_task.setAdapter(adapter);
+				if (newStatus.size() > 0) {	
 					xlist_task.setPullLoadEnable(true);
 				}
 				break;

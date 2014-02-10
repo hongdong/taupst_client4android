@@ -163,10 +163,10 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			switch (mode) {
 			case Task.TA_GETINFO_MODE_FIRSTTIME:
 				currentInfos = newInfos;
+				adapter = new InfoAdapter(context, currentInfos);
+				xlist_info.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				if (newInfos.size() > 0) {
-					adapter = new InfoAdapter(context, currentInfos);
-					xlist_info.setAdapter(adapter);
 					xlist_info.setPullLoadEnable(true);
 				}
 				break;
