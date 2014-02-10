@@ -81,10 +81,28 @@ public class JsonString {
 	
 	public static class Info {
 		public static final String INFO_ID = "news_id";
+		public static final String PERSON_ID = "send";
 		public static final String PERSON_PHOTOURL = "photo";
 		public static final String PERSON_NICKNAME = "username";
 		public static final String INFO_RELEASETIME = "time";
 		public static final String INFO_CONTENT = "content";
+		
+		public static final String PERSON_DEPARTMENT = "department";
+		public static final String PERSON_GRADE = "grade";
+		public static final String PERSON_SEX = "sex";
+		
+		public static final String INFO_SOURCE = "source";
+		public static final String INFO_TYPE = "type";
+	}
+	
+	public static class InfoMessage {
+		public static final String MESSAGE_ID = "message_id";
+		public static final String CURRENT_CONTENT = "message_content";
+		public static final String STATUS_ID = "task_id";
+		public static final String STATUS_PERSONID = "t_users_id";
+		public static final String STATUS_PERSONNICKNAME = "username";
+		public static final String STATUS_TITLE = "title";
+		public static final String MESSAGE_CONTENTS = "tmList";
 	}
 	
 	public static class Return {

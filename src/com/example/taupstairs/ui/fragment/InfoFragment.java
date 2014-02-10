@@ -2,19 +2,26 @@ package com.example.taupstairs.ui.fragment;
 
 import java.util.HashMap;
 import java.util.List;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
+import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.InfoService;
 import com.example.taupstairs.ui.activity.HomePageActivity;
+import com.example.taupstairs.ui.activity.InfoMessageActivity;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
@@ -27,6 +34,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	private XListView xlist_info;
 	private InfoAdapter adapter;
 	private List<Info> currentInfos;
+	private int clickPosition;
 	
 	private InfoService infoService;
 	private String lastestInfoId;
@@ -80,9 +88,42 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			adapter = new InfoAdapter(context, currentInfos);
 			xlist_info.setAdapter(adapter);
 		}
+		xlist_info.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				if (currentInfos.size() >= arg2) {
+					clickPosition = arg2 - 1;
+					int type = Integer.parseInt(currentInfos.get(clickPosition).getInfoType());
+					switch (type) {
+					case 1:
+						Intent intent = new Intent(context, InfoMessageActivity.class);
+						TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+						app.setInfo(currentInfos.get(clickPosition));
+						startActivity(intent);
+						break;
+						
+					case 2:
+						break;
+
+					case 3:
+						break;
+						
+					case 4:
+						break;
+						
+					default:
+						break;
+					}
+				}
+			}
+		});
 		xlist_info.setXListViewListener(new IXListViewListener() {
 			public void onRefresh() {
-				doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+				if (null == lastestInfoId) {
+					doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
+				} else {
+					doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+				}
 			}
 			
 			public void onLoadMore() {
@@ -122,9 +163,12 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			switch (mode) {
 			case Task.TA_GETINFO_MODE_FIRSTTIME:
 				currentInfos = newInfos;
-				adapter = new InfoAdapter(context, currentInfos);
-				xlist_info.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
+				if (newInfos.size() > 0) {
+					adapter = new InfoAdapter(context, currentInfos);
+					xlist_info.setAdapter(adapter);
+					xlist_info.setPullLoadEnable(true);
+				}
 				break;
 				
 			case Task.TA_GETINFO_MODE_PULLREFRESH:
@@ -162,7 +206,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	private void changeListData() {
 		xlist_info.stopRefresh();
 		xlist_info.stopLoadMore();
-		xlist_info.setPullLoadEnable(true);
 		xlist_info.setRefreshTime(lastestUpdata);
 		if (currentInfos.size() > 0) {
 			lastestInfoId = currentInfos.get(0).getInfoId();
@@ -172,10 +215,10 @@ public class InfoFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void exit() {
-		SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestInfoId);
-		infoService.emptyInfoDb();
-		infoService.insertInfos(currentInfos);
-		infoService.closeDBHelper();
+//		SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestInfoId);
+//		infoService.emptyInfoDb();
+//		infoService.insertInfos(currentInfos);
+//		infoService.closeDBHelper();
 	}
 
 }

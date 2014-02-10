@@ -219,16 +219,16 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String replyId = (String) taskParams.get(MessageContent.REPLY_ID);
 		String content = (String) taskParams.get(MessageContent.CONTENT);
 		String message_url = HttpClientUtil.BASE_URL + "data/taskmsg/save?task_id=" + statusId 
-				+ "&message_content=" + content;
+				+ "&message_content=" + content + "&to_user=" + replyId;
 		String mode = (String) taskParams.get(Task.TA_MESSAGE_MODE);
 		if (mode.equals(Task.TA_MESSAGE_MODE_ROOT)) {
 			
 		} else if (mode.equals(Task.TA_MESSAGE_MODE_CHILD)) {
 			String messageId = (String) taskParams.get(com.example.taupstairs.bean.Message.MESSAGE_ID);
-			String replyId = (String) taskParams.get(MessageContent.REPLY_ID);
-			message_url += "&to_user=" + replyId + "&root_id=" + messageId;
+			message_url += "&root_id=" + messageId;
 		} 
 		try {
 			message_url = StringUtil.replaceBlank(message_url);
@@ -334,6 +334,23 @@ public class DoTaskService {
 			e.printStackTrace();
 		}
 		return infos;
+	}
+	
+	public Object doGetInfoDetailTask(Task task) {
+		Object result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String infoSource = (String) taskParams.get(Info.INFO_SOURCE);
+		String infoType = (String) taskParams.get(Info.INFO_TYPE);
+		String getinfo_detail_url = HttpClientUtil.BASE_URL + 
+				"/data/news/detail?source=" + infoSource + "&type=" + infoType;
+		try {
+			String jsonString = HttpClientUtil.getRequest(getinfo_detail_url);
+			int type = Integer.parseInt(infoType);
+			result = JsonUtil.getInfoDetail(type, jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/*

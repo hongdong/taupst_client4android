@@ -51,7 +51,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private MessageAdapter adapter;
 	private EditText edit_message;
 	private String edit_text;
-	private String messageId, replyId;
+	private String messageId, replyId, replyNickname;
 	private ProgressDialog progressDialog;
 	private boolean flag_message_or_signup;
 	@Override
@@ -117,12 +117,12 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		holder = new Holder();
-		holder.img_task_detail_photo = (ImageView)findViewById(R.id.img_task_detail_photo);
-		holder.txt_task_detail_nickname = (TextView)findViewById(R.id.txt_task_detail_nickname);
-		holder.img_task_detail_sex = (ImageView)findViewById(R.id.img_task_detail_sex);
-		holder.txt_task_detail_releasetime = (TextView)findViewById(R.id.txt_task_detail_releasetime);
-		holder.txt_task_detail_grade = (TextView)findViewById(R.id.txt_task_detail_grade);
-		holder.txt_task_detail_department = (TextView)findViewById(R.id.txt_task_detail_department);	
+		holder.img_task_detail_photo = (ImageView)findViewById(R.id.img_photo);
+		holder.txt_task_detail_nickname = (TextView)findViewById(R.id.txt_nickname);
+		holder.img_task_detail_sex = (ImageView)findViewById(R.id.img_sex);
+		holder.txt_task_detail_releasetime = (TextView)findViewById(R.id.txt_releasetime);
+		holder.txt_task_detail_grade = (TextView)findViewById(R.id.txt_grade);
+		holder.txt_task_detail_department = (TextView)findViewById(R.id.txt_department);	
 		holder.txt_task_detail_title = (TextView)findViewById(R.id.txt_task_detail_title);
 		holder.txt_task_detail_content = (TextView)findViewById(R.id.txt_task_detail_content);
 		holder.txt_task_detail_rewards = (TextView)findViewById(R.id.txt_task_detail_rewards);
@@ -208,6 +208,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	public void changeEditHint(String messageId, String replyId, String replyNickname) {
 		this.messageId = messageId;
 		this.replyId = replyId;
+		this.replyNickname = replyNickname;
 		edit_message.setHint("回复  " + replyNickname);
 		edit_message.requestFocus();
 		KeyBoardUtil.show(this, edit_message); 
@@ -230,15 +231,16 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	
 	private void doMessageTask() {
 		Map<String, Object> taskParams = new HashMap<String, Object>();
-		taskParams.put(Task.TA_MESSAGE_ACTIVITY, Task.TA_MESSAGE_ACTIVITY);
+		taskParams.put(Task.TA_MESSAGE_ACTIVITY, Task.TA_MESSAGE_ACTIVITY_TASK);
 		taskParams.put(Status.STATUS_ID, status.getStatusId());
 		taskParams.put(MessageContent.CONTENT, edit_message.getText().toString().trim());
-		if (replyId != null) {		//判断是否回复发布者
+		if (replyId != null) {		//子留言
 			taskParams.put(Task.TA_MESSAGE_MODE, Task.TA_MESSAGE_MODE_CHILD);
 			taskParams.put(Message.MESSAGE_ID, messageId);
 			taskParams.put(MessageContent.REPLY_ID, replyId);
-		} else {
+		} else {					//根留言
 			taskParams.put(Task.TA_MESSAGE_MODE, Task.TA_MESSAGE_MODE_ROOT);
+			taskParams.put(MessageContent.REPLY_ID, status.getPersonId());
 		}
 		Task task = new Task(Task.TA_MESSAGE, taskParams);
 		MainService.addTask(task);
@@ -247,11 +249,11 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void refresh(Object... params) {
-		int taskId = (Integer) params[0];
-		switch (taskId) {
-		case Task.TA_CHECKSTATUS:
-			String result = (String) params[1];
-			if (result != null) {
+		if (params[1] != null) {
+			int taskId = (Integer) params[0];
+			switch (taskId) {
+			case Task.TA_CHECKSTATUS:
+				String result = (String) params[1];
 				try {
 					JSONObject jsonObject = new JSONObject(result);
 					int state = jsonObject.getInt(JsonString.Return.STATE);
@@ -259,22 +261,18 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}
-			break;
-		
-		case Task.TA_GETMESSAGE:
-			messages = (List<Message>) params[1];
-			if (messages != null) {
+				break;
+			
+			case Task.TA_GETMESSAGE:
+				messages = (List<Message>) params[1];
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);
 				listView.setVisibility(View.VISIBLE);
 				adapter = new MessageAdapter(this, messages);
 				listView.setAdapter(adapter);
-			}
-			break;
-			
-		case Task.TA_MESSAGE:
-			String message = (String) params[1];
-			if (message != null) {
+				break;
+				
+			case Task.TA_MESSAGE:
+				String message = (String) params[1];
 				try {
 					JSONObject jsonObject = new JSONObject(message);
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
@@ -284,7 +282,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 						String newMessageId = jsonObject.getString(JsonString.Message.MESSAGE_ID);
 						postMessage(newMessageId);	
 						replyId = null;
-						edit_message.setHint("说几句吧");
 						KeyBoardUtil.dismiss(this, edit_message);
 					} else {		
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
@@ -293,10 +290,10 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 					e.printStackTrace();
 				}
 				progressDialog.dismiss();
-			}	
 
-		default:
-			break;
+			default:
+				break;
+			}
 		}
 	}
 	
@@ -305,8 +302,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		case 0:	//正常
 			btn_signup.setVisibility(View.VISIBLE);
 			break;
-		case 1:	//报过名了，当然可以再报名
-			btn_signup.setVisibility(View.VISIBLE);
+		case 1:	
+			txt_multi.setText("已报名");
+			txt_multi.setVisibility(View.VISIBLE);
 			break;
 		case 2:
 			Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
@@ -318,7 +316,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			//已过期，我来处理
 			break;
 		case 5:
-			txt_multi.setText("已经完成了");
+			txt_multi.setText("已完结");
 			txt_multi.setVisibility(View.VISIBLE);
 			break;
 
@@ -334,7 +332,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		PersonService service = new PersonService(this);
 		Person person = service.getPersonById(personId);
-		if (replyId != null) {
+		if (replyId != null) {	//已有留言上添加子留言
 			Message clickMessage = null;
 			for (Message message : messages) {
 				if (message.getMessageId().equals(messageId)) {
@@ -345,15 +343,14 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			MessageContent content = new MessageContent();
 			content.setReplyId(personId);
 			content.setReplyNickname(person.getPersonNickname());
-			content.setReceiveNickname(status.getPersonNickname());
+			content.setReceiveNickname(replyNickname);
 			content.setContent(edit_text);
 			clickMessage.getMessageContents().add(content);
 			adapter.notifyDataSetChanged();
-		} else {
+		} else {	//一条新留言
 			Message message = new Message();	
 			message.setMessageId(newMessageId);
 			message.setPersonId(personId);
-			message.setPersonSex(person.getPersonSex());
 			message.setPersonPhotoUrl(person.getPersonPhotoUrl());
 			message.setPersonNickname(person.getPersonNickname());		
 			Time now = TimeUtil.getNow(Calendar.getInstance());

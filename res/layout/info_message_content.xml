@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:layout_marginTop="10dp"
+    android:background="@drawable/common_layout_bg">
+    
+    <!-- 内容，回复按钮 -->
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_marginLeft="15dp"
+		android:layout_marginRight="15dp">
+	    <TextView 
+	        android:id="@+id/txt_info_message_message"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/black"
+			android:textSize="16sp"/>
+	    <TextView 
+	        android:id="@+id/txt_info_message_reply"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/reply"
+			android:textSize="15sp"
+			android:textColor="@color/green"
+			android:layout_alignParentRight="true"
+			android:drawableRight="@drawable/icon_message"
+			android:drawablePadding="8dp"
+			android:clickable="true"
+			android:background="@drawable/common_text_item_bg"/>
+	</RelativeLayout>
+	
+	<include layout="@layout/task_detail_divider" />
+	
+	<!-- 任务发布人、任务 --> 
+	<LinearLayout 
+	    android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_marginLeft="15dp"
+		android:layout_marginRight="15dp"
+		android:background="@color/common_bg">
+	    <TextView 
+	        android:id="@+id/txt_info_message_nickname"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:textColor="@color/green"
+			android:textSize="16sp"
+			android:layout_marginTop="10dp"
+			android:layout_marginBottom="10dp"
+			android:layout_marginLeft="10dp"/>
+	    <TextView 
+	       	android:id="@+id/txt_info_message_title"
+	       	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/black"
+			android:textSize="17sp"
+			android:layout_marginTop="10dp"
+			android:layout_marginBottom="10dp"
+			android:layout_marginRight="10dp"/>
+	</LinearLayout>
+	
+	<include layout="@layout/task_detail_divider" />
+    
+    <com.example.taupstairs.view.MyListView 
+        android:id="@+id/list_info_message_message"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:divider="@color/white_divider"
+		android:dividerHeight="0.5dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:layout_marginLeft="15dp"
+		android:layout_marginRight="15dp">
+        
+    </com.example.taupstairs.view.MyListView>
+    
+    <include layout="@layout/task_detail_divider" />
+
+</LinearLayout>

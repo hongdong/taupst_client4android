@@ -38,11 +38,7 @@
     <string name="phone">Phone:</string>
     <string name="phone_hint">可输入您的爪机号</string>
     
-    <string name="homepage">主页面</string>
-    <string name="info">--------消息--------</string>
-    <string name="task">!!!!!!!!任务!!!!!!!!</string>
-    <string name="rank">........排行........</string>
-    <string name="me">我</string>
+    <string name="task_info_message">消息详情</string>
     
     <string name="write">发布任务</string>
     <string name="release">发  布</string>

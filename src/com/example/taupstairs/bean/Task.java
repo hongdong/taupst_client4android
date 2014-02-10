@@ -17,6 +17,8 @@ public class Task {
 	public static final String TA_NO = "no";
 	public static final String TA_ERROR = "error";
 	public static final String TA_SUCCESS = "success";
+	public static final String TA_ACTIVITY = "activity";
+	public static final String TA_FRAGMENT = "fragment";
 	
 	
 	//登录任务用到的常量值
@@ -77,7 +79,9 @@ public class Task {
 	
 	//发布留言
 	public static final int TA_MESSAGE = 10;
-	public static final String TA_MESSAGE_ACTIVITY = "TaskDetailActivity";
+	public static final String TA_MESSAGE_ACTIVITY = "activity";
+	public static final String TA_MESSAGE_ACTIVITY_TASK = "TaskDetailActivity";
+	public static final String TA_MESSAGE_ACTIVITY_INFO = "InfoMessageActivity";
 	public static final String TA_MESSAGE_MODE = "signup_mode";
 	public static final String TA_MESSAGE_MODE_ROOT = "signup_mode_root";
 	public static final String TA_MESSAGE_MODE_CHILD = "signup_mode_child";
@@ -114,6 +118,13 @@ public class Task {
 	public static final int TA_GETINFO_MODE_LOADMORE = 3;
 	public static final String TA_GETINFO_INFOID = "infoid";
 	public static final String TA_GETINFO_FRAGMENT = "InfoFragment";
+	
+	public static final int TA_GETINFO_DETAIL = 17;
+	public static final String TA_GETINFO_DETAIL_ACTIVITY = "activity";
+	public static final String TA_GETINFO_DETAIL_MESSAGE = "InfoMessageActivity";
+	public static final String TA_GETINFO_DETAIL_EXECTASK = "InfoExecTaskActivity";
+	public static final String TA_GETINFO_DETAIL_ENDTASK = "InfoEndTaskActivity";
+	public static final String TA_GETINFO_DETAIL_SIGNUP = "InfoSignUpActivity";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

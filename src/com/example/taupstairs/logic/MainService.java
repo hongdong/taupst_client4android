@@ -99,8 +99,15 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_MESSAGE:
-				ItaActivity activity_message = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY);
-				activity_message.refresh(Task.TA_MESSAGE, msg.obj);
+				Bundle data_message = msg.getData();
+				String activity_message = data_message.getString(Task.TA_MESSAGE_ACTIVITY);
+				if (activity_message.equals(Task.TA_MESSAGE_ACTIVITY_TASK)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY_TASK);
+					activity.refresh(Task.TA_MESSAGE, msg.obj);
+				} else if (activity_message.equals(Task.TA_MESSAGE_ACTIVITY_INFO)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY_INFO);
+					activity.refresh(Task.TA_MESSAGE, msg.obj);
+				}
 				break;
 				
 			case Task.TA_SIGNUP:
@@ -152,6 +159,23 @@ public class MainService extends Service implements Runnable {
 				Bundle data_getinfo = msg.getData();
 				int mode_getinfo = data_getinfo.getInt(Task.TA_GETINFO_MODE);
 				fragment_getinfo.refresh(Task.TA_GETINFO, mode_getinfo, msg.obj);
+				break;
+				
+			case Task.TA_GETINFO_DETAIL:
+				Bundle data_getinfo_detail = msg.getData();
+				String activity_getinfo_detail = data_getinfo_detail.getString(Task.TA_GETINFO_DETAIL_ACTIVITY);
+				if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_MESSAGE)) {
+					ItaActivity activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_MESSAGE);
+					if (activity_getinfo != null) {
+						activity_getinfo.refresh(Task.TA_GETINFO_DETAIL, msg.obj);
+					}
+				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_EXECTASK)) {
+					
+				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_ENDTASK)) {
+					
+				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_SIGNUP)) {
+					
+				}
 				break;
 
 			default:
@@ -239,6 +263,9 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_MESSAGE:
 			msg.obj = doTaskService.doMessageTask(task);
+			String activity_message = (String) taskParams.get(Task.TA_MESSAGE_ACTIVITY);
+			Bundle data_message = msg.getData();
+			data_message.putString(Task.TA_MESSAGE_ACTIVITY, activity_message);
 			break;
 			
 		case Task.TA_SIGNUP:
@@ -275,6 +302,13 @@ public class MainService extends Service implements Runnable {
 			int mode_info = (Integer) taskParams.get(Task.TA_GETINFO_MODE);
 			Bundle data_getinfo = msg.getData();
 			data_getinfo.putInt(Task.TA_GETINFO_MODE, mode_info);
+			break;
+			
+		case Task.TA_GETINFO_DETAIL:
+			msg.obj = doTaskService.doGetInfoDetailTask(task);
+			String activity_getinfo_detail = (String) taskParams.get(Task.TA_GETINFO_DETAIL_ACTIVITY);
+			Bundle data_getinfo_detail = msg.getData();
+			data_getinfo_detail.putString(Task.TA_GETINFO_DETAIL_ACTIVITY, activity_getinfo_detail);
 			break;
 
 		default:

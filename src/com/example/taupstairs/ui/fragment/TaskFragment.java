@@ -106,7 +106,11 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
 			public void onRefresh() {
-				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
+				if (null == lastestStatusId) {
+					getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
+				} else {
+					getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
+				}
 			}
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
@@ -184,10 +188,13 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			switch (mode) {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;
-				/*第一次上面不会设置这个，所以这里要设置*/
-				adapter = new TaskAdapter(context, currentStatus);
-				xlist_task.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
+				if (newStatus.size() > 0) {
+					/*第一次上面不会设置这个，所以这里要设置*/
+					adapter = new TaskAdapter(context, currentStatus);
+					xlist_task.setAdapter(adapter);
+					xlist_task.setPullLoadEnable(true);
+				}
 				break;
 				
 			case Task.TA_GETSTATUS_MODE_PULLREFRESH:
@@ -232,7 +239,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	private void changeListData() {
 		xlist_task.stopRefresh();
 		xlist_task.stopLoadMore();
-		xlist_task.setPullLoadEnable(true);
 		xlist_task.setRefreshTime(lastestUpdata);
 		if (currentStatus.size() > 0) {
 			lastestStatusId = currentStatus.get(0).getStatusId();

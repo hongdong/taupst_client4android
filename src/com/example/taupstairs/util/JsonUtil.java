@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.taupstairs.bean.Info;
+import com.example.taupstairs.bean.InfoMessage;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
@@ -161,16 +162,85 @@ public class JsonUtil {
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				Info info = new Info();
 				info.setInfoId(jsonObject.getString(JsonString.Info.INFO_ID));
+				info.setPersonId(jsonObject.getString(JsonString.Info.PERSON_ID));
 				info.setPersonPhotoUrl(jsonObject.getString(JsonString.Info.PERSON_PHOTOURL));
 				info.setPersonNickname(jsonObject.getString(JsonString.Info.PERSON_NICKNAME));
 				info.setInfoReleaseTime(jsonObject.getString(JsonString.Info.INFO_RELEASETIME));
 				info.setInfoContent(jsonObject.getString(JsonString.Info.INFO_CONTENT));
+				
+				info.setPersonDepartment(jsonObject.getString(JsonString.Info.PERSON_DEPARTMENT));
+				info.setPersonGrade(jsonObject.getString(JsonString.Info.PERSON_GRADE));
+				info.setPersonSex(jsonObject.getString(JsonString.Info.PERSON_SEX));
+				
+				info.setInfoSource(jsonObject.getString(JsonString.Info.INFO_SOURCE));
+				info.setInfoType(jsonObject.getString(JsonString.Info.INFO_TYPE));
+				
 				infos.add(info);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return infos;
+	}
+	
+	public static Object getInfoDetail(int type, String jsonString) {
+		Object object = null;
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);	
+			switch (type) {
+			case 1:
+				InfoMessage infoMessage = new InfoMessage();		
+				infoMessage.setMessageId(jsonObject.getString(JsonString.InfoMessage.MESSAGE_ID));
+				infoMessage.setCurrentMessage(jsonObject.getString(JsonString.InfoMessage.CURRENT_CONTENT));
+				infoMessage.setStatusId(jsonObject.getString(JsonString.InfoMessage.STATUS_ID));
+				infoMessage.setStatusPersonId(jsonObject.getString(JsonString.InfoMessage.STATUS_PERSONID));
+				infoMessage.setStatusPersonNickname(jsonObject.getString(JsonString.InfoMessage.STATUS_PERSONNICKNAME));
+				infoMessage.setStatusTitle(jsonObject.getString(JsonString.InfoMessage.STATUS_TITLE));
+				String content = jsonObject.getString(JsonString.InfoMessage.MESSAGE_CONTENTS);
+				List<MessageContent> contents = getInfoMessageContents(content);
+				infoMessage.setContents(contents);
+				object = infoMessage;
+				break;
+				
+			case 2:
+				
+				break;
+				
+			case 3:
+				
+				break;
+				
+			case 4:
+				
+				break;
+	
+			default:
+				break;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return object;
+	}
+	
+	public static List<MessageContent> getInfoMessageContents(String jsonString) {
+		List<MessageContent> contents = new ArrayList<MessageContent>();
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				MessageContent content = new MessageContent();
+				content.setReplyId(jsonObject.getString(JsonString.MessageContent.REPLY_ID));
+				content.setReplyNickname(jsonObject.getString(JsonString.MessageContent.REPLY_NICKNAME));
+				content.setReceiveId(jsonObject.getString(JsonString.MessageContent.RECEIVE_ID));
+				content.setReceiveNickname(jsonObject.getString(JsonString.MessageContent.RECEIVE_NICKNAME));
+				content.setContent(jsonObject.getString(JsonString.MessageContent.CONTENT));
+				contents.add(content);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return contents;
 	}
 	
 }
