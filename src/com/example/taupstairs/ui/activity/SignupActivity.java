@@ -93,13 +93,13 @@ public class SignupActivity extends Activity implements ItaActivity {
 		btn_ok.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				char optional[] = {'0', '0', '0', }; 
-				if (box_qq.isChecked()) {
+				if (box_phone.isChecked()) {
 					optional[0] = '1';
 				}
-				if (box_email.isChecked()) {
+				if (box_qq.isChecked()) {
 					optional[1] = '1';
 				}
-				if (box_phone.isChecked()) {
+				if (box_email.isChecked()) {
 					optional[2] = '1';
 				}
 				String contact = new String(optional);		

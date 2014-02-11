@@ -45,7 +45,7 @@ public class InfoMessageAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.info_message_message_content, null);
+		TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.info_message_content_message, null);
 		
 		Map<String, Object> item = list.get(position);
 		String content = (String) item.get(MessageContent.CONTENT);

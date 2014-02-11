@@ -105,6 +105,19 @@ public class JsonString {
 		public static final String MESSAGE_CONTENTS = "tmList";
 	}
 	
+	public static class InfoSignUp {
+		public static final String STATUS_ID = "task_id";
+		public static final String STATUS_PERSONID = "users_id";
+		public static final String STATUS_PERSONNICKNAME = "my_name";
+		public static final String STATUS_TITLE = "title";
+		public static final String SIGNUP_NICKNAME = "username";
+		public static final String SIGNUP_STRING = "message";
+		public static final String PERSON_CONTACK = "open_mes";
+		public static final String PERSON_PHONE = "phone";
+		public static final String PERSON_QQ = "qq";
+		public static final String PERSON_EMAIL = "email";
+	}
+	
 	public static class Return {
 		public static final String STATE = "state";
 		public static final String STATE_OK = "0";

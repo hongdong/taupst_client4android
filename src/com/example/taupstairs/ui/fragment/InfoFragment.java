@@ -2,7 +2,6 @@ package com.example.taupstairs.ui.fragment;
 
 import java.util.HashMap;
 import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
 import com.example.taupstairs.app.TaUpstairsApplication;
@@ -21,7 +19,10 @@ import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.InfoService;
 import com.example.taupstairs.ui.activity.HomePageActivity;
+import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
+import com.example.taupstairs.ui.activity.InfoExecTaskActivity;
 import com.example.taupstairs.ui.activity.InfoMessageActivity;
+import com.example.taupstairs.ui.activity.InfoSignUpActivity;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
@@ -35,6 +36,10 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	private InfoAdapter adapter;
 	private List<Info> currentInfos;
 	private int clickPosition;
+	
+	@SuppressWarnings("rawtypes")
+	private Class[] infoDetail = {InfoMessageActivity.class, InfoExecTaskActivity.class, 
+		InfoSignUpActivity.class, InfoEndTaskActivity.class, };
 	
 	private InfoService infoService;
 	private String lastestInfoId;
@@ -94,26 +99,10 @@ public class InfoFragment extends Fragment implements ItaFragment {
 				if (currentInfos.size() >= arg2) {
 					clickPosition = arg2 - 1;
 					int type = Integer.parseInt(currentInfos.get(clickPosition).getInfoType());
-					switch (type) {
-					case 1:
-						Intent intent = new Intent(context, InfoMessageActivity.class);
-						TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
-						app.setInfo(currentInfos.get(clickPosition));
-						startActivity(intent);
-						break;
-						
-					case 2:
-						break;
-
-					case 3:
-						break;
-						
-					case 4:
-						break;
-						
-					default:
-						break;
-					}
+					TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+					app.setInfo(currentInfos.get(clickPosition));
+					Intent intent = new Intent(context, infoDetail[type - 1]);
+					startActivity(intent);
 				}
 			}
 		});

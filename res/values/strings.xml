@@ -38,7 +38,8 @@
     <string name="phone">Phone:</string>
     <string name="phone_hint">可输入您的爪机号</string>
     
-    <string name="task_info_message">消息详情</string>
+    <string name="info_message">有人留言</string>
+    <string name="info_signup">有人报名</string>
     
     <string name="write">发布任务</string>
     <string name="release">发  布</string>

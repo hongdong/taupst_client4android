@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoMessage;
+import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
@@ -207,7 +208,24 @@ public class JsonUtil {
 				break;
 				
 			case 3:
-				
+				InfoSignUp infoSignUp = new InfoSignUp();
+				infoSignUp.setStatusId(jsonObject.getString(JsonString.InfoSignUp.STATUS_ID));
+				infoSignUp.setStatusPersonId(jsonObject.getString(JsonString.InfoSignUp.STATUS_PERSONID));
+				infoSignUp.setStatusPersonNickname(jsonObject.getString(JsonString.InfoSignUp.STATUS_PERSONNICKNAME));
+				infoSignUp.setStatusTitle(jsonObject.getString(JsonString.InfoSignUp.STATUS_TITLE));
+				infoSignUp.setSignUpNickname(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_NICKNAME));
+				infoSignUp.setSignUpString(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_STRING));
+				infoSignUp.setPersonContact(jsonObject.getString(JsonString.InfoSignUp.PERSON_CONTACK));
+				if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_PHONE)) {
+					infoSignUp.setPersonPhone(jsonObject.getString(JsonString.InfoSignUp.PERSON_PHONE));
+				}
+				if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_QQ)) {
+					infoSignUp.setPersonQq(jsonObject.getString(JsonString.InfoSignUp.PERSON_QQ));
+				}
+				if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_EMAIL)) {
+					infoSignUp.setPersonEmail(jsonObject.getString(JsonString.InfoSignUp.PERSON_EMAIL));
+				}
+				object = infoSignUp;
 				break;
 				
 			case 4:

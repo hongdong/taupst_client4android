@@ -174,7 +174,10 @@ public class MainService extends Service implements Runnable {
 				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_ENDTASK)) {
 					
 				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_SIGNUP)) {
-					
+					ItaActivity activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_SIGNUP);
+					if (activity_getinfo != null) {
+						activity_getinfo.refresh(Task.TA_GETINFO_DETAIL, msg.obj);
+					}
 				}
 				break;
 

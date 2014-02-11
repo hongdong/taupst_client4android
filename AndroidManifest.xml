@@ -82,6 +82,9 @@
         <activity 
             android:name=".ui.activity.InfoMessageActivity"
             android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.InfoSignUpActivity"
+            android:screenOrientation="portrait"></activity>
         
         <service android:name=".logic.MainService"></service>
 
