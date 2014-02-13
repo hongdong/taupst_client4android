@@ -92,7 +92,14 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_GETMESSAGE:
-				ItaActivity activity_getmessage = (ItaActivity) getActivityByName(Task.TA_GETMESSAGE_ACTIVITY);
+				Bundle data_getmessage = msg.getData();
+				String string_getmessage = data_getmessage.getString(Task.TA_GETMESSAGE_ACTIVITY);
+				ItaActivity activity_getmessage = null;
+				if (string_getmessage.equals(Task.TA_GETMESSAGE_ACTIVITY_DETAIL)) {
+					activity_getmessage = (ItaActivity) getActivityByName(Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
+				} else if (string_getmessage.equals(Task.TA_GETMESSAGE_ACTIVITY_BYID)) {
+					activity_getmessage = (ItaActivity) getActivityByName(Task.TA_GETMESSAGE_ACTIVITY_BYID);
+				}
 				if (activity_getmessage != null) {
 					activity_getmessage.refresh(Task.TA_GETMESSAGE, msg.obj);
 				}
@@ -106,6 +113,9 @@ public class MainService extends Service implements Runnable {
 					activity.refresh(Task.TA_MESSAGE, msg.obj);
 				} else if (activity_message.equals(Task.TA_MESSAGE_ACTIVITY_INFO)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY_INFO);
+					activity.refresh(Task.TA_MESSAGE, msg.obj);
+				} else if (activity_message.equals(Task.TA_MESSAGE_ACTIVITY_BYID)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_MESSAGE_ACTIVITY_BYID);
 					activity.refresh(Task.TA_MESSAGE, msg.obj);
 				}
 				break;
@@ -164,20 +174,30 @@ public class MainService extends Service implements Runnable {
 			case Task.TA_GETINFO_DETAIL:
 				Bundle data_getinfo_detail = msg.getData();
 				String activity_getinfo_detail = data_getinfo_detail.getString(Task.TA_GETINFO_DETAIL_ACTIVITY);
+				ItaActivity activity_getinfo = null;
 				if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_MESSAGE)) {
-					ItaActivity activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_MESSAGE);
-					if (activity_getinfo != null) {
-						activity_getinfo.refresh(Task.TA_GETINFO_DETAIL, msg.obj);
-					}
+					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_MESSAGE);
 				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_EXECTASK)) {
-					
-				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_ENDTASK)) {
-					
+					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_EXECTASK);
 				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_SIGNUP)) {
-					ItaActivity activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_SIGNUP);
-					if (activity_getinfo != null) {
-						activity_getinfo.refresh(Task.TA_GETINFO_DETAIL, msg.obj);
-					}
+					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_SIGNUP);
+				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_ENDTASK)) {
+					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_ENDTASK);
+				}
+				if (activity_getinfo != null) {
+					activity_getinfo.refresh(Task.TA_GETINFO_DETAIL, msg.obj);
+				}
+				break;
+				
+			case Task.TA_EXEC_TASK:
+				ItaActivity activity_exec_task = (ItaActivity) getActivityByName(Task.TA_EXEC_TASK_ACTIVITY);
+				activity_exec_task.refresh(Task.TA_EXEC_TASK, msg.obj);
+				break;
+				
+			case Task.TA_GET_TASK_DETAIL:
+				ItaActivity activity_get_task = (ItaActivity) getActivityByName(Task.TA_GET_TASK_DETAIL_ACTIVITY);
+				if (activity_get_task != null) {
+					activity_get_task.refresh(Task.TA_GET_TASK_DETAIL, msg.obj);
 				}
 				break;
 
@@ -262,6 +282,9 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_GETMESSAGE:
 			msg.obj = doTaskService.doGetMessageTask(task);
+			String activity_getmessage = (String) taskParams.get(Task.TA_GETMESSAGE_ACTIVITY);
+			Bundle data_getmessage = msg.getData();
+			data_getmessage.putString(Task.TA_GETMESSAGE_ACTIVITY, activity_getmessage);
 			break;
 			
 		case Task.TA_MESSAGE:
@@ -312,6 +335,14 @@ public class MainService extends Service implements Runnable {
 			String activity_getinfo_detail = (String) taskParams.get(Task.TA_GETINFO_DETAIL_ACTIVITY);
 			Bundle data_getinfo_detail = msg.getData();
 			data_getinfo_detail.putString(Task.TA_GETINFO_DETAIL_ACTIVITY, activity_getinfo_detail);
+			break;
+			
+		case Task.TA_EXEC_TASK:
+			msg.obj = doTaskService.doExecTaskTask(task);
+			break;
+			
+		case Task.TA_GET_TASK_DETAIL:
+			msg.obj = doTaskService.doGetTaskDetail(task);
 			break;
 
 		default:

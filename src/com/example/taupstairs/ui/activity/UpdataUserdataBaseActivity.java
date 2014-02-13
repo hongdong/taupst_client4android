@@ -96,13 +96,23 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 		});	
 	}
 	
+	private void showProgressDialog() {
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("    稍等片刻...");
+		progressDialog.show();
+	}
+	
+	private void dismissProgressDialog() {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
+	}
+	
 	/*
 	 * 网络任务
 	 */
 	private void doUpdataUserDataTask(String url) {
-		progressDialog.setCancelable(false);
-		progressDialog.setMessage("    稍等片刻...");
-		progressDialog.show();
+		showProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
 		taskParams.put(Task.TA_UPDATAUSERDATA_ACTIVITY, Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE);
 		taskParams.put(Task.TA_UPDATAUSERDATA_URL, url);
@@ -112,10 +122,10 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 	
 	@Override
 	public void refresh(Object... params) {
+		dismissProgressDialog();
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_UPDATAUSERDATA:
-			progressDialog.dismiss();
 			String result = (String) params[1];
 			if (null == result) {
 				Toast.makeText(this, "未连接网络", Toast.LENGTH_SHORT).show();

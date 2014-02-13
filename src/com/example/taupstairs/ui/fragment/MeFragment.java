@@ -256,17 +256,23 @@ public class MeFragment extends Fragment implements ItaFragment {
 		}
 	}
 	
-	private void progressShow() {
+	private void showProgressDialog() {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    稍等片刻...");
 		progressDialog.show();
+	}
+	
+	private void dismissProgressDialog() {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
 	}
 	
 	/*
 	 * 上传照片
 	 */
 	private void doUpdataUserPhotoTask() {
-		progressShow();
+		showProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
 		taskParams.put(Task.TA_UPLOADPHOTO_ACTIVITY, Task.TA_UPLOADPHOTO_ACTIVITY_ME);
 		taskParams.put(Task.TA_UPLOADPHOTO_BITMAP, userPhoto);
@@ -287,7 +293,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void refresh(Object... params) {
-		progressDialog.dismiss();
+		dismissProgressDialog();
 		if (params[1] != null) {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
@@ -362,7 +368,9 @@ public class MeFragment extends Fragment implements ItaFragment {
 	}
 
 	public void exit() {
-		personService.closeDBHelper();
+		if (personService != null) {
+			personService.closeDBHelper();
+		}
 	}
 
 }

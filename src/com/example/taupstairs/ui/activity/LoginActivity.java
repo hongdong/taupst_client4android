@@ -112,7 +112,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 	
 	private void dismissProgressDialog() {
-		progressDialog.dismiss();
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
 	}
 	
 	private void doCheckUserTask() {
@@ -146,7 +148,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 			taskParams.put(User.USER_COLLEGEID, collegeId);
 			taskParams.put(User.USER_STUDENTID, studentId);
 			taskParams.put(User.USER_PASSWORD, password);
-			taskParams.put(JsonString.Login.IS_EXIST, isExist ? "1" : "0");
+			taskParams.put(JsonString.Login.IS_EXIST, isExist ? "1" : "2");
 			if (!isExist && hasGetCaptcha) {
 				EditText editText = (EditText) findViewById(R.id.edit_captcha);
 				String captcha = editText.getText().toString().trim();
@@ -163,14 +165,14 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 
 	public void refresh(Object... params) {	
+		dismissProgressDialog();
 		isRefresh = false;
 		if (null == params[1]) {
 			Toast.makeText(LoginActivity.this, "没网络啊！！！亲", Toast.LENGTH_SHORT).show();
 		} else {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
-			case Task.TA_CHECKUSER:
-				dismissProgressDialog();
+			case Task.TA_CHECKUSER:	
 				String checkuser = ((String) params[1]).trim();
 				refreshCheckUser(checkuser);
 				break;
@@ -181,7 +183,6 @@ public class LoginActivity extends Activity implements ItaActivity {
 				break;
 				
 			case Task.TA_LOGIN:
-				dismissProgressDialog();
 				String login = ((String) params[1]).trim();	//这里的字符串要去空格，不然很可能不会equals
 				refreshLogin(login);
 				break;

@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.Info;
+import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
@@ -352,6 +353,35 @@ public class DoTaskService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public String doExecTaskTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String signUpId = (String) taskParams.get(InfoSignUp.SIGNUP_ID);
+		String signUpString = (String) taskParams.get(InfoSignUp.SIGNUP_STRING);
+		String exec_task_url = HttpClientUtil.BASE_URL + 
+				"data/sign/ce?sign_id=" + signUpId + "&reply=" + signUpString;
+		try {
+			result = HttpClientUtil.getRequest(exec_task_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public Status doGetTaskDetail(Task task) {
+		Status status = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String get_task_url = HttpClientUtil.BASE_URL + "data/task/info?task_id=" + statusId;
+		try {
+			String jsonString = HttpClientUtil.getRequest(get_task_url);
+			status = JsonUtil.getStatus(jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
 	}
 	
 	/*

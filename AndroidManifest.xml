@@ -80,10 +80,22 @@
             android:windowSoftInputMode="stateVisible"></activity>
         
         <activity 
+            android:name=".ui.activity.TaskByIdActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
             android:name=".ui.activity.InfoMessageActivity"
             android:screenOrientation="portrait"></activity>
         <activity 
             android:name=".ui.activity.InfoSignUpActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.InfoSignUpExecActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.InfoExecTaskActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.InfoEndTaskActivity"
             android:screenOrientation="portrait"></activity>
         
         <service android:name=".logic.MainService"></service>

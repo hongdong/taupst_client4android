@@ -284,10 +284,12 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	public void localRefresh(int id, Map<String, Object> params) {
 		switch (id) {
 		case HomePageString.UPDATA_PHOTO:
+//			infoFragment.localRefresh(id, params);	//目前消息列表根本没有自己的消息
 			taskFragment.localRefresh(id, params);
 			rankFragment.localRefresh(id, params);
 			break;
 		case HomePageString.UPDATA_NICKNAME:
+//			infoFragment.localRefresh(id, params);
 			taskFragment.localRefresh(id, params);
 			rankFragment.localRefresh(id, params);
 			break;

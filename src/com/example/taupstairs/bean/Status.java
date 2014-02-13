@@ -4,7 +4,8 @@ public class Status {
 
 	private Long id;
 	
-	/*ID，标题，内容，发布时间，截止时间，报酬，留言数，报名数*/
+	/*状态，ID，标题，内容，发布时间，截止时间，报酬，留言数，报名数*/
+	private String statusState;
 	private String statusId;
 	private String statusTitle;
 	private String statusContent;
@@ -26,6 +27,7 @@ public class Status {
 	
 	public static final String ID = "_id";
 	
+	public static final String STATUS_STATE = "statusState";
 	public static final String STATUS_ID = "statusId";
 	public static final String STATUS_TITLE = "statusTitle";
 	public static final String STATUS_CONTENT = "statusContent";
@@ -73,6 +75,12 @@ public class Status {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getStatusState() {
+		return statusState;
+	}
+	public void setStatusState(String statusState) {
+		this.statusState = statusState;
 	}
 	public String getStatusId() {
 		return statusId;

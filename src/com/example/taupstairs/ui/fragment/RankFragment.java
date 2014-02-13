@@ -158,8 +158,8 @@ public class RankFragment extends Fragment implements ItaFragment {
 		if (hasRefresh) {
 			rankService.emptyRankDb();
 			rankService.insertRanks(ranks);
+			rankService.closeDBHelper();
 		}
-		rankService.closeDBHelper();
 	}
 	
 }

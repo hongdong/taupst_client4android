@@ -75,13 +75,16 @@ public class Task {
 	
 	//获取留言
 	public static final int TA_GETMESSAGE = 9;
-	public static final String TA_GETMESSAGE_ACTIVITY = "TaskDetailActivity";
+	public static final String TA_GETMESSAGE_ACTIVITY = "activity";
+	public static final String TA_GETMESSAGE_ACTIVITY_DETAIL = "TaskDetailActivity";
+	public static final String TA_GETMESSAGE_ACTIVITY_BYID = "TaskByIdActivity";
 	
 	//发布留言
 	public static final int TA_MESSAGE = 10;
 	public static final String TA_MESSAGE_ACTIVITY = "activity";
 	public static final String TA_MESSAGE_ACTIVITY_TASK = "TaskDetailActivity";
 	public static final String TA_MESSAGE_ACTIVITY_INFO = "InfoMessageActivity";
+	public static final String TA_MESSAGE_ACTIVITY_BYID = "TaskByIdActivity";
 	public static final String TA_MESSAGE_MODE = "signup_mode";
 	public static final String TA_MESSAGE_MODE_ROOT = "signup_mode_root";
 	public static final String TA_MESSAGE_MODE_CHILD = "signup_mode_child";
@@ -125,6 +128,12 @@ public class Task {
 	public static final String TA_GETINFO_DETAIL_EXECTASK = "InfoExecTaskActivity";
 	public static final String TA_GETINFO_DETAIL_ENDTASK = "InfoEndTaskActivity";
 	public static final String TA_GETINFO_DETAIL_SIGNUP = "InfoSignUpActivity";
+	
+	public static final int TA_EXEC_TASK = 18;
+	public static final String TA_EXEC_TASK_ACTIVITY = "InfoSignUpExecActivity";
+	
+	public static final int TA_GET_TASK_DETAIL = 19;
+	public static final String TA_GET_TASK_DETAIL_ACTIVITY = "TaskByIdActivity";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

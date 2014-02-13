@@ -20,8 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.taupstairs.R;
-import com.example.taupstairs.adapter.MessageAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
+import com.example.taupstairs.adapter.ByIdMessageAdapter;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
@@ -40,53 +39,33 @@ import com.example.taupstairs.util.KeyBoardUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 
-public class TaskDetailActivity extends Activity implements ItaActivity {
+public class TaskByIdActivity extends Activity implements ItaActivity {
 
-	private Button btn_back, btn_refresh, btn_signup, btn_message;
+	private Button btn_back, btn_signup, btn_message;
 	private TextView txt_multi;
-	private Status status;
 	private Holder holder;
 	private Time now;
+	private String statusId;
+	private Status status;
 	private List<Message> messages;
-	private MessageAdapter adapter;
+	private ByIdMessageAdapter adapter;
 	private EditText edit_message;
 	private String edit_text;
 	private String messageId, replyId, replyNickname;
 	private ProgressDialog progressDialog;
-	private boolean flag_message_or_signup;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.task_detail);
-		MainService.addActivity(TaskDetailActivity.this);
+		MainService.addActivity(this);
 		init();
 	}
+	
 	@Override
 	public void init() {
+		initHolder();
 		initData();
 		initView();
-	}
-	
-	private void initData() {
-		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
-		status = app.getStatus();
-		now = TimeUtil.getNow(Calendar.getInstance());
-		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
-		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
-		if (personId.equals(status.getPersonId())) {
-			txt_multi.setText("我发布的");
-			txt_multi.setVisibility(View.VISIBLE);
-		} else {
-			Time end = TimeUtil.originalToTime(status.getStatusEndTime());
-			if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
-				txt_multi.setText("已过期");
-				txt_multi.setVisibility(View.VISIBLE);	
-			} else {
-				doCheckStatusTask();
-			}
-		}
-		flag_message_or_signup = false;
 	}
 	
 	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
@@ -108,14 +87,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		public TextView txt_task_detail_no_message;
 	}
 	
-	private void initView() {
-		btn_back = (Button)findViewById(R.id.btn_back_task_detail);
-		btn_refresh = (Button)findViewById(R.id.btn_refresh_task_detail);
-		btn_signup = (Button)findViewById(R.id.btn_task_detail_signup);
-		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
-		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
-		progressDialog = new ProgressDialog(this);
-		
+	private void initHolder() {
 		holder = new Holder();
 		holder.img_task_detail_photo = (ImageView)findViewById(R.id.img_photo);
 		holder.txt_task_detail_nickname = (TextView)findViewById(R.id.txt_nickname);
@@ -130,62 +102,31 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_signupcount = (TextView)findViewById(R.id.txt_task_detail_signupcount);
 		holder.txt_task_detail_messagecount = (TextView)findViewById(R.id.txt_task_detail_messagecount);
 		holder.txt_task_detail_no_message = (TextView)findViewById(R.id.txt_task_detail_no_message);
-		
-		/*以下进行任务详情基本部分的显示*/
-		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
-					HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
-		holder.img_task_detail_photo.setOnClickListener(personDataListener);
-		
-		holder.txt_task_detail_nickname.setText(status.getPersonNickname());
-		
-		String personSex = status.getPersonSex().trim();
-		if (personSex.equals(Person.MALE)) {
-			holder.img_task_detail_sex.setImageResource(R.drawable.icon_male);
-		} else if (personSex.equals(Person.FEMALE)) {
-			holder.img_task_detail_sex.setImageResource(R.drawable.icon_female);
-		}
-		
-		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
-		holder.txt_task_detail_releasetime.setText(displayTime);
-		
-		holder.txt_task_detail_grade.setText(status.getPersonGrade());
-		holder.txt_task_detail_department.setText(status.getPersonDepartment());
-		holder.txt_task_detail_title.setText(status.getStatusTitle());
-		holder.txt_task_detail_content.setText(status.getStatusContent());
-		holder.txt_task_detail_rewards.setText(status.getStatusRewards());
-		
-		String endTime = TimeUtil.getDisplayTime(now, status.getStatusEndTime());
-		holder.txt_task_detail_endtime.setText(endTime);
-		
-		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
-		String messageCount = status.getStatusMessageCount();
-		holder.txt_task_detail_messagecount.setText(messageCount);
-		if (messageCount.equals("0")) {
-			holder.txt_task_detail_no_message.setVisibility(View.VISIBLE);
-		} else {
-			doGetMessageTask();
-		}
+	}
+	
+	private void initData() {
+		now = TimeUtil.getNow(Calendar.getInstance());
+		statusId = getIntent().getStringExtra(Status.STATUS_ID);
+		doGetTaskDetailTask();
+	}
+	
+	private void initView() {
+		btn_back = (Button)findViewById(R.id.btn_back_task_detail);
+		btn_signup = (Button)findViewById(R.id.btn_task_detail_signup);
+		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
+		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
+		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
+		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (flag_message_or_signup) {
-					Intent intent = new Intent();
-					setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
-				}
 				finish();
-			}
-		});
-		
-		btn_refresh.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				
 			}
 		});
 		
 		btn_signup.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
+				Intent intent = new Intent(TaskByIdActivity.this, SignupActivity.class);
 				intent.putExtra(Status.STATUS_ID, status.getStatusId());
 				intent.putExtra(Status.PERSON_ID, status.getPersonId());
 				startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
@@ -226,12 +167,13 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	}
 	
 	/**
-	 * 检测任务
+	 * 刚进来要根据id获取任务详情
 	 */
-	private void doCheckStatusTask() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-		taskParams.put(Status.STATUS_ID, status.getStatusId());
-		Task task = new Task(Task.TA_CHECKSTATUS, taskParams);
+	private void doGetTaskDetailTask() {
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+		taskParams.put(Task.TA_GET_TASK_DETAIL_ACTIVITY, Task.TA_GET_TASK_DETAIL_ACTIVITY);
+		taskParams.put(Status.STATUS_ID, statusId);
+		Task task = new Task(Task.TA_GET_TASK_DETAIL, taskParams);
 		MainService.addTask(task);
 	}
 	
@@ -241,7 +183,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private void doGetMessageTask() {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Status.STATUS_ID, status.getStatusId());
-		taskParams.put(Task.TA_GETMESSAGE_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
+		taskParams.put(Task.TA_GETMESSAGE_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_BYID);
 		Task task = new Task(Task.TA_GETMESSAGE, taskParams);
 		MainService.addTask(task);
 	}
@@ -251,7 +193,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	 */
 	private void doMessageTask() {
 		Map<String, Object> taskParams = new HashMap<String, Object>();
-		taskParams.put(Task.TA_MESSAGE_ACTIVITY, Task.TA_MESSAGE_ACTIVITY_TASK);
+		taskParams.put(Task.TA_MESSAGE_ACTIVITY, Task.TA_MESSAGE_ACTIVITY_BYID);
 		taskParams.put(Status.STATUS_ID, status.getStatusId());
 		taskParams.put(MessageContent.CONTENT, edit_message.getText().toString().trim());
 		if (replyId != null) {		//子留言
@@ -265,7 +207,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		Task task = new Task(Task.TA_MESSAGE, taskParams);
 		MainService.addTask(task);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void refresh(Object... params) {
@@ -273,22 +215,16 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		if (params[1] != null) {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
-			case Task.TA_CHECKSTATUS:
-				String result = (String) params[1];
-				try {
-					JSONObject jsonObject = new JSONObject(result);
-					int state = jsonObject.getInt(JsonString.Return.STATE);
-					testState(state);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+			case Task.TA_GET_TASK_DETAIL:
+				status = (Status) params[1];
+				displayStatus();
 				break;
-			
+				
 			case Task.TA_GETMESSAGE:
 				messages = (List<Message>) params[1];
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);
 				listView.setVisibility(View.VISIBLE);
-				adapter = new MessageAdapter(this, messages);
+				adapter = new ByIdMessageAdapter(this, messages);
 				listView.setAdapter(adapter);
 				break;
 				
@@ -318,6 +254,55 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	}
 	
 	/**
+	 * 显示任务详情
+	 */
+	private void displayStatus() {
+		displayStatusPerson();
+		displayStatusContent();
+	}
+	
+	private void displayStatusPerson() {
+		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
+		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
+		holder.img_task_detail_photo.setOnClickListener(personDataListener);	
+		holder.txt_task_detail_nickname.setText(status.getPersonNickname());	
+		String personSex = status.getPersonSex().trim();
+		if (personSex.equals(Person.MALE)) {
+			holder.img_task_detail_sex.setImageResource(R.drawable.icon_male);
+		} else if (personSex.equals(Person.FEMALE)) {
+			holder.img_task_detail_sex.setImageResource(R.drawable.icon_female);
+		}
+		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
+		holder.txt_task_detail_releasetime.setText(displayTime);
+		holder.txt_task_detail_grade.setText(status.getPersonGrade());
+		holder.txt_task_detail_department.setText(status.getPersonDepartment());
+	}
+	
+	private void displayStatusContent() {
+		holder.txt_task_detail_title.setText(status.getStatusTitle());
+		holder.txt_task_detail_content.setText(status.getStatusContent());
+		holder.txt_task_detail_rewards.setText(status.getStatusRewards());	
+		String endTime = TimeUtil.getDisplayTime(now, status.getStatusEndTime());
+		holder.txt_task_detail_endtime.setText(endTime);	
+		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
+		Time end = TimeUtil.originalToTime(status.getStatusEndTime());
+		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
+			txt_multi.setText("已过期");
+			txt_multi.setVisibility(View.VISIBLE);	
+		} else {
+			testState(Integer.parseInt(status.getStatusState()));
+		}
+		String messageCount = status.getStatusMessageCount();
+		holder.txt_task_detail_messagecount.setText(messageCount);
+		if (messageCount.equals("0")) {
+			holder.txt_task_detail_no_message.setVisibility(View.VISIBLE);
+		} else {
+			doGetMessageTask();
+		}
+	}
+	
+	/**
 	 * 检测任务后测试状态
 	 * @param state	
 	 */
@@ -334,7 +319,8 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 			break;
 		case 3:
-			//是我发布的
+			txt_multi.setText("我发布的");
+			txt_multi.setVisibility(View.VISIBLE);
 			break;
 		case 4:
 			//已过期，我来处理
@@ -392,7 +378,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);	
 				messages = new ArrayList<Message>();
 				messages.add(0, message);
-				adapter = new MessageAdapter(this, messages);
+				adapter = new ByIdMessageAdapter(this, messages);
 				listView.setAdapter(adapter);
 				listView.setVisibility(View.VISIBLE);
 			}
@@ -402,45 +388,12 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		String messageCount = String.valueOf(count);
 		holder.txt_task_detail_messagecount.setText(messageCount);
 		status.setStatusMessageCount(messageCount);
-		flag_message_or_signup = true;
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-		case IntentString.RequestCode.TASKDETAIL_SIGNUP:
-			if (IntentString.ResultCode.SIGNUP_TASKDETAIL == resultCode) {
-				Toast.makeText(this, "报名成功", Toast.LENGTH_SHORT).show();
-				btn_signup.setVisibility(View.GONE);
-				txt_multi.setText("已报名");
-				txt_multi.setVisibility(View.VISIBLE);
-				int count = Integer.valueOf(status.getStatusSignUpCount()) + 1;
-				String signupCount = String.valueOf(count);
-				holder.txt_task_detail_signupcount.setText(signupCount);
-				status.setStatusSignUpCount(signupCount);
-				flag_message_or_signup = true;
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	public void onBackPressed() {
-		if (flag_message_or_signup) {
-			Intent intent = new Intent();
-			setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
-		}
-		super.onBackPressed();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		MainService.removeActivity(TaskDetailActivity.this);
+		MainService.removeActivity(this);
 	}
 	
 }

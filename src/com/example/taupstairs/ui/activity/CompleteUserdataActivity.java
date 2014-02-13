@@ -146,14 +146,24 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		phone = edit_phone.getText().toString().trim();
 	}
 	
+	private void showProgressDialog() {
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("    稍等片刻...");
+		progressDialog.show();
+	}
+	
+	private void dismissProgressDialog() {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
+	}
+	
 	/*
 	 * 更新用户数据。先上传头像，ok后再把头像地址和其它一起上传
 	 */
 	private void updataUserData() {
 		getEditString();
-		progressDialog.setCancelable(false);
-		progressDialog.setMessage("    稍等片刻...");
-		progressDialog.show();
+		showProgressDialog();
 		if (flag_img) {			
 			doUpdataUserPhotoTask();
 		} else {			
@@ -237,7 +247,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
-		progressDialog.dismiss();
+		dismissProgressDialog();
 		String result = (String) params[1];
 		if (result != null) {
 			int taskId = (Integer) params[0];

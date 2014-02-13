@@ -87,6 +87,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	@Override
 	public void initView() {
 		xlist_task = (XListView) view.findViewById(R.id.xlist_fm_task);	
+		xlist_task.setPullLoadEnable(false);
 		if (currentStatus != null) {
 			adapter = new TaskAdapter(context, currentStatus);
 			xlist_task.setAdapter(adapter);
@@ -273,7 +274,11 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	
 	public void releaseTaskSuccess() {
 		Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-		getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
+		if (null == lastestStatusId) {
+			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
+		} else {
+			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
+		}
 	}
 
 	/*
@@ -281,10 +286,12 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * 保存的方法里面只会保存一页（20条）的内容
 	 */
 	public void exit() {
-		SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestStatusId);
-		statusService.emptyStatusDb();
-		statusService.insertListStatus(currentStatus);
-		statusService.closeDBHelper();
+		if (statusService != null && lastestStatusId != null) {
+			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestStatusId);
+			statusService.emptyStatusDb();
+			statusService.insertListStatus(currentStatus);
+			statusService.closeDBHelper();
+		}
 	}
 	
 }

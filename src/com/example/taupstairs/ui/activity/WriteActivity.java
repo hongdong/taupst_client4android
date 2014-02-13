@@ -85,13 +85,23 @@ public class WriteActivity extends Activity implements ItaActivity {
 		});
 	}
 	
+	private void showProgressDialog() {
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("    稍等片刻...");
+		progressDialog.show();
+	}
+	
+	private void dismissProgressDialog() {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
+	}
+	
 	/*
 	 * 发布任务
 	 */
 	private void doReleaseTask() {
-		progressDialog.setCancelable(false);
-		progressDialog.setMessage("    正在发布...");
-		progressDialog.show();
+		showProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(4);
 		taskParams.put(Status.STATUS_TITLE, edit_write_title.getText().toString());
 		taskParams.put(Status.STATUS_CONTENT, edit_write_content.getText().toString());
@@ -103,10 +113,10 @@ public class WriteActivity extends Activity implements ItaActivity {
 	
 	@Override
 	public void refresh(Object... params) {
+		dismissProgressDialog();
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_RELEASE:
-			progressDialog.dismiss();
 			String result = ((String) params[1]);
 			if (null == result) {
 				Toast.makeText(WriteActivity.this, "没网络啊！！！亲", Toast.LENGTH_SHORT).show();

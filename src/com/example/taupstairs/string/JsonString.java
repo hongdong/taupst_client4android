@@ -32,6 +32,7 @@ public class JsonString {
 	}
 	
 	public static class Status {
+		public static final String STATUS_STATE = "task_state";
 		public static final String STATUS_ID = "task_id";
 		public static final String STATUS_TITLE = "title";
 		public static final String STATUS_CONTENT = "content";
@@ -97,6 +98,7 @@ public class JsonString {
 	
 	public static class InfoMessage {
 		public static final String MESSAGE_ID = "message_id";
+		public static final String ROOT_ID = "root_id";
 		public static final String CURRENT_CONTENT = "message_content";
 		public static final String STATUS_ID = "task_id";
 		public static final String STATUS_PERSONID = "t_users_id";
@@ -105,13 +107,25 @@ public class JsonString {
 		public static final String MESSAGE_CONTENTS = "tmList";
 	}
 	
+	public static class InfoExecTask {
+		public static final String SIGNUP_STRING_REPLY = "reply";
+		public static final String STATUS_ID = "task_id";
+		public static final String STATUS_PERSONID = "users_id";
+		public static final String STATUS_PERSONNICKNAME = "username";
+		public static final String STATUS_TITLE = "title";
+		public static final String SIGNUP_STRING_NICKNAME = "my_name";
+		public static final String SIGNUP_STRING = "message";
+	}
+	
 	public static class InfoSignUp {
+		public static final String SIGNUP_ID = "sign_id";
 		public static final String STATUS_ID = "task_id";
 		public static final String STATUS_PERSONID = "users_id";
 		public static final String STATUS_PERSONNICKNAME = "my_name";
 		public static final String STATUS_TITLE = "title";
 		public static final String SIGNUP_NICKNAME = "username";
 		public static final String SIGNUP_STRING = "message";
+		public static final String HAS_EXEC = "isexe";
 		public static final String PERSON_CONTACK = "open_mes";
 		public static final String PERSON_PHONE = "phone";
 		public static final String PERSON_QQ = "qq";

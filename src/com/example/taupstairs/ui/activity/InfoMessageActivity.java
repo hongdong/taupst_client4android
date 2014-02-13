@@ -35,6 +35,7 @@ import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.listener.ReplyInfoMessageListener;
 import com.example.taupstairs.listener.ReplyListInfoMessageListener;
+import com.example.taupstairs.listener.TaskByIdListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
@@ -52,7 +53,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 	private InfoMessageAdapter adapter;
 	private EditText edit_message;
 	private String edit_text;
-	private String messageId, replyId, replyNickname;
+	private String replyId, replyNickname;
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -153,29 +154,31 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 				if (edit_message.getText().toString().trim().equals("")) {
 					
 				} else {
-					progressDialog.setCancelable(false);
-					progressDialog.setMessage("    稍等片刻...");
-					progressDialog.show();
+					showProgressDialog();
 					doMessageTask();
 				}
 			}
 		});
-		
-		holder.view.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				//跳转到任务详情
-			}
-		});
+	}
+	
+	private void showProgressDialog() {
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("    稍等片刻...");
+		progressDialog.show();
+	}
+	
+	private void dismissProgressDialog() {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
 	}
 	
 	/**
 	 * 改变留言edit，并为留言做好参数准备
-	 * @param messageId
 	 * @param replyId
 	 * @param replyNickname
 	 */
-	public void changeEditHint(String messageId, String replyId, String replyNickname) {
-		this.messageId = messageId;
+	public void changeEditHint(String replyId, String replyNickname) {
 		this.replyId = replyId;
 		this.replyNickname = replyNickname;
 		edit_message.setHint("回复  " + replyNickname);
@@ -204,7 +207,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		taskParams.put(Status.STATUS_ID, info.getInfoMessage().getStatusId());
 		taskParams.put(MessageContent.CONTENT, edit_message.getText().toString().trim());
 		taskParams.put(Task.TA_MESSAGE_MODE, Task.TA_MESSAGE_MODE_CHILD);
-		taskParams.put(Message.MESSAGE_ID, messageId);
+		taskParams.put(Message.MESSAGE_ID, info.getInfoMessage().getMessageId());
 		taskParams.put(MessageContent.REPLY_ID, replyId);
 		Task task = new Task(Task.TA_MESSAGE, taskParams);
 		MainService.addTask(task);
@@ -212,6 +215,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
+		dismissProgressDialog();
 		if (params[1] != null) {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
@@ -222,7 +226,6 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 				break;
 				
 			case Task.TA_MESSAGE:
-				progressDialog.dismiss();
 				String message = (String) params[1];
 				try {
 					JSONObject jsonObject = new JSONObject(message);
@@ -251,6 +254,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 	 */
 	private void displayMessage() {
 		holder.txt_message.setText(info.getInfoMessage().getCurrentMessage());
+		holder.view.setOnClickListener(new TaskByIdListener(this, info.getInfoMessage().getStatusId()));
 		holder.txt_status_nickname.setText(info.getInfoMessage().getStatusPersonNickname());
 		holder.txt_status_title.setText("  :  " + info.getInfoMessage().getStatusTitle());
 		displayMessageList();
@@ -282,17 +286,16 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		adapter = new InfoMessageAdapter(this, list);
 		holder.list_message.setAdapter(adapter);
 		
-		String messageId = info.getInfoMessage().getMessageId();	
 		/*这两个在消息详情里面没传过来，要从外面拿
 		 * 在点击回复按钮的时候，要回复这个人，需要用到*/
 		String replyId = info.getPersonId();
 		String replyNickname = info.getPersonNickname();
 		ReplyInfoMessageListener replyInfoMessageListener = 
-				new ReplyInfoMessageListener(this, messageId, replyId, replyNickname);
+				new ReplyInfoMessageListener(this, replyId, replyNickname);
 		holder.txt_message_reply.setOnClickListener(replyInfoMessageListener);
 		
 		ReplyListInfoMessageListener replyListInfoMessageListener = 
-				new ReplyListInfoMessageListener(this, messageId, contents);
+				new ReplyListInfoMessageListener(this, contents);
 		holder.list_message.setOnItemClickListener(replyListInfoMessageListener);
 	}
 	

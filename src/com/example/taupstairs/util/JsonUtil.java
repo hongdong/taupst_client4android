@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.taupstairs.bean.Info;
+import com.example.taupstairs.bean.InfoExecTask;
 import com.example.taupstairs.bean.InfoMessage;
 import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.Message;
@@ -78,6 +79,32 @@ public class JsonUtil {
 			e.printStackTrace();
 		}
 		return listStatus;
+	}
+	
+	public static Status getStatus(String jsonString) {
+		Status status = new Status();
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);
+			status.setStatusState(jsonObject.getString(JsonString.Status.STATUS_STATE));
+			status.setStatusId(jsonObject.getString(JsonString.Status.STATUS_ID));
+			status.setStatusTitle(jsonObject.getString(JsonString.Status.STATUS_TITLE));
+			status.setStatusContent(jsonObject.getString(JsonString.Status.STATUS_CONTENT));
+			status.setStatusReleaseTime(jsonObject.getString(JsonString.Status.STATUS_RELEASETIME));
+			status.setStatusEndTime(jsonObject.getString(JsonString.Status.STATUS_ENDTIME));
+			status.setStatusRewards(jsonObject.getString(JsonString.Status.STATUS_REWARDS));
+			status.setStatusMessageCount(jsonObject.getString(JsonString.Status.STATUS_MESSAGECOUNT));
+			status.setStatusSignUpCount(jsonObject.getString(JsonString.Status.STATUS_SIGNUPCOUNT));
+			
+			status.setPersonId(jsonObject.getString(JsonString.Status.PERSON_ID));
+			status.setPersonPhotoUrl(jsonObject.getString(JsonString.Status.PERSON_PHOTOURL));
+			status.setPersonNickname(jsonObject.getString(JsonString.Status.PERSON_NICKNAME));
+			status.setPersonDepartment(jsonObject.getString(JsonString.Status.PERSON_DEPARTMENT));
+			status.setPersonGrade(jsonObject.getString(JsonString.Status.PERSON_GRADE));
+			status.setPersonSex(jsonObject.getString(JsonString.Status.PERSON_SEX));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}	
+		return status;
 	}
 	
 	public static List<Message> getMessages(String jsonString) {
@@ -191,7 +218,12 @@ public class JsonUtil {
 			switch (type) {
 			case 1:
 				InfoMessage infoMessage = new InfoMessage();		
-				infoMessage.setMessageId(jsonObject.getString(JsonString.InfoMessage.MESSAGE_ID));
+				String root_id = jsonObject.getString(JsonString.InfoMessage.ROOT_ID);
+				if (root_id.trim().equals("-1")) {
+					infoMessage.setMessageId(jsonObject.getString(JsonString.InfoMessage.MESSAGE_ID));
+				} else {
+					infoMessage.setMessageId(jsonObject.getString(JsonString.InfoMessage.ROOT_ID));
+				}
 				infoMessage.setCurrentMessage(jsonObject.getString(JsonString.InfoMessage.CURRENT_CONTENT));
 				infoMessage.setStatusId(jsonObject.getString(JsonString.InfoMessage.STATUS_ID));
 				infoMessage.setStatusPersonId(jsonObject.getString(JsonString.InfoMessage.STATUS_PERSONID));
@@ -204,17 +236,29 @@ public class JsonUtil {
 				break;
 				
 			case 2:
-				
+				InfoExecTask infoExecTask = new InfoExecTask();
+				infoExecTask.setSignUpStringReply(jsonObject.getString(JsonString.InfoExecTask.SIGNUP_STRING_REPLY));
+				infoExecTask.setStatusId(jsonObject.getString(JsonString.InfoExecTask.STATUS_ID));
+				infoExecTask.setStatusPersonId(jsonObject.getString(JsonString.InfoExecTask.STATUS_PERSONID));
+				infoExecTask.setStatusPersonNickname(
+						jsonObject.getString(JsonString.InfoExecTask.STATUS_PERSONNICKNAME));
+				infoExecTask.setStatusTitle(jsonObject.getString(JsonString.InfoExecTask.STATUS_TITLE));
+				infoExecTask.setSignUpStringNickname(
+						jsonObject.getString(JsonString.InfoExecTask.SIGNUP_STRING_NICKNAME));
+				infoExecTask.setSignUpString(jsonObject.getString(JsonString.InfoExecTask.SIGNUP_STRING));
+				object = infoExecTask;
 				break;
 				
 			case 3:
 				InfoSignUp infoSignUp = new InfoSignUp();
+				infoSignUp.setSignUpId(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_ID));
 				infoSignUp.setStatusId(jsonObject.getString(JsonString.InfoSignUp.STATUS_ID));
 				infoSignUp.setStatusPersonId(jsonObject.getString(JsonString.InfoSignUp.STATUS_PERSONID));
 				infoSignUp.setStatusPersonNickname(jsonObject.getString(JsonString.InfoSignUp.STATUS_PERSONNICKNAME));
 				infoSignUp.setStatusTitle(jsonObject.getString(JsonString.InfoSignUp.STATUS_TITLE));
 				infoSignUp.setSignUpNickname(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_NICKNAME));
 				infoSignUp.setSignUpString(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_STRING));
+				infoSignUp.setHasExec(jsonObject.getString(JsonString.InfoSignUp.HAS_EXEC));
 				infoSignUp.setPersonContact(jsonObject.getString(JsonString.InfoSignUp.PERSON_CONTACK));
 				if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_PHONE)) {
 					infoSignUp.setPersonPhone(jsonObject.getString(JsonString.InfoSignUp.PERSON_PHONE));

@@ -67,9 +67,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="15dp"
-	        android:id="@+id/layout_info_signup_phone"
-	        android:visibility="gone">
+	        android:layout_marginRight="15dp">
 	       	<ImageView 
 	            android:id="@+id/img_info_signup_phone"
 	            android:layout_width="wrap_content"
@@ -84,16 +82,39 @@
 				android:layout_marginLeft="10dp"
 				android:padding="10dp"
 				android:textSize="16sp"
+				android:autoLink="phone"
+				android:textColor="@color/black"
 				android:background="@drawable/common_txt_bg"/>
+	        <FrameLayout 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentRight="true"
+		        android:layout_centerVertical="true">
+		        <Button 
+			        android:id="@+id/btn_info_signup_exec"
+			        android:layout_width="wrap_content" 
+			        android:layout_height="wrap_content"
+			        android:text="@string/info_signup_exec"
+			        android:textSize="16sp"
+			        android:textColor="@color/white"
+			        android:background="@drawable/task_detail_btn_signup_bg"
+			        android:visibility="gone"/>
+		        <TextView 
+		            android:id="@+id/txt_info_signup_multi"
+		            android:layout_width="wrap_content" 
+			        android:layout_height="wrap_content"
+			        android:text="@string/has_exec"
+			        android:textSize="16sp"
+			        android:textColor="@color/black"
+			        android:visibility="gone"/>
+		    </FrameLayout>   
     	</RelativeLayout>
         <RelativeLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="15dp"
-	        android:id="@+id/layout_info_signup_qq"
-	        android:visibility="gone">
+	        android:layout_marginRight="15dp">
 	        <ImageView 
 				android:id="@+id/img_info_signup_qq"
 				android:layout_width="wrap_content"
@@ -108,6 +129,7 @@
 				android:layout_marginLeft="10dp"
 				android:padding="10dp"
 				android:textSize="16sp"
+				android:textColor="@color/black"
 				android:background="@drawable/common_txt_bg"/>
     	</RelativeLayout>
     	<RelativeLayout 
@@ -116,9 +138,7 @@
 	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="15dp"
 	        android:layout_marginRight="15dp"
-	        android:layout_marginBottom="10dp"
-	        android:id="@+id/layout_info_signup_email"
-	        android:visibility="gone">
+	        android:layout_marginBottom="10dp">
 	       	<ImageView 
 	            android:id="@+id/img_info_signup_email"
 	            android:layout_width="wrap_content"
@@ -133,6 +153,7 @@
 				android:layout_marginLeft="10dp"
 				android:padding="10dp"
 				android:textSize="16sp"
+				android:textColor="@color/black"
 				android:background="@drawable/common_txt_bg"/>
     	</RelativeLayout>
     </LinearLayout>

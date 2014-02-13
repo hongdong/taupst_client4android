@@ -188,10 +188,20 @@ public class SignupActivity extends Activity implements ItaActivity {
 		box_phone.setChecked(true);
 	}
 	
-	private void doSingupTask(String contact, String message) {
+	private void showProgressDialog() {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    稍等片刻...");
 		progressDialog.show();
+	}
+	
+	private void dismissProgressDialog() {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
+	}
+	
+	private void doSingupTask(String contact, String message) {
+		showProgressDialog();
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Status.STATUS_ID, statusId);
 		taskParams.put(Status.PERSON_ID, statusPersonId);
@@ -203,10 +213,10 @@ public class SignupActivity extends Activity implements ItaActivity {
 	
 	@Override
 	public void refresh(Object... params) {
+		dismissProgressDialog();
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_SIGNUP:
-			progressDialog.dismiss();
 			String result = (String) params[1];
 			if (result != null) {
 				try {
