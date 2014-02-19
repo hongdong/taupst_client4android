@@ -200,6 +200,31 @@ public class MainService extends Service implements Runnable {
 					activity_get_task.refresh(Task.TA_GET_TASK_DETAIL, msg.obj);
 				}
 				break;
+				
+			case Task.TA_END_TASK:
+				Bundle data_end_task = msg.getData();
+				String activity_end_task = data_end_task.getString(Task.TA_END_TASK_ACTIVITY);
+				if (activity_end_task.equals(Task.TA_END_TASK_ACTIVITY_DETAIL)) {
+					ItaActivity itaActivity = (ItaActivity) getActivityByName(Task.TA_END_TASK_ACTIVITY_DETAIL);
+					itaActivity.refresh(Task.TA_END_TASK, msg.obj);
+				} else if (activity_end_task.equals(Task.TA_END_TASK_ACTIVITY_BYID)) {
+					ItaActivity itaActivity = (ItaActivity) getActivityByName(Task.TA_END_TASK_ACTIVITY_BYID);
+					itaActivity.refresh(Task.TA_END_TASK, msg.obj);
+				}
+				break;
+				
+			case Task.TA_GET_SIGNUP_LIST:
+				ItaActivity activity_get_signup_list = 
+					(ItaActivity) getActivityByName(Task.TA_GET_SIGNUP_LIST_ACTIVITY);
+				if (activity_get_signup_list != null) {
+					activity_get_signup_list.refresh(Task.TA_GET_SIGNUP_LIST, msg.obj);
+				}
+				break;
+				
+			case Task.TA_EVALUATE:
+				ItaActivity activity_evaluate = (ItaActivity) getActivityByName(Task.TA_EVALUATE_ACTIVITY);
+				activity_evaluate.refresh(Task.TA_EVALUATE, msg.obj);
+				break;
 
 			default:
 				break;
@@ -245,6 +270,10 @@ public class MainService extends Service implements Runnable {
 		switch (task.getTaskId()) {		
 		case Task.TA_LOGIN:
 			msg.obj = doTaskService.doLoginTask(task);
+			break;
+			
+		case Task.TA_PUSH:
+			doTaskService.doPushTask(task);
 			break;
 			
 		case Task.TA_CHECKNET:		//检查网络的方式也是用login，看看是否能够成功返回登录数据
@@ -343,6 +372,21 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_GET_TASK_DETAIL:
 			msg.obj = doTaskService.doGetTaskDetail(task);
+			break;
+			
+		case Task.TA_END_TASK:
+			msg.obj = doTaskService.doEndTask(task);
+			String activity_end_task = (String) taskParams.get(Task.TA_END_TASK_ACTIVITY);
+			Bundle data_end_task = msg.getData();
+			data_end_task.putString(Task.TA_END_TASK_ACTIVITY, activity_end_task);
+			break;
+			
+		case Task.TA_GET_SIGNUP_LIST:
+			msg.obj = doTaskService.doGetSignUpListTask(task);
+			break;
+			
+		case Task.TA_EVALUATE:
+			msg.obj = doTaskService.doEvaluateTask(task);
 			break;
 
 		default:

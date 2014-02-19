@@ -2,7 +2,6 @@ package com.example.taupstairs.ui.fragment;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,12 +14,10 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
 import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Info;
-import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.InfoService;
-import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
 import com.example.taupstairs.ui.activity.InfoExecTaskActivity;
@@ -122,37 +119,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 				doGetInfoTask(Task.TA_GETINFO_MODE_LOADMORE, oldestInfoId);
 			}
 		});
-	}
-	
-	/*
-	 * HomePage的本地回调
-	 */
-	public void localRefresh(int id, Map<String, Object> params) {
-		switch (id) {
-		case HomePageString.UPDATA_PHOTO:
-			String personId_p = (String) params.get(Person.PERSON_ID);
-			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
-			for (Info info : currentInfos) {
-				if (personId_p.equals(info.getPersonId())) {
-					info.setPersonPhotoUrl(personPhotoUrl);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-		case HomePageString.UPDATA_NICKNAME:
-			String personId_n = (String) params.get(Person.PERSON_ID);
-			String personNickname = (String) params.get(Person.PERSON_NICKNAME);
-			for (Info info : currentInfos) {
-				if (personId_n.equals(info.getPersonId())) {
-					info.setPersonNickname(personNickname);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-
-		default:
-			break;
-		}
 	}
 	
 	private void doGetInfoTask(int mode, String infoId) {

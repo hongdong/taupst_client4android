@@ -25,6 +25,8 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.HomePageFragmentPagerAdapter;
 import com.example.taupstairs.bean.Person;
@@ -42,6 +44,7 @@ import com.example.taupstairs.ui.fragment.MeFragment;
 import com.example.taupstairs.ui.fragment.RankFragment;
 import com.example.taupstairs.ui.fragment.TaskFragment;
 import com.example.taupstairs.util.SharedPreferencesUtil;
+import com.example.taupstairs.util.Utils;
 
 public class HomePageActivity extends FragmentActivity implements ItaActivity {
 
@@ -89,6 +92,11 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	
 	/*初始化全局变量*/
 	private void initData() {
+		// 以apikey的方式登录，一般放在主Activity的onCreate中
+		PushManager.startWork(getApplicationContext(),
+				PushConstants.LOGIN_TYPE_API_KEY, 
+				Utils.getMetaValue(this, "api_key"));
+				
 		defaultUser = SharedPreferencesUtil.getDefaultUser(HomePageActivity.this);
 		currentIndex = 0;
 		flag_clear = false;

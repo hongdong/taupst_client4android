@@ -46,7 +46,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 	private PersonService personService;
 	private Person person;
 	private String qq, email, phone;
-	private String statusId, statusPersonId;
+	private String activityName, statusId, statusPersonId;
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 		handler = new Handler(); 
 		personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		personService = new PersonService(this);
+		activityName = getIntent().getStringExtra(Task.TA_ACTIVITY);
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
 		statusPersonId = getIntent().getStringExtra(Status.PERSON_ID);
 	} 
@@ -114,22 +115,22 @@ public class SignupActivity extends Activity implements ItaActivity {
 		
 		keyboardLayout.setOnkbdStateListener(new onKybdsChangeListener() {         
             public void onKeyBoardStateChange(int state) {
-                    switch (state) {
-                    case KeyboardLayout.KEYBOARD_STATE_HIDE:
-                    	handler.post(new Runnable() {
-							public void run() {
-								scrollView.fullScroll(ScrollView.FOCUS_UP);
-							}
-						}); 
-                    break;
-                    case KeyboardLayout.KEYBOARD_STATE_SHOW:
-                        handler.post(new Runnable() {
-							public void run() {
-								scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-							}
-						});  
-                    break;
-                    }
+                switch (state) {
+                case KeyboardLayout.KEYBOARD_STATE_HIDE:
+                	handler.post(new Runnable() {
+						public void run() {
+							scrollView.fullScroll(ScrollView.FOCUS_UP);
+						}
+					}); 
+                break;
+                case KeyboardLayout.KEYBOARD_STATE_SHOW:
+                    handler.post(new Runnable() {
+						public void run() {
+							scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+						}
+					});  
+                break;
+                }
             }
 		});
 		
@@ -224,7 +225,11 @@ public class SignupActivity extends Activity implements ItaActivity {
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
 					if (state.equals(JsonString.Return.STATE_OK)) {
 						Intent intent = new Intent();
-						setResult(IntentString.ResultCode.SIGNUP_TASKDETAIL, intent);
+						if (activityName.equals(Task.TA_GETMESSAGE_ACTIVITY_DETAIL)) {
+							setResult(IntentString.ResultCode.SIGNUP_TASKDETAIL, intent);
+						} else if (activityName.equals(Task.TA_GETMESSAGE_ACTIVITY_BYID)) {
+							setResult(IntentString.ResultCode.SIGNUP_TASKBYID, intent);
+						}
 						finish();
 					} else {
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();

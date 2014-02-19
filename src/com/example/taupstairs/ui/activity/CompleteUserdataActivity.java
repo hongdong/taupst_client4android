@@ -163,7 +163,6 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	 */
 	private void updataUserData() {
 		getEditString();
-		showProgressDialog();
 		if (flag_img) {			
 			doUpdataUserPhotoTask();
 		} else {			
@@ -175,6 +174,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	 * 网络任务
 	 */
 	private void doUpdataUserDataTask() {
+		showProgressDialog();
 		String url = "users_id=" + userId;
 		if (photo != null) {
 			url += "&photo=" + photo;
@@ -205,6 +205,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	 * 上传照片
 	 */
 	private void doUpdataUserPhotoTask() {
+		showProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
 		taskParams.put(Task.TA_UPLOADPHOTO_ACTIVITY, Task.TA_UPLOADPHOTO_ACTIVITY_COMPLETE);
 		taskParams.put(Task.TA_UPLOADPHOTO_BITMAP, userPhoto);

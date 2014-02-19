@@ -2,7 +2,10 @@ package com.example.taupstairs.app;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.baidu.frontia.FrontiaApplication;
 import com.example.taupstairs.bean.Info;
+import com.example.taupstairs.bean.SignUp;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.imageCache.LazyImageLoader;
 
@@ -12,11 +15,13 @@ public class TaUpstairsApplication extends Application {
 	public static LazyImageLoader lazyImageLoader;
 	private Status status;
 	private Info info;
+	private SignUp signUp;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		context = this.getApplicationContext();
+		FrontiaApplication.initFrontiaApplication(context);
 		lazyImageLoader = new LazyImageLoader();
 	}
 	
@@ -37,6 +42,14 @@ public class TaUpstairsApplication extends Application {
 	
 	public void setInfo(Info info) {
 		this.info = info;
+	}
+
+	public SignUp getSignUp() {
+		return signUp;
+	}
+
+	public void setSignUp(SignUp signUp) {
+		this.signUp = signUp;
 	}
 	
 }

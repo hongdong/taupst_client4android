@@ -8,7 +8,9 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -41,8 +43,8 @@ import com.example.taupstairs.util.TimeUtil;
 
 public class TaskByIdActivity extends Activity implements ItaActivity {
 
-	private Button btn_back, btn_signup, btn_message;
-	private TextView txt_multi;
+	private Button btn_back, btn_multi, btn_message;
+	private TextView txt_expired, txt_multi;
 	private Holder holder;
 	private Time now;
 	private String statusId;
@@ -53,6 +55,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	private String edit_text;
 	private String messageId, replyId, replyNickname;
 	private ProgressDialog progressDialog;
+	private boolean flag_my_task, flag_end, flag_expired;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,6 +108,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	}
 	
 	private void initData() {
+		flag_my_task = false;
 		now = TimeUtil.getNow(Calendar.getInstance());
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
 		doGetTaskDetailTask();
@@ -112,7 +116,8 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_task_detail);
-		btn_signup = (Button)findViewById(R.id.btn_task_detail_signup);
+		btn_multi = (Button)findViewById(R.id.btn_task_detail_signup);
+		txt_expired = (TextView)findViewById(R.id.txt_task_detail_expired);
 		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
 		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
 		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
@@ -124,19 +129,43 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 			}
 		});
 		
-		btn_signup.setOnClickListener(new OnClickListener() {
+		btn_multi.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(TaskByIdActivity.this, SignupActivity.class);
-				intent.putExtra(Status.STATUS_ID, status.getStatusId());
-				intent.putExtra(Status.PERSON_ID, status.getPersonId());
-				startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
+				if (flag_my_task) {
+					if (flag_end) {
+						jumpToEndTask();
+					} else {
+						//弹框提示是否真的要完结
+						AlertDialog.Builder builder = new AlertDialog.Builder(TaskByIdActivity.this);
+						builder.setTitle("任务完结后其它童鞋将不可报名\n确定要完结吗？")
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								doEndTaskTask();
+							}
+						})
+						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								//销毁对话框，什么都不做
+							}
+						})
+						.create()
+						.show();
+					}
+				} else {
+					Intent intent = new Intent(TaskByIdActivity.this, SignupActivity.class);
+					intent.putExtra(Task.TA_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_BYID);
+					intent.putExtra(Status.STATUS_ID, status.getStatusId());
+					intent.putExtra(Status.PERSON_ID, status.getPersonId());
+					startActivityForResult(intent, IntentString.RequestCode.TASKBYID_SIGNUP);
+				}
 			}
 		});
 		
 		btn_message.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (edit_message.getText().toString().trim().equals("")) {
-					
+					Intent intent = new Intent(TaskByIdActivity.this, SignUpListActivity.class);
+					startActivity(intent);
 				} else {
 					showProgressDialog();
 					doMessageTask();
@@ -166,6 +195,12 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		KeyBoardUtil.show(this, edit_message); 
 	}
 	
+	private void jumpToEndTask() {
+		Intent intent = new Intent(TaskByIdActivity.this, SignUpListActivity.class);
+		intent.putExtra(Status.STATUS_ID, status.getStatusId());
+		startActivity(intent);
+	}
+	
 	/**
 	 * 刚进来要根据id获取任务详情
 	 */
@@ -174,6 +209,18 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		taskParams.put(Task.TA_GET_TASK_DETAIL_ACTIVITY, Task.TA_GET_TASK_DETAIL_ACTIVITY);
 		taskParams.put(Status.STATUS_ID, statusId);
 		Task task = new Task(Task.TA_GET_TASK_DETAIL, taskParams);
+		MainService.addTask(task);
+	}
+	
+	/**
+	 * 完结任务
+	 */
+	private void doEndTaskTask() {
+		showProgressDialog();
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+		taskParams.put(Task.TA_END_TASK_ACTIVITY, Task.TA_END_TASK_ACTIVITY_BYID);
+		taskParams.put(Status.STATUS_ID, status.getStatusId());
+		Task task = new Task(Task.TA_END_TASK, taskParams);
 		MainService.addTask(task);
 	}
 	
@@ -220,6 +267,24 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 				displayStatus();
 				break;
 				
+			case Task.TA_END_TASK:
+				String end = (String) params[1];
+				System.out.println(end);
+				try {
+					JSONObject endObject = new JSONObject(end);
+					String state = endObject.getString(JsonString.Return.STATE).trim();
+					if (state.equals(JsonString.Return.STATE_OK)) {
+						flag_end = true;
+						btn_multi.setText("已完结");
+						jumpToEndTask();
+					} else {
+						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
+					}
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+				break;
+				
 			case Task.TA_GETMESSAGE:
 				messages = (List<Message>) params[1];
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);
@@ -257,8 +322,30 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	 * 显示任务详情
 	 */
 	private void displayStatus() {
+		setFlag();		//显示之前先设置标志
 		displayStatusPerson();
 		displayStatusContent();
+	}
+	
+	/**
+	 * 设置必要的标志（是否是我发布的，是否过期）
+	 */
+	private void setFlag() {
+		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
+		if (status.getPersonId().equals(personId)) {
+			flag_my_task = true;
+		} else {
+			flag_my_task = false;
+		}
+		
+		Time end = TimeUtil.originalToTime(status.getStatusEndTime());
+		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
+			flag_expired = true;
+			txt_expired.setText("已过期");
+			txt_expired.setVisibility(View.VISIBLE);
+		} else {
+			flag_expired = false;
+		}
 	}
 	
 	private void displayStatusPerson() {
@@ -286,13 +373,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		String endTime = TimeUtil.getDisplayTime(now, status.getStatusEndTime());
 		holder.txt_task_detail_endtime.setText(endTime);	
 		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
-		Time end = TimeUtil.originalToTime(status.getStatusEndTime());
-		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
-			txt_multi.setText("已过期");
-			txt_multi.setVisibility(View.VISIBLE);	
-		} else {
-			testState(Integer.parseInt(status.getStatusState()));
-		}
+		testState(Integer.parseInt(status.getStatusState()), Integer.parseInt(status.getIsSign()));
 		String messageCount = status.getStatusMessageCount();
 		holder.txt_task_detail_messagecount.setText(messageCount);
 		if (messageCount.equals("0")) {
@@ -303,35 +384,58 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	}
 	
 	/**
-	 * 检测任务后测试状态
+	 * 检测任务后测试状态。相当麻烦的事情
 	 * @param state	
 	 */
-	private void testState(int state) {
-		switch (state) {
-		case 0:	//正常
-			btn_signup.setVisibility(View.VISIBLE);
-			break;
-		case 1:	
-			txt_multi.setText("已报名");
-			txt_multi.setVisibility(View.VISIBLE);
-			break;
-		case 2:
-			Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
-			break;
-		case 3:
-			txt_multi.setText("我发布的");
-			txt_multi.setVisibility(View.VISIBLE);
-			break;
-		case 4:
-			//已过期，我来处理
-			break;
-		case 5:
-			txt_multi.setText("已完结");
-			txt_multi.setVisibility(View.VISIBLE);
-			break;
-
-		default:
-			break;
+	private void testState(int statusState, int isSign) {
+		if (flag_my_task) {
+			switch (statusState) {
+			case 1:	
+				flag_end = false;
+				btn_multi.setText("点击完结");
+				btn_multi.setVisibility(View.VISIBLE);
+				break;
+				
+			case 3:	
+				flag_end = true;
+				btn_multi.setText("已完结");
+				btn_multi.setVisibility(View.VISIBLE);
+				break;
+				
+			default:	
+				break;
+			}
+		} else {	//这里有8种情况，过期、报名、完结的组合，2的3次方。暂时先这样做
+			TextView txt_end = (TextView)findViewById(R.id.txt_task_detail_end);
+			switch (statusState) {
+			case 1:	
+				flag_end = false;
+				txt_end.setText("未完结");
+				txt_end.setVisibility(View.VISIBLE);
+				break;
+				
+			case 3:
+				flag_end = true;
+				txt_end.setText("已完结");
+				txt_end.setVisibility(View.VISIBLE);
+				break;
+				
+			default:
+				break;
+			}
+			
+			if (0 == isSign) {
+				if (!flag_expired && !flag_end) {
+					btn_multi.setText("猛戳报名");
+					btn_multi.setVisibility(View.VISIBLE);
+				} else {
+					txt_multi.setText("未报名");
+					txt_multi.setVisibility(View.VISIBLE);
+				}
+			} else {
+				txt_multi.setText("已报名");
+				txt_multi.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 	
@@ -388,6 +492,27 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		String messageCount = String.valueOf(count);
 		holder.txt_task_detail_messagecount.setText(messageCount);
 		status.setStatusMessageCount(messageCount);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case IntentString.RequestCode.TASKBYID_SIGNUP:
+			if (IntentString.ResultCode.SIGNUP_TASKBYID == resultCode) {
+				Toast.makeText(this, "报名成功", Toast.LENGTH_SHORT).show();
+				btn_multi.setVisibility(View.GONE);
+				txt_multi.setText("已报名");
+				txt_multi.setVisibility(View.VISIBLE);
+				int count = Integer.valueOf(status.getStatusSignUpCount()) + 1;
+				String signupCount = String.valueOf(count);
+				holder.txt_task_detail_signupcount.setText(signupCount);
+			}
+			break;
+
+		default:
+			break;
+		}
 	}
 	
 	@Override

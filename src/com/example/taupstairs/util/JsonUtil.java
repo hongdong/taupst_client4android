@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.taupstairs.bean.Info;
+import com.example.taupstairs.bean.InfoEndTask;
 import com.example.taupstairs.bean.InfoExecTask;
 import com.example.taupstairs.bean.InfoMessage;
 import com.example.taupstairs.bean.InfoSignUp;
@@ -15,6 +16,7 @@ import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
+import com.example.taupstairs.bean.SignUp;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.string.JsonString;
 
@@ -85,7 +87,10 @@ public class JsonUtil {
 		Status status = new Status();
 		try {
 			JSONObject jsonObject = new JSONObject(jsonString);
+			
+			status.setIsSign(jsonObject.getString(JsonString.Status.IS_SIGN));
 			status.setStatusState(jsonObject.getString(JsonString.Status.STATUS_STATE));
+			
 			status.setStatusId(jsonObject.getString(JsonString.Status.STATUS_ID));
 			status.setStatusTitle(jsonObject.getString(JsonString.Status.STATUS_TITLE));
 			status.setStatusContent(jsonObject.getString(JsonString.Status.STATUS_CONTENT));
@@ -273,7 +278,14 @@ public class JsonUtil {
 				break;
 				
 			case 4:
-				
+				InfoEndTask infoEndTask = new InfoEndTask();
+				infoEndTask.setEndTaskString(jsonObject.getString(JsonString.InfoEndTask.ENDTASK_STRING));
+				infoEndTask.setStatusId(jsonObject.getString(JsonString.InfoEndTask.STATUS_ID));
+				infoEndTask.setStatusPersonId(jsonObject.getString(JsonString.InfoEndTask.STATUS_PERSONID));
+				infoEndTask.setStatusPersonNickname(jsonObject.getString(JsonString.InfoEndTask.STATUS_PERSONNICKNAME));
+				infoEndTask.setStatusTitle(jsonObject.getString(JsonString.InfoEndTask.STATUS_TITLE));
+				infoEndTask.setEndTaskPraise(jsonObject.getString(JsonString.InfoEndTask.ENDTASK_PRAISE));
+				object = infoEndTask;
 				break;
 	
 			default:
@@ -303,6 +315,29 @@ public class JsonUtil {
 			e.printStackTrace();
 		}
 		return contents;
+	}
+	
+	public static List<SignUp> getSignUps(String jsonString) {
+		List<SignUp> signUps = new ArrayList<SignUp>();
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				SignUp signUp = new SignUp();
+				signUp.setSignUpId(jsonObject.getString(JsonString.SignUp.SIGNUP_ID));
+				signUp.setPersonId(jsonObject.getString(JsonString.SignUp.PERSON_ID));
+				signUp.setPersonPhotoUrl(jsonObject.getString(JsonString.SignUp.PERSON_PHOTOURL));
+				signUp.setPersonNickname(jsonObject.getString(JsonString.SignUp.PERSON_NICKNAME));
+				signUp.setSignUpTime(jsonObject.getString(JsonString.SignUp.SIGNUP_TIME));
+				signUp.setIsExe(jsonObject.getString(JsonString.SignUp.IS_EXE));
+				signUp.setSignUpPraise(jsonObject.getString(JsonString.SignUp.SIGNUP_PRAISE));
+				signUp.setSignUpMessage(jsonObject.getString(JsonString.SignUp.SIGNUP_MESSAGE));
+				signUps.add(signUp);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return signUps;
 	}
 	
 }

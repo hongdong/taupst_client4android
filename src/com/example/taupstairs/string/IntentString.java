@@ -13,6 +13,8 @@ public class IntentString {
 		public static final int MEFRAGMENT_UPDATAUSERDATABASE = 8;
 		public static final int TASKDETAIL_SIGNUP = 10;
 		public static final int INFOSIGNUP_INFOSIGNUPEXEC = 11;
+		public static final int TASKBYID_SIGNUP = 12;
+		public static final int SIGNUPLIST_EVALUATE = 13;
 	}
 	
 	public static class ResultCode {
@@ -24,6 +26,8 @@ public class IntentString {
 		public static final int UPDATAUSERDATABASE_MEFRAGMENT_SIGNATURE = 9;
 		public static final int SIGNUP_TASKDETAIL = 10;
 		public static final int INFOSIGNUPEXEC_INFOSIGNUP = 11;
+		public static final int SIGNUP_TASKBYID = 12;
+		public static final int EVALUATE_SIGNUPLIST = 13;
 	}
 	
 	public static class Extra {

@@ -204,7 +204,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 				holder.btn_exec.setVisibility(View.GONE);
 				holder.txt_multi.setVisibility(View.VISIBLE);
 				/*根新本地存储，下回不显示“选Ta执行”的按钮*/
-				info.getInfoSignUp().setHasExec("1");
+				info.getInfoSignUp().setHasExec("0");
 			}
 			break;
 

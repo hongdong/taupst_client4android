@@ -12,7 +12,7 @@
        	android:id="@+id/txt_task_detail_title"
        	android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="15dp"
+		android:layout_margin="10dp"
 		android:textColor="@color/black"
 		android:textSize="18sp"/>
 	<include layout="@layout/task_detail_divider" />
@@ -20,10 +20,7 @@
 		android:id="@+id/txt_task_detail_content"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
+		android:layout_margin="10dp"
 		android:textColor="@color/black"
 		android:textSize="16sp"/>
 	<include layout="@layout/task_detail_divider" />
@@ -32,12 +29,12 @@
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="15dp">
+	    android:layout_marginTop="10dp">
 	    <TextView 
 	        android:id="@+id/txt_task_detail_reward_tmp"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="15dp"
+			android:layout_marginLeft="10dp"
 			android:gravity="center_vertical"
 			android:text="@string/task_rewards"
 			android:textColor="@color/black"
@@ -58,15 +55,15 @@
 	</RelativeLayout>
 	
 	<!-- 截止时间 --> 
-	<LinearLayout 
+	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="15dp"
-	    android:orientation="horizontal">
+	    android:layout_marginTop="10dp">
 	    <TextView 
+	        android:id="@+id/txt_task_detail_endtime_pictrue"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="15dp"
+			android:layout_marginLeft="10dp"
 			android:gravity="center_vertical"
 			android:text="@string/endtime"
 			android:textColor="@color/black"
@@ -77,22 +74,34 @@
 	        android:id="@+id/txt_task_detail_endtime"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_toRightOf="@id/txt_task_detail_endtime_pictrue"
+			android:layout_centerVertical="true"
 			android:layout_marginLeft="15dp"
 			android:textColor="@color/black"
 			android:textSize="16sp"/>
-	</LinearLayout>
+	    <TextView 
+            android:id="@+id/txt_task_detail_expired"
+            android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="15dp"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:textSize="16sp"
+	        android:textColor="@color/black"
+	        android:visibility="gone"/>
+	</RelativeLayout>
 	
 	<!-- 报名人数，报名 --> 
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="15dp"
-	    android:layout_marginBottom="20dp">
+	    android:layout_marginTop="10dp"
+	    android:layout_marginBottom="10dp">
 	    <TextView 
 	        android:id="@+id/txt_task_detail_signup"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="15dp"
+			android:layout_marginLeft="10dp"
 			android:gravity="center_vertical"
 			android:text="@string/signup_count"
 			android:textColor="@color/black"
@@ -109,6 +118,7 @@
 			android:textColor="@color/black"
 			android:textSize="16sp"/>
 	    <FrameLayout 
+	        android:id="@+id/layout_task_detail_frame"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
@@ -117,8 +127,7 @@
 		        android:id="@+id/btn_task_detail_signup"
 		        android:layout_width="wrap_content" 
 		        android:layout_height="wrap_content"
-		        android:layout_marginRight="20dp"
-		        android:text="@string/signup"
+		        android:layout_marginRight="15dp"
 		        android:textSize="16sp"
 		        android:textColor="@color/white"
 		        android:background="@drawable/task_detail_btn_signup_bg"
@@ -127,11 +136,21 @@
 	            android:id="@+id/txt_task_detail_multi"
 	            android:layout_width="wrap_content" 
 		        android:layout_height="wrap_content"
-		        android:layout_marginRight="20dp"
+		        android:layout_marginRight="15dp"
 		        android:textSize="16sp"
 		        android:textColor="@color/black"
 		        android:visibility="gone"/>
 	    </FrameLayout>   
+	    <TextView 
+	        android:id="@+id/txt_task_detail_end"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_marginRight="10dp"
+			android:layout_toLeftOf="@id/layout_task_detail_frame"
+			android:textColor="@color/black"
+			android:textSize="16sp"
+			android:visibility="gone"/>
 	</RelativeLayout>
 	<include layout="@layout/task_detail_divider" />
 </LinearLayout>

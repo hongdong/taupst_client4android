@@ -4,8 +4,11 @@ public class Status {
 
 	private Long id;
 	
-	/*状态，ID，标题，内容，发布时间，截止时间，报酬，留言数，报名数*/
+	/*是否报名，状态，ID，标题，内容，发布时间，截止时间，报酬，留言数，报名数*/
+	
+	private String isSign;
 	private String statusState;
+	
 	private String statusId;
 	private String statusTitle;
 	private String statusContent;
@@ -75,6 +78,12 @@ public class Status {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getIsSign() {
+		return isSign;
+	}
+	public void setIsSign(String isSign) {
+		this.isSign = isSign;
 	}
 	public String getStatusState() {
 		return statusState;

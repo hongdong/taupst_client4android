@@ -135,6 +135,21 @@ public class Task {
 	public static final int TA_GET_TASK_DETAIL = 19;
 	public static final String TA_GET_TASK_DETAIL_ACTIVITY = "TaskByIdActivity";
 	
+	public static final int TA_END_TASK = 20;
+	public static final String TA_END_TASK_ACTIVITY = "activity";
+	public static final String TA_END_TASK_ACTIVITY_DETAIL = "TaskDetailActivity";
+	public static final String TA_END_TASK_ACTIVITY_BYID = "TaskByIdActivity";
+	
+	public static final int TA_PUSH = 21;
+	public static final String TA_PUSH_CHANNEL_ID = "channel_id";
+	public static final String TA_PUSH_USER_ID= "user_id";
+	
+	public static final int TA_GET_SIGNUP_LIST = 22;
+	public static final String TA_GET_SIGNUP_LIST_ACTIVITY = "SignUpListActivity";
+	
+	public static final int TA_EVALUATE = 23;
+	public static final String TA_EVALUATE_ACTIVITY = "EvaluateActivity";
+	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
 		this.taskId = taskId;

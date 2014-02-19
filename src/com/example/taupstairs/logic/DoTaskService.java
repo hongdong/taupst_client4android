@@ -15,6 +15,7 @@ import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
+import com.example.taupstairs.bean.SignUp;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -83,6 +84,19 @@ public class DoTaskService {
 			e.printStackTrace();	//如果没有连接网络，就会抛出异常，result就会为初值TA_NO：no
 		}
 		return result;
+	}
+	
+	public void doPushTask(Task task) {
+		Map<String, Object> taskParams = task.getTaskParams();
+		String channelid = (String) taskParams.get(Task.TA_PUSH_CHANNEL_ID);
+		String userid = (String) taskParams.get(Task.TA_PUSH_USER_ID);
+		String push_url = HttpClientUtil.BASE_URL + "/data/pull/save?user_id=" + userid +
+				"&channel_id=" + channelid;
+		try {
+			HttpClientUtil.getRequest(push_url);
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
 	}
 	
 	/*获取Person信息*/
@@ -186,7 +200,7 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String check_status_url = HttpClientUtil.BASE_URL + "data/sign/issign?task_id=" + statusId;
+		String check_status_url = HttpClientUtil.BASE_URL + "/data/task/checktask?task_id=" + statusId;
 		try {
 			result = HttpClientUtil.getRequest(check_status_url);
 		} catch (Exception e) {
@@ -363,6 +377,7 @@ public class DoTaskService {
 		String exec_task_url = HttpClientUtil.BASE_URL + 
 				"data/sign/ce?sign_id=" + signUpId + "&reply=" + signUpString;
 		try {
+			exec_task_url = StringUtil.replaceBlank(exec_task_url);
 			result = HttpClientUtil.getRequest(exec_task_url);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -383,6 +398,53 @@ public class DoTaskService {
 		}
 		return status;
 	}
+	
+	public String doEndTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String end_task_url = HttpClientUtil.BASE_URL + "/data/task/finish?task_id=" + statusId;
+		try {
+			result = HttpClientUtil.getRequest(end_task_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public List<SignUp> doGetSignUpListTask(Task task) {
+		List<SignUp> signUps = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String get_signup_list_url = HttpClientUtil.BASE_URL + "data/sign/signlist?task_id=" + statusId;
+		try {
+			String jsonString = HttpClientUtil.getRequest(get_signup_list_url);
+			signUps = JsonUtil.getSignUps(jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return signUps;
+	}
+	
+	public String doEvaluateTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String statusId = (String) taskParams.get(Status.STATUS_ID);
+		String signupId = (String) taskParams.get(SignUp.SIGNUP_ID);
+		String personId = (String) taskParams.get(SignUp.PERSON_ID);
+		String signupPraise = (String) taskParams.get(SignUp.SIGNUP_PRAISE);
+		String signupMessage = (String) taskParams.get(SignUp.SIGNUP_MESSAGE);
+		String evaluate_url = HttpClientUtil.BASE_URL + "/data/task/apprise?task_id=" + statusId
+				+ "&sign_id=" + signupId + "&users_id=" + personId 
+				+ "&prise=" + signupPraise + "&msg=" + signupMessage;
+		try {
+			evaluate_url = StringUtil.replaceBlank(evaluate_url);
+			result = HttpClientUtil.getRequest(evaluate_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	} 
 	
 	/*
 	 * 用户注销

@@ -115,6 +115,8 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		} else {
 			displayMessage();
 		}
+		replyId = info.getPersonId();	//这两个不初始化的话，直接回复就会出错
+		replyNickname = info.getPersonNickname();
 	}
 	
 	private void initView() {

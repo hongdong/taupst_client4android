@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:padding="5dp">
+	    
+    <LinearLayout 
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" 
+	    android:background="@color/white">
+        
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal">
+	        <!-- 头像  --> 
+			<ImageView 
+			    android:id="@+id/img_signup_list"
+			    android:layout_width="40dp"
+			    android:layout_height="40dp"
+			    android:layout_margin="10dp"
+			    android:contentDescription="@string/drawable"
+			    android:clickable="true"/>
+			
+			<RelativeLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp">
+				<!-- 昵称，时间  --> 
+				<LinearLayout 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:orientation="vertical">
+				    <TextView 
+				        android:id="@+id/txt_signup_list_nickname"
+				        android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textStyle="bold"
+						android:textColor="@color/green"
+						android:textSize="14sp"/>
+				    <TextView 
+				        android:id="@+id/txt_signup_list_time"
+				        android:layout_width="wrap_content"
+						android:layout_height="wrap_content"	
+						android:layout_marginTop="8dp"
+						android:textColor="@color/black"
+						android:textSize="14sp"/>
+				</LinearLayout>
+			
+				<!-- 是否为执行者  --> 
+				<TextView 
+			        android:id="@+id/txt_signup_list_isexe"
+			        android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"
+					android:textSize="16sp"
+					android:textColor="@color/black"/>
+			</RelativeLayout>
+	    </LinearLayout>
+	    
+	    <include layout="@layout/task_detail_divider" />
+		
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginBottom="10dp"
+		    android:id="@+id/layout_signup_list"
+		    android:visibility="gone">
+	        <TextView 
+		        android:id="@+id/txt_signup_list_message"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="60dp"
+				android:textColor="@color/black"
+				android:textSize="14sp"/>
+		    <TextView 
+		        android:id="@+id/txt_signup_list_praise"
+		        android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="10dp"
+				android:layout_alignParentRight="true"
+				android:textSize="14sp"
+				android:textStyle="bold"
+				android:textColor="@color/gold"/>
+	    </RelativeLayout>
+	    
+    </LinearLayout>
+</LinearLayout>

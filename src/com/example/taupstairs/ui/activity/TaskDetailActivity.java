@@ -8,7 +8,9 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -42,8 +44,8 @@ import com.example.taupstairs.util.TimeUtil;
 
 public class TaskDetailActivity extends Activity implements ItaActivity {
 
-	private Button btn_back, btn_refresh, btn_signup, btn_message;
-	private TextView txt_multi;
+	private Button btn_back, btn_multi, btn_message;
+	private TextView txt_expired, txt_end, txt_multi;
 	private Status status;
 	private Holder holder;
 	private Time now;
@@ -53,7 +55,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private String edit_text;
 	private String messageId, replyId, replyNickname;
 	private ProgressDialog progressDialog;
-	private boolean flag_message_or_signup;
+	private boolean flag_message_or_signup, flag_my_task, flag_expired, flag_end;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -72,20 +74,24 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		status = app.getStatus();
 		now = TimeUtil.getNow(Calendar.getInstance());
+		
 		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
-		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
-		if (personId.equals(status.getPersonId())) {
-			txt_multi.setText("我发布的");
-			txt_multi.setVisibility(View.VISIBLE);
+		if (status.getPersonId().equals(personId)) {
+			flag_my_task = true;
 		} else {
-			Time end = TimeUtil.originalToTime(status.getStatusEndTime());
-			if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
-				txt_multi.setText("已过期");
-				txt_multi.setVisibility(View.VISIBLE);	
-			} else {
-				doCheckStatusTask();
-			}
+			flag_my_task = false;
 		}
+		
+		txt_expired = (TextView)findViewById(R.id.txt_task_detail_expired);
+		Time end = TimeUtil.originalToTime(status.getStatusEndTime());
+		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
+			flag_expired = true;
+			txt_expired.setText("已过期");
+			txt_expired.setVisibility(View.VISIBLE);
+		} else {
+			flag_expired = false;
+		}
+		
 		flag_message_or_signup = false;
 	}
 	
@@ -110,11 +116,14 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_task_detail);
-		btn_refresh = (Button)findViewById(R.id.btn_refresh_task_detail);
-		btn_signup = (Button)findViewById(R.id.btn_task_detail_signup);
+		txt_end = (TextView)findViewById(R.id.txt_task_detail_end);
+		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
+		btn_multi = (Button)findViewById(R.id.btn_task_detail_signup);
 		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
 		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
 		progressDialog = new ProgressDialog(this);
+		
+		doCheckStatusTask();
 		
 		holder = new Holder();
 		holder.img_task_detail_photo = (ImageView)findViewById(R.id.img_photo);
@@ -177,18 +186,35 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			}
 		});
 		
-		btn_refresh.setOnClickListener(new OnClickListener() {
+		btn_multi.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				
-			}
-		});
-		
-		btn_signup.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
-				intent.putExtra(Status.STATUS_ID, status.getStatusId());
-				intent.putExtra(Status.PERSON_ID, status.getPersonId());
-				startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
+				if (flag_my_task) {
+					if (flag_end) {
+						jumpToEndTask();
+					} else {
+						//弹框提示是否真的要完结
+						AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailActivity.this);
+						builder.setTitle("任务完结后其它童鞋将不可报名\n确定要完结吗？")
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								doEndTaskTask();
+							}
+						})
+						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								//销毁对话框，什么都不做
+							}
+						})
+						.create()
+						.show();
+					}
+				} else {
+					Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
+					intent.putExtra(Task.TA_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
+					intent.putExtra(Status.STATUS_ID, status.getStatusId());
+					intent.putExtra(Status.PERSON_ID, status.getPersonId());
+					startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
+				}
 			}
 		});
 		
@@ -225,6 +251,12 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		KeyBoardUtil.show(this, edit_message); 
 	}
 	
+	private void jumpToEndTask() {
+		Intent intent = new Intent(TaskDetailActivity.this, SignUpListActivity.class);
+		intent.putExtra(Status.STATUS_ID, status.getStatusId());
+		startActivity(intent);
+	}
+	
 	/**
 	 * 检测任务
 	 */
@@ -232,6 +264,18 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
 		taskParams.put(Status.STATUS_ID, status.getStatusId());
 		Task task = new Task(Task.TA_CHECKSTATUS, taskParams);
+		MainService.addTask(task);
+	}
+	
+	/**
+	 * 完结任务
+	 */
+	private void doEndTaskTask() {
+		showProgressDialog();
+		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+		taskParams.put(Task.TA_END_TASK_ACTIVITY, Task.TA_END_TASK_ACTIVITY_DETAIL);
+		taskParams.put(Status.STATUS_ID, status.getStatusId());
+		Task task = new Task(Task.TA_END_TASK, taskParams);
 		MainService.addTask(task);
 	}
 	
@@ -277,10 +321,29 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				String result = (String) params[1];
 				try {
 					JSONObject jsonObject = new JSONObject(result);
-					int state = jsonObject.getInt(JsonString.Return.STATE);
-					testState(state);
+					int statusState = jsonObject.getInt(JsonString.Status.STATUS_STATE);
+					int isSign = jsonObject.getInt(JsonString.Status.IS_SIGN);
+					testState(statusState, isSign);
 				} catch (JSONException e) {
 					e.printStackTrace();
+				}
+				break;
+				
+			case Task.TA_END_TASK:
+				String end = (String) params[1];
+				System.out.println(end);
+				try {
+					JSONObject endObject = new JSONObject(end);
+					String state = endObject.getString(JsonString.Return.STATE).trim();
+					if (state.equals(JsonString.Return.STATE_OK)) {
+						flag_end = true;
+						btn_multi.setText("已完结");
+						jumpToEndTask();
+					} else {
+						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
+					}
+				} catch (JSONException e1) {
+					e1.printStackTrace();
 				}
 				break;
 			
@@ -321,31 +384,54 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	 * 检测任务后测试状态
 	 * @param state	
 	 */
-	private void testState(int state) {
-		switch (state) {
-		case 0:	//正常
-			btn_signup.setVisibility(View.VISIBLE);
-			break;
-		case 1:	
-			txt_multi.setText("已报名");
-			txt_multi.setVisibility(View.VISIBLE);
-			break;
-		case 2:
-			Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
-			break;
-		case 3:
-			//是我发布的
-			break;
-		case 4:
-			//已过期，我来处理
-			break;
-		case 5:
-			txt_multi.setText("已完结");
-			txt_multi.setVisibility(View.VISIBLE);
-			break;
-
-		default:
-			break;
+	private void testState(int statusState, int isSign) {
+		if (flag_my_task) {		//是我发布的。这个时候按钮都可用
+			switch (statusState) {
+			case 1:	
+				flag_end = false;
+				btn_multi.setText("点击完结");
+				btn_multi.setVisibility(View.VISIBLE);
+				break;
+				
+			case 3:	
+				flag_end = true;
+				btn_multi.setText("已完结");
+				btn_multi.setVisibility(View.VISIBLE);
+				break;
+				
+			default:	
+				break;
+			}
+		} else {	//这里有8种情况，过期、报名、完结的组合，2的3次方。暂时先这样做
+			switch (statusState) {	//过期上面已经显示了，先判断是否已经完结
+			case 1:	
+				flag_end = false;
+				txt_end.setText("未完结");
+				txt_end.setVisibility(View.VISIBLE);
+				break;
+				
+			case 3:
+				flag_end = true;
+				txt_end.setText("已完结");
+				txt_end.setVisibility(View.VISIBLE);
+				break;
+				
+			default:
+				break;
+			}
+			
+			if (0 == isSign) {	//未报名，且未过期未完结的时候，才能猛戳报名。不然就是未报名
+				if (!flag_expired && !flag_end) {
+					btn_multi.setText("猛戳报名");
+					btn_multi.setVisibility(View.VISIBLE);
+				} else {
+					txt_multi.setText("未报名");
+					txt_multi.setVisibility(View.VISIBLE);
+				}
+			} else {	//已经报名了
+				txt_multi.setText("已报名");
+				txt_multi.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 	
@@ -412,7 +498,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		case IntentString.RequestCode.TASKDETAIL_SIGNUP:
 			if (IntentString.ResultCode.SIGNUP_TASKDETAIL == resultCode) {
 				Toast.makeText(this, "报名成功", Toast.LENGTH_SHORT).show();
-				btn_signup.setVisibility(View.GONE);
+				btn_multi.setVisibility(View.GONE);
 				txt_multi.setText("已报名");
 				txt_multi.setVisibility(View.VISIBLE);
 				int count = Integer.valueOf(status.getStatusSignUpCount()) + 1;

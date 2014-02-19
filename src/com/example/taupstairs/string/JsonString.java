@@ -32,7 +32,10 @@ public class JsonString {
 	}
 	
 	public static class Status {
+		
+		public static final String IS_SIGN = "isSign";
 		public static final String STATUS_STATE = "task_state";
+		
 		public static final String STATUS_ID = "task_id";
 		public static final String STATUS_TITLE = "title";
 		public static final String STATUS_CONTENT = "content";
@@ -130,6 +133,26 @@ public class JsonString {
 		public static final String PERSON_PHONE = "phone";
 		public static final String PERSON_QQ = "qq";
 		public static final String PERSON_EMAIL = "email";
+	}
+	
+	public static class InfoEndTask {
+		public static final String ENDTASK_STRING = "msg";
+		public static final String STATUS_ID = "task_id";
+		public static final String STATUS_PERSONID = "users_id";
+		public static final String STATUS_PERSONNICKNAME = "username";
+		public static final String STATUS_TITLE = "title";
+		public static final String ENDTASK_PRAISE = "prise";
+	}
+	
+	public static class SignUp {
+		public static final String SIGNUP_ID = "sign_id";
+		public static final String PERSON_ID = "users_id";
+		public static final String PERSON_PHOTOURL = "photo";
+		public static final String PERSON_NICKNAME = "username";
+		public static final String SIGNUP_TIME = "sign_time";
+		public static final String IS_EXE = "isexe";
+		public static final String SIGNUP_PRAISE = "prise";
+		public static final String SIGNUP_MESSAGE = "msg";
 	}
 	
 	public static class Return {

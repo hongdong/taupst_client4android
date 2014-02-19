@@ -150,7 +150,7 @@ public class InfoExecTaskActivity extends Activity implements ItaActivity {
 	private void displayExecTask() {
 		InfoExecTask infoExecTask = info.getInfoExecTask();
 		holder.txt_exec_task_string_reply.setText(infoExecTask.getSignUpStringReply());
-		holder.view.setOnClickListener(new TaskByIdListener(this, info.getInfoExecTask().getStatusId()));
+		holder.view.setOnClickListener(new TaskByIdListener(this, infoExecTask.getStatusId()));
 		holder.txt_status_nickname.setText(infoExecTask.getStatusPersonNickname());
 		holder.txt_status_title.setText("  :  " + infoExecTask.getStatusTitle());
 		holder.txt_exec_task_string_nickname.setText(infoExecTask.getSignUpStringNickname());
