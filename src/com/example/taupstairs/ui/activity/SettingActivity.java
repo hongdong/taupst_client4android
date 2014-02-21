@@ -26,7 +26,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 	private Button btn_back, btn_change_user;
 	private ListView list_user, list_soft;
 	private String[] setting_user = {"联系资料", "清除缓存", };
-	private String[] setting_soft = {"关于我们", "服务声名", "检查更新", "用户反馈"};
+	private String[] setting_soft = {"关于我们", "服务声名", "版本特性", "用户反馈"};
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

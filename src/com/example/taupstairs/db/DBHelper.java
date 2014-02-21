@@ -44,6 +44,8 @@ public class DBHelper extends SQLiteOpenHelper {
 	
 	private void initStatusDB(SQLiteDatabase db) {
 		db.execSQL(DBInfo.Table.STATUS_CREATE_STRING);
+		db.execSQL(DBInfo.Table.MY_RELEASE_STATUS_CREATE_STRING);
+		db.execSQL(DBInfo.Table.MY_SIGNUP_STATUS_CREATE_STRING);
 	}
 	
 	private void initRankDB(SQLiteDatabase db) {

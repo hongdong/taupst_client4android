@@ -90,7 +90,7 @@ public class DoTaskService {
 		Map<String, Object> taskParams = task.getTaskParams();
 		String channelid = (String) taskParams.get(Task.TA_PUSH_CHANNEL_ID);
 		String userid = (String) taskParams.get(Task.TA_PUSH_USER_ID);
-		String push_url = HttpClientUtil.BASE_URL + "/data/pull/save?user_id=" + userid +
+		String push_url = HttpClientUtil.BASE_URL + "data/pull/save?user_id=" + userid +
 				"&channel_id=" + channelid;
 		try {
 			HttpClientUtil.getRequest(push_url);
@@ -122,26 +122,55 @@ public class DoTaskService {
 		List<Status> listStatus = null;
 		String getstatus_url = null;
 		Map<String, Object> taskParams = task.getTaskParams();
+		int type = (Integer) taskParams.get(Task.TA_GETSTATUS_TYPE);
 		int mode = (Integer) taskParams.get(Task.TA_GETSTATUS_MODE);
-		String statusId = null;
+		String statusId = null, personId = null;
 		switch (mode) {
 		case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down";
 			break;
 			
 		case Task.TA_GETSTATUS_MODE_PULLREFRESH:
-			statusId = (String) taskParams.get(Task.TA_GETSTATUS_STATUSID);
+			statusId = (String) taskParams.get(Status.STATUS_ID);
 			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down?task_id=" + statusId;
 			break;
 			
 		case Task.TA_GETSTATUS_MODE_LOADMORE:
-			statusId = (String) taskParams.get(Task.TA_GETSTATUS_STATUSID);
+			statusId = (String) taskParams.get(Status.STATUS_ID);
 			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Up?task_id=" + statusId;
 			break;
 
 		default:
 			break;
 		}
+		
+		switch (type) {
+		case Task.TA_GETSTATUS_TYPE_ALL:
+			
+			break;
+			
+		case Task.TA_GETSTATUS_TYPE_MY_RELEASE:
+			personId = (String) taskParams.get(Person.PERSON_ID);
+			if (Task.TA_GETSTATUS_MODE_FIRSTTIME == mode) {
+				getstatus_url += "?my=" + personId;
+			} else {
+				getstatus_url += "&my=" + personId;
+			}
+			break;
+			
+		case Task.TA_GETSTATUS_TYPE_MY_SIGNUP:
+			personId = (String) taskParams.get(Person.PERSON_ID);
+			if (Task.TA_GETSTATUS_MODE_FIRSTTIME == mode) {
+				getstatus_url += "?sign=" + personId;
+			} else {
+				getstatus_url += "&sign=" + personId;
+			}
+			break;	
+
+		default:
+			break;
+		}
+		
 		try {
 			String jsonString = HttpClientUtil.getRequest(getstatus_url);
 			/*如果数组长度为0，则链表长度为0，但他不为空，因为在里面已经new了，
@@ -200,7 +229,7 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String check_status_url = HttpClientUtil.BASE_URL + "/data/task/checktask?task_id=" + statusId;
+		String check_status_url = HttpClientUtil.BASE_URL + "data/task/checktask?task_id=" + statusId;
 		try {
 			result = HttpClientUtil.getRequest(check_status_url);
 		} catch (Exception e) {
@@ -264,7 +293,7 @@ public class DoTaskService {
 		String personId = (String) taskParams.get(Status.PERSON_ID);
 		String contact = (String) taskParams.get(Task.TA_SIGNUP_CONTACT);
 		String message = (String) taskParams.get(Task.TA_SIGNUP_MESSAGE);
-		String signup_url = HttpClientUtil.BASE_URL + "/data/sign/save?task_id=" + statusId + 
+		String signup_url = HttpClientUtil.BASE_URL + "data/sign/save?task_id=" + statusId + 
 				"&task_user=" + personId + "&open_mes=" + contact + "&message=" + message;
 		try {
 			signup_url = StringUtil.replaceBlank(signup_url);
@@ -358,7 +387,7 @@ public class DoTaskService {
 		String infoSource = (String) taskParams.get(Info.INFO_SOURCE);
 		String infoType = (String) taskParams.get(Info.INFO_TYPE);
 		String getinfo_detail_url = HttpClientUtil.BASE_URL + 
-				"/data/news/detail?source=" + infoSource + "&type=" + infoType;
+				"data/news/detail?source=" + infoSource + "&type=" + infoType;
 		try {
 			String jsonString = HttpClientUtil.getRequest(getinfo_detail_url);
 			int type = Integer.parseInt(infoType);
@@ -403,7 +432,7 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
-		String end_task_url = HttpClientUtil.BASE_URL + "/data/task/finish?task_id=" + statusId;
+		String end_task_url = HttpClientUtil.BASE_URL + "data/task/finish?task_id=" + statusId;
 		try {
 			result = HttpClientUtil.getRequest(end_task_url);
 		} catch (Exception e) {
@@ -434,7 +463,7 @@ public class DoTaskService {
 		String personId = (String) taskParams.get(SignUp.PERSON_ID);
 		String signupPraise = (String) taskParams.get(SignUp.SIGNUP_PRAISE);
 		String signupMessage = (String) taskParams.get(SignUp.SIGNUP_MESSAGE);
-		String evaluate_url = HttpClientUtil.BASE_URL + "/data/task/apprise?task_id=" + statusId
+		String evaluate_url = HttpClientUtil.BASE_URL + "data/task/apprise?task_id=" + statusId
 				+ "&sign_id=" + signupId + "&users_id=" + personId 
 				+ "&prise=" + signupPraise + "&msg=" + signupMessage;
 		try {

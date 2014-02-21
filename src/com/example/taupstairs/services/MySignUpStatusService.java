@@ -9,11 +9,11 @@ import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.db.DBHelper;
 import com.example.taupstairs.db.DBInfo;
 
-public class StatusService {
+public class MySignUpStatusService {
 
 	private DBHelper dbHelper;
 	
-	public StatusService(Context context) {
+	public MySignUpStatusService(Context context) {
 		dbHelper = new DBHelper(context);
 	}
 	
@@ -22,7 +22,8 @@ public class StatusService {
 	 */
 	public List<Status> getListStatus() {
 		List<Status> listStatus = new ArrayList<Status>(Status.STATUS_COUNT_PERPAGE);
-		Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + DBInfo.Table.STATUS_TB_NAME, null);
+		Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
+				"select * from " + DBInfo.Table.MY_SIGNUP_STATUS_TB_NAME, null);
 		if (null == cursor || cursor.getCount() <= 0) {
 			return null;
 		}
@@ -54,7 +55,7 @@ public class StatusService {
 	 * 清空表
 	 */
 	public void emptyStatusDb() {
-		dbHelper.getReadableDatabase().execSQL("delete from " + DBInfo.Table.STATUS_TB_NAME);
+		dbHelper.getReadableDatabase().execSQL("delete from " + DBInfo.Table.MY_SIGNUP_STATUS_TB_NAME);
 	}
 	
 	/*
@@ -64,7 +65,7 @@ public class StatusService {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		for (int i = 0; i < listStatus.size() && i < Status.STATUS_COUNT_PERPAGE; i++) {
 			Status status = listStatus.get(i);
-			db.execSQL("insert into " + DBInfo.Table.STATUS_TB_NAME + 
+			db.execSQL("insert into " + DBInfo.Table.MY_SIGNUP_STATUS_TB_NAME + 
 					" values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 					new String[] {status.getStatusId(), status.getStatusTitle(), 
 					status.getStatusContent(), status.getStatusReleaseTime(), status.getStatusEndTime(), 

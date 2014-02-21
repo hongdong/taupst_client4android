@@ -10,6 +10,19 @@
 	    android:orientation="vertical"
 	    android:background="@color/common_bg">
 	    <com.example.taupstairs.view.MyListView
+	        android:id="@+id/list_fm_me_status"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:cacheColorHint="#00000000"
+	        android:divider="@color/white_divider"
+	        android:dividerHeight="1dp"
+	        android:background="@drawable/common_list_bg"
+	        android:visibility="gone">
+	        
+	    </com.example.taupstairs.view.MyListView>
+	    
+	    <com.example.taupstairs.view.MyListView
 	        android:id="@+id/list_fm_me_variable"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"

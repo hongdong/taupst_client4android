@@ -56,7 +56,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private boolean isExit = false;
 	
 	private boolean noNet = true;
-	private boolean goCheck = false;
+	private boolean isChecking = false;
 	private boolean displayNoNet = false;
 	private ChangeUserReceiver receiver;
 	
@@ -84,8 +84,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	@Override
 	public void init() {
 		initData();
-		initView();
 		initCheckNetTask();
+		initView();
 		initReceiver();
 		initSetListener();
 	}
@@ -93,9 +93,9 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	/*初始化全局变量*/
 	private void initData() {
 		// 以apikey的方式登录，一般放在主Activity的onCreate中
-		PushManager.startWork(getApplicationContext(),
-				PushConstants.LOGIN_TYPE_API_KEY, 
-				Utils.getMetaValue(this, "api_key"));
+//		PushManager.startWork(getApplicationContext(),
+//				PushConstants.LOGIN_TYPE_API_KEY, 
+//				Utils.getMetaValue(this, "api_key"));
 				
 		defaultUser = SharedPreferencesUtil.getDefaultUser(HomePageActivity.this);
 		currentIndex = 0;
@@ -147,8 +147,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		new Thread() {
 			public void run() {
 				while (noNet) {
-					if (!goCheck) {
-						goCheck = true;
+					if (!isChecking) {
+						isChecking = true;
 						doCheckNetTask();
 						try {
 							sleep(1000);
@@ -269,8 +269,12 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 				}
 			} else {
 				noNet = false;
+				/*登录之后才能发id*/
+				PushManager.startWork(getApplicationContext(),
+						PushConstants.LOGIN_TYPE_API_KEY, 
+						Utils.getMetaValue(this, "api_key"));
 			}
-			goCheck = false;
+			isChecking = false;
 			break;
 			
 		case Task.TA_USEREXIT:

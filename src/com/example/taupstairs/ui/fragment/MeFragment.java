@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -24,10 +26,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.PersonVariableDataAdapter;
 import com.example.taupstairs.bean.Person;
@@ -39,6 +43,8 @@ import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
+import com.example.taupstairs.ui.activity.MyReleaseStatusActivity;
+import com.example.taupstairs.ui.activity.MySignUpStatusActivity;
 import com.example.taupstairs.ui.activity.SettingActivity;
 import com.example.taupstairs.ui.activity.UpdataUserdataBaseActivity;
 import com.example.taupstairs.util.SdCardUtil;
@@ -51,7 +57,8 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private Person defaultPerson;
 	private PersonService personService;
 	private View view;
-	private ListView list_variable, list_base;
+	private ListView list_status, list_variable, list_base;
+	private String[] my_status = {"我发布的任务", "我报名的任务"};
 	private PersonVariableDataAdapter variable_adapter;
 	private TextView txt_setting;
 	private static final String LIST_LEFT = "left";
@@ -101,10 +108,34 @@ public class MeFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void initView() {
+		list_status = (ListView)view.findViewById(R.id.list_fm_me_status);
 		list_variable = (ListView)view.findViewById(R.id.list_fm_me_variable);
 		list_base = (ListView)view.findViewById(R.id.list_fm_me_base);
 		txt_setting = (TextView)view.findViewById(R.id.txt_fm_me_setting);
 		progressDialog = new ProgressDialog(context);
+		
+		ArrayAdapter<String> adapter_status = new ArrayAdapter<String>(context, 
+				R.layout.common_txt_item, my_status);
+		list_status.setAdapter(adapter_status);
+		list_status.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				switch (arg2) {
+				case 0:
+					Intent intent1 = new Intent(context, MyReleaseStatusActivity.class);
+					startActivity(intent1);
+					break;
+					
+				case 1:
+					Intent intent2 = new Intent(context, MySignUpStatusActivity.class);
+					startActivity(intent2);
+					break;
+
+				default:
+					break;
+				}
+			}
+		});
 		
 		if (defaultPerson != null) {		//在initData里面已经从数据库中读数据了
 			displayPerson(defaultPerson);	//如果数据库中有数据，就直接显示出来
@@ -342,6 +373,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 	private void displayPerson(Person defaultPerson) {
 		displayPersonVariable(defaultPerson);
 		displayPersonBase(defaultPerson);
+		list_status.setVisibility(View.VISIBLE);	//把任务选项列表显示出来
 		txt_setting.setVisibility(View.VISIBLE);	//把设置那一行显示出来
 	}
 	

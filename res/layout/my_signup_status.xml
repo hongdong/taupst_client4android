@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/common_bg">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/actionbar_bg" >
+        <Button
+            android:id="@+id/btn_back_my_signup_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/btn_back_bg" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/my_signup_status"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+    <com.example.taupstairs.view.XListView 
+        android:id="@+id/xlist_my_signup_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:divider="@null"
+        android:cacheColorHint="#00000000">
+    </com.example.taupstairs.view.XListView>
+</LinearLayout>

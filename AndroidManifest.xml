@@ -125,6 +125,13 @@
             android:name=".ui.activity.EvaluateActivity"
             android:screenOrientation="portrait"></activity>
         
+        <activity 
+            android:name=".ui.activity.MyReleaseStatusActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.MySignUpStatusActivity"
+            android:screenOrientation="portrait"></activity>
+        
         <service android:name=".logic.MainService"></service>
         
         <!-- push service client -->

@@ -66,6 +66,12 @@ public class Time {
 	public void setMinute(int minute) {
 		this.minute = minute;
 	}
+
+	@Override
+	public String toString() {
+		return "Time [year=" + year + ", month=" + month + ", day=" + day
+				+ ", hour=" + hour + ", minute=" + minute + "]";
+	}
 	
 	
 }

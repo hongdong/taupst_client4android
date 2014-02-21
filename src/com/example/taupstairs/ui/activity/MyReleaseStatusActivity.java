@@ -1,39 +1,36 @@
-package com.example.taupstairs.ui.fragment;
+package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.content.Context;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.logic.ItaFragment;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
-import com.example.taupstairs.services.StatusService;
-import com.example.taupstairs.string.HomePageString;
+import com.example.taupstairs.services.MyReleaseStatusService;
 import com.example.taupstairs.string.IntentString;
-import com.example.taupstairs.ui.activity.TaskDetailActivity;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
 
-public class TaskFragment extends Fragment implements ItaFragment {
+public class MyReleaseStatusActivity extends Activity implements ItaActivity {
 
-	private Context context;
-	private View view;
+	private Button btn_back;
 	private XListView xlist_task;
 	private TaskAdapter adapter;
 	private List<Status> currentStatus;
@@ -42,54 +39,48 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	/*是否正在加载任务*/
 	private boolean isRefresh;
 	
-	private StatusService statusService;
+	private MyReleaseStatusService statusService;
 	private String lastestStatusId;
 	private String oldestStatusId;
 	private String lastestUpdata;
-	
-	public TaskFragment() {
-		super();
-	}
-	
-	public TaskFragment(Context context) {
-		super();
-		this.context = context;
-	}
-	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MainService.addFragment(TaskFragment.this);
-		initData();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		view =  inflater.inflate(R.layout.fm_task, container, false);
-		initView();
-		return view;
+		setContentView(R.layout.my_release_status);
+		MainService.addActivity(this);
+		init();
 	}
 	
 	@Override
-	public void initData() {
+	public void init() {
+		initData();
+		initView();
+	}
+	
+	private void initData() {
 		isRefresh = false;
-		lastestStatusId = SharedPreferencesUtil.getLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID);
+		lastestStatusId = SharedPreferencesUtil.getLastestId(this, SharedPreferencesUtil.LASTEST_MY_RELEASE_STATUS_ID);
 		if (null == lastestStatusId) {
 			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);		
 		} else {
 			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);	
 		}
-		statusService = new StatusService(context);	
+		statusService = new MyReleaseStatusService(this);	
 		currentStatus = statusService.getListStatus();
 	}
-
-	@Override
-	public void initView() {
-		xlist_task = (XListView) view.findViewById(R.id.xlist_fm_task);	
+	
+	private void initView() {
+		btn_back = (Button)findViewById(R.id.btn_back_my_release_status);
+		btn_back.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
+		xlist_task = (XListView) findViewById(R.id.xlist_my_release_status);	
 		xlist_task.setPullLoadEnable(false);
 		if (currentStatus != null) {
-			adapter = new TaskAdapter(context, currentStatus);
+			adapter = new TaskAdapter(this, currentStatus);
 			xlist_task.setAdapter(adapter);
 		}
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
@@ -98,10 +89,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 				if (currentStatus.size() >= arg2) {
 					clickPosition = arg2 - 1;
 					/*全局变量传递数据*/
-					Intent intent = new Intent(context, TaskDetailActivity.class);
-					TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+					Intent intent = new Intent(MyReleaseStatusActivity.this, TaskDetailActivity.class);
+					TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 					app.setStatus(currentStatus.get(arg2 - 1));
-					startActivityForResult(intent, IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL);
+					startActivityForResult(intent, IntentString.RequestCode.MYRELEASESTATUS_TASKDETAIL);
 				}
 			}
 		});
@@ -119,16 +110,18 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		});
 	}
 	
-	/*
-	 * 加载任务。
-	 * 参数标志着是不是第一次加载，下拉刷新，上拉加载更多
+	/**
+	 * 
+	 * @param mode
+	 * @param statusId
 	 */
 	private void getStatusFromTask(int mode, String statusId) {
 		if (!isRefresh) {
 			isRefresh = true;
 			Map<String, Object> taskParams = new HashMap<String, Object>();
-			taskParams.put(Task.TA_GETSTATUS_ACTIVITY, Task.TA_GETSTATUS_FRAGMENT);
-			taskParams.put(Task.TA_GETSTATUS_TYPE, Task.TA_GETSTATUS_TYPE_ALL);
+			taskParams.put(Task.TA_GETSTATUS_ACTIVITY, Task.TA_GETSTATUS_MYRELEASESTATUS);
+			taskParams.put(Task.TA_GETSTATUS_TYPE, Task.TA_GETSTATUS_TYPE_MY_RELEASE);
+			taskParams.put(Person.PERSON_ID, SharedPreferencesUtil.getDefaultUser(this).getUserId());
 			taskParams.put(Task.TA_GETSTATUS_MODE, mode);
 			taskParams.put(Status.STATUS_ID, statusId);
 			Task task = new Task(Task.TA_GETSTATUS, taskParams);
@@ -152,39 +145,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		}
 	}
 	
-	/*
-	 * HomePage的本地回调
-	 */
-	public void localRefresh(int id, Map<String, Object> params) {
-		switch (id) {
-		case HomePageString.UPDATA_PHOTO:
-			String personId_p = (String) params.get(Person.PERSON_ID);
-			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
-			for (Status status : currentStatus) {
-				if (personId_p.equals(status.getPersonId())) {
-					status.setPersonPhotoUrl(personPhotoUrl);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-		case HomePageString.UPDATA_NICKNAME:
-			String personId_n = (String) params.get(Person.PERSON_ID);
-			String personNickname = (String) params.get(Person.PERSON_NICKNAME);
-			for (Status status : currentStatus) {
-				if (personId_n.equals(status.getPersonId())) {
-					status.setPersonNickname(personNickname);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-
-		default:
-			break;
-		}
-	}
-	
-	/*
-	 * 刷新列表
+	/**
+	 * 
+	 * @param mode
+	 * @param newStatus
 	 */
 	private void refreshList(int mode, List<Status> newStatus) {
 		if (newStatus != null) {
@@ -192,7 +156,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;
 				/*第一次上面不会设置这个，所以这里要设置*/
-				adapter = new TaskAdapter(context, currentStatus);
+				adapter = new TaskAdapter(this, currentStatus);
 				xlist_task.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				break;
@@ -205,7 +169,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 						adapter.notifyDataSetChanged();
 					} else {	/*读取数据库可能失败。或许是上次没保存好*/
 						currentStatus = newStatus;
-						adapter = new TaskAdapter(context, currentStatus);
+						adapter = new TaskAdapter(this, currentStatus);
 						xlist_task.setAdapter(adapter);
 					}
 				} else {
@@ -251,22 +215,14 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL:
-			if (IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT == resultCode) {
-				TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+		case IntentString.RequestCode.MYRELEASESTATUS_TASKDETAIL:
+			if (IntentString.ResultCode.TASKDETAIL_MYRELEASESTATUS == resultCode) {
+				TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 				Status status = app.getStatus();
 				currentStatus.add(clickPosition, status);
 				currentStatus.remove(clickPosition + 1);
 				adapter.notifyDataSetChanged();
 			}
-			break;
-			
-		/*这里捕获不到，看来要在homepage捕获到，再调用*/
-		case IntentString.RequestCode.HOMEPAGE_WRITE:
-//			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
-//				Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-//				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
-//			}
 			break;
 
 		default:
@@ -274,26 +230,17 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		}
 	}
 	
-	public void releaseTaskSuccess() {
-		Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-		if (null == lastestStatusId) {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
-		} else {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
-		}
-	}
-
-	/*
-	 * 退出的时候保存一下最新任务ID和任务。
-	 * 保存的方法里面只会保存一页（20条）的内容
-	 */
-	public void exit() {
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MainService.removeActivity(this);
 		if (statusService != null && lastestStatusId != null) {
-			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestStatusId);
+			SharedPreferencesUtil.savaLastestId(this, 
+					SharedPreferencesUtil.LASTEST_MY_RELEASE_STATUS_ID, lastestStatusId);
 			statusService.emptyStatusDb();
 			statusService.insertListStatus(currentStatus);
 			statusService.closeDBHelper();
 		}
 	}
-	
+
 }

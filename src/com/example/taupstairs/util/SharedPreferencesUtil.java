@@ -13,6 +13,8 @@ public class SharedPreferencesUtil {
 	private static final String LASTEST_ID = "lastest_id";
 	public static final int LASTEST_INFOID = 1;
 	public static final int LASTEST_STATUSID = 2;
+	public static final int LASTEST_MY_RELEASE_STATUS_ID = 3;
+	public static final int LASTEST_MY_SIGNUP_STATUS_ID = 4;
 
 	/*存储默认账户（如果先前存储过默认账户，则会覆盖）*/
 	public static void saveDefaultUser(Context context, User user) {
@@ -52,6 +54,14 @@ public class SharedPreferencesUtil {
 		case LASTEST_STATUSID:
 			editor.putString(Status.STATUS_ID, lastestId);
 			break;
+			
+		case LASTEST_MY_RELEASE_STATUS_ID:
+			editor.putString(Status.STATUS_RELEASETIME, lastestId);
+			break;
+		
+		case LASTEST_MY_SIGNUP_STATUS_ID:
+			editor.putString(Status.STATUS_SIGNUPCOUNT, lastestId);
+			break;
 
 		default:
 			break;
@@ -73,6 +83,14 @@ public class SharedPreferencesUtil {
 			
 		case LASTEST_STATUSID:
 			id = sp.getString(Status.STATUS_ID, null);
+			break;
+			
+		case LASTEST_MY_RELEASE_STATUS_ID:
+			id = sp.getString(Status.STATUS_RELEASETIME, null);
+			break;
+		
+		case LASTEST_MY_SIGNUP_STATUS_ID:
+			id = sp.getString(Status.STATUS_SIGNUPCOUNT, null);
 			break;
 
 		default:

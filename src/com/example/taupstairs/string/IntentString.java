@@ -15,6 +15,8 @@ public class IntentString {
 		public static final int INFOSIGNUP_INFOSIGNUPEXEC = 11;
 		public static final int TASKBYID_SIGNUP = 12;
 		public static final int SIGNUPLIST_EVALUATE = 13;
+		public static final int MYRELEASESTATUS_TASKDETAIL = 14;
+		public static final int MYSIGNUPSTATUS_TASKDETAIL = 15;
 	}
 	
 	public static class ResultCode {
@@ -28,6 +30,8 @@ public class IntentString {
 		public static final int INFOSIGNUPEXEC_INFOSIGNUP = 11;
 		public static final int SIGNUP_TASKBYID = 12;
 		public static final int EVALUATE_SIGNUPLIST = 13;
+		public static final int TASKDETAIL_MYRELEASESTATUS = 14;
+		public static final int TASKDETAIL_MYSIGNUPSTATUS = 15;
 	}
 	
 	public static class Extra {

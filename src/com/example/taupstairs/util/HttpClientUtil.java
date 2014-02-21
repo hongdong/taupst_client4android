@@ -38,6 +38,7 @@ public class HttpClientUtil {
 	private static final int DEFAULT_SOCKET_TIMEOUT = 5000;
 	private static final String SCHEME_NAME = "http";
 	public static final String BASE_URL = "http://taupst.duapp.com/";
+//	public static final String BASE_URL = "http://192.168.1.101:8080/TaUpst/";
 	public static final String PHOTO_BASE_URL = "http://bcs.duapp.com/taupst/photo/";
 	
 	/*

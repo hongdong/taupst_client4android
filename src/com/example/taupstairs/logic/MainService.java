@@ -32,12 +32,16 @@ public class MainService extends Service implements Runnable {
 			switch (msg.what) {	
 			case Task.TA_LOGIN:
 				ItaActivity activity_login = (ItaActivity) getActivityByName(Task.TA_LOGIN_ACTIVITY);
-				activity_login.refresh(Task.TA_LOGIN, msg.obj);
+				if (activity_login != null) {
+					activity_login.refresh(Task.TA_LOGIN, msg.obj);
+				}
 				break;
 				
 			case Task.TA_CHECKNET:
 				ItaActivity activity_checknet = (ItaActivity) getActivityByName(Task.TA_CHECKNET_ACTIVITY);
-				activity_checknet.refresh(Task.TA_CHECKNET, msg.obj);
+				if (activity_checknet != null) {
+					activity_checknet.refresh(Task.TA_CHECKNET, msg.obj);
+				}
 				break;
 				
 			case Task.TA_GETUSERDATA:
@@ -53,10 +57,23 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_GETSTATUS:
-				ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
 				Bundle data_getstatus = msg.getData();
+				String activity_getstatus = data_getstatus.getString(Task.TA_GETSTATUS_ACTIVITY);
 				int mode = data_getstatus.getInt(Task.TA_GETSTATUS_MODE);
-				fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
+				if (activity_getstatus.equals(Task.TA_GETSTATUS_FRAGMENT)) {
+					ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
+					fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
+				} else if (activity_getstatus.equals(Task.TA_GETSTATUS_MYRELEASESTATUS)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETSTATUS_MYRELEASESTATUS);
+					if (activity != null) {
+						activity.refresh(Task.TA_GETSTATUS, mode, msg.obj);
+					}
+				} else if (activity_getstatus.equals(Task.TA_GETSTATUS_MYSIGNUPSTATUS)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETSTATUS_MYSIGNUPSTATUS);
+					if (activity != null) {
+						activity.refresh(Task.TA_GETSTATUS, mode, msg.obj);
+					}
+				}
 				break;
 				
 			case Task.TA_RELEASE:
@@ -289,9 +306,11 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_GETSTATUS:
 			msg.obj = doTaskService.doGetStatusTask(task);
+			String activity_getstatus = (String) taskParams.get(Task.TA_GETSTATUS_ACTIVITY);
 			int mode = (Integer) taskParams.get(Task.TA_GETSTATUS_MODE);
 			Bundle data_getstatus = msg.getData();
 			data_getstatus.putInt(Task.TA_GETSTATUS_MODE, mode);
+			data_getstatus.putString(Task.TA_GETSTATUS_ACTIVITY, activity_getstatus);
 			break;
 			
 		case Task.TA_RELEASE:

@@ -51,11 +51,15 @@ public class SelectEndtimeActivity extends Activity implements ItaActivity {
 		datePicker = (DatePicker)findViewById(R.id.selectendtime_date);
 		timePicker = (TimePicker)findViewById(R.id.selectendtime_time);
 		
-		datePicker.init(now.getYear(), now.getMonth(), now.getDay(), new OnDateChangedListener() {
+		/*这里需要格外注意，Calendar获取出来的月份是从0到11，
+		 * 在转为time类的时候我已经变成1到12，也就是说now对象的月份是1到12，
+		 * 但init函数的月份传入又要是0到11，所以还要减1*/
+		datePicker.init(now.getYear(), now.getMonth() - 1, now.getDay(), new OnDateChangedListener() {
 			public void onDateChanged(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
 				endTime.setYear(year);
-				endTime.setMonth(monthOfYear);
+				/*这里回调函数的monthOfYear是0到11，endTime最后要和now比较，所以要转为1到12*/
+				endTime.setMonth(monthOfYear + 1);
 				endTime.setDay(dayOfMonth);
 			}
 		});

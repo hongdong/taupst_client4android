@@ -82,6 +82,8 @@
     <string name="praise">被赞:</string>
     <string name="my_rank">我的排名:</string>
     
+    <string name="my_release_status">我发布的任务</string>
+    <string name="my_signup_status">我报名的任务</string>
     <string name="drawable">头像:</string>
     <string name="nickname">昵称:</string>
     <string name="signature">个性签名:</string>

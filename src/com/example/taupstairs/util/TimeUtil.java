@@ -111,6 +111,7 @@ public class TimeUtil {
 	public static Time getNow(Calendar calendar) {
 		calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
+		/*这里需要格外注意，Calendar获取出来的月份是从0到11*/
 		int month = calendar.get(Calendar.MONTH) + 1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
