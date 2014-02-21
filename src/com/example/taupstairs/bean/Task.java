@@ -61,6 +61,9 @@ public class Task {
 	
 	//用户注销
 	public static final int TA_USEREXIT = 6;
+	public static final String TA_USEREXIT_TYPE = "type";
+	public static final int TA_USEREXIT_TYPE_CHANGE = 0;
+	public static final int TA_USEREXIT_TYPE_NORMAL = 1;
 	public static final String TA_USEREXIT_TASKPARAMS = "userexit";
 	public static final String TA_USEREXIT_ACTIVITY_HOMEPAGE = "HomePageActivity";
 	public static final String TA_USEREXIT_ACTIVITY_SETTING = "SettingActivity";

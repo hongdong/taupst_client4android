@@ -351,7 +351,7 @@ public class MainService extends Service implements Runnable {
 			break;
 		
 		case Task.TA_USEREXIT:
-			doTaskService.doUserExit(); 
+			doTaskService.doUserExit(task); 
 			String activity_userexit = (String) taskParams.get(Task.TA_USEREXIT_TASKPARAMS);
 			msg.obj = activity_userexit;
 			break;

@@ -478,8 +478,22 @@ public class DoTaskService {
 	/*
 	 * 用户注销
 	 */
-	public void doUserExit() {
+	public void doUserExit(Task task) {
+		Map<String, Object> taskParams = task.getTaskParams();
+		int type = (Integer) taskParams.get(Task.TA_USEREXIT_TYPE);
 		String userexit_url = HttpClientUtil.BASE_URL + "data/user/exit";
+		switch (type) {
+		case Task.TA_USEREXIT_TYPE_NORMAL:
+			userexit_url += "?type=1";
+			break;
+			
+		case Task.TA_USEREXIT_TYPE_CHANGE:
+			
+			break;
+
+		default:
+			break;
+		}
 		try {
 			HttpClientUtil.getRequest(userexit_url);
 		} catch (Exception e) {

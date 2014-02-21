@@ -250,7 +250,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	private void doUsetExitTask() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		Map<String, Object> taskParams = new HashMap<String, Object>();
+		taskParams.put(Task.TA_USEREXIT_TYPE, Task.TA_USEREXIT_TYPE_NORMAL);
 		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
 		Task task = new Task(Task.TA_USEREXIT, taskParams);
 		MainService.addTask(task);

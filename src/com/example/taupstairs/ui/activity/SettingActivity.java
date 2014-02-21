@@ -1,6 +1,8 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
@@ -104,7 +107,8 @@ public class SettingActivity extends Activity implements ItaActivity {
 		btn_change_user.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {	
 				showProgressDialog();
-				HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+				Map<String, Object> taskParams = new HashMap<String, Object>();
+				taskParams.put(Task.TA_USEREXIT_TYPE, Task.TA_USEREXIT_TYPE_CHANGE);
 				taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_SETTING);
 				Task task = new Task(Task.TA_USEREXIT, taskParams);
 				MainService.addTask(task);
