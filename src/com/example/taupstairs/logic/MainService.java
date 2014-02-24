@@ -44,6 +44,13 @@ public class MainService extends Service implements Runnable {
 				}
 				break;
 				
+			case Task.TA_CHECKUPDATA:
+				ItaActivity activity_checkupdata = (ItaActivity) getActivityByName(Task.TA_CHECKUPDATA_ACTIVITY);
+				if (activity_checkupdata != null) {
+					activity_checkupdata.refresh(Task.TA_CHECKUPDATA, msg.obj);
+				}
+				break;
+				
 			case Task.TA_GETUSERDATA:
 				Bundle data_getuserdata = msg.getData();
 				String activity_getuserdata = data_getuserdata.getString(Task.TA_GETUSERDATA_ACTIVITY);
@@ -242,6 +249,11 @@ public class MainService extends Service implements Runnable {
 				ItaActivity activity_evaluate = (ItaActivity) getActivityByName(Task.TA_EVALUATE_ACTIVITY);
 				activity_evaluate.refresh(Task.TA_EVALUATE, msg.obj);
 				break;
+				
+			case Task.TA_FEEDBACK:
+				ItaActivity activity_feedback = (ItaActivity) getActivityByName(Task.TA_FEEDBACK_ACTIVITY);
+				activity_feedback.refresh(Task.TA_FEEDBACK, msg.obj);
+				break;
 
 			default:
 				break;
@@ -295,6 +307,10 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_CHECKNET:		//检查网络的方式也是用login，看看是否能够成功返回登录数据
 			msg.obj = doTaskService.doLoginTask(task);
+			break;
+			
+		case Task.TA_CHECKUPDATA:
+			msg.obj = doTaskService.doCheckUpdataTask(task);
 			break;
 			
 		case Task.TA_GETUSERDATA:
@@ -406,6 +422,10 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_EVALUATE:
 			msg.obj = doTaskService.doEvaluateTask(task);
+			break;
+			
+		case Task.TA_FEEDBACK:
+			msg.obj = doTaskService.doFeedbackTask(task);
 			break;
 
 		default:

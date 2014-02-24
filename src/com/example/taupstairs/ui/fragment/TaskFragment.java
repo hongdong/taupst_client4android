@@ -3,6 +3,7 @@ package com.example.taupstairs.ui.fragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,14 +14,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;

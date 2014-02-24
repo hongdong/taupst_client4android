@@ -21,6 +21,9 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.InfoService;
+import com.example.taupstairs.services.MyReleaseStatusService;
+import com.example.taupstairs.services.MySignUpStatusService;
 import com.example.taupstairs.services.RankService;
 import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
@@ -57,7 +60,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		img_captcha = (ImageView)findViewById(R.id.img_captcha);
 		btn_captcha = (Button)findViewById(R.id.btn_refresh_captcha);
 		edit_captcha = (EditText)findViewById(R.id.edit_captcha);
-		txt_about = (TextView)findViewById(R.id.txt_about);
+		txt_about = (TextView)findViewById(R.id.txt_about_us);
 		txt_server = (TextView)findViewById(R.id.txt_server);
 		progressDialog = new ProgressDialog(this);
 		
@@ -257,10 +260,19 @@ public class LoginActivity extends Activity implements ItaActivity {
 		user.setUserCollegeName(collegeName);
 		/*至关重要的一步，保存后下次会自动跳到主页面*/
 		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);
-		SharedPreferencesUtil.savaLastestId(LoginActivity.this, SharedPreferencesUtil.LASTEST_STATUSID, null);
+		SharedPreferencesUtil.emptyLastestId(this);
+		InfoService infoService = new InfoService(this);
+		infoService.emptyInfoDb();
+		infoService.closeDBHelper();
 		StatusService statusService = new StatusService(LoginActivity.this);
 		statusService.emptyStatusDb();
 		statusService.closeDBHelper();
+		MyReleaseStatusService myReleaseStatusService = new MyReleaseStatusService(this);
+		myReleaseStatusService.emptyStatusDb();
+		myReleaseStatusService.closeDBHelper();
+		MySignUpStatusService mySignUpStatusService = new MySignUpStatusService(this);
+		mySignUpStatusService.emptyStatusDb();
+		mySignUpStatusService.closeDBHelper();
 		RankService rankService = new RankService(LoginActivity.this);
 		rankService.emptyRankDb();
 		rankService.closeDBHelper();

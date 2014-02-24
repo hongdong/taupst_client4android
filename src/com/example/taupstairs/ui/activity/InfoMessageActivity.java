@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoMessageAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoMessage;
 import com.example.taupstairs.bean.Message;
@@ -38,6 +37,7 @@ import com.example.taupstairs.listener.ReplyListInfoMessageListener;
 import com.example.taupstairs.listener.TaskByIdListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.HttpClientUtil;

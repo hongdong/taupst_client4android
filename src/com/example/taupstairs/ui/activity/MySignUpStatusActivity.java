@@ -3,22 +3,24 @@ package com.example.taupstairs.ui.activity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.MySignUpStatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.util.SharedPreferencesUtil;

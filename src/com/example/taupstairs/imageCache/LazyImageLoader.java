@@ -3,13 +3,15 @@ package com.example.taupstairs.imageCache;
 import java.lang.Thread.State;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import com.example.taupstairs.app.TaUpstairsApplication;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import com.example.taupstairs.logic.TaUpstairsApplication;
 
 public class LazyImageLoader {
 

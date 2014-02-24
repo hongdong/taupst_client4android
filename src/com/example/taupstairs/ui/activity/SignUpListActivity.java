@@ -16,12 +16,12 @@ import android.widget.Toast;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.SignUpListAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.SignUp;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.string.IntentString;
 
 public class SignUpListActivity extends Activity implements ItaActivity {

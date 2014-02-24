@@ -1,4 +1,4 @@
-package com.example.taupstairs.app;
+package com.example.taupstairs.logic;
 
 import android.app.Application;
 import android.content.Context;

@@ -99,4 +99,14 @@ public class SharedPreferencesUtil {
 		return id;
 	}
 	
+	public static void emptyLastestId(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(LASTEST_ID, Context.MODE_PRIVATE);
+		Editor editor = sp.edit();
+		editor.putString(Info.INFO_ID, null);
+		editor.putString(Status.STATUS_ID, null);
+		editor.putString(Status.STATUS_RELEASETIME, null);
+		editor.putString(Status.STATUS_SIGNUPCOUNT, null);
+		editor.commit();
+	}
+	
 }

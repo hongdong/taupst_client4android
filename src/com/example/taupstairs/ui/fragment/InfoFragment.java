@@ -2,6 +2,7 @@ package com.example.taupstairs.ui.fragment;
 
 import java.util.HashMap;
 import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.InfoService;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
@@ -203,10 +205,10 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	@Override
 	public void exit() {
 		if (infoService != null && lastestInfoId != null) {
-//			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestInfoId);
-//			infoService.emptyInfoDb();
-//			infoService.insertInfos(currentInfos);
-//			infoService.closeDBHelper();
+			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestInfoId);
+			infoService.emptyInfoDb();
+			infoService.insertInfos(currentInfos);
+			infoService.closeDBHelper();
 		}
 	}
 

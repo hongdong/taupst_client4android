@@ -86,6 +86,22 @@ public class DoTaskService {
 		return result;
 	}
 	
+	/**
+	 * 检测软件版本更新
+	 * @param task
+	 * @return
+	 */
+	public String doCheckUpdataTask(Task task) {
+		String result = null;
+		String checkupdata_url = HttpClientUtil.BASE_URL + "data/version/detail";
+		try {
+			result = HttpClientUtil.getRequest(checkupdata_url);
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
+		return result;
+	}
+	
 	public void doPushTask(Task task) {
 		Map<String, Object> taskParams = task.getTaskParams();
 		String channelid = (String) taskParams.get(Task.TA_PUSH_CHANNEL_ID);
@@ -469,6 +485,20 @@ public class DoTaskService {
 		try {
 			evaluate_url = StringUtil.replaceBlank(evaluate_url);
 			result = HttpClientUtil.getRequest(evaluate_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	} 
+	
+	public String doFeedbackTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String feedbackString = (String) taskParams.get(Task.TA_FEEDBACK_STRING);
+		String feedback_url = HttpClientUtil.BASE_URL + "data/fb/save?opinion=" + feedbackString;
+		try {
+			feedback_url = StringUtil.replaceBlank(feedback_url);
+			result = HttpClientUtil.getRequest(feedback_url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

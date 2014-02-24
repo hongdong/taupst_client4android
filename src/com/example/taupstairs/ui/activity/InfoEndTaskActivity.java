@@ -2,6 +2,7 @@ package com.example.taupstairs.ui.activity;
 
 import java.util.Calendar;
 import java.util.HashMap;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoEndTask;
 import com.example.taupstairs.bean.Person;
@@ -20,6 +21,7 @@ import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.listener.TaskByIdListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.TimeUtil;
 

@@ -2,7 +2,8 @@ package com.example.taupstairs.imageCache;
 
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
-import com.example.taupstairs.app.TaUpstairsApplication;
+
+import com.example.taupstairs.logic.TaUpstairsApplication;
 
 public class SimpleImageLoader {
 

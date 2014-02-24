@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,9 +23,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.MessageAdapter;
-import com.example.taupstairs.app.TaUpstairsApplication;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
@@ -34,6 +36,7 @@ import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
@@ -123,8 +126,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
 		progressDialog = new ProgressDialog(this);
 		
-		doCheckStatusTask();
-		
 		holder = new Holder();
 		holder.img_task_detail_photo = (ImageView)findViewById(R.id.img_photo);
 		holder.txt_task_detail_nickname = (TextView)findViewById(R.id.txt_nickname);
@@ -170,11 +171,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
 		String messageCount = status.getStatusMessageCount();
 		holder.txt_task_detail_messagecount.setText(messageCount);
-		if (messageCount.equals("0")) {
-			holder.txt_task_detail_no_message.setVisibility(View.VISIBLE);
-		} else {
-			doGetMessageTask();
-		}
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -228,6 +224,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
+		
+		doCheckStatusTask();
+		doGetMessageTask();
 	}
 	
 	private void showProgressDialog() {
@@ -331,7 +330,6 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				
 			case Task.TA_END_TASK:
 				String end = (String) params[1];
-				System.out.println(end);
 				try {
 					JSONObject endObject = new JSONObject(end);
 					String state = endObject.getString(JsonString.Return.STATE).trim();
@@ -349,6 +347,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			
 			case Task.TA_GETMESSAGE:
 				messages = (List<Message>) params[1];
+				if (0 == messages.size()) {
+					holder.txt_task_detail_no_message.setVisibility(View.VISIBLE);
+				}
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);
 				listView.setVisibility(View.VISIBLE);
 				adapter = new MessageAdapter(this, messages);
@@ -356,6 +357,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				break;
 				
 			case Task.TA_MESSAGE:
+				holder.txt_task_detail_no_message.setVisibility(View.GONE);
 				String message = (String) params[1];
 				try {
 					JSONObject jsonObject = new JSONObject(message);

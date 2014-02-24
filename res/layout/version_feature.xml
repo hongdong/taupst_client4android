@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/common_bg">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/actionbar_bg" >
         <Button
-            android:id="@+id/btn_back_serverdeclare"
+            android:id="@+id/btn_back_version_feature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -19,21 +19,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/server_declare"
+            android:text="@string/version_feature"
             android:textColor="@color/white"
             android:textSize="20sp" />
     </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-        <TextView
-            android:id="@+id/txt_server_declare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+	    <TextView 
+	        android:id="@+id/txt_version_feature"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:scrollbars="vertical"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+	        android:textSize="16sp"
+	        android:textColor="@color/black"/>
     </ScrollView>
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,14 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
-import com.example.taupstairs.services.RankService;
 import com.example.taupstairs.util.FileUtil;
-import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
@@ -83,19 +79,23 @@ public class SettingActivity extends Activity implements ItaActivity {
 					long arg3) {
 				switch (arg2) {			
 				case 0:
-					Intent intent1 = new Intent(SettingActivity.this, AboutUsActivity.class);
-					startActivity(intent1);
+					Intent intent0 = new Intent(SettingActivity.this, AboutUsActivity.class);
+					startActivity(intent0);
 					break;
 
 				case 1:
-					Intent intent2 = new Intent(SettingActivity.this, ServerDeclareActivity.class);
-					startActivity(intent2);
+					Intent intent1 = new Intent(SettingActivity.this, ServerDeclareActivity.class);
+					startActivity(intent1);
 					break;
 					
 				case 2:
+					Intent intent2 = new Intent(SettingActivity.this, VersionFeatureActivity.class);
+					startActivity(intent2);
 					break;
 					
 				case 3:
+					Intent intent3 = new Intent(SettingActivity.this, FeedbackActivity.class);
+					startActivity(intent3);
 					break;
 					
 				default:
@@ -132,14 +132,14 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog.setCancelable(false);
 		progressDialog.setMessage("    正在清除...");
 		progressDialog.show();
-		SharedPreferencesUtil.savaLastestId(SettingActivity.this, SharedPreferencesUtil.LASTEST_STATUSID, null);
 		FileUtil.deletePhoto(getFilesDir().getAbsolutePath());
+//		SharedPreferencesUtil.emptyLastestId(this);
 //		PersonService personService = new PersonService(SettingActivity.this);
 //		personService.emptyPersonDB();
 //		personService.closeDBHelper();
-		RankService rankService = new RankService(SettingActivity.this);
-		rankService.emptyRankDb();
-		rankService.closeDBHelper();
+//		RankService rankService = new RankService(SettingActivity.this);
+//		rankService.emptyRankDb();
+//		rankService.closeDBHelper();
 		progressDialog.dismiss();
 		Toast.makeText(SettingActivity.this, "清除完成", Toast.LENGTH_SHORT).show();
 	}

@@ -35,6 +35,7 @@ import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.manager.UpdataManager;
 import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
@@ -81,18 +82,30 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		init();
 	}
 	
+	/**
+	 * 目前这个回调函数只有在刚打开软件和收到推送后才会调用
+	 * 所以可以直接setCurrent(INDEX_INFO);
+	 */
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setCurrent(INDEX_INFO);		//收到推送的消息后，有一些处理会调用onResume，这个时候让他跳到消息页面
+	}
+	
 	@Override
 	public void init() {
 		initData();
 		initCheckNetTask();
 		initView();
 		initReceiver();
-		initSetListener();
+		initListener();
+		initCheckUpdata();
 	}
 	
 	/*初始化全局变量*/
 	private void initData() {
 		// 以apikey的方式登录，一般放在主Activity的onCreate中
+		//但startWork后要把百度后台服务发来的id发给我们的报务器，所以等登录完成后再startWork
 //		PushManager.startWork(getApplicationContext(),
 //				PushConstants.LOGIN_TYPE_API_KEY, 
 //				Utils.getMetaValue(this, "api_key"));
@@ -170,7 +183,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	/*初始化控件的监听器*/
-	private void initSetListener() {
+	private void initListener() {
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {	
 				if (flag_clear) {
@@ -229,6 +242,10 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		});
 	}
 	
+	private void initCheckUpdata() {
+		doCheckUpdataTask();
+	}
+	
 	/*设置当前状态*/
 	private void setCurrent(int index) {
 		viewPager.setCurrentItem(index);
@@ -249,7 +266,16 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		MainService.addTask(task);
 	}
 	
+	private void doCheckUpdataTask() {
+		Task task = new Task(Task.TA_CHECKUPDATA, null);
+		MainService.addTask(task);
+	}
+	
 	private void doUsetExitTask() {
+		for (int i = 0; i < fragments.size(); i++) {
+			ItaFragment fragment = (ItaFragment) fragments.get(i);
+			fragment.exit();
+		}
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Task.TA_USEREXIT_TYPE, Task.TA_USEREXIT_TYPE_NORMAL);
 		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
@@ -278,11 +304,13 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 			isChecking = false;
 			break;
 			
+		case Task.TA_CHECKUPDATA:
+			String jsonString = (String) params[1];
+			UpdataManager updataManager = new UpdataManager(this, jsonString);
+			updataManager.checkUpdate();
+			break;
+			
 		case Task.TA_USEREXIT:
-			for (int i = 0; i < fragments.size(); i++) {
-				ItaFragment fragment = (ItaFragment) fragments.get(i);
-				fragment.exit();
-			}
 			System.exit(0);
 			break;
 

@@ -12,6 +12,12 @@ public class JsonString {
 		public static final String STATE_NO = "2";
 	}
 	
+	public static class Updata {
+		public static final String VERSION_CODE = "versionCode";
+		public static final String DOWNLOAD_URL = "downloadURL";
+		public static final String APK_NAME = "apkName";
+	}
+	
 	public static class Person {
 		public static final String PERSON_ID = "users_id";
 		

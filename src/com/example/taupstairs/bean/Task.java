@@ -159,6 +159,13 @@ public class Task {
 	public static final int TA_EVALUATE = 23;
 	public static final String TA_EVALUATE_ACTIVITY = "EvaluateActivity";
 	
+	public static final int TA_FEEDBACK = 24;
+	public static final String TA_FEEDBACK_STRING = "feedback_string";
+	public static final String TA_FEEDBACK_ACTIVITY = "FeedbackActivity";
+	
+	public static final int TA_CHECKUPDATA = 25;
+	public static final String TA_CHECKUPDATA_ACTIVITY = "HomePageActivity";
+	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
 		this.taskId = taskId;
