@@ -34,6 +34,7 @@ public class Info {
 	public static final String PERSON_NICKNAME = "personNickname";
 	public static final String INFO_RELEASETIME = "infoReleaseTime";
 	public static final String INFO_CONTENT = "infoContent";
+	public static final String IS_NEW = "isNew";
 	
 	public static final String PERSON_DEPARTMENT = "personDepartment";
 	public static final String PERSON_GRADE = "personGrade";

@@ -132,6 +132,14 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			MainService.addTask(task);
 		}
 	}
+	
+	/**
+	 * 收到推送后，百度后台service发出广播，广播再发送Intent给HomePage，
+	 * HomePage通过这个接口使得消息界面更新
+	 */
+	public void homePageCallBack() {
+		doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

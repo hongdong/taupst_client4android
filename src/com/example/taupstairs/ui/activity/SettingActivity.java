@@ -151,12 +151,11 @@ public class SettingActivity extends Activity implements ItaActivity {
 		switch (taskId) {
 		case Task.TA_USEREXIT:
 			MainService.emptyMainService();				//先清空MainService里面的链表
-			Intent intent_receiver = new Intent();		//再发送主界面关闭的广播
-			intent_receiver.setAction("com.example.taupstairs.CHANGE_USER");
-			sendBroadcast(intent_receiver);
 			Intent intent_login = new Intent(SettingActivity.this, LoginActivity.class);
+			intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent_login);				//最后跳到登录界面
 			finish();
+			overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			break;
 
 		default:

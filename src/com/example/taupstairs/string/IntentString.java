@@ -38,4 +38,8 @@ public class IntentString {
 		public static final String TYPE = "type";
 		public static final String CONTENT = "content";
 	}
+	
+	public static class Action {
+		public static final String CHANGE_USER = "com.example.taupstairs.CHANGE_USER";
+	}
 }

@@ -38,6 +38,7 @@
     <string name="phone">Phone:</string>
     <string name="phone_hint">可输入您的爪机号</string>
     
+    <string name="new_info">New!</string>
     <string name="info_message">有人留言</string>
     <string name="info_signup">有人报名</string>
     <string name="info_signup_exec">选Ta执行</string>

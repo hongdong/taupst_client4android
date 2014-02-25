@@ -217,10 +217,12 @@ public class UpdataManager {
             return;  
         }  
         Intent intent = new Intent(Intent.ACTION_VIEW);  
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  
         // 安装，如果签名不一致，可能出现程序未安装提示  
         intent.setDataAndType(Uri.fromFile(new File(apkfile.getAbsolutePath())), 
         		"application/vnd.android.package-archive");   
         context.startActivity(intent);  
+        android.os.Process.killProcess(android.os.Process.myPid());
     }  
     
 }  

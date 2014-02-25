@@ -207,7 +207,7 @@ public class JsonUtil {
 				
 				info.setInfoSource(jsonObject.getString(JsonString.Info.INFO_SOURCE));
 				info.setInfoType(jsonObject.getString(JsonString.Info.INFO_TYPE));
-				
+								
 				infos.add(info);
 			}
 		} catch (JSONException e) {

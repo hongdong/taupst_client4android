@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,7 +21,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.example.taupstairs.R;
@@ -59,7 +55,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private boolean noNet = true;
 	private boolean isChecking = false;
 	private boolean displayNoNet = false;
-	private ChangeUserReceiver receiver;
 	
 	private ViewPager viewPager;
 	private List<Fragment> fragments;
@@ -89,7 +84,12 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		setCurrent(INDEX_INFO);		//收到推送的消息后，有一些处理会调用onResume，这个时候让他跳到消息页面
+		String action = intent.getAction();
+		if (Utils.ACTION_MESSAGE.equals(action)) {
+			infoFragment.homePageCallBack();
+		} else if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
+			setCurrent(INDEX_INFO);	
+		} 	
 	}
 	
 	@Override
@@ -97,7 +97,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		initData();
 		initCheckNetTask();
 		initView();
-		initReceiver();
 		initListener();
 		initCheckUpdata();
 	}
@@ -172,14 +171,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 				}
 			};
 		}.start();
-	}
-	
-	/*初始化广播接收*/
-	private void initReceiver() {
-		receiver = new ChangeUserReceiver();
-		IntentFilter filter = new IntentFilter();
-		filter.addAction("com.example.taupstairs.CHANGE_USER");
-		registerReceiver(receiver, filter);
 	}
 	
 	/*初始化控件的监听器*/
@@ -272,6 +263,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	private void doUsetExitTask() {
+		finish();
 		for (int i = 0; i < fragments.size(); i++) {
 			ItaFragment fragment = (ItaFragment) fragments.get(i);
 			fragment.exit();
@@ -311,6 +303,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 			break;
 			
 		case Task.TA_USEREXIT:
+			PushManager.stopWork(getApplicationContext());
 			System.exit(0);
 			break;
 
@@ -365,7 +358,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.exit:
-			finish();
 			doUsetExitTask();
 			break;
 
@@ -393,7 +385,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
 	  
 	    } else {  
-	    	finish();
 	        doUsetExitTask();
 	    }  
 	}  
@@ -401,13 +392,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(receiver);
-	}
-	
-	public class ChangeUserReceiver extends BroadcastReceiver {
-		public void onReceive(Context context, Intent intent) {
-			HomePageActivity.this.finish();
-		}
 	}
 
 }
