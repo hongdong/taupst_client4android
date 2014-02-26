@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.taupstairs.string.IntentString;
 public class SignUpListActivity extends Activity implements ItaActivity {
 
 	private Button btn_back;
+	private LinearLayout layout_loading;
 	private String statusId;
 	private ListView list_signup_list;
 	private List<SignUp> signUps;
@@ -49,6 +51,8 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 	private void initData() {
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
 		doGetSignUpListTask();
+		layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
+		layout_loading.setVisibility(View.VISIBLE);
 	}
 	
 	private void initView() {
@@ -77,6 +81,7 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
 			case Task.TA_GET_SIGNUP_LIST:
+				layout_loading.setVisibility(View.GONE);
 				signUps = (List<SignUp>) params[1];
 				display();
 				break;

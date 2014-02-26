@@ -23,17 +23,22 @@
 	        android:textColor="@color/white"
 	        android:textSize="20sp" />
 	</RelativeLayout>
-	<LinearLayout 
+	<FrameLayout 
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="10dp"
-		android:layout_marginRight="10dp"
-	    android:orientation="vertical">
-	     
-        <!-- 用户的基本信息  --> 
-		<include layout="@layout/task_detail_content_person"/>
-		
-		<include layout="@layout/info_end_task_content"/>
-		        
-    </LinearLayout> 
+	    android:layout_height="match_parent">
+		<LinearLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+		    android:orientation="vertical">
+		     
+	        <!-- 用户的基本信息  --> 
+			<include layout="@layout/task_detail_content_person"/>
+			
+			<include layout="@layout/info_end_task_content"/>
+			        
+	    </LinearLayout> 
+	    <include layout="@layout/loading"/>
+    </FrameLayout>
 </LinearLayout>

@@ -48,7 +48,8 @@
 		    
 	    <!-- 回复留言 -->
 	    <include layout="@layout/task_detail_post_message"/>
-	       
+	    
+	    <include layout="@layout/loading"/>
     </FrameLayout>
 
 </LinearLayout>

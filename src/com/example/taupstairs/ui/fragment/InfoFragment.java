@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
@@ -34,6 +35,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 
 	private View view;
 	private HomePageActivity context;
+	private LinearLayout layout;
 	private XListView xlist_info;
 	private InfoAdapter adapter;
 	private List<Info> currentInfos;
@@ -89,6 +91,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void initView() {
+		layout = (LinearLayout) view.findViewById(R.id.layout_fm_info_no_info);
 		xlist_info = (XListView) view.findViewById(R.id.xlist_fm_info);
 		xlist_info.setPullLoadEnable(false);
 		if (currentInfos != null) {
@@ -207,13 +210,15 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			lastestInfoId = currentInfos.get(0).getInfoId();
 			oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
 			xlist_info.setPullLoadEnable(true);
+		} else {
+			layout.setVisibility(View.VISIBLE);	//这个时候要显示没有信息
 		}
 	}
 
 	@Override
 	public void exit() {
 		if (infoService != null && lastestInfoId != null) {
-			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestInfoId);
+			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_INFOID, lastestInfoId);
 			infoService.emptyInfoDb();
 			infoService.insertInfos(currentInfos);
 			infoService.closeDBHelper();

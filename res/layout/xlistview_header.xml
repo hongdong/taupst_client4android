@@ -46,11 +46,12 @@
             android:contentDescription="@string/xlistview_header_hint_loading"/>
         <ProgressBar
             android:id="@+id/xlistview_header_progressbar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignLeft="@id/xlistview_header_text"
             android:layout_centerVertical="true"
             android:layout_marginLeft="-40dp"
+            style="@style/loading_progressbar_style"
             android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

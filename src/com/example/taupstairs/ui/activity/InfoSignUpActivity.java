@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
 	 * 留言内容，任务发布人，任务标题*/
 	private class Holder {
+		public LinearLayout layout_loading;
 		public ImageView img_photo;
 		public TextView txt_nickname;
 		public ImageView img_sex;
@@ -71,6 +73,8 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	
 	private void initHolder() {
 		holder = new Holder();
+		holder.layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
+		
 		holder.img_photo = (ImageView)findViewById(R.id.img_photo);
 		holder.txt_nickname = (TextView)findViewById(R.id.txt_nickname);
 		holder.img_sex = (ImageView)findViewById(R.id.img_sex);
@@ -93,6 +97,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		info = app.getInfo();
 		if (null == info.getInfoSignUp()) {	//可能本地已经保存了
+			showProgressBar();
 			doGetInfoSignUpTask();
 		} else {
 			displaySignUp();
@@ -126,6 +131,14 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		});
 	}
 	
+	private void showProgressBar() {
+		holder.layout_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideProgressBar() {
+		holder.layout_loading.setVisibility(View.GONE);
+	}
+	
 	/**
 	 * 获取详情
 	 */
@@ -144,6 +157,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
 			case Task.TA_GETINFO_DETAIL:
+				hideProgressBar();
 				InfoSignUp infoSignUp = (InfoSignUp) params[1];
 				info.setInfoSignUp(infoSignUp);
 				displaySignUp();

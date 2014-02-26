@@ -28,8 +28,13 @@ public class InfoService {
 			info.setPersonId(cursor.getString(cursor.getColumnIndex(Info.PERSON_ID)));
 			info.setPersonPhotoUrl(cursor.getString(cursor.getColumnIndex(Info.PERSON_PHOTOURL)));
 			info.setPersonNickname(cursor.getString(cursor.getColumnIndex(Info.PERSON_NICKNAME)));
+			info.setPersonSex(cursor.getString(cursor.getColumnIndex(Info.PERSON_SEX)));
+			info.setPersonDepartment(cursor.getString(cursor.getColumnIndex(Info.PERSON_DEPARTMENT)));
+			info.setPersonGrade(cursor.getString(cursor.getColumnIndex(Info.PERSON_GRADE)));
 			info.setInfoReleaseTime(cursor.getString(cursor.getColumnIndex(Info.INFO_RELEASETIME)));
 			info.setInfoContent(cursor.getString(cursor.getColumnIndex(Info.INFO_CONTENT)));
+			info.setInfoSource(cursor.getString(cursor.getColumnIndex(Info.INFO_SOURCE)));
+			info.setInfoType(cursor.getString(cursor.getColumnIndex(Info.INFO_TYPE)));
 			infos.add(info);
 		}
 		return infos;
@@ -40,9 +45,11 @@ public class InfoService {
 		for (int i = 0; i < infos.size() && i < Info.INFO_COUNT_PERPAGE; i++) {
 			Info info = infos.get(i);
 			db.execSQL("insert into " + Info.TB_NAME + 
-					" values(null, ?, ?, ?, ?, ?, ?)", 
+					" values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 					new String[] {info.getInfoId(), info.getPersonId(), info.getPersonPhotoUrl(), 
-					info.getPersonNickname(), info.getInfoReleaseTime(), info.getInfoContent()});
+					info.getPersonNickname(), info.getPersonSex(), info.getPersonDepartment(), 
+					info.getPersonGrade(), info.getInfoReleaseTime(), info.getInfoContent(), 
+					info.getInfoSource(), info.getInfoType(), });
 		}
 	}
 	

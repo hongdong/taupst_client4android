@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.example.taupstairs.util.HttpClientUtil;
 public class PersonDataActivity extends Activity implements ItaActivity {
 
 	private Button btn_back;
+	private LinearLayout layout_loading;
 	private String personId;
 	private Person person;
 	private static final String LIST_LEFT = "left";
@@ -45,6 +47,8 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	private void initData() {
 		personId = getIntent().getStringExtra(Person.PERSON_ID);
 		doGetUserDataTask();
+		layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
+		layout_loading.setVisibility(View.VISIBLE);
 	}
 	
 	private void initView() {
@@ -70,6 +74,7 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
 			case Task.TA_GETUSERDATA:
+				layout_loading.setVisibility(View.GONE);
 				person = (Person) params[1];
 				displayPerson(person);
 				break;

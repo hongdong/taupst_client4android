@@ -4,9 +4,6 @@
     <string name="app_name">Ta楼上</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    
-    <string name="ver001">Version 001</string>
-    <string name="ver002">Version 002</string>
     <string name="exit">退出</string>
     
     <string name="logo">logo</string>
@@ -38,7 +35,7 @@
     <string name="phone">Phone:</string>
     <string name="phone_hint">可输入您的爪机号</string>
     
-    <string name="new_info">New!</string>
+    <string name="no_info">还没有消息</string>
     <string name="info_message">有人留言</string>
     <string name="info_signup">有人报名</string>
     <string name="info_signup_exec">选Ta执行</string>
@@ -56,6 +53,7 @@
     <string name="select_endtime">选择截止时间</string>
     
     <string name="person_data">用户资料</string>
+    <string name="loading">正在加载....</string>
     
     <string name="task_detail">任务详情</string>
     <string name="rewards">报酬  :</string>

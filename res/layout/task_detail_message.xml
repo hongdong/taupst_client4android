@@ -52,5 +52,7 @@
 			android:textColor="@color/black"
 			android:textSize="18sp"
 			android:visibility="gone"/>
+	    
+	    <include layout="@layout/loading_message"/>
 	</FrameLayout>
 </LinearLayout>

@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ import com.example.taupstairs.util.TimeUtil;
 public class TaskByIdActivity extends Activity implements ItaActivity {
 
 	private Button btn_back, btn_multi, btn_message;
+	private LinearLayout layout_loading;
 	private TextView txt_expired, txt_multi;
 	private Holder holder;
 	private Time now;
@@ -66,9 +68,15 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	
 	@Override
 	public void init() {
+		initProgressBar();
 		initHolder();
 		initData();
 		initView();
+	}
+	
+	private void initProgressBar() {
+		layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
+		layout_loading.setVisibility(View.VISIBLE);
 	}
 	
 	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
@@ -88,6 +96,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		public TextView txt_task_detail_signupcount;
 		public TextView txt_task_detail_messagecount;
 		public TextView txt_task_detail_no_message;
+		public LinearLayout layout_loading_message;
 	}
 	
 	private void initHolder() {
@@ -105,6 +114,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_signupcount = (TextView)findViewById(R.id.txt_task_detail_signupcount);
 		holder.txt_task_detail_messagecount = (TextView)findViewById(R.id.txt_task_detail_messagecount);
 		holder.txt_task_detail_no_message = (TextView)findViewById(R.id.txt_task_detail_no_message);
+		holder.layout_loading_message = (LinearLayout)findViewById(R.id.layout_loading_message);
 	}
 	
 	private void initData() {
@@ -172,6 +182,14 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 				}
 			}
 		});
+	}
+	
+	private void showProgressBar() {
+		holder.layout_loading_message.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideProgressBar() {
+		holder.layout_loading_message.setVisibility(View.GONE);
 	}
 	
 	private void showProgressDialog() {
@@ -263,6 +281,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
 			case Task.TA_GET_TASK_DETAIL:
+				layout_loading.setVisibility(View.GONE);
 				status = (Status) params[1];
 				displayStatus();
 				break;
@@ -286,6 +305,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 				break;
 				
 			case Task.TA_GETMESSAGE:
+				hideProgressBar();
 				messages = (List<Message>) params[1];
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);
 				listView.setVisibility(View.VISIBLE);
@@ -379,6 +399,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		if (messageCount.equals("0")) {
 			holder.txt_task_detail_no_message.setVisibility(View.VISIBLE);
 		} else {
+			showProgressBar();	//显示加载留言的进度条
 			doGetMessageTask();
 		}
 	}

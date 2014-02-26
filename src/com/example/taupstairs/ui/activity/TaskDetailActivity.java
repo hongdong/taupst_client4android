@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,6 +116,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		public TextView txt_task_detail_signupcount;
 		public TextView txt_task_detail_messagecount;
 		public TextView txt_task_detail_no_message;
+		public LinearLayout layout_loading_message;
 	}
 	
 	private void initView() {
@@ -140,6 +142,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_signupcount = (TextView)findViewById(R.id.txt_task_detail_signupcount);
 		holder.txt_task_detail_messagecount = (TextView)findViewById(R.id.txt_task_detail_messagecount);
 		holder.txt_task_detail_no_message = (TextView)findViewById(R.id.txt_task_detail_no_message);
+		holder.layout_loading_message = (LinearLayout)findViewById(R.id.layout_loading_message);
 		
 		/*以下进行任务详情基本部分的显示*/
 		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
@@ -171,6 +174,8 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
 		String messageCount = status.getStatusMessageCount();
 		holder.txt_task_detail_messagecount.setText(messageCount);
+		
+		showProgressBar();	//显示加载留言的进度条
 		
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -227,6 +232,14 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		
 		doCheckStatusTask();
 		doGetMessageTask();
+	}
+	
+	private void showProgressBar() {
+		holder.layout_loading_message.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideProgressBar() {
+		holder.layout_loading_message.setVisibility(View.GONE);
 	}
 	
 	private void showProgressDialog() {
@@ -346,6 +359,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 				break;
 			
 			case Task.TA_GETMESSAGE:
+				hideProgressBar();	//留言加载完毕，关闭此进度条
 				messages = (List<Message>) params[1];
 				if (0 == messages.size()) {
 					holder.txt_task_detail_no_message.setVisibility(View.VISIBLE);
