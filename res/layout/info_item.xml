@@ -5,7 +5,7 @@
 	android:layout_marginTop="10dp"
 	android:orientation="horizontal"
 	android:background="@drawable/fm_bg_list_item">
-	<ImageView 
+	<com.example.taupstairs.view.RoundAngleImageView 
 	    android:id="@+id/img_fm_info_photo"
 	    android:layout_width="40dp"
 	    android:layout_height="40dp"

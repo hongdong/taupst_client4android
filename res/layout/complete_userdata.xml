@@ -61,7 +61,7 @@
 		        <RelativeLayout 
 		            android:layout_width="match_parent"
 		        	android:layout_height="wrap_content">
-		        	<ImageView
+		        	<com.example.taupstairs.view.RoundAngleImageView
 			            android:id="@+id/img_userphoto"
 			            android:layout_width="80dp"
 			            android:layout_height="80dp"		            

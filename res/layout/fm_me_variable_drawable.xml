@@ -21,7 +21,7 @@
     	android:src="@drawable/img_select"
     	android:contentDescription="@string/drawable"/>
 
-    <ImageView
+    <com.example.taupstairs.view.RoundAngleImageView
         android:id="@+id/img_fm_me_drawable"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -30,7 +30,6 @@
         android:layout_marginBottom="10dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/img_fm_me_select"
-        android:contentDescription="@string/drawable"
-        android:scaleType="fitXY" />
+        android:contentDescription="@string/drawable"/>
 
 </RelativeLayout>

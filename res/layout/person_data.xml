@@ -36,7 +36,7 @@
 			android:layout_marginTop="10dp"
 			android:orientation="horizontal"
 			android:background="@drawable/common_layout_bg">
-			<ImageView 
+			<com.example.taupstairs.view.RoundAngleImageView 
 			    android:id="@+id/img_person_data_photo"
 			    android:layout_width="70dp"
 			    android:layout_height="70dp"
