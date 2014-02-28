@@ -229,8 +229,8 @@ public class DoTaskService {
 		Map<String, Object> taskParams = task.getTaskParams();
 		String url = (String) taskParams.get(Task.TA_UPDATAUSERDATA_URL);
 		String updata_userdata_url = HttpClientUtil.BASE_URL + "data/user/update?" + url;
-		updata_userdata_url = StringUtil.replaceBlank(updata_userdata_url);
 		try {
+			updata_userdata_url = StringUtil.replaceBlank(updata_userdata_url);
 			result = HttpClientUtil.getRequest(updata_userdata_url);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -263,7 +263,6 @@ public class DoTaskService {
 		String statusId = (String) taskParams.get(Status.STATUS_ID);
 		String get_message_url = HttpClientUtil.BASE_URL + "data/taskmsg/taskMsgList2Down?task_id=" + statusId;
 		try {
-			get_message_url = StringUtil.replaceBlank(get_message_url);
 			String jsonString = HttpClientUtil.getRequest(get_message_url);
 			messages = JsonUtil.getMessages(jsonString);
 		} catch (Exception e) {

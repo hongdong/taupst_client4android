@@ -11,52 +11,7 @@ public class TimeUtil {
 	public static final int SMALL = -1;
 
 	public static String getDisplayTime(Time now, String original) {
-		String displayTime = null;
-		String month, day, hour, minute;
-		Time time = originalToTime(original);
-		if (time.getMonth() < 10) {
-			month = "0" + time.getMonth();
-		} else {
-			month = "" + time.getMonth();
-		}
-		if (time.getDay() < 10) {
-			day = "0" + time.getDay();
-		} else {
-			day = "" + time.getDay();
-		}
-		if (time.getHour() < 10) {
-			hour = "0" + time.getHour();
-		} else {
-			hour = "" + time.getHour();
-		}
-		if (time.getMinute() < 10) {
-			minute = "0" + time.getMinute();
-		} else {
-			minute = "" + time.getMinute();
-		}
-		if (time.getYear() != now.getYear()) {
-			displayTime = time.getYear() + "年" + 
-					month + "月" +
-					day + "日  " +
-					hour + ":" +
-					minute;
-		} else {
-			if (time.getMonth() != now.getMonth()) {
-				displayTime = month + "月" +
-						day + "日  " +
-						hour + ":" +
-						minute;
-			} else {
-				if (time.getDay() != now.getDay()) {
-					displayTime = day + "日  " +
-							hour + ":" +
-							minute;
-				} else {
-					displayTime = "今天  " + hour + ":" + minute;
-				}
-			}
-		}
-		return displayTime;
+		return getDisplayTime(now, originalToTime(original));
 	}
 	
 	public static String getDisplayTime(Time now, Time original) {
@@ -108,6 +63,11 @@ public class TimeUtil {
 		return displayTime;
 	}
 	
+	/**
+	 * 
+	 * @param calendar
+	 * @return
+	 */
 	public static Time getNow(Calendar calendar) {
 		calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
@@ -120,6 +80,11 @@ public class TimeUtil {
 		return now;
 	}
 	
+	/**
+	 * 
+	 * @param original
+	 * @return
+	 */
 	public static Time originalToTime(String original) {
 		char[] time = original.toCharArray();
 		int year = Integer.parseInt(String.copyValueOf(time, 0, 4));
@@ -131,6 +96,11 @@ public class TimeUtil {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param time
+	 * @return
+	 */
 	public static String timeToOriginal(Time time) {
 		String month, day, hour, minute;
 		if (time.getMonth() < 10) {
@@ -162,6 +132,12 @@ public class TimeUtil {
 		return original;
 	}
 	
+	/**
+	 * 两个时间比较大小，一直判断，还相当麻烦
+	 * @param large
+	 * @param small
+	 * @return
+	 */
 	public static int compare(Time large, Time small) {
 		if (large.getYear() > small.getYear()) {
 			return LARGE;
@@ -187,6 +163,10 @@ public class TimeUtil {
 		return SMALL;
 	}
 	
+	/**
+	 * 设置上次刷新时间，用于可下拉的listview下次下拉时显示
+	 * @return
+	 */
 	public static String setLastestUpdata() {
 		String hour, minute;
 		Time lastestRefreshTime = getNow(Calendar.getInstance());

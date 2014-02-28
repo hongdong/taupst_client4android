@@ -2,13 +2,10 @@ package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.example.taupstairs.R;
-import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.logic.ItaActivity;
-import com.example.taupstairs.logic.MainService;
-import com.example.taupstairs.string.JsonString;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -17,6 +14,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.taupstairs.R;
+import com.example.taupstairs.bean.Task;
+import com.example.taupstairs.logic.ItaActivity;
+import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.JsonString;
 
 public class FeedbackActivity extends Activity implements ItaActivity {
 
@@ -55,7 +58,11 @@ public class FeedbackActivity extends Activity implements ItaActivity {
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				doFeedbackTask();
+				if (edit_string.getText().toString().trim().equals("")) {
+					Toast.makeText(FeedbackActivity.this, "您还没有输入反馈内容", Toast.LENGTH_SHORT).show();
+				} else {
+					doFeedbackTask();
+				}
 			}
 		});
 	}
@@ -93,6 +100,7 @@ public class FeedbackActivity extends Activity implements ItaActivity {
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
 					if (state.equals(JsonString.Return.STATE_OK)) {
 						Toast.makeText(this, "反馈成功", Toast.LENGTH_SHORT).show();
+						edit_string.setText("");
 					} else {
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 					}

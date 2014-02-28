@@ -15,7 +15,7 @@ public class SdCardUtil {
 		String state = Environment.getExternalStorageState();
 		if(state.equals(Environment.MEDIA_MOUNTED)){
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

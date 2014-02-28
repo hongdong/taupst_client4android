@@ -7,7 +7,7 @@
     <!-- android:descendantFocusability="blocksDescendants" -->
     
     <!-- 头像  --> 
-	<com.example.taupstairs.view.RoundAngleImageView 
+	<ImageView
 	    android:id="@+id/img_message_photo"
 	    android:layout_width="30dp"
 	    android:layout_height="30dp"

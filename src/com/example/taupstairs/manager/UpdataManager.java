@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import com.example.taupstairs.R;
 import com.example.taupstairs.string.JsonString;
+import com.example.taupstairs.util.SdCardUtil;
 
 public class UpdataManager {
 
@@ -128,7 +129,7 @@ public class UpdataManager {
     private Runnable downApkRunnable = new Runnable(){  
         @Override  
         public void run() {  
-            if (!android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {  
+            if (!SdCardUtil.hasSdcard()) {  
                 //如果没有SD卡  
                 Builder builder = new Builder(context);  
                 builder.setTitle("提示");  

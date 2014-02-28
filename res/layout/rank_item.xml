@@ -6,7 +6,7 @@
     android:background="@drawable/fm_bg_list_item"> 
     
     <!-- 头像  --> 
-	<com.example.taupstairs.view.RoundAngleImageView 
+	<ImageView 
 	    android:id="@+id/img_fm_rank_photo"
 	    android:layout_width="40dp"
 	    android:layout_height="40dp"

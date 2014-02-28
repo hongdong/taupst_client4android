@@ -39,7 +39,7 @@
 			android:text="@string/task_rewards"
 			android:textColor="@color/black"
 			android:textSize="16sp"
-			android:drawableLeft="@drawable/img_task_rewards_n"
+			android:drawableLeft="@drawable/task_rewards_45"
 			android:drawablePadding="10dp"/>
         <TextView 
 	        android:id="@+id/txt_task_detail_rewards"
@@ -58,7 +58,7 @@
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="10dp">
+	    android:layout_marginTop="20dp">
 	    <TextView 
 	        android:id="@+id/txt_task_detail_endtime_pictrue"
 	        android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
 			android:text="@string/endtime"
 			android:textColor="@color/black"
 			android:textSize="16sp"
-			android:drawableLeft="@drawable/img_task_endtime_n"
+			android:drawableLeft="@drawable/task_endtime_45"
 			android:drawablePadding="10dp"/>
 	    <TextView 
 	        android:id="@+id/txt_task_detail_endtime"
@@ -95,18 +95,19 @@
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_marginTop="10dp"
+	    android:layout_marginTop="20dp"
 	    android:layout_marginBottom="10dp">
 	    <TextView 
 	        android:id="@+id/txt_task_detail_signup"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="10dp"
+			android:layout_centerVertical="true"
 			android:gravity="center_vertical"
 			android:text="@string/signup_count"
 			android:textColor="@color/black"
 			android:textSize="16sp"
-			android:drawableLeft="@drawable/img_task_signupcount_n"
+			android:drawableLeft="@drawable/task_signupcount_45"
 			android:drawablePadding="10dp"/>
 	    <TextView 
 	        android:id="@+id/txt_task_detail_signupcount"

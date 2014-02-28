@@ -8,7 +8,7 @@
 	android:background="@drawable/common_layout_bg">
   
     <!-- 头像  --> 
-	<com.example.taupstairs.view.RoundAngleImageView 
+	<ImageView 
 	    android:id="@+id/img_photo"
 	    android:layout_width="50dp"
 	    android:layout_height="50dp"

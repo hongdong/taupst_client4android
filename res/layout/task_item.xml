@@ -6,15 +6,14 @@
     android:background="@drawable/fm_bg_list_item">
     
     <!-- 头像  --> 
-	<com.example.taupstairs.view.RoundAngleImageView
+	<ImageView
 	    android:id="@+id/img_fm_task_photo"
 	    android:layout_width="40dp"
 	    android:layout_height="40dp"
 	    android:layout_marginTop="10dp"
 	    android:layout_marginLeft="8dp"
 	    android:contentDescription="@string/drawable"
-	    android:clickable="true"
-	    android:background="@drawable/img_photo_bg"/>
+	    android:clickable="true"/>
 	
 	<LinearLayout 
 		android:layout_width="match_parent"
@@ -116,7 +115,7 @@
 				android:textSize="12sp"
 				android:textColor="@color/task_text_message_signup"
 				android:layout_alignParentRight="true"
-				android:drawableLeft="@drawable/icon_message"
+				android:drawableLeft="@drawable/icon_signup_13"
 				android:drawablePadding="3dp"
 				android:clickable="true"/>
 		    <TextView 
@@ -127,7 +126,7 @@
 				android:textSize="12sp"
 				android:textColor="@color/task_text_message_signup"
 				android:layout_toLeftOf="@id/txt_fm_task_signup"
-				android:drawableLeft="@drawable/icon_signup"
+				android:drawableLeft="@drawable/icon_message_13"
 				android:drawablePadding="3dp"
 				android:clickable="true"/>
 		</RelativeLayout>
