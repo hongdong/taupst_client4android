@@ -138,7 +138,11 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	 * HomePage通过这个接口使得消息界面更新
 	 */
 	public void homePageCallBack() {
-		doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+		if (null == lastestInfoId) {
+			doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
+		} else {
+			doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
