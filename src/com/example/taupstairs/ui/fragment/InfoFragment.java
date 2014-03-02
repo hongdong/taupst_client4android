@@ -165,12 +165,14 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		if (newInfos != null) {
 			switch (mode) {
 			case Task.TA_GETINFO_MODE_FIRSTTIME:
-				if (newInfos.size() <= 0) {
-					LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_no_info);
+				LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_no_info);
+				if (newInfos.size() <= 0) {	
 					TextView txt_no_info = (TextView) view.findViewById(R.id.txt_no_info);
 					txt_no_info.setText("还没有消息");
 					layout.setVisibility(View.VISIBLE);	//这个时候要显示没有消息
-				} 
+				} else {
+					layout.setVisibility(View.GONE);
+				}
 				currentInfos = newInfos;
 				adapter = new InfoAdapter(context, currentInfos);
 				xlist_info.setAdapter(adapter);
