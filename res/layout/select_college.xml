@@ -45,7 +45,7 @@
 				android:drawableLeft="@drawable/login_img_search"
 		    	android:hint="@string/input_college"
 		    	android:textColorHint="@color/gray"
-		    	android:textSize="18sp"
+		    	android:textSize="16sp"
 		    	android:textColor="@color/black"/>
 	    </LinearLayout>
 	    <ListView 
