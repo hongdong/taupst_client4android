@@ -6,7 +6,7 @@
     android:maxLines="5"
 	android:maxLength="50"
     android:textColor="@color/black"
-    android:textSize="14sp"
+    android:textSize="13sp"
     android:paddingTop="0.5dp"
     android:paddingBottom="0.5dp"
     android:background="@drawable/common_text_item_bg"/>

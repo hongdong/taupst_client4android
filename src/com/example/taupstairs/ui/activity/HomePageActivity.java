@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,14 +28,12 @@ import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.HomePageFragmentPagerAdapter;
-import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.manager.UpdataManager;
-import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
@@ -56,6 +57,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private boolean isChecking = false;
 	private boolean displayNoNet = false;
 	
+	private PushMessageClickReceiver receiver;
+	
 	private ViewPager viewPager;
 	private List<Fragment> fragments;
 	private InfoFragment infoFragment;
@@ -77,28 +80,21 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		init();
 	}
 	
-	/**
-	 * 目前这个回调函数只有在刚打开软件和收到推送后才会调用
-	 * 所以可以直接setCurrent(INDEX_INFO);
-	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
 		String action = intent.getAction();
-		if (Utils.ACTION_MESSAGE.equals(action)) {
-			infoFragment.homePageCallBack();
-		} else if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
-			setCurrent(INDEX_INFO);	
-		} 	
+		if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
+			setCurrent(INDEX_INFO);
+		}
 	}
 	
 	@Override
 	public void init() {
 		initData();
 		initCheckNetTask();
+		initReceiver();
 		initView();
 		initListener();
-		initCheckUpdata();
 	}
 	
 	/*初始化全局变量*/
@@ -112,6 +108,35 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		defaultUser = SharedPreferencesUtil.getDefaultUser(HomePageActivity.this);
 		currentIndex = 0;
 		flag_clear = false;
+	}
+	
+	/*进入软件时检测网络*/
+	private void initCheckNetTask() {
+		new Thread() {
+			public void run() {
+				while (noNet) {
+					if (!isChecking) {
+						isChecking = true;
+						doCheckNetTask();
+						try {
+							sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			};
+		}.start();
+	}
+	
+	/**
+	 * 初始化百度Push服务发来的广播接收
+	 */
+	private void initReceiver() {
+		receiver = new PushMessageClickReceiver();
+		IntentFilter filter = new IntentFilter();  
+        filter.addAction("com.example.taupstairs.UPDATA_INFO");
+        registerReceiver(receiver, filter);  
 	}
 	
 	/*初始化UI*/
@@ -138,39 +163,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		viewPager = (ViewPager) findViewById(R.id.hp_viewpager);
 		HomePageFragmentPagerAdapter adapter = new HomePageFragmentPagerAdapter(getSupportFragmentManager(), fragments);
 		viewPager.setAdapter(adapter);
-		checkPerson();
-	}
-	
-	/**
-	 * 检测数据库中是否存在person信息，如果不存在，就要先加载。
-	 * 不然有些地方用到了就会空指针异常
-	 */
-	private void checkPerson() {
-		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
-		PersonService personService = new PersonService(this);
-		Person person = personService.getPersonById(personId);
-		if (null == person) {
-			viewPager.setOffscreenPageLimit(fragments.size());
-		}
-	}
-	
-	/*进入软件时检测网络*/
-	private void initCheckNetTask() {
-		new Thread() {
-			public void run() {
-				while (noNet) {
-					if (!isChecking) {
-						isChecking = true;
-						doCheckNetTask();
-						try {
-							sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			};
-		}.start();
+		//预加载4个fragment。默认的不会预加载这么多，页面切换会卡
+		viewPager.setOffscreenPageLimit(fragments.size());	
 	}
 	
 	/*初始化控件的监听器*/
@@ -233,10 +227,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		});
 	}
 	
-	private void initCheckUpdata() {
-		doCheckUpdataTask();
-	}
-	
 	/*设置当前状态*/
 	private void setCurrent(int index) {
 		viewPager.setCurrentItem(index);
@@ -292,6 +282,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 				PushManager.startWork(getApplicationContext(),
 						PushConstants.LOGIN_TYPE_API_KEY, 
 						Utils.getMetaValue(this, "api_key"));
+				doCheckUpdataTask();
 			}
 			isChecking = false;
 			break;
@@ -392,6 +383,16 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		unregisterReceiver(receiver);
+	}
+	
+	/**
+	 * 更新消息列表
+	 */
+	public class PushMessageClickReceiver extends BroadcastReceiver {
+		public void onReceive(final Context context, Intent intent) {
+			infoFragment.homePageCallBack();
+		}
 	}
 
 }

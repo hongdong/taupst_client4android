@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 import com.example.taupstairs.R;
@@ -31,7 +33,8 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 
 	private Button btn_back, btn_ok;
 	private EditText edit_evaluate;
-	private NumberPicker np_evaluate;
+	private TextView txt_praise;
+	private SeekBar sk_evaluate;
 	private String statusId;
 	private SignUp signUp;
 	private String signUpPraise, signUpMessage;
@@ -54,13 +57,15 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		signUp = app.getSignUp();
+		signUpPraise = "0";
 	}
 	
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_evaluate);
 		btn_ok = (Button)findViewById(R.id.btn_ok_evaluate);
 		edit_evaluate = (EditText)findViewById(R.id.edit_evaluate);
-		np_evaluate = (NumberPicker)findViewById(R.id.np_evaluate);
+		txt_praise = (TextView)findViewById(R.id.txt_evaluate_praise);
+		sk_evaluate = (SeekBar)findViewById(R.id.sk_evaluate);
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
@@ -71,14 +76,28 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				signUpPraise = String.valueOf(np_evaluate.getValue());
 				signUpMessage = edit_evaluate.getText().toString();
 				doEvaluateTask();
 			}
 		});
 		
-		np_evaluate.setMinValue(0);
-		np_evaluate.setMaxValue(32);
+		txt_praise.setText("0");
+		
+		sk_evaluate.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				
+			}
+			
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				
+			}
+			
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				signUpPraise = String.valueOf(progress);
+				txt_praise.setText(signUpPraise);
+			}
+		});
 	}
 	
 	private void showProgressDialog() {

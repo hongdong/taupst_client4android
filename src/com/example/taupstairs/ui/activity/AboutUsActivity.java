@@ -30,6 +30,7 @@ public class AboutUsActivity extends Activity implements ItaActivity {
 		
 		StringBuilder about_us = new StringBuilder();
 		about_us.append("<html><body>");
+		
 		about_us.append("<p><strong>1. 团队介绍</strong></p>");
 		about_us.append("<p>1.1</p>");
 		about_us.append("<p>“Ta楼上”由Starry工作室制作。</p>");
@@ -38,6 +39,14 @@ public class AboutUsActivity extends Activity implements ItaActivity {
 		about_us.append("<p>2.1</p>");
 		about_us.append("<p>用户使用过程中有任务想反馈的信息，都可通过设置页面的“用户反馈”项进行反馈，");
 		about_us.append("欢迎提出你们宝贵的意见。</p>");
+		
+		about_us.append("<p>2.2</p>");
+		about_us.append("<p>用户也可将问题发到我们的邮箱，我们将尽最大努力去满足用户需求，");
+		about_us.append("邮箱地址为：taupst@126.com。</p>");
+		
+		about_us.append("<p>2.3</p>");
+		about_us.append("有兴趣的用户可加入我们的qq群进行讨论，qq群号为：24527732。</p>");
+		
 		about_us.append("</body></html>");
 		txt_about_us.setMovementMethod(ScrollingMovementMethod.getInstance());
 		txt_about_us.setText(Html.fromHtml(about_us.toString()));

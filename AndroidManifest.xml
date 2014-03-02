@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="18" />
     
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -141,7 +141,7 @@
         <service android:name=".logic.MainService"></service>
         
         <!-- push service client -->
-        <receiver android:name=".receiver.PushMessageReceiver" >
+        <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>
                 <!-- 接收push消息 -->
                 <action android:name="com.baidu.android.pushservice.action.MESSAGE" />

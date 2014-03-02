@@ -21,7 +21,7 @@
             android:layout_centerInParent="true"
             android:text="@string/version_feature"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="19sp" />
     </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
@@ -30,10 +30,11 @@
 	        android:id="@+id/txt_version_feature"
 	        android:layout_width="wrap_content" 
 	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:scrollbars="vertical"
-	        android:textSize="16sp"
+	        android:textSize="15sp"
 	        android:textColor="@color/black"/>
     </ScrollView>
 </LinearLayout>

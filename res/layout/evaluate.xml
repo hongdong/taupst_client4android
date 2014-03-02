@@ -21,7 +21,7 @@
             android:layout_centerInParent="true"
             android:text="@string/evaluate"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="19sp" />
         <Button 
 			android:id="@+id/btn_ok_evaluate"
 			android:layout_width="wrap_content" 
@@ -47,7 +47,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:hint="@string/say_a_little"
-            android:textSize="18sp" 
+            android:textSize="16sp" 
             android:maxLines="5"
             android:maxLength="50"
             android:background="@drawable/edit_47"/>
@@ -64,22 +64,38 @@
             android:layout_marginLeft="20dp"
             android:text="@string/evaluata_ta"
             android:textColor="@color/black"
-            android:textSize="16sp" />
-        <NumberPicker 
-            android:id="@+id/np_evaluate"
+            android:textSize="15sp" />
+        <TextView 
+            android:id="@+id/txt_evaluate_praise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/txt_evaluate_ta"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+			android:textColor="@color/gold"
+            android:textSize="18sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/np_evaluate"
+            android:layout_toRightOf="@id/txt_evaluate_praise"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:text="@string/evaluate_praise"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
     </RelativeLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+        <SeekBar 
+           android:id="@+id/sk_evaluate"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="20dp"
+           android:layout_marginRight="50dp"
+           android:max="32"/>
+    </LinearLayout>
 </LinearLayout>

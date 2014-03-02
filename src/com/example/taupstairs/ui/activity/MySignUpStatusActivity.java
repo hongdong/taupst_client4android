@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 
@@ -154,6 +156,12 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 		if (newStatus != null) {
 			switch (mode) {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
+				if (newStatus.size() <= 0) {
+					LinearLayout layout = (LinearLayout) findViewById(R.id.layout_no_info);
+					TextView txt_no_info = (TextView) findViewById(R.id.txt_no_info);
+					txt_no_info.setText("还没有报名过任务");
+					layout.setVisibility(View.VISIBLE);	
+				} 
 				currentStatus = newStatus;
 				/*第一次上面不会设置这个，所以这里要设置*/
 				adapter = new TaskAdapter(this, currentStatus);

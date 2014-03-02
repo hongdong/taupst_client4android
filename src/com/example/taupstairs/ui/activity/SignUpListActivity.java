@@ -13,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taupstairs.R;
@@ -93,24 +94,31 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 	}
 	
 	private void display() {
-		adapter = new SignUpListAdapter(this, signUps);
-		list_signup_list.setAdapter(adapter);
-		list_signup_list.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				SignUp signUp = signUps.get(arg2);
-				if (signUp.getIsExe().equals("0") && signUp.getSignUpPraise().equals("")) {
-					clickPosition = arg2;
-					TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
-					app.setSignUp(signUps.get(arg2));
-					Intent intent = new Intent(SignUpListActivity.this, EvaluateActivity.class);
-					intent.putExtra(Status.STATUS_ID, statusId);
-					startActivityForResult(intent, IntentString.RequestCode.SIGNUPLIST_EVALUATE);
-				} else {	
-					//已经评价过了
+		if (signUps.size() <= 0) {
+			LinearLayout layout = (LinearLayout) findViewById(R.id.layout_no_info);
+			TextView txt_no_info = (TextView) findViewById(R.id.txt_no_info);
+			txt_no_info.setText("这个任务没有人报名");
+			layout.setVisibility(View.VISIBLE);	
+		} else {
+			adapter = new SignUpListAdapter(this, signUps);
+			list_signup_list.setAdapter(adapter);
+			list_signup_list.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					SignUp signUp = signUps.get(arg2);
+					if (signUp.getIsExe().equals("0") && signUp.getSignUpPraise().equals("")) {
+						clickPosition = arg2;
+						TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
+						app.setSignUp(signUps.get(arg2));
+						Intent intent = new Intent(SignUpListActivity.this, EvaluateActivity.class);
+						intent.putExtra(Status.STATUS_ID, statusId);
+						startActivityForResult(intent, IntentString.RequestCode.SIGNUPLIST_EVALUATE);
+					} else {	
+						//已经评价过了
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	@Override

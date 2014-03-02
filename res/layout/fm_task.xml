@@ -8,8 +8,6 @@
         android:id="@+id/xlist_fm_task"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
-        android:layout_marginLeft="0.5dp"
-       	android:layout_marginRight="0.5dp"
         android:divider="@null"
         android:cacheColorHint="#00000000">
     </com.example.taupstairs.view.XListView>

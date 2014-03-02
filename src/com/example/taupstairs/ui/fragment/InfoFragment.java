@@ -2,7 +2,6 @@ package com.example.taupstairs.ui.fragment;
 
 import java.util.HashMap;
 import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
 import com.example.taupstairs.bean.Info;
@@ -35,7 +34,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 
 	private View view;
 	private HomePageActivity context;
-	private LinearLayout layout;
 	private XListView xlist_info;
 	private InfoAdapter adapter;
 	private List<Info> currentInfos;
@@ -91,7 +89,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void initView() {
-		layout = (LinearLayout) view.findViewById(R.id.layout_fm_info_no_info);
 		xlist_info = (XListView) view.findViewById(R.id.xlist_fm_info);
 		xlist_info.setPullLoadEnable(false);
 		if (currentInfos != null) {
@@ -164,6 +161,12 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		if (newInfos != null) {
 			switch (mode) {
 			case Task.TA_GETINFO_MODE_FIRSTTIME:
+				if (newInfos.size() <= 0) {
+					LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_no_info);
+					TextView txt_no_info = (TextView) view.findViewById(R.id.txt_no_info);
+					txt_no_info.setText("还没有消息");
+					layout.setVisibility(View.VISIBLE);	//这个时候要显示没有消息
+				} 
 				currentInfos = newInfos;
 				adapter = new InfoAdapter(context, currentInfos);
 				xlist_info.setAdapter(adapter);
@@ -210,8 +213,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			lastestInfoId = currentInfos.get(0).getInfoId();
 			oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
 			xlist_info.setPullLoadEnable(true);
-		} else {
-			layout.setVisibility(View.VISIBLE);	//这个时候要显示没有信息
 		}
 	}
 

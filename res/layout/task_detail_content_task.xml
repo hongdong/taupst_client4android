@@ -14,7 +14,7 @@
 		android:layout_height="wrap_content"
 		android:layout_margin="10dp"
 		android:textColor="@color/black"
-		android:textSize="18sp"/>
+		android:textSize="17sp"/>
 	<include layout="@layout/task_detail_divider" />
 	<TextView 
 		android:id="@+id/txt_task_detail_content"
@@ -22,7 +22,7 @@
 		android:layout_height="wrap_content"
 		android:layout_margin="10dp"
 		android:textColor="@color/black"
-		android:textSize="16sp"/>
+		android:textSize="15sp"/>
 	<include layout="@layout/task_detail_divider" />
 	
 	<!-- 报酬 --> 
@@ -38,7 +38,7 @@
 			android:gravity="center_vertical"
 			android:text="@string/task_rewards"
 			android:textColor="@color/black"
-			android:textSize="16sp"
+			android:textSize="15sp"
 			android:drawableLeft="@drawable/task_rewards_45"
 			android:drawablePadding="10dp"/>
         <TextView 
@@ -47,11 +47,11 @@
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_toRightOf="@id/txt_task_detail_reward_tmp"
-			android:layout_marginLeft="15dp"	
+			android:layout_marginLeft="10dp"	
 			android:layout_marginRight="15dp"
 			android:textStyle="bold"
 			android:textColor="@color/gold"
-			android:textSize="16sp"/>
+			android:textSize="15sp"/>
 	</RelativeLayout>
 	
 	<!-- 截止时间 --> 
@@ -67,7 +67,7 @@
 			android:gravity="center_vertical"
 			android:text="@string/endtime"
 			android:textColor="@color/black"
-			android:textSize="16sp"
+			android:textSize="15sp"
 			android:drawableLeft="@drawable/task_endtime_45"
 			android:drawablePadding="10dp"/>
 	    <TextView 
@@ -76,9 +76,9 @@
 			android:layout_height="wrap_content"
 			android:layout_toRightOf="@id/txt_task_detail_endtime_pictrue"
 			android:layout_centerVertical="true"
-			android:layout_marginLeft="15dp"
+			android:layout_marginLeft="10dp"
 			android:textColor="@color/black"
-			android:textSize="16sp"/>
+			android:textSize="15sp"/>
 	    <TextView 
             android:id="@+id/txt_task_detail_expired"
             android:layout_width="wrap_content" 
@@ -86,7 +86,7 @@
 	        android:layout_marginRight="15dp"
 	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true"
-	        android:textSize="16sp"
+	        android:textSize="15sp"
 	        android:textColor="@color/black"
 	        android:visibility="gone"/>
 	</RelativeLayout>
@@ -106,7 +106,7 @@
 			android:gravity="center_vertical"
 			android:text="@string/signup_count"
 			android:textColor="@color/black"
-			android:textSize="16sp"
+			android:textSize="15sp"
 			android:drawableLeft="@drawable/task_signupcount_45"
 			android:drawablePadding="10dp"/>
 	    <TextView 
@@ -114,22 +114,22 @@
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:layout_marginLeft="15dp"
+			android:layout_marginLeft="10dp"
 			android:layout_toRightOf="@id/txt_task_detail_signup"
 			android:textColor="@color/black"
-			android:textSize="16sp"/>
+			android:textSize="15sp"/>
 	    <FrameLayout 
 	        android:id="@+id/layout_task_detail_frame"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_marginRight="15dp"
 	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true">
 	        <Button 
 		        android:id="@+id/btn_task_detail_signup"
 		        android:layout_width="wrap_content" 
 		        android:layout_height="wrap_content"
-		        android:layout_marginRight="15dp"
-		        android:textSize="16sp"
+		        android:textSize="15sp"
 		        android:textColor="@color/white"
 		        android:background="@drawable/task_detail_btn_signup_bg"
 		        android:visibility="gone"/>
@@ -137,8 +137,7 @@
 	            android:id="@+id/txt_task_detail_multi"
 	            android:layout_width="wrap_content" 
 		        android:layout_height="wrap_content"
-		        android:layout_marginRight="15dp"
-		        android:textSize="16sp"
+		        android:textSize="15sp"
 		        android:textColor="@color/black"
 		        android:visibility="gone"/>
 	    </FrameLayout>   
@@ -150,7 +149,7 @@
 			android:layout_marginRight="10dp"
 			android:layout_toLeftOf="@id/layout_task_detail_frame"
 			android:textColor="@color/black"
-			android:textSize="16sp"
+			android:textSize="15sp"
 			android:visibility="gone"/>
 	</RelativeLayout>
 	<include layout="@layout/task_detail_divider" />

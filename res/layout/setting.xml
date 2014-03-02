@@ -21,7 +21,7 @@
             android:layout_centerInParent="true"
             android:text="@string/setting"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="19sp" />
     </RelativeLayout>
     <LinearLayout 
         android:layout_width="match_parent"
@@ -34,6 +34,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="15dp"
+	        android:cacheColorHint="#00000000"
 	        android:divider="@color/white_divider"
 	        android:dividerHeight="1dp"
 	        android:background="@drawable/common_list_bg">
@@ -44,6 +45,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="15dp"
+	        android:cacheColorHint="#00000000"
 	        android:divider="@color/white_divider"
 	        android:dividerHeight="1dp"
 	        android:background="@drawable/common_list_bg">

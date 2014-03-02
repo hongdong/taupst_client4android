@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.taupstairs.R;
@@ -224,9 +225,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 		hasGetCaptcha = true;
 		edit_captcha.setText(null);
 		img_captcha.setImageDrawable(drawable);
-		img_captcha.setVisibility(View.VISIBLE);
-		btn_captcha.setVisibility(View.VISIBLE);
-		edit_captcha.setVisibility(View.VISIBLE);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.layout_login_captcha);
+		layout.setVisibility(View.VISIBLE);
 	}
 	
 	private void refreshLogin(String result) {

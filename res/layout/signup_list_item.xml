@@ -75,7 +75,7 @@
 		        android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="10dp"
-				android:layout_marginRight="60dp"
+				android:layout_marginRight="80dp"
 				android:textColor="@color/black"
 				android:textSize="14sp"/>
 		    <TextView 
@@ -86,7 +86,9 @@
 				android:layout_alignParentRight="true"
 				android:textSize="14sp"
 				android:textStyle="bold"
-				android:textColor="@color/gold"/>
+				android:textColor="@color/gold"
+				android:drawableRight="@drawable/praise_15"
+				android:drawablePadding="10dp"/>
 	    </RelativeLayout>
 	    
     </LinearLayout>
