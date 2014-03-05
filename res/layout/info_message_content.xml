@@ -10,14 +10,12 @@
 	<RelativeLayout 
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp">
+		android:layout_margin="10dp">
 	    <TextView 
 	        android:id="@+id/txt_info_message_message"
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginRight="70dp"
 			android:textColor="@color/black"
 			android:textSize="15sp"/>
 	    <TextView 
@@ -41,10 +39,7 @@
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp"
+		android:layout_margin="10dp"
 		android:background="@drawable/info_detail_bg_task"
 		android:id="@+id/layout_info_message_task">
 	    <TextView 
@@ -77,10 +72,7 @@
 		android:cacheColorHint="#00000000"
 		android:divider="@color/white_divider"
 		android:dividerHeight="0.5dp"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp">
+		android:layout_margin="10dp">
         
     </com.example.taupstairs.view.MyListView>
     

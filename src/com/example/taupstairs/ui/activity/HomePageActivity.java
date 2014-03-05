@@ -82,6 +82,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
+		System.out.println("onNewIntent");
 		String action = intent.getAction();
 		if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
 			setCurrent(INDEX_INFO);
@@ -98,13 +99,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	/*初始化全局变量*/
-	private void initData() {
-		// 以apikey的方式登录，一般放在主Activity的onCreate中
-		//但startWork后要把百度后台服务发来的id发给我们的报务器，所以等登录完成后再startWork
-//		PushManager.startWork(getApplicationContext(),
-//				PushConstants.LOGIN_TYPE_API_KEY, 
-//				Utils.getMetaValue(this, "api_key"));
-				
+	private void initData() {		
 		defaultUser = SharedPreferencesUtil.getDefaultUser(HomePageActivity.this);
 		currentIndex = 0;
 		flag_clear = false;
@@ -254,6 +249,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	
 	private void doUsetExitTask() {
 		finish();
+		PushManager.stopWork(getApplicationContext());
 		for (int i = 0; i < fragments.size(); i++) {
 			ItaFragment fragment = (ItaFragment) fragments.get(i);
 			fragment.exit();
@@ -294,7 +290,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 			break;
 			
 		case Task.TA_USEREXIT:
-			PushManager.stopWork(getApplicationContext());
 			System.exit(0);
 			break;
 
@@ -309,14 +304,20 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	public void localRefresh(int id, Map<String, Object> params) {
 		switch (id) {
 		case HomePageString.UPDATA_PHOTO:
-//			infoFragment.localRefresh(id, params);	//目前消息列表根本没有自己的消息
 			taskFragment.localRefresh(id, params);
 			rankFragment.localRefresh(id, params);
 			break;
 		case HomePageString.UPDATA_NICKNAME:
-//			infoFragment.localRefresh(id, params);
 			taskFragment.localRefresh(id, params);
 			rankFragment.localRefresh(id, params);
+			break;
+			
+		case HomePageString.NEW_INFO:
+			infoFragment.localRefresh(id, params);
+			break;
+			
+		case HomePageString.RELEASE_STATUS_SUCCESS:
+			taskFragment.localRefresh(id, params);
 			break;
 
 		default:
@@ -330,7 +331,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		switch (requestCode) {
 		case IntentString.RequestCode.HOMEPAGE_WRITE:
 			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
-				taskFragment.releaseTaskSuccess();
+				localRefresh(HomePageString.RELEASE_STATUS_SUCCESS, null);
 			}
 			break;
 
@@ -391,7 +392,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	 */
 	public class PushMessageClickReceiver extends BroadcastReceiver {
 		public void onReceive(final Context context, Intent intent) {
-			infoFragment.homePageCallBack();
+			localRefresh(HomePageString.NEW_INFO, null);
 		}
 	}
 

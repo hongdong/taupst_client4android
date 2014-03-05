@@ -47,7 +47,6 @@ public class Task {
 	public static final int TA_GETSTATUS_TYPE_MY_SIGNUP = 3;
 	public static final String TA_GETSTATUS_MODE = "getstatus_mode";
 	public static final int TA_GETSTATUS_MODE_FIRSTTIME = 1;
-	public static final int TA_GETSTATUS_MODE_PULLREFRESH = 2;
 	public static final int TA_GETSTATUS_MODE_LOADMORE = 3;
 	public static final String TA_GETSTATUS_ACTIVITY = "activity";
 	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";

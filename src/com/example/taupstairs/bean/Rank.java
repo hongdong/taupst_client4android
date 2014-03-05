@@ -12,7 +12,7 @@ public class Rank {
 	private String rankRank;
 	
 	public static final String TB_NAME = "rank";	
-	public static final int RANK_COUNT_PERPAGE = 20;
+	public static final int RANK_COUNT_PERPAGE = 21;
 	public static final String ID = "_id";
 	
 	public static final String RANK_ID = "rankId";

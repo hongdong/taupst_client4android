@@ -7,6 +7,8 @@ public class InfoSignUp {
 	private String statusPersonId;
 	private String statusPersonNickname;
 	private String statusTitle;
+	private String statusEndTime;
+	private String statusState;
 	private String signUpNickname;
 	private String signUpString;
 	private String hasExec;
@@ -17,6 +19,7 @@ public class InfoSignUp {
 	
 	public static final String SIGNUP_ID = "signUpId";
 	public static final String SIGNUP_STRING = "signUpString";
+	public static final String PERSON_CONTACT = "personContact";
 	
 	public String getSignUpId() {
 		return signUpId;
@@ -47,6 +50,18 @@ public class InfoSignUp {
 	}
 	public void setStatusTitle(String statusTitle) {
 		this.statusTitle = statusTitle;
+	}
+	public String getStatusEndTime() {
+		return statusEndTime;
+	}
+	public void setStatusEndTime(String statusEndTime) {
+		this.statusEndTime = statusEndTime;
+	}
+	public String getStatusState() {
+		return statusState;
+	}
+	public void setStatusState(String statusState) {
+		this.statusState = statusState;
 	}
 	public String getSignUpNickname() {
 		return signUpNickname;
@@ -95,11 +110,13 @@ public class InfoSignUp {
 		return "InfoSignUp [signUpId=" + signUpId + ", statusId=" + statusId
 				+ ", statusPersonId=" + statusPersonId
 				+ ", statusPersonNickname=" + statusPersonNickname
-				+ ", statusTitle=" + statusTitle + ", signUpNickname="
-				+ signUpNickname + ", signUpString=" + signUpString
-				+ ", personContact=" + personContact + ", personPhone="
-				+ personPhone + ", personQq=" + personQq + ", personEmail="
-				+ personEmail + "]";
+				+ ", statusTitle=" + statusTitle + ", statusEndTime="
+				+ statusEndTime + ", statusState=" + statusState
+				+ ", signUpNickname=" + signUpNickname + ", signUpString="
+				+ signUpString + ", hasExec=" + hasExec + ", personContact="
+				+ personContact + ", personPhone=" + personPhone
+				+ ", personQq=" + personQq + ", personEmail=" + personEmail
+				+ "]";
 	}
 	
 }

@@ -9,10 +9,7 @@
         android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:orientation="vertical"
-	    android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp">
+	    android:layout_margin="10dp">
         <TextView 
 	        android:id="@+id/txt_info_signup_string"
 	        android:layout_width="wrap_content"
@@ -28,10 +25,7 @@
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp"
+		android:layout_margin="10dp"
 		android:background="@drawable/info_detail_bg_task"
 		android:id="@+id/layout_info_signup_task">
 	    <TextView 
@@ -61,13 +55,11 @@
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="10dp">
 	    <RelativeLayout 
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="15dp">
+	        android:layout_height="wrap_content">
 	       	<ImageView 
 	            android:id="@+id/img_info_signup_phone"
 	            android:layout_width="wrap_content"
@@ -113,9 +105,7 @@
         <RelativeLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="15dp">
+	        android:layout_marginTop="10dp">
 	        <ImageView 
 				android:id="@+id/img_info_signup_qq"
 				android:layout_width="wrap_content"
@@ -133,14 +123,21 @@
 				android:padding="10dp"
 				android:textSize="15sp"
 				android:textColor="@color/black"/>
+	        <TextView 
+	            android:id="@+id/txt_info_signup_expired"
+	            android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentRight="true"
+		        android:layout_centerVertical="true"
+		        android:text="@string/task_expired"
+		        android:textSize="15sp"
+		        android:textColor="@color/black"
+		        android:visibility="gone"/>
     	</RelativeLayout>
     	<RelativeLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="15dp"
-	        android:layout_marginBottom="10dp">
+	        android:layout_marginTop="10dp">
 	       	<ImageView 
 	            android:id="@+id/img_info_signup_email"
 	            android:layout_width="wrap_content"
@@ -158,6 +155,16 @@
 				android:padding="10dp"
 				android:textSize="15sp"
 				android:textColor="@color/black"/>
+	        <TextView 
+	            android:id="@+id/txt_info_signup_end"
+	            android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_alignParentRight="true"
+		        android:text="@string/task_end"
+		        android:textSize="15sp"
+		        android:textColor="@color/black"
+		        android:visibility="gone"/>
     	</RelativeLayout>
     </LinearLayout>
 </LinearLayout>

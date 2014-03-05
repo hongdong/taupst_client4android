@@ -19,6 +19,7 @@ import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
+import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.listener.TaskByIdListener;
@@ -34,6 +35,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	private Button btn_back;
 	private Holder holder;
 	private Info info;
+	private boolean to_select;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,6 +68,8 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		public TextView txt_status_title;
 		public Button btn_exec;
 		public TextView txt_multi;
+		public TextView txt_expired;
+		public TextView txt_end;
 		public TextView txt_person_phone;
 		public TextView txt_person_qq;
 		public TextView txt_person_email;
@@ -88,12 +92,15 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		holder.txt_status_title = (TextView)findViewById(R.id.txt_info_signup_title);
 		holder.btn_exec = (Button)findViewById(R.id.btn_info_signup_exec);
 		holder.txt_multi = (TextView)findViewById(R.id.txt_info_signup_multi);
+		holder.txt_expired = (TextView)findViewById(R.id.txt_info_signup_expired);
+		holder.txt_end = (TextView)findViewById(R.id.txt_info_signup_end);
 		holder.txt_person_phone = (TextView)findViewById(R.id.txt_info_signup_phone);
 		holder.txt_person_qq = (TextView)findViewById(R.id.txt_info_signup_qq);
 		holder.txt_person_email = (TextView)findViewById(R.id.txt_info_signup_email);
 	}
 	
 	private void initData() {
+		to_select = true;
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		info = app.getInfo();
 		if (null == info.getInfoSignUp()) {	//可能本地已经保存了
@@ -196,15 +203,30 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		} else {
 			holder.txt_person_email.setText("Ta没有向您提供email");
 		}
+		
+		Time now = TimeUtil.getNow(Calendar.getInstance());
+		Time end = TimeUtil.originalToTime(infoSignUp.getStatusEndTime());
+		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
+			to_select = false;
+			holder.txt_expired.setVisibility(View.VISIBLE);
+		}
+		
+		if (infoSignUp.getStatusState().trim().equals("3")) {
+			to_select = false;
+			holder.txt_end.setVisibility(View.VISIBLE);
+		}
+		
 		String hasExec = infoSignUp.getHasExec();
 		if (hasExec.equals("1")) {
-			holder.btn_exec.setVisibility(View.VISIBLE);
-			holder.btn_exec.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					Intent intent = new Intent(InfoSignUpActivity.this, InfoSignUpExecActivity.class);
-					startActivityForResult(intent, IntentString.RequestCode.INFOSIGNUP_INFOSIGNUPEXEC);
-				}
-			});
+			if (to_select) {
+				holder.btn_exec.setVisibility(View.VISIBLE);
+				holder.btn_exec.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						Intent intent = new Intent(InfoSignUpActivity.this, InfoSignUpExecActivity.class);
+						startActivityForResult(intent, IntentString.RequestCode.INFOSIGNUP_INFOSIGNUPEXEC);
+					}
+				});
+			}
 		} else if (hasExec.equals("0")) {
 			holder.txt_multi.setVisibility(View.VISIBLE);
 		}

@@ -9,10 +9,7 @@
         android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:orientation="vertical"
-	    android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp">
+	    android:layout_margin="10dp">
         <TextView 
 	        android:id="@+id/txt_info_exec_task_string_reply"
 	        android:layout_width="wrap_content"
@@ -28,10 +25,7 @@
 	    android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp"
+		android:layout_margin="10dp"
 		android:background="@drawable/info_detail_bg_task"
 		android:id="@+id/layout_info_exec_task_task">
 	    <TextView 
@@ -57,28 +51,77 @@
 
 	<include layout="@layout/task_detail_divider" />
 	
-	<LinearLayout 
+	<!-- 对方提供给你的联系方式 -->
+    <LinearLayout 
         android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="horizontal"
-	    android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_marginLeft="15dp"
-		android:layout_marginRight="15dp">
-	    <TextView 
-	        android:id="@+id/txt_info_exec_task_string_nickname"
-	        android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textStyle="bold"
-			android:textColor="@color/green"
-			android:textSize="15sp"
-			android:layout_marginBottom="10dp"
-			android:layout_marginLeft="10dp"/>
-        <TextView 
-	        android:id="@+id/txt_info_exec_task_string"
-	        android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/black"
-			android:textSize="15sp"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+	       	<ImageView 
+	            android:id="@+id/img_info_exec_task_phone"
+	            android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:src="@drawable/contact_phone_40"
+				android:contentDescription="@string/hello_world"/>
+	        <TextView 
+	            android:id="@+id/txt_info_exec_task_phone"
+	       		android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_toRightOf="@id/img_info_exec_task_phone"
+				android:layout_marginLeft="5dp"
+				android:padding="10dp"
+				android:textSize="15sp"
+				android:autoLink="phone"
+				android:textColor="@color/black"/> 
+    	</RelativeLayout>
+        <RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp">
+	        <ImageView 
+				android:id="@+id/img_info_exec_task_qq"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:src="@drawable/contact_qq_40"
+				android:contentDescription="@string/hello_world"/>
+	        <TextView 
+	            android:id="@+id/txt_info_exec_task_qq"
+	       		android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_toRightOf="@id/img_info_exec_task_qq"
+				android:layout_marginLeft="5dp"
+				android:padding="10dp"
+				android:textSize="15sp"
+				android:textColor="@color/black"/>
+    	</RelativeLayout>
+    	<RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp">
+	       	<ImageView 
+	            android:id="@+id/img_info_exec_task_email"
+	            android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:src="@drawable/contact_email_40"
+				android:contentDescription="@string/hello_world"/>
+	        <TextView 
+	            android:id="@+id/txt_info_exec_task_email"
+	       		android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_toRightOf="@id/img_info_exec_task_email"
+				android:layout_marginLeft="5dp"
+				android:padding="10dp"
+				android:textSize="15sp"
+				android:textColor="@color/black"/>
+    	</RelativeLayout>
     </LinearLayout>
 </LinearLayout>

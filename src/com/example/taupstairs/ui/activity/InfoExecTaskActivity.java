@@ -61,8 +61,9 @@ public class InfoExecTaskActivity extends Activity implements ItaActivity {
 		public View view;
 		public TextView txt_status_nickname;
 		public TextView txt_status_title;
-		public TextView txt_exec_task_string_nickname;
-		public TextView txt_exec_task_string;
+		public TextView txt_person_phone;
+		public TextView txt_person_qq;
+		public TextView txt_person_email;
 	}
 	
 	private void initHolder() {
@@ -80,8 +81,9 @@ public class InfoExecTaskActivity extends Activity implements ItaActivity {
 		holder.view = findViewById(R.id.layout_info_exec_task_task);
 		holder.txt_status_nickname = (TextView)findViewById(R.id.txt_info_exec_task_nickname);
 		holder.txt_status_title = (TextView)findViewById(R.id.txt_info_exec_task_title);
-		holder.txt_exec_task_string_nickname = (TextView)findViewById(R.id.txt_info_exec_task_string_nickname);
-		holder.txt_exec_task_string = (TextView)findViewById(R.id.txt_info_exec_task_string);
+		holder.txt_person_phone = (TextView)findViewById(R.id.txt_info_exec_task_phone);
+		holder.txt_person_qq = (TextView)findViewById(R.id.txt_info_exec_task_qq);
+		holder.txt_person_email = (TextView)findViewById(R.id.txt_info_exec_task_email);
 	}
 	
 	private void initData() {
@@ -169,8 +171,25 @@ public class InfoExecTaskActivity extends Activity implements ItaActivity {
 		holder.view.setOnClickListener(new TaskByIdListener(this, infoExecTask.getStatusId()));
 		holder.txt_status_nickname.setText(infoExecTask.getStatusPersonNickname());
 		holder.txt_status_title.setText("  :  " + infoExecTask.getStatusTitle());
-		holder.txt_exec_task_string_nickname.setText(infoExecTask.getSignUpStringNickname());
-		holder.txt_exec_task_string.setText("  :  " + infoExecTask.getSignUpString());
+		
+		String contact = infoExecTask.getPersonContact();
+		/*以下为联系方式，可能对方没有全部提供*/
+		char[] optional = contact.toCharArray();
+		if (optional[0] != '0') {
+			holder.txt_person_phone.setText(infoExecTask.getPersonPhone());
+		} else {
+			holder.txt_person_phone.setText("Ta没有向您提供手机号");
+		}
+		if (optional[1] != '0') {
+			holder.txt_person_qq.setText(infoExecTask.getPersonQq());
+		} else {
+			holder.txt_person_qq.setText("Ta没有向您提供qq号");
+		}
+		if (optional[2] != '0') {
+			holder.txt_person_email.setText(infoExecTask.getPersonEmail());
+		} else {
+			holder.txt_person_email.setText("Ta没有向您提供email");
+		}
 	}
 	
 	@Override

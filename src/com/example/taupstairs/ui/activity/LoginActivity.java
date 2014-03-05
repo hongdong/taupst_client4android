@@ -299,6 +299,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 				collegeId = data.getStringExtra(College.COLLEGE_ID);
 				collegeName = data.getStringExtra(College.COLLEGE_NAME);
 				txt_college_name.setText(collegeName);
+				LoginToast.checkCollege(this, Integer.parseInt(collegeId));
 			}
 		}
 	}

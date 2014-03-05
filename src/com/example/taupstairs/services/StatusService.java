@@ -26,26 +26,28 @@ public class StatusService {
 		if (null == cursor || cursor.getCount() <= 0) {
 			return null;
 		}
-		while (cursor.moveToNext()) {
-			Status status = new Status();
-			
-			status.setStatusId(cursor.getString(cursor.getColumnIndex(Status.STATUS_ID)));
-			status.setStatusTitle(cursor.getString(cursor.getColumnIndex(Status.STATUS_TITLE)));
-			status.setStatusContent(cursor.getString(cursor.getColumnIndex(Status.STATUS_CONTENT)));
-			status.setStatusReleaseTime(cursor.getString(cursor.getColumnIndex(Status.STATUS_RELEASETIME)));
-			status.setStatusEndTime(cursor.getString(cursor.getColumnIndex(Status.STATUS_ENDTIME)));
-			status.setStatusRewards(cursor.getString(cursor.getColumnIndex(Status.STATUS_REWARDS)));
-			status.setStatusMessageCount(cursor.getString(cursor.getColumnIndex(Status.STATUS_MESSAGECOUNT)));
-			status.setStatusSignUpCount(cursor.getString(cursor.getColumnIndex(Status.STATUS_SIGNUPCOUNT)));
-			
-			status.setPersonId(cursor.getString(cursor.getColumnIndex(Status.PERSON_ID)));
-			status.setPersonPhotoUrl(cursor.getString(cursor.getColumnIndex(Status.PERSON_PHOTOURL)));
-			status.setPersonNickname(cursor.getString(cursor.getColumnIndex(Status.PERSON_NICKNAME)));
-			status.setPersonDepartment(cursor.getString(cursor.getColumnIndex(Status.PERSON_DEPARTMENT)));
-			status.setPersonGrade(cursor.getString(cursor.getColumnIndex(Status.PERSON_GRADE)));
-			status.setPersonSex(cursor.getString(cursor.getColumnIndex(Status.PERSON_SEX)));
-			
-			listStatus.add(status);
+		for (int i = 0; i < Status.STATUS_COUNT_PERPAGE; i++) {
+			if (cursor.moveToNext()) {
+				Status status = new Status();
+				
+				status.setStatusId(cursor.getString(cursor.getColumnIndex(Status.STATUS_ID)));
+				status.setStatusTitle(cursor.getString(cursor.getColumnIndex(Status.STATUS_TITLE)));
+				status.setStatusContent(cursor.getString(cursor.getColumnIndex(Status.STATUS_CONTENT)));
+				status.setStatusReleaseTime(cursor.getString(cursor.getColumnIndex(Status.STATUS_RELEASETIME)));
+				status.setStatusEndTime(cursor.getString(cursor.getColumnIndex(Status.STATUS_ENDTIME)));
+				status.setStatusRewards(cursor.getString(cursor.getColumnIndex(Status.STATUS_REWARDS)));
+				status.setStatusMessageCount(cursor.getString(cursor.getColumnIndex(Status.STATUS_MESSAGECOUNT)));
+				status.setStatusSignUpCount(cursor.getString(cursor.getColumnIndex(Status.STATUS_SIGNUPCOUNT)));
+				
+				status.setPersonId(cursor.getString(cursor.getColumnIndex(Status.PERSON_ID)));
+				status.setPersonPhotoUrl(cursor.getString(cursor.getColumnIndex(Status.PERSON_PHOTOURL)));
+				status.setPersonNickname(cursor.getString(cursor.getColumnIndex(Status.PERSON_NICKNAME)));
+				status.setPersonDepartment(cursor.getString(cursor.getColumnIndex(Status.PERSON_DEPARTMENT)));
+				status.setPersonGrade(cursor.getString(cursor.getColumnIndex(Status.PERSON_GRADE)));
+				status.setPersonSex(cursor.getString(cursor.getColumnIndex(Status.PERSON_SEX)));
+				
+				listStatus.add(status);
+			}
 		}
 		return listStatus;
 	}

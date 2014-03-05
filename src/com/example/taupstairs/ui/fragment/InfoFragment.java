@@ -2,6 +2,8 @@ package com.example.taupstairs.ui.fragment;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,7 @@ import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.InfoService;
+import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
 import com.example.taupstairs.ui.activity.InfoExecTaskActivity;
@@ -134,14 +137,22 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	}
 	
 	/**
-	 * 收到推送后，百度后台service发出广播，广播再发送Intent给HomePage，
-	 * HomePage通过这个接口使得消息界面更新
+	 * homepage的本地回调
+	 * @param id
+	 * @param params
 	 */
-	public void homePageCallBack() {
-		if (null == lastestInfoId) {
-			doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
-		} else {
-			doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+	public void localRefresh(int id, Map<String, Object> params) {
+		switch (id) {
+		case HomePageString.NEW_INFO:
+			if (null == lastestInfoId) {
+				doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
+			} else {
+				doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
 

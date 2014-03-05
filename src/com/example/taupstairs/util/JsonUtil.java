@@ -251,6 +251,16 @@ public class JsonUtil {
 				infoExecTask.setSignUpStringNickname(
 						jsonObject.getString(JsonString.InfoExecTask.SIGNUP_STRING_NICKNAME));
 				infoExecTask.setSignUpString(jsonObject.getString(JsonString.InfoExecTask.SIGNUP_STRING));
+				infoExecTask.setPersonContact(jsonObject.getString(JsonString.InfoExecTask.PERSON_CONTACK));
+				if (!jsonObject.isNull(JsonString.InfoExecTask.PERSON_PHONE)) {
+					infoExecTask.setPersonPhone(jsonObject.getString(JsonString.InfoExecTask.PERSON_PHONE));
+				}
+				if (!jsonObject.isNull(JsonString.InfoExecTask.PERSON_QQ)) {
+					infoExecTask.setPersonQq(jsonObject.getString(JsonString.InfoExecTask.PERSON_QQ));
+				}
+				if (!jsonObject.isNull(JsonString.InfoExecTask.PERSON_EMAIL)) {
+					infoExecTask.setPersonEmail(jsonObject.getString(JsonString.InfoExecTask.PERSON_EMAIL));
+				}
 				object = infoExecTask;
 				break;
 				
@@ -261,6 +271,8 @@ public class JsonUtil {
 				infoSignUp.setStatusPersonId(jsonObject.getString(JsonString.InfoSignUp.STATUS_PERSONID));
 				infoSignUp.setStatusPersonNickname(jsonObject.getString(JsonString.InfoSignUp.STATUS_PERSONNICKNAME));
 				infoSignUp.setStatusTitle(jsonObject.getString(JsonString.InfoSignUp.STATUS_TITLE));
+				infoSignUp.setStatusEndTime(jsonObject.getString(JsonString.InfoSignUp.STATUS_ENDTIME));
+				infoSignUp.setStatusState(jsonObject.getString(JsonString.InfoSignUp.STATUS_STATE));
 				infoSignUp.setSignUpNickname(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_NICKNAME));
 				infoSignUp.setSignUpString(jsonObject.getString(JsonString.InfoSignUp.SIGNUP_STRING));
 				infoSignUp.setHasExec(jsonObject.getString(JsonString.InfoSignUp.HAS_EXEC));

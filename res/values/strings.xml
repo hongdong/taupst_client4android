@@ -39,6 +39,8 @@
     <string name="info_signup">有人报名</string>
     <string name="info_signup_exec">选Ta执行</string>
     <string name="has_exec">已选Ta执行</string>
+    <string name="task_expired">任务过期</string>
+    <string name="task_end">任务完结</string>
     <string name="info_exec_task">选你执行</string>
     <string name="info_end_task">评价发你</string>
     

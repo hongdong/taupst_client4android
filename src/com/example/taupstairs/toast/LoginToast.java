@@ -16,4 +16,11 @@ public class LoginToast {
 		default:Toast.makeText(context, "未知错误", Toast.LENGTH_SHORT).show();break;
 		}
 	}
+	
+	public static void checkCollege(Context context, int collegeId) {
+		switch (collegeId) {
+		case 5:Toast.makeText(context, "福建农林大学须输入金桥网帐号密码", Toast.LENGTH_LONG).show();break;
+		default:break;
+		}
+	}
 }

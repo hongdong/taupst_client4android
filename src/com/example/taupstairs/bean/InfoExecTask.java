@@ -9,6 +9,10 @@ public class InfoExecTask {
 	private String statusTitle;
 	private String signUpStringNickname;
 	private String signUpString;
+	private String personContact;
+	private String personPhone;
+	private String personQq;
+	private String personEmail;
 	
 	public String getSignUpStringReply() {
 		return signUpStringReply;
@@ -52,6 +56,30 @@ public class InfoExecTask {
 	public void setSignUpString(String signUpString) {
 		this.signUpString = signUpString;
 	}
+	public String getPersonContact() {
+		return personContact;
+	}
+	public void setPersonContact(String personContact) {
+		this.personContact = personContact;
+	}
+	public String getPersonPhone() {
+		return personPhone;
+	}
+	public void setPersonPhone(String personPhone) {
+		this.personPhone = personPhone;
+	}
+	public String getPersonQq() {
+		return personQq;
+	}
+	public void setPersonQq(String personQq) {
+		this.personQq = personQq;
+	}
+	public String getPersonEmail() {
+		return personEmail;
+	}
+	public void setPersonEmail(String personEmail) {
+		this.personEmail = personEmail;
+	}
 	@Override
 	public String toString() {
 		return "InfoExecTask [signUpStringReply=" + signUpStringReply
@@ -59,7 +87,10 @@ public class InfoExecTask {
 				+ statusPersonId + ", statusPersonNickname="
 				+ statusPersonNickname + ", statusTitle=" + statusTitle
 				+ ", signUpStringNickname=" + signUpStringNickname
-				+ ", signUpString=" + signUpString + "]";
+				+ ", signUpString=" + signUpString + ", personContact="
+				+ personContact + ", personPhone=" + personPhone
+				+ ", personQq=" + personQq + ", personEmail=" + personEmail
+				+ "]";
 	}
 	
 }

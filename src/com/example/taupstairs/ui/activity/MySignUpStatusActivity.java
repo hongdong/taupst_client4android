@@ -42,7 +42,6 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 	private boolean isRefresh;
 	
 	private MySignUpStatusService statusService;
-	private String lastestStatusId;
 	private String oldestStatusId;
 	private String lastestUpdata;
 	
@@ -60,15 +59,10 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 	}
 	
 	private void initData() {
-		isRefresh = false;
-		lastestStatusId = SharedPreferencesUtil.getLastestId(this, SharedPreferencesUtil.LASTEST_MY_SIGNUP_STATUS_ID);
-		if (null == lastestStatusId) {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);		
-		} else {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);	
-		}
+		isRefresh = false;		
 		statusService = new MySignUpStatusService(this);	
 		currentStatus = statusService.getListStatus();
+		getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);
 	}
 	
 	private void initView() {
@@ -100,11 +94,7 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
 			public void onRefresh() {
-				if (null == lastestStatusId) {
-					getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
-				} else {
-					getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
-				}
+				getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
 			}
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
@@ -169,24 +159,6 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				break;
 				
-			case Task.TA_GETSTATUS_MODE_PULLREFRESH:
-				if (newStatus.size() < 20) {
-					if (currentStatus != null) {
-						/*这里一定要放到最头部，那样显示才不会乱*/
-						currentStatus.addAll(0, newStatus);
-						adapter.notifyDataSetChanged();
-					} else {	/*读取数据库可能失败。或许是上次没保存好*/
-						currentStatus = newStatus;
-						adapter = new TaskAdapter(this, currentStatus);
-						xlist_task.setAdapter(adapter);
-					}
-				} else {
-					currentStatus = newStatus;
-					adapter.notifyDataSetInvalidated();
-				}
-				lastestUpdata = TimeUtil.setLastestUpdata();
-				break;
-				
 			case Task.TA_GETSTATUS_MODE_LOADMORE:
 				currentStatus.addAll(newStatus);
 				adapter.notifyDataSetChanged();
@@ -213,7 +185,6 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 		xlist_task.stopLoadMore();
 		xlist_task.setRefreshTime(lastestUpdata);
 		if (currentStatus.size() > 0) {
-			lastestStatusId = currentStatus.get(0).getStatusId();
 			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
 			xlist_task.setPullLoadEnable(true);
 		}
@@ -242,9 +213,7 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(this);
-		if (statusService != null && lastestStatusId != null) {
-			SharedPreferencesUtil.savaLastestId(this, 
-					SharedPreferencesUtil.LASTEST_MY_SIGNUP_STATUS_ID, lastestStatusId);
+		if (statusService != null) {
 			statusService.emptyStatusDb();
 			statusService.insertListStatus(currentStatus);
 			statusService.closeDBHelper();

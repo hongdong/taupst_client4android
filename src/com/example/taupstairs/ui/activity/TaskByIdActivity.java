@@ -496,13 +496,13 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 			contents.add(0, content);	
 			message.setMessageContents(contents);
 			if (messages != null) {
-				messages.add(0, message);
+				messages.add(message);
 				adapter.notifyDataSetChanged();
 			} else {
 				holder.txt_task_detail_no_message.setVisibility(View.GONE);
 				ListView listView = (ListView) findViewById(R.id.list_task_detail_message);	
 				messages = new ArrayList<Message>();
-				messages.add(0, message);
+				messages.add(message);
 				adapter = new ByIdMessageAdapter(this, messages);
 				listView.setAdapter(adapter);
 				listView.setVisibility(View.VISIBLE);

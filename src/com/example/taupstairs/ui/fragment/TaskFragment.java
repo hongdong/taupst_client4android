@@ -3,7 +3,6 @@ package com.example.taupstairs.ui.fragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.bean.Person;
@@ -27,7 +25,6 @@ import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.ui.activity.TaskDetailActivity;
-import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
@@ -45,7 +42,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	private boolean isRefresh;
 	
 	private StatusService statusService;
-	private String lastestStatusId;
 	private String oldestStatusId;
 	private String lastestUpdata;
 	
@@ -75,15 +71,10 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	
 	@Override
 	public void initData() {
-		isRefresh = false;
-		lastestStatusId = SharedPreferencesUtil.getLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID);
-		if (null == lastestStatusId) {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);		
-		} else {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);	
-		}
+		isRefresh = false;		
 		statusService = new StatusService(context);	
 		currentStatus = statusService.getListStatus();
+		getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);
 	}
 
 	@Override
@@ -109,11 +100,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
 			public void onRefresh() {
-				if (null == lastestStatusId) {
-					getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
-				} else {
-					getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
-				}
+				getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
 			}
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
@@ -135,22 +122,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			taskParams.put(Status.STATUS_ID, statusId);
 			Task task = new Task(Task.TA_GETSTATUS, taskParams);
 			MainService.addTask(task);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void refresh(Object... params) {
-		int taskId = (Integer) params[0];
-		switch (taskId) {
-		case Task.TA_GETSTATUS:
-			int mode = (Integer) params[1];
-			List<Status> newStatus = (List<Status>) params[2];
-			refreshList(mode, newStatus);
-			break;
-
-		default:
-			break;
 		}
 	}
 	
@@ -179,6 +150,27 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			}
 			adapter.notifyDataSetChanged();
 			break;
+			
+		case HomePageString.RELEASE_STATUS_SUCCESS:
+			Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
+			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void refresh(Object... params) {
+		int taskId = (Integer) params[0];
+		switch (taskId) {
+		case Task.TA_GETSTATUS:
+			int mode = (Integer) params[1];
+			List<Status> newStatus = (List<Status>) params[2];
+			refreshList(mode, newStatus);
+			break;
 
 		default:
 			break;
@@ -193,27 +185,8 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			switch (mode) {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;
-				/*第一次上面不会设置这个，所以这里要设置*/
 				adapter = new TaskAdapter(context, currentStatus);
 				xlist_task.setAdapter(adapter);
-				lastestUpdata = TimeUtil.setLastestUpdata();
-				break;
-				
-			case Task.TA_GETSTATUS_MODE_PULLREFRESH:
-				if (newStatus.size() < 20) {
-					if (currentStatus != null) {
-						/*这里一定要放到最头部，那样显示才不会乱*/
-						currentStatus.addAll(0, newStatus);
-						adapter.notifyDataSetChanged();
-					} else {	/*读取数据库可能失败。或许是上次没保存好*/
-						currentStatus = newStatus;
-						adapter = new TaskAdapter(context, currentStatus);
-						xlist_task.setAdapter(adapter);
-					}
-				} else {
-					currentStatus = newStatus;
-					adapter.notifyDataSetInvalidated();
-				}
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				break;
 				
@@ -243,7 +216,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		xlist_task.stopLoadMore();
 		xlist_task.setRefreshTime(lastestUpdata);
 		if (currentStatus.size() > 0) {
-			lastestStatusId = currentStatus.get(0).getStatusId();
 			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
 			xlist_task.setPullLoadEnable(true);
 		}
@@ -262,26 +234,9 @@ public class TaskFragment extends Fragment implements ItaFragment {
 				adapter.notifyDataSetChanged();
 			}
 			break;
-			
-		/*这里捕获不到，看来要在homepage捕获到，再调用*/
-		case IntentString.RequestCode.HOMEPAGE_WRITE:
-//			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
-//				Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-//				getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
-//			}
-			break;
 
 		default:
 			break;
-		}
-	}
-	
-	public void releaseTaskSuccess() {
-		Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-		if (null == lastestStatusId) {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
-		} else {
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_PULLREFRESH, lastestStatusId);
 		}
 	}
 
@@ -290,8 +245,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * 保存的方法里面只会保存一页（20条）的内容
 	 */
 	public void exit() {
-		if (statusService != null && lastestStatusId != null) {
-			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_STATUSID, lastestStatusId);
+		if (statusService != null) {
 			statusService.emptyStatusDb();
 			statusService.insertListStatus(currentStatus);
 			statusService.closeDBHelper();

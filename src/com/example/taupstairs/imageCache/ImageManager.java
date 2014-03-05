@@ -8,13 +8,16 @@ import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import com.example.taupstairs.util.HttpClientUtil;
-import com.example.taupstairs.util.MD5Util;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
+import com.example.taupstairs.util.MD5Util;
 
 public class ImageManager {
 
@@ -70,6 +73,10 @@ public class ImageManager {
 		try {
 			is = context.openFileInput(fileName);
 			drawable = Drawable.createFromStream(is, fileName);
+			/* 这里也要保存到缓存中。因为缓存中可能没有，但存储器上有，这个时候就要放到缓存中去*/
+			synchronized (this) {
+				imageCache.put(url, new SoftReference<Drawable>(drawable));
+			}
 		} catch (Exception e) {
 			/*这里经常会找不到，所以就不要打印了，直接返回null*/
 			return null;
@@ -95,11 +102,17 @@ public class ImageManager {
 		Drawable drawable = null;
 		HttpGet get = new HttpGet(url);
 		try {
-			HttpClient httpClient = HttpClientUtil.getHttpClient();
+			/**
+			 * 这里的httpclient可以不要单例。因为这里是向百度的服务器下载图片，而不是我们的服务器
+			 */
+//			HttpClient httpClient = HttpClientUtil.getHttpClient();
+			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(get);
 			InputStream is = response.getEntity().getContent();
 			/*把图片加到内存的缓存中*/
-			imageCache.put(url, new SoftReference<Drawable>(drawable));
+			synchronized (this) {
+				imageCache.put(url, new SoftReference<Drawable>(drawable));
+			}
 			/*先保存，再读出。此处保存一定要将url转为可用的文件名，不然会异常*/
 			String fileName = getMd5(url);
 			writeImageToFile(fileName, is);
@@ -151,6 +164,21 @@ public class ImageManager {
 	 */
 	private String getMd5(String url) {
 		return MD5Util.getMD5String(url);
+	}
+	
+	/**
+	 * 内存回收
+	 * @param url
+	 */
+	public void releaseImage(String url) {
+        if(imageCache.containsKey(url)) {
+           SoftReference<Drawable> reference = imageCache.get(url);
+           Drawable drawable = reference.get();
+           if(null != drawable) {
+        	   drawable.setCallback(null);
+           }
+           imageCache.remove(url);
+        }
 	}
 	
 }

@@ -146,11 +146,6 @@ public class DoTaskService {
 			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down";
 			break;
 			
-		case Task.TA_GETSTATUS_MODE_PULLREFRESH:
-			statusId = (String) taskParams.get(Status.STATUS_ID);
-			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Down?task_id=" + statusId;
-			break;
-			
 		case Task.TA_GETSTATUS_MODE_LOADMORE:
 			statusId = (String) taskParams.get(Status.STATUS_ID);
 			getstatus_url = HttpClientUtil.BASE_URL + "data/task/taskList2Up?task_id=" + statusId;
@@ -403,6 +398,10 @@ public class DoTaskService {
 		String infoType = (String) taskParams.get(Info.INFO_TYPE);
 		String getinfo_detail_url = HttpClientUtil.BASE_URL + 
 				"data/news/detail?source=" + infoSource + "&type=" + infoType;
+		if (infoType.equals("2")) {		//类型2有接口有更新
+			getinfo_detail_url = HttpClientUtil.BASE_URL + 
+					"data/news/detail_2?source=" + infoSource + "&type=" + infoType;
+		}
 		try {
 			String jsonString = HttpClientUtil.getRequest(getinfo_detail_url);
 			int type = Integer.parseInt(infoType);
@@ -417,12 +416,15 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String signUpId = (String) taskParams.get(InfoSignUp.SIGNUP_ID);
+		String contact = (String) taskParams.get(InfoSignUp.PERSON_CONTACT);
 		String signUpString = (String) taskParams.get(InfoSignUp.SIGNUP_STRING);
 		String exec_task_url = HttpClientUtil.BASE_URL + 
-				"data/sign/ce?sign_id=" + signUpId + "&reply=" + signUpString;
+				"data/sign/ce_2?sign_id=" + signUpId + "&t_open_mes=" + contact + "&reply=" + signUpString;
 		try {
 			exec_task_url = StringUtil.replaceBlank(exec_task_url);
 			result = HttpClientUtil.getRequest(exec_task_url);
+			System.out.println(exec_task_url);
+			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
