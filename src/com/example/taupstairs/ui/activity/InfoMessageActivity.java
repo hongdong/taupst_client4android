@@ -132,7 +132,8 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		
 		SimpleImageLoader.showImage(holder.img_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + info.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(this, info.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(this, info.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_nickname.setText(info.getPersonNickname());
@@ -151,12 +152,14 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		holder.txt_department.setText(info.getPersonDepartment());
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_message.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (edit_message.getText().toString().trim().equals("")) {
 					

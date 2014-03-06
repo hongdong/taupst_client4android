@@ -81,6 +81,7 @@ public class User {
 		this.userPassword = userPassword;
 	}
 
+	@Override
 	public String toString() {
 		return "User [userCollegeId=" + userCollegeId + ", userStudentId="
 				+ userStudentId + ", userPassword=" + userPassword + "]";

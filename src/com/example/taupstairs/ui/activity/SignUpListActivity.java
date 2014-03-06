@@ -61,6 +61,7 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 		list_signup_list = (ListView)findViewById(R.id.list_signup_list);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -103,6 +104,7 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 			adapter = new SignUpListAdapter(this, signUps);
 			list_signup_list.setAdapter(adapter);
 			list_signup_list.setOnItemClickListener(new OnItemClickListener() {
+				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					SignUp signUp = signUps.get(arg2);

@@ -12,16 +12,19 @@ public class PersonDataListener implements OnClickListener {
 
 	private Context context;
 	private String personId;
+	private String permission;
 	
-	public PersonDataListener(Context context, String personId) {
+	public PersonDataListener(Context context, String personId, String permission) {
 		this.context = context;
 		this.personId = personId;
+		this.permission = permission;
 	}
 
 	@Override
 	public void onClick(View v) {
 		Intent intent = new Intent(context, PersonDataActivity.class);
 		intent.putExtra(Person.PERSON_ID, personId);
+		intent.putExtra(Person.PERMISSION, permission);
 		context.startActivity(intent);
 	}
 

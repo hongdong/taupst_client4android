@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
@@ -64,7 +67,8 @@ public class MessageAdapter extends BaseAdapter {
 		
 		SimpleImageLoader.showImage(holder.img_message_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + message.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(context, message.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(context, message.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_message_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_message_nickname.setText(message.getPersonNickname());

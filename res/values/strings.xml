@@ -54,6 +54,9 @@
     <string name="select_endtime">选择截止时间</string>
     
     <string name="person_data">用户资料</string>
+    <string name="person_data_hide">欧哦！！！这位童鞋没有公开实名信息。</string>
+    <string name="person_data_setting">我也去设置</string>
+    <string name="person_data_gosetting">（点击设置）</string>
     <string name="loading">正在加载....</string>
     
     <string name="task_detail">任务详情</string>
@@ -93,6 +96,15 @@
     <string name="change_user">切换用户</string>
     
     <string name="updata_userdata">更新用户资料</string>
+    <string name="updata_userdata_real">实名资料设置</string>
+    <string name="real_data">以下为你的实名资料：</string>
+    <string name="real_data_permission">向所有人公开实名资料？</string>
+    <string name="real_data_public">是</string>
+    <string name="real_data_hide">否</string>
+    <string name="real_data_declare">
+        	注：1. 若设置实名资料为不公开，除了在报名他人发布任务时，公开给任务发布人之外，
+        	其它地方对他人都不公开。2. 若修改设置按右上角打勾按钮提交到服务器才可以。
+    </string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

@@ -69,12 +69,14 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 		}
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				updata = edit_userdata.getText().toString().trim();
 				if (updata.equals(content)) {
@@ -114,7 +116,7 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 	private void doUpdataUserDataTask(String url) {
 		showProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
-		taskParams.put(Task.TA_UPDATAUSERDATA_ACTIVITY, Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE);
+		taskParams.put(Task.TA_UPDATAUSERDATA_ACTIVITY, Task.TA_UPDATAUSERDATA_ACTIVITY_BASE);
 		taskParams.put(Task.TA_UPDATAUSERDATA_URL, url);
 		Task task = new Task(Task.TA_UPDATAUSERDATA, taskParams);
 		MainService.addTask(task);

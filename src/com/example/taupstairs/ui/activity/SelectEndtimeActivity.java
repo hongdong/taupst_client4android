@@ -55,6 +55,7 @@ public class SelectEndtimeActivity extends Activity implements ItaActivity {
 		 * 在转为time类的时候我已经变成1到12，也就是说now对象的月份是1到12，
 		 * 但init函数的月份传入又要是0到11，所以还要减1*/
 		datePicker.init(now.getYear(), now.getMonth() - 1, now.getDay(), new OnDateChangedListener() {
+			@Override
 			public void onDateChanged(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
 				endTime.setYear(year);
@@ -68,6 +69,7 @@ public class SelectEndtimeActivity extends Activity implements ItaActivity {
 		timePicker.setCurrentHour(now.getHour());
 		timePicker.setCurrentMinute(now.getMinute());
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+			@Override
 			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				endTime.setHour(hourOfDay);
 				endTime.setMinute(minute);
@@ -76,12 +78,14 @@ public class SelectEndtimeActivity extends Activity implements ItaActivity {
 		
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				now = TimeUtil.getNow(Calendar.getInstance());
 				if (TimeUtil.LARGE == TimeUtil.compare(endTime, now)) {

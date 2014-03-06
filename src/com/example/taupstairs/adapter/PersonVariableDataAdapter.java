@@ -1,9 +1,5 @@
 package com.example.taupstairs.adapter;
 
-import com.example.taupstairs.R;
-import com.example.taupstairs.bean.Person;
-import com.example.taupstairs.imageCache.SimpleImageLoader;
-import com.example.taupstairs.util.HttpClientUtil;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.taupstairs.R;
+import com.example.taupstairs.bean.Person;
+import com.example.taupstairs.imageCache.SimpleImageLoader;
+import com.example.taupstairs.util.HttpClientUtil;
 
 public class PersonVariableDataAdapter extends BaseAdapter {
 

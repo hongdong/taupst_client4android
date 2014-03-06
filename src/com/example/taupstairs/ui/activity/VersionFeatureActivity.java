@@ -39,6 +39,7 @@ public class VersionFeatureActivity extends Activity implements ItaActivity {
 		btn_back = (Button)findViewById(R.id.btn_back_version_feature);
 		txt_version_feature = (TextView)findViewById(R.id.txt_version_feature);
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}

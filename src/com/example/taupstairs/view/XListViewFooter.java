@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
 
 public class XListViewFooter extends LinearLayout {
@@ -94,7 +95,7 @@ public class XListViewFooter extends LinearLayout {
 	 */
 	public void show() {
 		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)mContentView.getLayoutParams();
-		lp.height = LayoutParams.WRAP_CONTENT;
+		lp.height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 		mContentView.setLayoutParams(lp);
 	}
 	
@@ -102,7 +103,7 @@ public class XListViewFooter extends LinearLayout {
 		mContext = context;
 		LinearLayout moreView = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.xlistview_footer, null);
 		addView(moreView);
-		moreView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		moreView.setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		mContentView = moreView.findViewById(R.id.xlistview_footer_content);
 		mProgressBar = moreView.findViewById(R.id.xlistview_footer_progressbar);

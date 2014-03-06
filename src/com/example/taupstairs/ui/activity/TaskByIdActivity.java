@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -22,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.ByIdMessageAdapter;
 import com.example.taupstairs.bean.Message;
@@ -134,12 +137,14 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_multi.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (flag_my_task) {
 					if (flag_end) {
@@ -149,11 +154,13 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 						AlertDialog.Builder builder = new AlertDialog.Builder(TaskByIdActivity.this);
 						builder.setTitle("任务完结后其它童鞋将不可报名\n确定要完结吗？")
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								doEndTaskTask();
 							}
 						})
 						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								//销毁对话框，什么都不做
 							}
@@ -172,6 +179,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		});
 		
 		btn_message.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (edit_message.getText().toString().trim().equals("")) {
 					Intent intent = new Intent(TaskByIdActivity.this, SignUpListActivity.class);
@@ -371,7 +379,8 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	private void displayStatusPerson() {
 		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(this, status.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_task_detail_photo.setOnClickListener(personDataListener);	
 		holder.txt_task_detail_nickname.setText(status.getPersonNickname());	
 		String personSex = status.getPersonSex().trim();

@@ -14,6 +14,7 @@ public class JsonString {
 	
 	public static class Updata {
 		public static final String VERSION_CODE = "versionCode";
+		public static final String DISPLAY_MESSAGE = "displayMessage";
 		public static final String DOWNLOAD_URL = "downloadURL";
 		public static final String APK_NAME = "apkName";
 	}
@@ -35,6 +36,7 @@ public class JsonString {
 		public static final String PERSON_SPECIALTY = "special";
 		public static final String PERSON_NAME = "realname";
 		public static final String PERSON_SEX = "sex";
+		public static final String PERMISSION = "hide";
 	}
 	
 	public static class Status {

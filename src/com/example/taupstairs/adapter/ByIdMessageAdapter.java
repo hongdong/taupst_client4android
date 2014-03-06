@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.ByIdReplyListMessageListener;
@@ -66,7 +67,8 @@ public class ByIdMessageAdapter extends BaseAdapter {
 		
 		SimpleImageLoader.showImage(holder.img_message_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + message.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(context, message.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(context, message.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_message_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_message_nickname.setText(message.getPersonNickname());

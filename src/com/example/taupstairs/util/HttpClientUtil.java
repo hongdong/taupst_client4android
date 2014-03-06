@@ -72,6 +72,7 @@ public class HttpClientUtil {
 
 	public static String getRequest(final String url) throws Exception {
 		FutureTask<String> task = new FutureTask<String>(new Callable<String>() {
+			@Override
 			public String call() throws Exception {
 				HttpGet get = new HttpGet(url);							//创建HttpGet对象用于GET请求
 				HttpClient httpClient = getHttpClient();
@@ -90,6 +91,7 @@ public class HttpClientUtil {
 	/*用POST命令发送请求的URL，外加一个Map参数返回服务器相应的字符串*/
 	public static String postRequest(final String url, final Map<String, String>rawParams) throws Exception {
 		FutureTask<String> task = new FutureTask<String>(new Callable<String>() {
+			@Override
 			public String call() throws Exception {
 				HttpPost post = new HttpPost(url);						//创建HttpPost对象用于POST请求
 				List<NameValuePair> params = new ArrayList<NameValuePair>();

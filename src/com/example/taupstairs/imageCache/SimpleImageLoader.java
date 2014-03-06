@@ -25,6 +25,7 @@ public class SimpleImageLoader {
 	 */
 	private static ImageLoaderCallback getCallback(final ImageView imageView) {
 		return new ImageLoaderCallback() {
+			@Override
 			public void refresh(Drawable drawable) {
 				imageView.setImageDrawable(drawable);
 			}

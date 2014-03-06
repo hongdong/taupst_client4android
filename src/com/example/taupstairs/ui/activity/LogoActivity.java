@@ -28,14 +28,17 @@ public class LogoActivity extends Activity implements ItaActivity {
 		img_logo = (ImageView)findViewById(R.id.img_logo);
 		animation = AnimationUtils.loadAnimation(LogoActivity.this, R.anim.logo);
 		animation.setAnimationListener(new AnimationListener() {
+			@Override
 			public void onAnimationStart(Animation animation) {
 				
 			}
 			
+			@Override
 			public void onAnimationRepeat(Animation animation) {
 				
 			}
 			
+			@Override
 			public void onAnimationEnd(Animation animation) {
 				defaultUser = SharedPreferencesUtil.getDefaultUser(LogoActivity.this);
 				if (null != defaultUser) {				

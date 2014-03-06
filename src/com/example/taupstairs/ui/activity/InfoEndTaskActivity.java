@@ -101,7 +101,8 @@ public class InfoEndTaskActivity extends Activity implements ItaActivity {
 		/*person数据的显示*/
 		SimpleImageLoader.showImage(holder.img_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + info.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(this, info.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(this, info.getPersonId(), Person.PERMISSION_PUBLIC);
 		holder.img_photo.setOnClickListener(personDataListener);
 		holder.txt_nickname.setText(info.getPersonNickname());
 		String personSex = info.getPersonSex().trim();
@@ -116,6 +117,7 @@ public class InfoEndTaskActivity extends Activity implements ItaActivity {
 		holder.txt_department.setText(info.getPersonDepartment());
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}

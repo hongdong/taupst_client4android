@@ -5,8 +5,8 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
@@ -58,13 +58,13 @@ public class MessageContentAdapter extends BaseAdapter {
 			int green = context.getResources().getColor(R.color.green);
 			SpannableString spannableString = new SpannableString(content);
 			spannableString.setSpan(new ForegroundColorSpan(green), 
-					reply_start, reply_end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+					reply_start, reply_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 			spannableString.setSpan(new StyleSpan(Typeface.BOLD), 
-					reply_start, reply_end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+					reply_start, reply_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 			spannableString.setSpan(new ForegroundColorSpan(green), 
-					receive_start, receive_end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+					receive_start, receive_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 			spannableString.setSpan(new StyleSpan(Typeface.BOLD), 
-					receive_start, receive_end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+					receive_start, receive_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 			
 			textView.setText(spannableString);
 		} else {

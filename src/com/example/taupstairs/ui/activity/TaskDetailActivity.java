@@ -147,7 +147,8 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		/*以下进行任务详情基本部分的显示*/
 		SimpleImageLoader.showImage(holder.img_task_detail_photo, 
 					HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(this, status.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(this, status.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_task_detail_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_task_detail_nickname.setText(status.getPersonNickname());
@@ -178,6 +179,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		showProgressBar();	//显示加载留言的进度条
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (flag_message_or_signup) {
 					Intent intent = new Intent();
@@ -188,6 +190,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		});
 		
 		btn_multi.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (flag_my_task) {
 					if (flag_end) {
@@ -195,13 +198,16 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 					} else {
 						//弹框提示是否真的要完结
 						AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailActivity.this);
-						builder.setTitle("任务完结后其它童鞋将不可报名\n确定要完结吗？")
+						builder.setTitle("提醒");
+						builder.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								doEndTaskTask();
 							}
 						})
 						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								//销毁对话框，什么都不做
 							}
@@ -220,6 +226,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		});
 		
 		btn_message.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (edit_message.getText().toString().trim().equals("")) {
 					

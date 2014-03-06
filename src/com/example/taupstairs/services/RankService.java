@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.db.DBHelper;
+import com.example.taupstairs.db.DBInfo;
 
 public class RankService {
 
@@ -18,7 +19,7 @@ public class RankService {
 	
 	public List<Rank> getRanks() {
 		List<Rank> ranks = new ArrayList<Rank>(Rank.RANK_COUNT_PERPAGE);
-		Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + Rank.TB_NAME, null);
+		Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + DBInfo.Table.RANK_TB_NAME, null);
 		if (null == cursor || cursor.getCount() <= 0) {
 			return null;
 		}
@@ -32,6 +33,7 @@ public class RankService {
 			rank.setRankRank(cursor.getString(cursor.getColumnIndex(Rank.RANK_RANK)));
 			ranks.add(rank);
 		}
+		cursor.close();
 		return ranks;
 	}
 	
@@ -39,7 +41,7 @@ public class RankService {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		for (int i = 0; i < ranks.size() && i < Rank.RANK_COUNT_PERPAGE; i++) {
 			Rank rank = ranks.get(i);
-			db.execSQL("insert into " + Rank.TB_NAME + 
+			db.execSQL("insert into " + DBInfo.Table.RANK_TB_NAME + 
 					" values(null, null, ?, ?, ?, ?, ?, ?)", 
 					new String[] {rank.getPersonId(), rank.getPersonPhotoUrl(), rank.getPersonNickname(),
 					rank.getPersonSex(), rank.getRankPraise(), rank.getRankRank()});
@@ -50,7 +52,7 @@ public class RankService {
 	 * 清空表
 	 */
 	public void emptyRankDb() {
-		dbHelper.getReadableDatabase().execSQL("delete from " + Rank.TB_NAME);
+		dbHelper.getReadableDatabase().execSQL("delete from " + DBInfo.Table.RANK_TB_NAME);
 	}
 	
 	/*关闭数据库缓存，一般在activity的onDestroy方法中调用*/

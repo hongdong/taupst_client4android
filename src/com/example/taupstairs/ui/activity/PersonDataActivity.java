@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
@@ -21,13 +23,15 @@ import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.util.HttpClientUtil;
+import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class PersonDataActivity extends Activity implements ItaActivity {
 
 	private Button btn_back;
 	private LinearLayout layout_loading;
-	private String personId;
+	private String personId, permission;
 	private Person person;
+	private TextView txt_setting;
 	private static final String LIST_LEFT = "left";
 	private static final String LIST_RIGHT = "right";
 	@Override
@@ -40,22 +44,36 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	
 	@Override
 	public void init() {
+		initProgressBar();
 		initData();
 		initView();
 	}
 	
-	private void initData() {
-		personId = getIntent().getStringExtra(Person.PERSON_ID);
-		doGetUserDataTask();
+	private void initProgressBar() {
 		layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
 		layout_loading.setVisibility(View.VISIBLE);
 	}
 	
+	private void initData() {
+		personId = getIntent().getStringExtra(Person.PERSON_ID);
+		permission = getIntent().getStringExtra(Person.PERMISSION);
+		doGetUserDataTask();
+	}
+	
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_person_data);
+		txt_setting = (TextView)findViewById(R.id.txt_person_data_setting);
+		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		txt_setting.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(PersonDataActivity.this, UpdataUserdataRealActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
@@ -89,7 +107,11 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	
 	private void displayPerson(Person person) {
 		displayPersonVariable(person);
-		displayPersonBase(person);
+		if (person.getPermission().equals(Person.PERMISSION_PUBLIC) 
+				|| permission.equals(Person.PERMISSION_PUBLIC)
+				|| personId.equals(SharedPreferencesUtil.getDefaultUser(this).getUserId())) {
+			displayPersonBase(person);
+		}
 	}
 	
 	private class Holder {
@@ -126,6 +148,7 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 		SimpleAdapter base_adapter = new SimpleAdapter(this, list, R.layout.person_data_base, 
 				new String[] {LIST_LEFT, LIST_RIGHT, }, new int[] {R.id.txt_base_left, R.id.txt_base_right});
 		list_base.setAdapter(base_adapter);			//把五个基本资料显示出来
+		list_base.setVisibility(View.VISIBLE);
 	}
 	
 	@Override

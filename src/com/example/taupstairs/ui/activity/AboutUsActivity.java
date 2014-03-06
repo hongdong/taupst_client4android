@@ -23,6 +23,7 @@ public class AboutUsActivity extends Activity implements ItaActivity {
 		btn_back = (Button)findViewById(R.id.btn_back_aboutus);
 		txt_about_us = (TextView)findViewById(R.id.txt_about);
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}

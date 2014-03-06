@@ -49,6 +49,7 @@ public class StatusService {
 				listStatus.add(status);
 			}
 		}
+		cursor.close();
 		return listStatus;
 	}
 	

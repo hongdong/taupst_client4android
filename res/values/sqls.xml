@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="db_create_sql">
+        <item >
+            create table if not exists college 
+            (_id integer primary key autoincrement, collegeId, collegeName)
+        </item>
+        
+        <item >
+            create table if not exists person 
+            (_id integer primary key autoincrement, personId, personPhotoUrl, personNickname, 
+            personSignature, personQq, personEmail, personPhone, personFaculty, personYear, 
+			personSpecialty, personName, personSex, permission)
+        </item>
+        
+        <item >
+            create table if not exists info  
+			(_id integer primary key autoincrement, infoId, 
+			personId, personPhotoUrl, personNickname, personSex, personDepartment, 
+			personGrade, infoReleaseTime, infoContent, infoSource, infoType)
+        </item>
+        
+        <item >
+            create table if not exists status 
+			(_id integer primary key autoincrement, statusId, statusTitle, statusContent, 
+			statusReleaseTime, statusEndTime, statusRewards, statusMessageCount, statusSignUpCount, 
+			personId, personPhotoUrl, personNickname, personDepartment, personGrade, personSex)
+        </item>
+        
+        <item >
+            create table if not exists my_release_status 
+			(_id integer primary key autoincrement, statusId, statusTitle, statusContent, 
+			statusReleaseTime, statusEndTime, statusRewards, statusMessageCount, statusSignUpCount, 
+			personId, personPhotoUrl, personNickname, personDepartment, personGrade, personSex)
+        </item>
+        
+        <item >
+            create table if not exists my_signup_status 
+			(_id integer primary key autoincrement, statusId, statusTitle, statusContent, 
+			statusReleaseTime, statusEndTime, statusRewards, statusMessageCount, statusSignUpCount, 
+			personId, personPhotoUrl, personNickname, personDepartment, personGrade, personSex)
+        </item>
+        
+        <item >
+            create table if not exists rank 
+			(_id integer primary key autoincrement, rankId, personId, personPhotoUrl, 
+			personNickname, personSex, rankPraise, rankRank) 
+        </item>
+    </string-array>
+    
+    <string-array name="db_drop_sql">
+        <item >drop table college</item>
+        
+        <item >drop table person</item>
+        
+        <item >drop table info</item>
+        
+        <item >drop table status</item>
+        
+        <item >drop table my_release_status</item>
+        
+        <item >drop table my_signup_status</item>
+        
+        <item >drop table rank</item>
+    </string-array>
+</resources>

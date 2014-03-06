@@ -3,11 +3,13 @@ package com.example.taupstairs.ui.fragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.RankAdapter;
 import com.example.taupstairs.bean.Person;
@@ -77,9 +79,11 @@ public class RankFragment extends Fragment implements ItaFragment {
 			doGetRankTask();
 		}
 		xlist_rank.setXListViewListener(new IXListViewListener() {
+			@Override
 			public void onRefresh() {
 				doGetRankTask();
 			}
+			@Override
 			public void onLoadMore() {
 				
 			}

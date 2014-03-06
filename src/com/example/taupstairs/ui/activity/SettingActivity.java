@@ -2,6 +2,7 @@ package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
@@ -24,8 +26,13 @@ public class SettingActivity extends Activity implements ItaActivity {
 
 	private Button btn_back, btn_change_user;
 	private ListView list_user, list_soft;
-	private String[] setting_user = {"联系资料", "清除缓存", };
+	private String[] setting_user = {"联系资料", "实名资料", "清除缓存", };
 	private String[] setting_soft = {"关于我们", "服务声名", "版本特性", "用户反馈"};
+	
+	@SuppressWarnings("rawtypes")
+	private Class[] listSoftClasses = {AboutUsActivity.class, ServerDeclareActivity.class, 
+		VersionFeatureActivity.class, FeedbackActivity.class, };
+	
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(SettingActivity.this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -53,15 +61,21 @@ public class SettingActivity extends Activity implements ItaActivity {
 				R.layout.common_txt_item, setting_user);
 		list_user.setAdapter(adapter_user);
 		list_user.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				switch (arg2) {			
 				case 0:
-					Intent intent = new Intent(SettingActivity.this, UpdataUserdataOptionalActivity.class);
-					startActivity(intent);
+					Intent intent1 = new Intent(SettingActivity.this, UpdataUserdataOptionalActivity.class);
+					startActivity(intent1);
+					break;
+					
+				case 1:
+					Intent intent2 = new Intent(SettingActivity.this, UpdataUserdataRealActivity.class);
+					startActivity(intent2);
 					break;
 
-				case 1:
+				case 2:
 					emptyCacheMemory();
 					break;
 					
@@ -75,36 +89,16 @@ public class SettingActivity extends Activity implements ItaActivity {
 				R.layout.common_txt_item, setting_soft);
 		list_soft.setAdapter(adapter_soft);
 		list_soft.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				switch (arg2) {			
-				case 0:
-					Intent intent0 = new Intent(SettingActivity.this, AboutUsActivity.class);
-					startActivity(intent0);
-					break;
-
-				case 1:
-					Intent intent1 = new Intent(SettingActivity.this, ServerDeclareActivity.class);
-					startActivity(intent1);
-					break;
-					
-				case 2:
-					Intent intent2 = new Intent(SettingActivity.this, VersionFeatureActivity.class);
-					startActivity(intent2);
-					break;
-					
-				case 3:
-					Intent intent3 = new Intent(SettingActivity.this, FeedbackActivity.class);
-					startActivity(intent3);
-					break;
-					
-				default:
-					break;
-				}
+				Intent intent = new Intent(SettingActivity.this, listSoftClasses[arg2]);
+				startActivity(intent);
 			}
 		});
 		
 		btn_change_user.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {	
 				showProgressDialog();
 				Map<String, Object> taskParams = new HashMap<String, Object>();

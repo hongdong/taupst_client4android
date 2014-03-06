@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.logic.ItaActivity;
 
@@ -57,6 +58,7 @@ public class ServerDeclareActivity extends Activity implements ItaActivity {
 		txt_server_declare.setText(Html.fromHtml(server_declare.toString()));
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}

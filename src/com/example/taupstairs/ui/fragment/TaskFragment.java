@@ -3,6 +3,7 @@ package com.example.taupstairs.ui.fragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.bean.Person;
@@ -86,6 +88,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			xlist_task.setAdapter(adapter);
 		}
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentStatus.size() >= arg2) {
@@ -99,9 +102,11 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			}
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
+			@Override
 			public void onRefresh() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
 			}
+			@Override
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
 			}
@@ -244,6 +249,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * 退出的时候保存一下最新任务ID和任务。
 	 * 保存的方法里面只会保存一页（20条）的内容
 	 */
+	@Override
 	public void exit() {
 		if (statusService != null) {
 			statusService.emptyStatusDb();

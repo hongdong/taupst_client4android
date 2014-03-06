@@ -15,8 +15,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taupstairs.R;
@@ -69,12 +69,14 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				signUpMessage = edit_evaluate.getText().toString();
 				doEvaluateTask();
@@ -84,14 +86,17 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 		txt_praise.setText("0");
 		
 		sk_evaluate.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				
 			}
 			
+			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				
 			}
 			
+			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				signUpPraise = String.valueOf(progress);

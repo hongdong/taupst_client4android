@@ -81,6 +81,7 @@ public class LazyImageLoader {
 	 * 线程异步执行完后要把下载到的东西传过来
 	 */
 	Handler handler = new Handler() {
+		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MESSAGE_WHAT:
@@ -106,6 +107,7 @@ public class LazyImageLoader {
 		
 		private boolean isRun = true;
 		
+		@Override
 		public void run() {
 			try {
 				while (isRun) {

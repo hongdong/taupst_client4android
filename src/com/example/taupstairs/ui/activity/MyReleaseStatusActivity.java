@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
@@ -68,6 +68,7 @@ public class MyReleaseStatusActivity extends Activity implements ItaActivity {
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_my_release_status);
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -80,6 +81,7 @@ public class MyReleaseStatusActivity extends Activity implements ItaActivity {
 			xlist_task.setAdapter(adapter);
 		}
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentStatus.size() >= arg2) {
@@ -93,9 +95,11 @@ public class MyReleaseStatusActivity extends Activity implements ItaActivity {
 			}
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
+			@Override
 			public void onRefresh() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
 			}
+			@Override
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
 			}

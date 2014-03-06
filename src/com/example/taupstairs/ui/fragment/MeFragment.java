@@ -118,6 +118,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 				R.layout.common_txt_item, my_status);
 		list_status.setAdapter(adapter_status);
 		list_status.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				switch (arg2) {
@@ -143,6 +144,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 			doGetUserDataTask();			//没有的话，就从服务器获取
 		}
 		list_variable.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				switch (arg2) {				//arg2为组件的位置，这个是系统定的，从0开始
@@ -170,6 +172,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 			}
 		});
 		txt_setting.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {		
 				Intent intent = new Intent(context, SettingActivity.class);
 				startActivity(intent);	
@@ -181,6 +184,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 		new AlertDialog.Builder(context)
 		.setTitle("设置头像")
 		.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:
@@ -203,6 +207,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 			}
 		})
 		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
@@ -399,6 +404,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 		list_base.setAdapter(base_adapter);			//把五个基本资料显示出来
 	}
 
+	@Override
 	public void exit() {
 		if (personService != null) {
 			personService.closeDBHelper();

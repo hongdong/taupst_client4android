@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.db.DBHelper;
+import com.example.taupstairs.db.DBInfo;
 
 public class PersonService {
 
@@ -18,39 +19,41 @@ public class PersonService {
 	/*添加Person*/
 	public void insertPerson(Person person) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		db.execSQL("insert into " + Person.TB_NAME + " values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+		db.execSQL("insert into " + DBInfo.Table.PERSON_TA_NAME + 
+				" values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 				new Object[] {person.getPersonId(), person.getPersonPhotoUrl(), person.getPersonNickname(), 
 				person.getPersonSignature(), person.getPersonQq(), person.getPersonEmail(), 
 				person.getPersonPhone(), person.getPersonFaculty(), person.getPersonYear(), 
-				person.getPersonSpecialty(), person.getPersonName(), person.getPersonSex()});
+				person.getPersonSpecialty(), person.getPersonName(), person.getPersonSex(), 
+				person.getPermission(), });
 	}
 	
 	/*
-	 * 更新头像，昵称，个性签名
+	 * 更新单列
 	 */
 	public void updataPersonInfo(String personId, String column, String updata) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(column, updata);
-		db.update(Person.TB_NAME, values, Person.PERSON_ID + " = ? ", new String[] {personId, });
+		db.update(DBInfo.Table.PERSON_TA_NAME, values, Person.PERSON_ID + " = ? ", new String[] {personId, });
 	}
 	
 	/*根据personId删除指定行*/
 	public void deletePerson(String personId) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		db.execSQL("delete from " + Person.TB_NAME + " where " + Person.PERSON_ID + " = ? ", 
+		db.execSQL("delete from " + DBInfo.Table.PERSON_TA_NAME + " where " + Person.PERSON_ID + " = ? ", 
 				new String[] {personId, });
 	}
 	
 	public void emptyPersonDB() {
-		dbHelper.getReadableDatabase().execSQL("delete from " + Person.TB_NAME);
+		dbHelper.getReadableDatabase().execSQL("delete from " + DBInfo.Table.PERSON_TA_NAME);
 	}
 	
 	/*根据PersonId返回Person信息*/
 	public Person getPersonById(String personId) {
 		Person person = null;
 		Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-				"select * from " + Person.TB_NAME + " where " + Person.PERSON_ID + " = ? ", 
+				"select * from " + DBInfo.Table.PERSON_TA_NAME + " where " + Person.PERSON_ID + " = ? ", 
 				new String[] {personId, });
 		if (null != cursor && cursor.getCount() > 0) {
 			cursor.moveToFirst();		//这一句一定要加，总之我不加就出错了
@@ -62,9 +65,11 @@ public class PersonService {
 			String personSpecialty = cursor.getString(cursor.getColumnIndex(Person.PERSON_SPECIALTY));
 			String personName = cursor.getString(cursor.getColumnIndex(Person.PERSON_NAME));
 			String personSex = cursor.getString(cursor.getColumnIndex(Person.PERSON_SEX));
+			String permission = cursor.getString(cursor.getColumnIndex(Person.PERMISSION));
 			person = new Person(personId, personPhotoUrl, personNickname, personSignature, null, 
-					personFaculty, personYear, personSpecialty, personName, personSex);
+					personFaculty, personYear, personSpecialty, personName, personSex, permission);
 		}
+		cursor.close();
 		return person;
 	}
 	
@@ -74,7 +79,7 @@ public class PersonService {
 	public Person getPersonOptional(String personId) {
 		Person person = null;
 		Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-				"select * from " + Person.TB_NAME + " where " + Person.PERSON_ID + " = ? ", 
+				"select * from " + DBInfo.Table.PERSON_TA_NAME + " where " + Person.PERSON_ID + " = ? ", 
 				new String[] {personId, });
 		if (null != cursor && cursor.getCount() > 0) {
 			cursor.moveToFirst();		//这一句一定要加，总之我不加就出错了

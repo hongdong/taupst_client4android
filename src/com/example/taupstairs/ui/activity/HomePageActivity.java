@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
+
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.example.taupstairs.R;
@@ -51,11 +53,9 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private Button btn_top_right;
 	private RadioButton btn_info, btn_task, btn_rank;
 	private List<RadioButton> buttons;
-	private boolean isExit = false;
 	
-	private boolean noNet = true;
-	private boolean isChecking = false;
-	private boolean displayNoNet = false;
+	private boolean first_time_login = true;
+	private boolean isExit = false;
 	
 	private PushMessageClickReceiver receiver;
 	
@@ -81,15 +81,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	@Override
-	protected void onNewIntent(Intent intent) {
-		System.out.println("onNewIntent");
-		String action = intent.getAction();
-		if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
-			setCurrent(INDEX_INFO);
-		}
-	}
-	
-	@Override
 	public void init() {
 		initData();
 		initCheckNetTask();
@@ -108,16 +99,14 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	/*进入软件时检测网络*/
 	private void initCheckNetTask() {
 		new Thread() {
+			@Override
 			public void run() {
-				while (noNet) {
-					if (!isChecking) {
-						isChecking = true;
-						doCheckNetTask();
-						try {
-							sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+				while (true) {
+					doCheckNetTask();
+					try {
+						sleep(600000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			};
@@ -165,6 +154,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	/*初始化控件的监听器*/
 	private void initListener() {
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {	
 				if (flag_clear) {
 					flag_clear = false;
@@ -188,6 +178,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		});
 		/*初始化右上角按键的监听器*/
 		btn_top_right.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (INDEX_TASK == currentIndex) {
 					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
@@ -200,6 +191,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		});
 		
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			@Override
 			public void onPageSelected(int arg0) {
 				currentIndex = arg0;
 				if (INDEX_ME == currentIndex) {
@@ -213,9 +205,11 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 					buttons.get(currentIndex).setChecked(true);
 				}
 			}
+			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 				
 			}
+			@Override
 			public void onPageScrollStateChanged(int arg0) {
 				
 			}
@@ -268,19 +262,17 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		case Task.TA_CHECKNET:
 			String ok = (String) params[1];
 			if (ok.equals(Task.TA_NO)) {
-				if (!displayNoNet) {
-					displayNoNet = true;
-					Toast.makeText(this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
-				}
+				Toast.makeText(this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 			} else {
-				noNet = false;
-				/*登录之后才能发id*/
-				PushManager.startWork(getApplicationContext(),
-						PushConstants.LOGIN_TYPE_API_KEY, 
-						Utils.getMetaValue(this, "api_key"));
-				doCheckUpdataTask();
+				if (first_time_login) {
+					first_time_login = false;
+					/*登录之后才能发id*/
+					PushManager.startWork(getApplicationContext(),
+							PushConstants.LOGIN_TYPE_API_KEY, 
+							Utils.getMetaValue(this, "api_key"));
+					doCheckUpdataTask();
+				}
 			}
-			isChecking = false;
 			break;
 			
 		case Task.TA_CHECKUPDATA:
@@ -341,6 +333,14 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	@Override
+	protected void onNewIntent(Intent intent) {
+		String action = intent.getAction();
+		if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
+			setCurrent(INDEX_INFO);
+		}
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.home_page, menu);
 		return super.onCreateOptionsMenu(menu);
@@ -371,11 +371,11 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();  
 	        tExit = new Timer();  
 	        tExit.schedule(new TimerTask() {  
-	            public void run() {  
+	            @Override
+				public void run() {  
 	                isExit = false; // 取消退出  
 	            }  
-	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
-	  
+	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务    
 	    } else {  
 	        doUsetExitTask();
 	    }  
@@ -391,6 +391,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	 * 更新消息列表
 	 */
 	public class PushMessageClickReceiver extends BroadcastReceiver {
+		@Override
 		public void onReceive(final Context context, Intent intent) {
 			localRefresh(HomePageString.NEW_INFO, null);
 		}

@@ -1,8 +1,10 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
@@ -67,12 +70,14 @@ public class UpdataUserdataOptionalActivity extends Activity implements ItaActiv
 		edit_phone.setText(phone);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				getEditString();
 				if (qqString.equals(qq) && emailString.equals(email) && phoneString.equals(phone)) {
@@ -123,7 +128,7 @@ public class UpdataUserdataOptionalActivity extends Activity implements ItaActiv
 	private void doUpdataUserDataTask() {	
 		showProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
-		taskParams.put(Task.TA_UPDATAUSERDATA_ACTIVITY, Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL);
+		taskParams.put(Task.TA_UPDATAUSERDATA_ACTIVITY, Task.TA_UPDATAUSERDATA_ACTIVITY_OPTIONAL);
 		taskParams.put(Task.TA_UPDATAUSERDATA_URL, url);
 		Task task = new Task(Task.TA_UPDATAUSERDATA, taskParams);
 		MainService.addTask(task);

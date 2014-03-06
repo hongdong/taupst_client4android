@@ -18,8 +18,7 @@ public class Person {
 	private String personSpecialty;
 	private String personName;
 	private String personSex;
-	
-	public static final String TB_NAME = "person";
+	private String permission;
 	
 	public static final String ID = "_id";
 	public static final String PERSON_ID = "personId";
@@ -36,13 +35,12 @@ public class Person {
 	public static final String PERSON_SPECIALTY = "personSpecialty";
 	public static final String PERSON_NAME = "personName";
 	public static final String PERSON_SEX = "personSex";
+	public static final String PERMISSION = "permission";
 	
 	public static final String MALE = "男";
-	public static final String MALE_NICKNAME = "某屌丝男";
-	public static final String MALE_SIGNATRUE = "没签名，没妹子";
 	public static final String FEMALE = "女";
-	public static final String FEMALE_NICKNAME = "某女汉子";
-	public static final String FEMALE_SIGNATRUE = "没签名，真汉子";
+	public static final String PERMISSION_PUBLIC = "0";
+	public static final String PERMISSION_HIDE = "1";
 	
 	public Person(){
 		
@@ -57,7 +55,7 @@ public class Person {
 	public Person(String personId, String personPhotoUrl,
 			String personNickname, String personSignature, String personPraise,
 			String personFaculty, String personYear, String personSpecialty,
-			String personName, String personSex) {
+			String personName, String personSex, String permission) {
 		this.personId = personId;
 		this.personPhotoUrl = personPhotoUrl;
 		this.personNickname = personNickname;
@@ -68,13 +66,14 @@ public class Person {
 		this.personSpecialty = personSpecialty;
 		this.personName = personName;
 		this.personSex = personSex;
+		this.permission = permission;
 	}
 	
 	public Person(String personId, String personPhotoUrl, String personNickname, 
 			String personSignature, String personPraise, String personQq,
 			String personEmail, String personPhone, String personFaculty,
 			String personYear, String personSpecialty, String personName,
-			String personSex) {
+			String personSex, String permission) {
 		this.personId = personId;
 		this.personPhotoUrl = personPhotoUrl;
 		this.personNickname = personNickname;
@@ -88,6 +87,7 @@ public class Person {
 		this.personSpecialty = personSpecialty;
 		this.personName = personName;
 		this.personSex = personSex;
+		this.permission = permission;
 	}
 
 	public Long getId() {
@@ -174,17 +174,24 @@ public class Person {
 	public void setPersonSex(String personSex) {
 		this.personSex = personSex;
 	}
+	public String getPermission() {
+		return permission;
+	}
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
 
 	@Override
 	public String toString() {
-		return "Person [personId=" + personId + ", personPhotoUrl="
-				+ personPhotoUrl + ", personNickname=" + personNickname
-				+ ", personSignature=" + personSignature + ", personPraise="
-				+ personPraise + ", personQq=" + personQq + ", personEmail="
-				+ personEmail + ", personPhone=" + personPhone
-				+ ", personFaculty=" + personFaculty + ", personYear="
-				+ personYear + ", personSpecialty=" + personSpecialty
-				+ ", personName=" + personName + ", personSex=" + personSex
+		return "Person [id=" + id + ", personId=" + personId
+				+ ", personPhotoUrl=" + personPhotoUrl + ", personNickname="
+				+ personNickname + ", personSignature=" + personSignature
+				+ ", personPraise=" + personPraise + ", personQq=" + personQq
+				+ ", personEmail=" + personEmail + ", personPhone="
+				+ personPhone + ", personFaculty=" + personFaculty
+				+ ", personYear=" + personYear + ", personSpecialty="
+				+ personSpecialty + ", personName=" + personName
+				+ ", personSex=" + personSex + ", permission=" + permission
 				+ "]";
 	}
 	

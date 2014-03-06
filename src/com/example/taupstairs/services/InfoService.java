@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.db.DBHelper;
+import com.example.taupstairs.db.DBInfo;
 
 public class InfoService {
 
@@ -18,7 +19,7 @@ public class InfoService {
 	
 	public List<Info> getInfos() {
 		List<Info> infos = new ArrayList<Info>(Info.INFO_COUNT_PERPAGE);
-		Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + Info.TB_NAME, null);
+		Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from " + DBInfo.Table.INFO_TB_NAME, null);
 		if (null == cursor || cursor.getCount() <= 0) {
 			return null;
 		}
@@ -37,6 +38,7 @@ public class InfoService {
 			info.setInfoType(cursor.getString(cursor.getColumnIndex(Info.INFO_TYPE)));
 			infos.add(info);
 		}
+		cursor.close();
 		return infos;
 	}
 	
@@ -44,7 +46,7 @@ public class InfoService {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		for (int i = 0; i < infos.size() && i < Info.INFO_COUNT_PERPAGE; i++) {
 			Info info = infos.get(i);
-			db.execSQL("insert into " + Info.TB_NAME + 
+			db.execSQL("insert into " + DBInfo.Table.INFO_TB_NAME + 
 					" values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 					new String[] {info.getInfoId(), info.getPersonId(), info.getPersonPhotoUrl(), 
 					info.getPersonNickname(), info.getPersonSex(), info.getPersonDepartment(), 
@@ -54,7 +56,7 @@ public class InfoService {
 	}
 	
 	public void emptyInfoDb() {
-		dbHelper.getReadableDatabase().execSQL("delete from " + Info.TB_NAME);
+		dbHelper.getReadableDatabase().execSQL("delete from " + DBInfo.Table.INFO_TB_NAME);
 	}
 	
 	public void closeDBHelper() {

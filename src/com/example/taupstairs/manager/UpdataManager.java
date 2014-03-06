@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import org.json.JSONObject;
-import android.app.AlertDialog.Builder;
+
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -22,6 +24,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SdCardUtil;
@@ -35,6 +38,8 @@ public class UpdataManager {
 	private String jsonString;
 	//服务器端版本号
 	private int versionCode;
+	//显示新版本特性
+	private String displayMessage;
 	//下载地址
 	private String downloadUrl;
 	//apk名字
@@ -59,6 +64,7 @@ public class UpdataManager {
 		try {
 			JSONObject jsonObject = new JSONObject(jsonString);
 			versionCode = jsonObject.getInt(JsonString.Updata.VERSION_CODE);
+			displayMessage = jsonObject.getString(JsonString.Updata.DISPLAY_MESSAGE);
 			downloadUrl = jsonObject.getString(JsonString.Updata.DOWNLOAD_URL);
 			apkName = jsonObject.getString(JsonString.Updata.APK_NAME);
 			PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 
@@ -75,10 +81,12 @@ public class UpdataManager {
      * 提示更新对话框          
      */  
     private void showUpdateDialog() {  
-        Builder builder = new Builder(context);   
-        builder.setMessage("版本更新");  
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);   
+        builder.setTitle("发现新版本"); 
+        builder.setMessage(displayMessage);
         builder.setPositiveButton("下载", new OnClickListener() {  
-            public void onClick(DialogInterface dialog, int which) {  
+            @Override
+			public void onClick(DialogInterface dialog, int which) {  
                 dialog.dismiss();  
                 showDownloadDialog();  // 弹出下载框  
             }  
@@ -96,14 +104,15 @@ public class UpdataManager {
      * 弹出下载框 
      */  
     private void showDownloadDialog() {  
-        Builder builder = new Builder(context);  
+    	AlertDialog.Builder builder = new AlertDialog.Builder(context);  
         builder.setTitle("版本更新中...");  
         final LayoutInflater inflater = LayoutInflater.from(context);  
         View view = inflater.inflate(R.layout.update_prgress, null);  
         progressBar = (ProgressBar) view.findViewById(R.id.pb_update_progress);  
         builder.setView(view);  
         builder.setNegativeButton("取消", new OnClickListener() {  
-            public void onClick(DialogInterface dialog, int which) {  
+            @Override
+			public void onClick(DialogInterface dialog, int which) {  
                 dialog.dismiss();  
                 //终止下载  
                 isInterceptDownload = true;  
@@ -131,11 +140,12 @@ public class UpdataManager {
         public void run() {  
             if (!SdCardUtil.hasSdcard()) {  
                 //如果没有SD卡  
-                Builder builder = new Builder(context);  
+            	AlertDialog.Builder builder = new AlertDialog.Builder(context);  
                 builder.setTitle("提示");  
                 builder.setMessage("当前设备无SD卡，数据无法下载");  
                 builder.setPositiveButton("确定", new OnClickListener() {   
-                    public void onClick(DialogInterface dialog, int which) {  
+                    @Override
+					public void onClick(DialogInterface dialog, int which) {  
                         dialog.dismiss();  
                     }  
                 });  
@@ -190,7 +200,8 @@ public class UpdataManager {
      * 声明一个handler来跟进进度条 
      */  
     private Handler handler = new Handler() {  
-        public void handleMessage(Message msg) {  
+        @Override
+		public void handleMessage(Message msg) {  
             switch (msg.what) {  
             case 1:  
                 // 更新进度情况  

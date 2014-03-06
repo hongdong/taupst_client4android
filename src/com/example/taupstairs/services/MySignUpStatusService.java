@@ -48,6 +48,7 @@ public class MySignUpStatusService {
 			
 			listStatus.add(status);
 		}
+		cursor.close();
 		return listStatus;
 	}
 	

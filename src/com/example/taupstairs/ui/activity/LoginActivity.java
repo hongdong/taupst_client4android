@@ -1,8 +1,10 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.bean.Task;
@@ -52,6 +55,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		init();
 	}
 
+	@Override
 	public void init() {
 		View view = findViewById(R.id.layout_login_college);
 		txt_college_name = (TextView)findViewById(R.id.txt_college_name);
@@ -66,12 +70,14 @@ public class LoginActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		view.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, SelectCollegeActivity.class);
 				startActivityForResult(intent, IntentString.RequestCode.LOGIN_SELECTCOLLEGE);
 			}
 		});
 		btn_login.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (txt_college_name.getText().toString().equals("")) {
 					Toast.makeText(LoginActivity.this, "请选择学校", Toast.LENGTH_SHORT).show();
@@ -91,18 +97,21 @@ public class LoginActivity extends Activity implements ItaActivity {
 			}
 		});
 		txt_about.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, AboutUsActivity.class);
 				startActivity(intent);
 			}
 		});
 		txt_server.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this, ServerDeclareActivity.class);
 				startActivity(intent);
 			}
 		});
 		btn_captcha.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				doCheckUserTask();
 			}
@@ -168,6 +177,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		}
 	}
 
+	@Override
 	public void refresh(Object... params) {	
 		dismissProgressDialog();
 		isRefresh = false;
@@ -292,6 +302,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 	
 	/*接收Intent返回的数据*/
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (IntentString.RequestCode.LOGIN_SELECTCOLLEGE == requestCode) {

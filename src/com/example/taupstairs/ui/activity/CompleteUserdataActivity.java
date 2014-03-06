@@ -2,8 +2,10 @@ package com.example.taupstairs.ui.activity;
 
 import java.io.File;
 import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
@@ -71,16 +74,19 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				jumpToHomePage();
 			}
 		});
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				updataUserData();
 			}
 		});
 		img_userphoto.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				showDialog();
 			}
@@ -91,6 +97,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 		new AlertDialog.Builder(CompleteUserdataActivity.this)
 		.setTitle("设置头像")
 		.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case 0:
@@ -113,6 +120,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 			}
 		})
 		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}

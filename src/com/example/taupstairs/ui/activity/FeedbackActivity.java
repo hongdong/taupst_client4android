@@ -51,12 +51,14 @@ public class FeedbackActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (edit_string.getText().toString().trim().equals("")) {
 					Toast.makeText(FeedbackActivity.this, "您还没有输入反馈内容", Toast.LENGTH_SHORT).show();

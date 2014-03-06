@@ -2,13 +2,7 @@ package com.example.taupstairs.adapter;
 
 import java.util.Calendar;
 import java.util.List;
-import com.example.taupstairs.R;
-import com.example.taupstairs.bean.SignUp;
-import com.example.taupstairs.bean.Time;
-import com.example.taupstairs.imageCache.SimpleImageLoader;
-import com.example.taupstairs.listener.PersonDataListener;
-import com.example.taupstairs.util.HttpClientUtil;
-import com.example.taupstairs.util.TimeUtil;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -18,6 +12,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.taupstairs.R;
+import com.example.taupstairs.bean.Person;
+import com.example.taupstairs.bean.SignUp;
+import com.example.taupstairs.bean.Time;
+import com.example.taupstairs.imageCache.SimpleImageLoader;
+import com.example.taupstairs.listener.PersonDataListener;
+import com.example.taupstairs.util.HttpClientUtil;
+import com.example.taupstairs.util.TimeUtil;
 
 public class SignUpListAdapter extends BaseAdapter {
 
@@ -60,7 +63,8 @@ public class SignUpListAdapter extends BaseAdapter {
 		
 		SimpleImageLoader.showImage(holder.img_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + signUp.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(context, signUp.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(context, signUp.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_nickname.setText(signUp.getPersonNickname());

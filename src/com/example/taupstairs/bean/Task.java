@@ -74,8 +74,9 @@ public class Task {
 	public static final String TA_UPDATAUSERDATA_ACTIVITY = "activity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
 	public static final String TA_UPDATAUSERDATA_FRAGMENT_ME = "MeFragment";
-	public static final String TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE = "UpdataUserdataBaseActivity";
-	public static final String TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL = "UpdataUserdataOptionalActivity";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY_BASE = "UpdataUserdataBaseActivity";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY_OPTIONAL = "UpdataUserdataOptionalActivity";
+	public static final String TA_UPDATAUSERDATA_ACTIVITY_REAL = "UpdataUserdataRealActivity";
 	
 	//检查任务
 	public static final int TA_CHECKSTATUS = 8;

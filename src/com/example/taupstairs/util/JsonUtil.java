@@ -46,6 +46,7 @@ public class JsonUtil {
 			person.setPersonSpecialty(jsonObject.getString(JsonString.Person.PERSON_SPECIALTY));
 			person.setPersonName(jsonObject.getString(JsonString.Person.PERSON_NAME));
 			person.setPersonSex(jsonObject.getString(JsonString.Person.PERSON_SEX));
+			person.setPermission(jsonObject.getString(JsonString.Person.PERMISSION));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -1,6 +1,7 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.College;
 import com.example.taupstairs.logic.ItaActivity;
@@ -61,6 +63,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 				R.layout.common_txt_item, collegeNames);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				String collegeName = ((TextView)arg1).getText().toString();
@@ -73,6 +76,7 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			}
 		});
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				setResult(Activity.RESULT_CANCELED, intent);
@@ -80,13 +84,16 @@ public class SelectCollegeActivity extends Activity implements ItaActivity {
 			}
 		});
 		edit.addTextChangedListener(new TextWatcher() {
+			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				
 			}
+			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				
 			}
+			@Override
 			public void afterTextChanged(Editable s) {
 				if (edit.getText().toString().isEmpty()) {
 					showAllCollege();

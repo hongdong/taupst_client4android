@@ -28,6 +28,7 @@ public class MainService extends Service implements Runnable {
 	private DoTaskService doTaskService = new DoTaskService(MainService.this);
 	
 	Handler handler = new Handler() {
+		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {	
 			case Task.TA_LOGIN:
@@ -97,13 +98,17 @@ public class MainService extends Service implements Runnable {
 				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_FRAGMENT_ME)) {
 					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_UPDATAUSERDATA_FRAGMENT_ME);
 					fragment.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
-				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE)) {
+				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_BASE)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(
-							Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATABASE);
+							Task.TA_UPDATAUSERDATA_ACTIVITY_BASE);
 					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
-				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL)) {
+				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_OPTIONAL)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(
-							Task.TA_UPDATAUSERDATA_ACTIVITY_UPDATAUSERDATAOPTIONAL);
+							Task.TA_UPDATAUSERDATA_ACTIVITY_OPTIONAL);
+					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
+				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_REAL)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(
+							Task.TA_UPDATAUSERDATA_ACTIVITY_REAL);
 					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
 				}
 				break;

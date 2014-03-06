@@ -11,9 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
 import com.example.taupstairs.bean.Info;
@@ -99,6 +100,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			xlist_info.setAdapter(adapter);
 		}
 		xlist_info.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentInfos.size() >= arg2) {
@@ -112,6 +114,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			}
 		});
 		xlist_info.setXListViewListener(new IXListViewListener() {
+			@Override
 			public void onRefresh() {
 				if (null == lastestInfoId) {
 					doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
@@ -120,6 +123,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 				}
 			}
 			
+			@Override
 			public void onLoadMore() {
 				doGetInfoTask(Task.TA_GETINFO_MODE_LOADMORE, oldestInfoId);
 			}

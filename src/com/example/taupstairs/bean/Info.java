@@ -23,7 +23,6 @@ public class Info {
 	private InfoEndTask infoEndTask;
 	private InfoSignUp infoSignUp;
 	
-	public static final String TB_NAME = "info";
 	public static final int INFO_COUNT_PERPAGE = 20;
 	
 	public static final String ID = "_id";

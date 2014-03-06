@@ -1,6 +1,7 @@
 package com.example.taupstairs.adapter;
 
 import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
+import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
@@ -52,7 +55,8 @@ public class RankAdapter extends BaseAdapter {
 		holder.txt_rank = (TextView) view.findViewById(R.id.txt_fm_rank_rank);
 		
 		SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + rank.getPersonPhotoUrl());
-		PersonDataListener personDataListener = new PersonDataListener(context, rank.getPersonId());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(context, rank.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_nickname.setText(rank.getPersonNickname());

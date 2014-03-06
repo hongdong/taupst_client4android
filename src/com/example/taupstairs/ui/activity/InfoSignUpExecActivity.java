@@ -17,11 +17,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.InfoSignUp;
@@ -87,12 +87,14 @@ public class InfoSignUpExecActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				char optional[] = {'0', '0', '0', }; 
 				if (box_phone.isChecked()) {
@@ -115,19 +117,22 @@ public class InfoSignUpExecActivity extends Activity implements ItaActivity {
 		});
 		
 		keyboardLayout.setOnkbdStateListener(new onKybdsChangeListener() {         
-            public void onKeyBoardStateChange(int state) {
+            @Override
+			public void onKeyBoardStateChange(int state) {
                 switch (state) {
                 case KeyboardLayout.KEYBOARD_STATE_HIDE:
                 	handler.post(new Runnable() {
+						@Override
 						public void run() {
-							scrollView.fullScroll(ScrollView.FOCUS_UP);
+							scrollView.fullScroll(View.FOCUS_UP);
 						}
 					}); 
                 break;
                 case KeyboardLayout.KEYBOARD_STATE_SHOW:
                     handler.post(new Runnable() {
+						@Override
 						public void run() {
-							scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+							scrollView.fullScroll(View.FOCUS_DOWN);
 						}
 					});  
                 break;
@@ -136,6 +141,7 @@ public class InfoSignUpExecActivity extends Activity implements ItaActivity {
 		});
 		
 		box_qq.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
 					txt_qq.setTextColor(Color.BLACK);
@@ -146,6 +152,7 @@ public class InfoSignUpExecActivity extends Activity implements ItaActivity {
 		});
 		
 		box_email.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
 					txt_email.setTextColor(Color.BLACK);
@@ -156,6 +163,7 @@ public class InfoSignUpExecActivity extends Activity implements ItaActivity {
 		});
 		
 		box_phone.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
 					txt_phone.setTextColor(Color.BLACK);
@@ -166,6 +174,7 @@ public class InfoSignUpExecActivity extends Activity implements ItaActivity {
 		});
 		
 		txt_setting.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(InfoSignUpExecActivity.this, UpdataUserdataOptionalActivity.class);
 				startActivity(intent);

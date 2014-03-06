@@ -48,6 +48,7 @@ public class MyReleaseStatusService {
 			
 			listStatus.add(status);
 		}
+		cursor.close();
 		return listStatus;
 	}
 	

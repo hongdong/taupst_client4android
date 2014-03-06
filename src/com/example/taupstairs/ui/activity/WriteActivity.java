@@ -56,12 +56,14 @@ public class WriteActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (edit_write_title.getText().toString().equals("")) {
 					Toast.makeText(WriteActivity.this, "标题不能为空", Toast.LENGTH_SHORT).show();
@@ -78,6 +80,7 @@ public class WriteActivity extends Activity implements ItaActivity {
 		});
 		
 		btn_write_endtime.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(WriteActivity.this, SelectEndtimeActivity.class);
 				startActivityForResult(intent, IntentString.RequestCode.WRITE_SELECTENDTIME);
@@ -163,6 +166,7 @@ public class WriteActivity extends Activity implements ItaActivity {
 	/*
 	 * 退出时要将它从链表中移除，不然下次再进来，可能不能更新UI
 	 */
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(WriteActivity.this);
