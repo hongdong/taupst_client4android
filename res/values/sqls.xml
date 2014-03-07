@@ -9,8 +9,8 @@
         <item >
             create table if not exists person 
             (_id integer primary key autoincrement, personId, personPhotoUrl, personNickname, 
-            personSignature, personQq, personEmail, personPhone, personFaculty, personYear, 
-			personSpecialty, personName, personSex, permission)
+            personSignature, personQq, personEmail, personPhone, personPraise, personFaculty, 
+            personYear, personSpecialty, personName, personSex, permission)
         </item>
         
         <item >

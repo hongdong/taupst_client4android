@@ -20,12 +20,12 @@ public class PersonService {
 	public void insertPerson(Person person) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		db.execSQL("insert into " + DBInfo.Table.PERSON_TA_NAME + 
-				" values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+				" values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 				new Object[] {person.getPersonId(), person.getPersonPhotoUrl(), person.getPersonNickname(), 
 				person.getPersonSignature(), person.getPersonQq(), person.getPersonEmail(), 
-				person.getPersonPhone(), person.getPersonFaculty(), person.getPersonYear(), 
-				person.getPersonSpecialty(), person.getPersonName(), person.getPersonSex(), 
-				person.getPermission(), });
+				person.getPersonPhone(), person.getPersonPraise(), person.getPersonFaculty(), 
+				person.getPersonYear(), person.getPersonSpecialty(), person.getPersonName(), 
+				person.getPersonSex(), person.getPermission(), });
 	}
 	
 	/*
@@ -60,13 +60,14 @@ public class PersonService {
 			String personPhotoUrl = cursor.getString(cursor.getColumnIndex(Person.PERSON_PHOTOURL));
 			String personNickname = cursor.getString(cursor.getColumnIndex(Person.PERSON_NICKNAME));
 			String personSignature = cursor.getString(cursor.getColumnIndex(Person.PERSON_SIGNATURE));
+			String personPraise = cursor.getString(cursor.getColumnIndex(Person.PERSON_PRAISE));
 			String personFaculty = cursor.getString(cursor.getColumnIndex(Person.PERSON_FACULTY));
 			String personYear = cursor.getString(cursor.getColumnIndex(Person.PERSON_YEAR));
 			String personSpecialty = cursor.getString(cursor.getColumnIndex(Person.PERSON_SPECIALTY));
 			String personName = cursor.getString(cursor.getColumnIndex(Person.PERSON_NAME));
 			String personSex = cursor.getString(cursor.getColumnIndex(Person.PERSON_SEX));
 			String permission = cursor.getString(cursor.getColumnIndex(Person.PERMISSION));
-			person = new Person(personId, personPhotoUrl, personNickname, personSignature, null, 
+			person = new Person(personId, personPhotoUrl, personNickname, personSignature, personPraise, 
 					personFaculty, personYear, personSpecialty, personName, personSex, permission);
 		}
 		cursor.close();

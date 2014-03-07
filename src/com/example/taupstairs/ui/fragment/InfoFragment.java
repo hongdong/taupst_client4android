@@ -233,7 +233,9 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		if (currentInfos.size() > 0) {
 			lastestInfoId = currentInfos.get(0).getInfoId();
 			oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
-			xlist_info.setPullLoadEnable(true);
+			if (currentInfos.size() >= 20) {	//小于一页（20条）的时候，不要显示加载更多选项
+				xlist_info.setPullLoadEnable(true);
+			}
 		}
 	}
 
