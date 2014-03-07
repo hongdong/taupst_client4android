@@ -1,8 +1,6 @@
 package com.example.taupstairs.ui.activity;
 
-import java.util.Calendar;
 import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoSignUp;
@@ -127,7 +124,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		} else if (personSex.equals(Person.FEMALE)) {
 			holder.img_sex.setImageResource(R.drawable.icon_female);
 		}
-		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(Calendar.getInstance()), info.getInfoReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), info.getInfoReleaseTime());
 		holder.txt_releasetime.setText(displayTime);
 		holder.txt_grade.setText(info.getPersonGrade());
 		holder.txt_department.setText(info.getPersonDepartment());
@@ -206,7 +203,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 			holder.txt_person_email.setText("Ta没有向您提供email");
 		}
 		
-		Time now = TimeUtil.getNow(Calendar.getInstance());
+		Time now = TimeUtil.getNow();
 		Time end = TimeUtil.originalToTime(infoSignUp.getStatusEndTime());
 		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
 			to_select = false;

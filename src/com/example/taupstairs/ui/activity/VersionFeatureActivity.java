@@ -49,11 +49,25 @@ public class VersionFeatureActivity extends Activity implements ItaActivity {
 		version_feature.append("<html><body>");
 		version_feature.append("<p><strong>1. 当前版本</strong></p>");
 		version_feature.append("<p>1.1</p>");
-		version_feature.append("<p>当前版本为本软件第一版本，版本号为1.0</p>");
+		version_feature.append("<p>当前版本为本软件第一版本，版本名为1.1。</p>");
 		
 		version_feature.append("<p><strong>2. 版本功能</strong></p>");
 		version_feature.append("<p>2.1</p>");
 		version_feature.append("<p>用户可进行任务的发布，报名任务，留言，以及其他一些相关设置。</p>");
+		version_feature.append("</body></html>");
+		
+		version_feature.append("<p><strong>3. 关于点赞</strong></p>");
+		version_feature.append("<p>3.1</p>");
+		version_feature.append("<p>用户报名任务且任务发布者选你执行，当发布者完结此任务后将可以给你0到32个赞，");
+		version_feature.append("而不是由用户在页面上直接点赞。</p>");
+		version_feature.append("</body></html>");
+		
+		version_feature.append("<p><strong>4. 关于实名资料</strong></p>");
+		version_feature.append("<p>4.1</p>");
+		version_feature.append("<p>1.1版本将由用户设置是否对所有人公开实名资料，可以点击设置页面“实名资料”项进行设置。");
+		version_feature.append("用户设置不公开实名资料后，只有在这三种情况下，实名资料才强制向对方公开，");
+		version_feature.append("分别是用户报名任务后，或有人报名你的任务且你选他执行，或对你任务的执行者给赞，");
+		version_feature.append("即在“有人报名”、“选我执行”、“评价了你”的消息详情页面点击头像可查看对方实名资料。</p>");
 		version_feature.append("</body></html>");
 		txt_version_feature.setMovementMethod(ScrollingMovementMethod.getInstance());
 		txt_version_feature.setText(Html.fromHtml(version_feature.toString()));

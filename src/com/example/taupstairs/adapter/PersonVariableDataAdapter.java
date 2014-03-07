@@ -49,7 +49,7 @@ public class PersonVariableDataAdapter extends BaseAdapter {
 		case 0:
 			view = LayoutInflater.from(context).inflate(R.layout.fm_me_variable_drawable, null);
 			ImageView imageView = (ImageView)view.findViewById(R.id.img_fm_me_drawable);
-			SimpleImageLoader.showImage(imageView, HttpClientUtil.PHOTO_BASE_URL + photoUrl);
+			SimpleImageLoader.showImage(imageView, HttpClientUtil.PHOTO_BASE_URL + "l" + photoUrl);
 			break;
 		
 		case 1:

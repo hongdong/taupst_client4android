@@ -1,8 +1,6 @@
 package com.example.taupstairs.ui.activity;
 
-import java.util.Calendar;
 import java.util.HashMap;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoEndTask;
@@ -111,7 +108,7 @@ public class InfoEndTaskActivity extends Activity implements ItaActivity {
 		} else if (personSex.equals(Person.FEMALE)) {
 			holder.img_sex.setImageResource(R.drawable.icon_female);
 		}
-		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(Calendar.getInstance()), info.getInfoReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), info.getInfoReleaseTime());
 		holder.txt_releasetime.setText(displayTime);
 		holder.txt_grade.setText(info.getPersonGrade());
 		holder.txt_department.setText(info.getPersonDepartment());

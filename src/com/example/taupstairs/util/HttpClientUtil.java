@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -115,17 +114,21 @@ public class HttpClientUtil {
 	/*
 	 * 获取验证码。其实是一个获取图片的接口
 	 */
-	public static Drawable getCaptcha(String captchaUrl) {
-		Drawable drawable = null;
-		HttpGet get = new HttpGet(captchaUrl);
-		try {
-			HttpResponse response = getHttpClient().execute(get);
-			InputStream is = response.getEntity().getContent();
-			drawable = Drawable.createFromStream(is, captchaUrl);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return drawable;
-	}
+	public static Drawable getCaptcha(final String captchaUrl) throws Exception {
+		FutureTask<Drawable> task = new FutureTask<Drawable>(new Callable<Drawable>() {
+			public Drawable call() throws Exception {
+				HttpGet get = new HttpGet(captchaUrl);					//创建HttpGet对象用于GET请求
+				HttpClient httpClient = getHttpClient();
+				HttpResponse response = httpClient.execute(get);		//发送GET请求
+				if (200 == response.getStatusLine().getStatusCode()) {
+					InputStream is = response.getEntity().getContent();
+					return Drawable.createFromStream(is, captchaUrl);
+				}
+				return null;
+			}
+		});
+		new Thread(task).start();
+		return task.get();
+	}	
 	
 }

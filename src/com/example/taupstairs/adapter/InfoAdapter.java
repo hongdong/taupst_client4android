@@ -1,8 +1,6 @@
 package com.example.taupstairs.adapter;
 
-import java.util.Calendar;
 import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.Person;
-import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.util.HttpClientUtil;
@@ -56,15 +52,15 @@ public class InfoAdapter extends BaseAdapter {
 		holder.txt_releasetime = (TextView) view.findViewById(R.id.txt_fm_info_releasetime);
 		holder.txt_content = (TextView) view.findViewById(R.id.txt_fm_info_content);
 		
-		SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + info.getPersonPhotoUrl());
+		SimpleImageLoader.showImage(holder.img_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + info.getPersonPhotoUrl());
 		PersonDataListener personDataListener = 
 				new PersonDataListener(context, info.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_nickname.setText(info.getPersonNickname());
 		
-		Time now = TimeUtil.getNow(Calendar.getInstance());
-		String displayTime = TimeUtil.getDisplayTime(now, info.getInfoReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), info.getInfoReleaseTime());
 		holder.txt_releasetime.setText(displayTime);
 		
 		holder.txt_content.setText(info.getInfoContent());

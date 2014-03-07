@@ -1,7 +1,5 @@
 package com.example.taupstairs.ui.activity;
 
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.logic.ItaActivity;
@@ -41,7 +38,7 @@ public class SelectEndtimeActivity extends Activity implements ItaActivity {
 	}
 	
 	private void initData() {
-		now = TimeUtil.getNow(Calendar.getInstance());
+		now = TimeUtil.getNow();
 		endTime = now;
 	}
 	
@@ -87,7 +84,7 @@ public class SelectEndtimeActivity extends Activity implements ItaActivity {
 		btn_ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				now = TimeUtil.getNow(Calendar.getInstance());
+				now = TimeUtil.getNow();
 				if (TimeUtil.LARGE == TimeUtil.compare(endTime, now)) {
 					Intent intent = new Intent();
 					intent.putExtra(Time.YEAR, endTime.getYear());

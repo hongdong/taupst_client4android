@@ -42,15 +42,31 @@
     <string name="task_expired">任务过期</string>
     <string name="task_end">任务完结</string>
     <string name="info_exec_task">选你执行</string>
-    <string name="info_end_task">评价发你</string>
+    <string name="info_end_task">评价了你</string>
     
     <string name="write">发布任务</string>
     <string name="release">发  布</string>
     <string name="write_task_title">标  题（不超过14个字）</string>
     <string name="write_task_content">正  文（不超过140个字）</string>
     <string name="write_task_rewards">报  酬（不超过50个字）</string>
+    <string name="common_write_rewards">常用报酬：</string>
+    <string name="write_rewards_1">请吃饭</string>
+    <string name="write_rewards_2">一起看电影</string>
+    <string name="write_rewards_3">喝奶茶</string>
+    <string name="write_rewards_4">楼上是美女的话你就抱回家吧！</string>
+    <string name="write_rewards_5">和楼下搞基</string>
+    <string name="write_rewards_6">你来定</string>
     <string name="write_endtime_hint">选个截止时间吧！</string>
-    <string name="write_go">Go</string>
+    <string name="common_write_endtime">常用截止时间：</string>
+    <string name="write_endtime_12">中午12点前</string>
+    <string name="write_endtime_18">晚上6点前</string>
+    <string name="write_endtime_21">晚上9点前</string>
+    <string name="write_endtime_24">今天之前</string>
+    <string name="write_endtime_day_1">一天后</string>
+    <string name="write_endtime_day_3">三天后</string>
+    <string name="write_endtime_day_10">十天后</string>
+    <string name="write_endtime_month_1">一个月后</string>
+    <string name="write_go">点击选择</string>
     <string name="select_endtime">选择截止时间</string>
     
     <string name="person_data">用户资料</string>
@@ -102,8 +118,10 @@
     <string name="real_data_public">是</string>
     <string name="real_data_hide">否</string>
     <string name="real_data_declare">
-        	注：1. 若设置实名资料为不公开，除了在报名他人发布任务时，公开给任务发布人之外，
-        	其它地方对他人都不公开。2. 若修改设置按右上角打勾按钮提交到服务器才可以。
+        	注：1. 若设置实名资料为不公开，只有在三种情况下，实名资料才强制向对方公开。
+        	分别是用户报名任务后，或有人报名你的任务且你选他执行，或对你任务的执行者给赞，
+        	即在“有人报名”、“选我执行”、“评价了你”的消息详情页面点击头像可查看对方实名资料。
+        	2. 若要修改设置，须按右上角打勾按钮提交到服务器。
     </string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>

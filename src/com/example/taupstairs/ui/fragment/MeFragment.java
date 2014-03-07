@@ -320,6 +320,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 	 * 网络任务
 	 */
 	private void doUpdataUserDataTask(String url) {
+		dismissProgressDialog();
 		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
 		taskParams.put(Task.TA_UPDATAUSERDATA_ACTIVITY, Task.TA_UPDATAUSERDATA_FRAGMENT_ME);
 		taskParams.put(Task.TA_UPDATAUSERDATA_URL, url);

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
-
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.example.taupstairs.R;
@@ -38,7 +36,6 @@ import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.manager.UpdataManager;
 import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
-import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.ui.fragment.InfoFragment;
 import com.example.taupstairs.ui.fragment.MeFragment;
 import com.example.taupstairs.ui.fragment.RankFragment;
@@ -231,7 +228,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		taskParams.put(User.USER_COLLEGEID, defaultUser.getUserCollegeId());
 		taskParams.put(User.USER_STUDENTID, defaultUser.getUserStudentId());
 		taskParams.put(User.USER_PASSWORD, defaultUser.getUserPassword());
-		taskParams.put(JsonString.Login.IS_EXIST, "1");
 		Task task = new Task(Task.TA_CHECKNET, taskParams);
 		MainService.addTask(task);
 	}
@@ -260,8 +256,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_CHECKNET:
-			String ok = (String) params[1];
-			if (ok.equals(Task.TA_NO)) {
+			String result = (String) params[1];
+			if (null == result) {
 				Toast.makeText(this, "没网络啊！！！亲", Toast.LENGTH_LONG).show();
 			} else {
 				if (first_time_login) {

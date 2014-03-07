@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <EditText 
+        android:id="@+id/edit_write_rewards"
+        android:layout_width="match_parent" 
+		android:layout_height="80dp"
+		android:layout_marginTop="10dp"
+		android:paddingLeft="15dp"
+		android:paddingRight="15dp"
+		android:paddingTop="10dp"
+		android:paddingBottom="10dp"
+		android:gravity="top"
+		android:maxLength="50"
+		android:textSize="15sp"
+		android:hint="@string/write_task_rewards"
+		android:textColorHint="@color/gray"
+		android:background="@drawable/common_edit_bg"/>
+</LinearLayout>

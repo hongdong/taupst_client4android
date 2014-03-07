@@ -65,11 +65,26 @@ public class TimeUtil {
 	
 	/**
 	 * 
+	 * @return
+	 */
+	public static Time getNow() {
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		/*这里需要格外注意，Calendar获取出来的月份是从0到11*/
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+		Time now = new Time(year, month, day, hour, minute);
+		return now;
+	}
+	
+	/**
+	 * 
 	 * @param calendar
 	 * @return
 	 */
-	public static Time getNow(Calendar calendar) {
-		calendar = Calendar.getInstance();
+	public static Time getTimeByCalendar(Calendar calendar) {
 		int year = calendar.get(Calendar.YEAR);
 		/*这里需要格外注意，Calendar获取出来的月份是从0到11*/
 		int month = calendar.get(Calendar.MONTH) + 1;
@@ -169,7 +184,7 @@ public class TimeUtil {
 	 */
 	public static String setLastestUpdata() {
 		String hour, minute;
-		Time lastestRefreshTime = getNow(Calendar.getInstance());
+		Time lastestRefreshTime = getNow();
 		
 		if (lastestRefreshTime.getHour() < 10) {
 			hour = "0" + lastestRefreshTime.getHour();

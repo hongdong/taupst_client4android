@@ -1,14 +1,11 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -21,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoMessageAdapter;
 import com.example.taupstairs.bean.Info;
@@ -145,7 +141,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 			holder.img_sex.setImageResource(R.drawable.icon_female);
 		}
 		
-		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(Calendar.getInstance()), info.getInfoReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), info.getInfoReleaseTime());
 		holder.txt_releasetime.setText(displayTime);
 		
 		holder.txt_grade.setText(info.getPersonGrade());

@@ -109,15 +109,15 @@ public class ImageManager {
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(get);
 			InputStream is = response.getEntity().getContent();
-			/*把图片加到内存的缓存中*/
-			synchronized (this) {
-				imageCache.put(url, new SoftReference<Drawable>(drawable));
-			}
 			/*先保存，再读出。此处保存一定要将url转为可用的文件名，不然会异常*/
 			String fileName = getMd5(url);
 			writeImageToFile(fileName, is);
 			is = context.openFileInput(fileName);
 			drawable = Drawable.createFromStream(is, fileName);
+			/*把图片加到内存的缓存中*/
+			synchronized (this) {
+				imageCache.put(url, new SoftReference<Drawable>(drawable));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

@@ -19,7 +19,6 @@ import com.example.taupstairs.bean.SignUp;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
-import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.JsonUtil;
 import com.example.taupstairs.util.StringUtil;
@@ -65,15 +64,14 @@ public class DoTaskService {
 	
 	/*登录任务*/
 	public String doLoginTask(Task task) {
-		String result = Task.TA_NO;
+		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		String collegeId = (String) taskParams.get(User.USER_COLLEGEID);
 		String studentId = (String) taskParams.get(User.USER_STUDENTID);
 		String password = (String) taskParams.get(User.USER_PASSWORD);
-		String isExist = (String) taskParams.get(JsonString.Login.IS_EXIST);
 		String captcha = (String) taskParams.get(Task.TA_LOGIN_CAPTCHA);
 		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
-				+ "&pwd=" + password + "&school=" + collegeId + "&issysn=" + isExist;
+				+ "&pwd=" + password + "&school=" + collegeId;
 		if (captcha != null) {
 			login_url += "&code=" + captcha;
 		}
@@ -335,23 +333,35 @@ public class DoTaskService {
 		String result = null;
 		Map<String, Object> taskParams = task.getTaskParams();
 		Bitmap bitmap = (Bitmap) taskParams.get(Task.TA_UPLOADPHOTO_BITMAP);
+		
+		Bitmap smallBitmap = null;
+		if (bitmap.getWidth() <= 100 || bitmap.getHeight() <= 100) {
+			smallBitmap = bitmap;
+		} else {
+			smallBitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+		}
+		Bitmap[] bitmaps = {smallBitmap, bitmap};
+		String fileName = System.currentTimeMillis() + ".png";
+		String lFileName = "l" + fileName;
+		String[] fileNames = {fileName, lFileName};
 		try {	/*先把图片写到cache里面，再读出来以流的方式上传*/
-			File file = context.getFilesDir();
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-			byte[] byteArray = stream.toByteArray();
-			final String fileName = System.currentTimeMillis() + ".jpeg";
-			File imageFile = new File(file, fileName);
-			FileOutputStream fstream = new FileOutputStream(imageFile);
-			BufferedOutputStream bStream = new BufferedOutputStream(fstream);
-			bStream.write(byteArray);
-			if (bStream != null) {
-				bStream.close();
+			File file = context.getCacheDir();
+			for (int i = 0; i < fileNames.length; i++) {
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bitmaps[i].compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+				File imageFile = new File(file, fileNames[i]);
+				FileOutputStream fstream = new FileOutputStream(imageFile);
+				BufferedOutputStream bStream = new BufferedOutputStream(fstream);
+				bStream.write(byteArray);
+				if (bStream != null) {
+					bStream.close();
+				}
+				UploadToBCS ub = new UploadToBCS();
+				File f = new File(file.getAbsolutePath() + "/" + fileNames[i]);
+				ub.putObjectByInputStream(f, "/" + fileNames[i]);	
 			}
-			UploadToBCS ub = new UploadToBCS();
-			File f = new File(file.getAbsolutePath() + "/" + fileName);
-			ub.putObjectByInputStream(f, "/" + fileName);
-			result = fileName;						
+			result = fileNames[0];	//都上传成功后才能赋值，如果异常了，result会为null返回
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

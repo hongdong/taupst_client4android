@@ -35,9 +35,6 @@
 				android:layout_marginRight="15dp"
 				android:background="@drawable/btn_ok_bg"/>
 	    </RelativeLayout>
-	    
-	    <include layout="@layout/request_focus"/>
-	    
 	    <ScrollView 
 	        android:id="@+id/scroll_info_signup_exec"
 	        android:layout_width="match_parent"

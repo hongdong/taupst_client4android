@@ -3,6 +3,7 @@ package com.example.taupstairs.ui.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,13 +23,14 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class PersonDataActivity extends Activity implements ItaActivity {
 
 	private Button btn_back;
-	private LinearLayout layout_loading;
+	private Holder holder;
 	private String personId, permission;
 	private Person person;
 	private TextView txt_setting;
@@ -44,20 +46,24 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	
 	@Override
 	public void init() {
-		initProgressBar();
+		initHolder();
 		initData();
 		initView();
+		testData();
 	}
 	
-	private void initProgressBar() {
-		layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
-		layout_loading.setVisibility(View.VISIBLE);
+	private void initHolder() {
+		holder = new Holder();
+		holder.layout_loading = (LinearLayout)findViewById(R.id.layout_loading);
+		holder.img_photo = (ImageView) findViewById(R.id.img_person_data_photo);
+		holder.txt_nickname = (TextView) findViewById(R.id.txt_person_data_nickname);
+		holder.txt_praise = (TextView) findViewById(R.id.txt_person_data_praise);
+		holder.txt_signature = (TextView) findViewById(R.id.txt_person_data_signature);
 	}
 	
 	private void initData() {
 		personId = getIntent().getStringExtra(Person.PERSON_ID);
 		permission = getIntent().getStringExtra(Person.PERMISSION);
-		doGetUserDataTask();
 	}
 	
 	private void initView() {
@@ -78,8 +84,29 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 		});
 	}
 	
+	private void testData() {
+		String myId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
+		if (personId.equals(myId)) {
+			PersonService personService = new PersonService(this);
+			person = personService.getPersonById(myId);
+			displayPersonVariable(person);
+			displayPersonBase(person);
+		} else {
+			doGetUserDataTask();
+		}
+	}
+	
+	private void showProgressBar() {
+		holder.layout_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideProgressBar() {
+		holder.layout_loading.setVisibility(View.GONE);
+	}
+	
 	private void doGetUserDataTask() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+		showProgressBar();
+		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Task.TA_GETUSERDATA_ACTIVITY, Task.TA_GETUSERDATA_ACTIVITY_PERSONDATA);
 		taskParams.put(Task.TA_GETUSERDATA_TASKPARAMS, personId);
 		Task task = new Task(Task.TA_GETUSERDATA, taskParams);
@@ -92,7 +119,7 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
 			case Task.TA_GETUSERDATA:
-				layout_loading.setVisibility(View.GONE);
+				hideProgressBar();
 				person = (Person) params[1];
 				displayPerson(person);
 				break;
@@ -108,13 +135,13 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	private void displayPerson(Person person) {
 		displayPersonVariable(person);
 		if (person.getPermission().equals(Person.PERMISSION_PUBLIC) 
-				|| permission.equals(Person.PERMISSION_PUBLIC)
-				|| personId.equals(SharedPreferencesUtil.getDefaultUser(this).getUserId())) {
+				|| permission.equals(Person.PERMISSION_PUBLIC)) {
 			displayPersonBase(person);
 		}
 	}
 	
 	private class Holder {
+		public LinearLayout layout_loading;
 		public ImageView img_photo;
 		public TextView txt_nickname;
 		public TextView txt_praise;
@@ -122,12 +149,9 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	}
 	
 	private void displayPersonVariable(Person person) {
-		Holder holder = new Holder();
-		holder.img_photo = (ImageView) findViewById(R.id.img_person_data_photo);
-		holder.txt_nickname = (TextView) findViewById(R.id.txt_person_data_nickname);
-		holder.txt_praise = (TextView) findViewById(R.id.txt_person_data_praise);
-		holder.txt_signature = (TextView) findViewById(R.id.txt_person_data_signature);
-		SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + person.getPersonPhotoUrl());
+		
+		SimpleImageLoader.showImage(holder.img_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + "l" + person.getPersonPhotoUrl());
 		holder.txt_nickname.setText(person.getPersonNickname());
 		holder.txt_praise.setText(person.getPersonPraise() + "  ");
 		holder.txt_signature.setText(person.getPersonSignature());

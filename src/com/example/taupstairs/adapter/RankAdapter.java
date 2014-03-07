@@ -54,7 +54,8 @@ public class RankAdapter extends BaseAdapter {
 		holder.txt_praise = (TextView) view.findViewById(R.id.txt_fm_rank_praise);
 		holder.txt_rank = (TextView) view.findViewById(R.id.txt_fm_rank_rank);
 		
-		SimpleImageLoader.showImage(holder.img_photo, HttpClientUtil.PHOTO_BASE_URL + rank.getPersonPhotoUrl());
+		SimpleImageLoader.showImage(holder.img_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + rank.getPersonPhotoUrl());
 		PersonDataListener personDataListener = 
 				new PersonDataListener(context, rank.getPersonId(), Person.PERMISSION_HIDE);
 		holder.img_photo.setOnClickListener(personDataListener);

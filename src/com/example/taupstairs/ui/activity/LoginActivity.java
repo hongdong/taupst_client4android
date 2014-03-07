@@ -1,6 +1,7 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -155,23 +156,22 @@ public class LoginActivity extends Activity implements ItaActivity {
 	/*登录放到后台处理*/
 	private void doLoginTask() {
 		if (!isRefresh) {
-			isRefresh = true;
-			showProgressDialog();
-			HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
-			taskParams.put(User.USER_COLLEGEID, collegeId);
-			taskParams.put(User.USER_STUDENTID, studentId);
-			taskParams.put(User.USER_PASSWORD, password);
-			taskParams.put(JsonString.Login.IS_EXIST, isExist ? "1" : "2");
+			isRefresh = true;			
+			Map<String, Object> taskParams = new HashMap<String, Object>();
 			if (!isExist && hasGetCaptcha) {
 				EditText editText = (EditText) findViewById(R.id.edit_captcha);
 				String captcha = editText.getText().toString().trim();
 				if (captcha.equals("")) {
-					dismissProgressDialog();
+					isRefresh = false;
 					Toast.makeText(LoginActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
 					return;
-				}
+				} 
 				taskParams.put(Task.TA_LOGIN_CAPTCHA, captcha);
 			}
+			showProgressDialog();
+			taskParams.put(User.USER_COLLEGEID, collegeId);
+			taskParams.put(User.USER_STUDENTID, studentId);
+			taskParams.put(User.USER_PASSWORD, password);
 			Task task = new Task(Task.TA_LOGIN, taskParams);
 			MainService.addTask(task);
 		}

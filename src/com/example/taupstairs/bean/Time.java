@@ -18,6 +18,14 @@ public class Time {
 		
 	}
 	
+	public Time(Time time) {
+		this.year = time.getYear();
+		this.month = time.getMonth();
+		this.day = time.getDay();
+		this.hour = time.getHour();
+		this.minute = time.getMinute();
+	}
+	
 	public Time(int day, int hour, int minute) {
 		this.day = day;
 		this.hour = hour;

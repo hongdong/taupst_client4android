@@ -1,8 +1,6 @@
 package com.example.taupstairs.adapter;
 
-import java.util.Calendar;
 import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
-import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.util.HttpClientUtil;
@@ -70,8 +66,7 @@ public class TaskAdapter extends BaseAdapter {
 		
 		holder.txt_fm_task_nickname.setText(status.getPersonNickname());
 		
-		Time now = TimeUtil.getNow(Calendar.getInstance());
-		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), status.getStatusReleaseTime());
 		holder.txt_fm_task_releasetime.setText(displayTime);
 		
 		holder.txt_fm_task_title.setText(status.getStatusTitle());

@@ -1,11 +1,9 @@
 package com.example.taupstairs.adapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
-import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
 import com.example.taupstairs.listener.ReplyListMessageListener;
@@ -73,8 +69,7 @@ public class MessageAdapter extends BaseAdapter {
 		
 		holder.txt_message_nickname.setText(message.getPersonNickname());
 		
-		Time now = TimeUtil.getNow(Calendar.getInstance());
-		String displayTime = TimeUtil.getDisplayTime(now, message.getMessageTime());
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), message.getMessageTime());
 		holder.txt_message_time.setText(displayTime);
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();

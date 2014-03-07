@@ -119,18 +119,20 @@ public class LazyImageLoader {
 					}
 					Drawable drawable = imageManager.downloadImage(url);
 					/*bundle.putParcelable不能传Drawable，所以就转一下了*/
-					Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-					Message message = new Message();
-					message.what = MESSAGE_WHAT;
-					Bundle bundle = message.getData();
-					bundle.putString(URL, url);
-					bundle.putParcelable(IMAGE, bitmap);
-					handler.sendMessage(message);
+					if (drawable != null) {
+						Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+						Message message = new Message();
+						message.what = MESSAGE_WHAT;
+						Bundle bundle = message.getData();
+						bundle.putString(URL, url);
+						bundle.putParcelable(IMAGE, bitmap);
+						handler.sendMessage(message);
+					}
 					/*移除头，因为头url对应的下载已经完成了*/
 					urlQueue.remove();
 				}
 			} catch (Exception e) {
-				
+				e.printStackTrace();
 			}
 		}
 	}

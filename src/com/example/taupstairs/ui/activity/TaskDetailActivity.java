@@ -1,14 +1,11 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -24,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.MessageAdapter;
 import com.example.taupstairs.bean.Message;
@@ -77,7 +73,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private void initData() {
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		status = app.getStatus();
-		now = TimeUtil.getNow(Calendar.getInstance());
+		now = TimeUtil.getNow();
 		
 		String personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		if (status.getPersonId().equals(personId)) {
@@ -486,7 +482,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			message.setPersonId(personId);
 			message.setPersonPhotoUrl(person.getPersonPhotoUrl());
 			message.setPersonNickname(person.getPersonNickname());		
-			Time now = TimeUtil.getNow(Calendar.getInstance());
+			Time now = TimeUtil.getNow();
 			message.setMessageTime(TimeUtil.timeToOriginal(now));		
 			List<MessageContent> contents = new ArrayList<MessageContent>();
 			MessageContent content = new MessageContent();	
