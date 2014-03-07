@@ -40,8 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
 		String[] db_drop_sqls = context.getResources().getStringArray(R.array.db_drop_sql);
 		if (newVersion > oldVersion) {
 			for (int i = 0; i < db_drop_sqls.length; i++) {
-				db.execSQL(db_drop_sqls[i]);
-				db.execSQL(db_create_sqls[i]);
+				db.execSQL(db_drop_sqls[i]);	//删除旧的表
+				db.execSQL(db_create_sqls[i]);	//创建新的表
 			}
 		}
 	}
