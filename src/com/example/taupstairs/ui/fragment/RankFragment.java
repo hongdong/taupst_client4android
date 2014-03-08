@@ -18,7 +18,7 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.RankService;
-import com.example.taupstairs.string.HomePageString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
@@ -95,7 +95,7 @@ public class RankFragment extends Fragment implements ItaFragment {
 	 */
 	public void localRefresh(int id, Map<String, Object> params) {
 		switch (id) {
-		case HomePageString.UPDATA_PHOTO:
+		case NormalString.LocalRefresh.UPDATA_PHOTO:
 			hasRefresh = true;
 			String personId_p = (String) params.get(Person.PERSON_ID);
 			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
@@ -106,7 +106,7 @@ public class RankFragment extends Fragment implements ItaFragment {
 			}
 			adapter.notifyDataSetChanged();
 			break;
-		case HomePageString.UPDATA_NICKNAME:
+		case NormalString.LocalRefresh.UPDATA_NICKNAME:
 			hasRefresh = true;
 			String personId_n = (String) params.get(Person.PERSON_ID);
 			String personNickname = (String) params.get(Person.PERSON_NICKNAME);

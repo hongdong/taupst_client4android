@@ -34,8 +34,8 @@ import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.manager.UpdataManager;
-import com.example.taupstairs.string.HomePageString;
 import com.example.taupstairs.string.IntentString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.ui.fragment.InfoFragment;
 import com.example.taupstairs.ui.fragment.MeFragment;
 import com.example.taupstairs.ui.fragment.RankFragment;
@@ -54,7 +54,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private boolean first_time_login = true;
 	private boolean isExit = false;
 	
-	private PushMessageClickReceiver receiver;
+	private HomePageReceiver receiver;
 	
 	private ViewPager viewPager;
 	private List<Fragment> fragments;
@@ -114,9 +114,10 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	 * 初始化百度Push服务发来的广播接收
 	 */
 	private void initReceiver() {
-		receiver = new PushMessageClickReceiver();
+		receiver = new HomePageReceiver();
 		IntentFilter filter = new IntentFilter();  
-        filter.addAction("com.example.taupstairs.UPDATA_INFO");
+        filter.addAction(NormalString.Receiver.NEW_INFO);
+        filter.addAction(NormalString.Receiver.CHANGE_USER);
         registerReceiver(receiver, filter);  
 	}
 	
@@ -146,6 +147,10 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		viewPager.setAdapter(adapter);
 		//预加载4个fragment。默认的不会预加载这么多，页面切换会卡
 		viewPager.setOffscreenPageLimit(fragments.size());	
+		//刚进去跳到任务页面
+		flag_clear = false;
+		currentIndex = INDEX_TASK;
+		setCurrent(INDEX_TASK);	
 	}
 	
 	/*初始化控件的监听器*/
@@ -224,10 +229,11 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	private void doCheckNetTask() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>(1);
+		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(User.USER_COLLEGEID, defaultUser.getUserCollegeId());
 		taskParams.put(User.USER_STUDENTID, defaultUser.getUserStudentId());
 		taskParams.put(User.USER_PASSWORD, defaultUser.getUserPassword());
+		taskParams.put(Task.TA_LOGIN_ISEXIST, "3");		//3表示服务器数据库中已经存在
 		Task task = new Task(Task.TA_CHECKNET, taskParams);
 		MainService.addTask(task);
 	}
@@ -291,20 +297,20 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	 */
 	public void localRefresh(int id, Map<String, Object> params) {
 		switch (id) {
-		case HomePageString.UPDATA_PHOTO:
+		case NormalString.LocalRefresh.UPDATA_PHOTO:
 			taskFragment.localRefresh(id, params);
 			rankFragment.localRefresh(id, params);
 			break;
-		case HomePageString.UPDATA_NICKNAME:
+		case NormalString.LocalRefresh.UPDATA_NICKNAME:
 			taskFragment.localRefresh(id, params);
 			rankFragment.localRefresh(id, params);
 			break;
 			
-		case HomePageString.NEW_INFO:
+		case NormalString.LocalRefresh.NEW_INFO:
 			infoFragment.localRefresh(id, params);
 			break;
 			
-		case HomePageString.RELEASE_STATUS_SUCCESS:
+		case NormalString.LocalRefresh.RELEASE_STATUS_SUCCESS:
 			taskFragment.localRefresh(id, params);
 			break;
 
@@ -319,7 +325,7 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		switch (requestCode) {
 		case IntentString.RequestCode.HOMEPAGE_WRITE:
 			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
-				localRefresh(HomePageString.RELEASE_STATUS_SUCCESS, null);
+				localRefresh(NormalString.LocalRefresh.RELEASE_STATUS_SUCCESS, null);
 			}
 			break;
 
@@ -384,12 +390,17 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	/**
-	 * 更新消息列表
+	 *接收广播。目前接收两个：新消息推送、切换账户
 	 */
-	public class PushMessageClickReceiver extends BroadcastReceiver {
-		@Override
+	public class HomePageReceiver extends BroadcastReceiver {
 		public void onReceive(final Context context, Intent intent) {
-			localRefresh(HomePageString.NEW_INFO, null);
+			String action = intent.getAction();
+			if (action.equals(NormalString.Receiver.NEW_INFO)) {
+				localRefresh(NormalString.LocalRefresh.NEW_INFO, null);
+			} else if (action.equals(NormalString.Receiver.CHANGE_USER)) {
+				finish();	
+				PushManager.stopWork(getApplicationContext());
+			}
 		}
 	}
 

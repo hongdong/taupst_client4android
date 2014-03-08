@@ -20,6 +20,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.util.FileUtil;
 
 public class SettingActivity extends Activity implements ItaActivity {
@@ -127,13 +128,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog.setMessage("    正在清除...");
 		progressDialog.show();
 		FileUtil.deletePhoto(getFilesDir().getAbsolutePath());
-//		SharedPreferencesUtil.emptyLastestId(this);
-//		PersonService personService = new PersonService(SettingActivity.this);
-//		personService.emptyPersonDB();
-//		personService.closeDBHelper();
-//		RankService rankService = new RankService(SettingActivity.this);
-//		rankService.emptyRankDb();
-//		rankService.closeDBHelper();
 		progressDialog.dismiss();
 		Toast.makeText(SettingActivity.this, "清除完成", Toast.LENGTH_SHORT).show();
 	}
@@ -145,8 +139,10 @@ public class SettingActivity extends Activity implements ItaActivity {
 		switch (taskId) {
 		case Task.TA_USEREXIT:
 			MainService.emptyMainService();				//先清空MainService里面的链表
+			Intent intent_change_user = new Intent(NormalString.Receiver.CHANGE_USER);
+			sendBroadcast(intent_change_user);
+			//上面操作可能比较久，所以在这里再隐藏进度条
 			Intent intent_login = new Intent(SettingActivity.this, LoginActivity.class);
-			intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent_login);				//最后跳到登录界面
 			finish();
 			overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -155,6 +151,12 @@ public class SettingActivity extends Activity implements ItaActivity {
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MainService.removeActivity(this);
 	}
 	
 }

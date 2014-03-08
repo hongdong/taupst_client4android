@@ -5,6 +5,7 @@ public class JsonString {
 	public static class Login {
 		public static final String IS_LOGINED = "isLogined";
 		public static final String USERS_ID = "users_id";
+		public static final String IS_EXIST = "is_exist";
 		public static final String CAPTCHA = "mcode";
 		public static final String STATE = "state";
 	}

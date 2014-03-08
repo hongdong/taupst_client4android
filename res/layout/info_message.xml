@@ -42,8 +42,14 @@
 				<include layout="@layout/task_detail_content_person"/>
 				
 				<include layout="@layout/info_message_content"/>
+				
+				<TextView 
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="50dp"/>
 				        
 		    </LinearLayout> 
+		        
 		</ScrollView>
 		    
 	    <!-- 回复留言 -->

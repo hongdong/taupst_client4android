@@ -194,8 +194,8 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 					} else {
 						//弹框提示是否真的要完结
 						AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailActivity.this);
-						builder.setTitle("提醒");
-						builder.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
+						builder.setTitle("提醒")
+						.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {

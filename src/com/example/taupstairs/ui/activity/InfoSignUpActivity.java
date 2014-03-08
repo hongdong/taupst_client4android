@@ -15,11 +15,11 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.Person;
+import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.listener.PersonDataListener;
-import com.example.taupstairs.listener.TaskByIdListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
@@ -181,7 +181,14 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	private void displaySignUp() {
 		InfoSignUp infoSignUp = info.getInfoSignUp();
 		holder.txt_signup_string.setText(infoSignUp.getSignUpString());
-		holder.view.setOnClickListener(new TaskByIdListener(this, info.getInfoSignUp().getStatusId()));
+		final String statusId = infoSignUp.getStatusId();
+		holder.view.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(InfoSignUpActivity.this, TaskByIdActivity.class);
+				intent.putExtra(Status.STATUS_ID, statusId);
+				startActivityForResult(intent, IntentString.RequestCode.INFOSIGNUP_TASKBYID);
+			}
+		});
 		holder.txt_status_nickname.setText(infoSignUp.getStatusPersonNickname());
 		holder.txt_status_title.setText("  :  " + infoSignUp.getStatusTitle());
 		String contact = infoSignUp.getPersonContact();
@@ -245,6 +252,12 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 				info.getInfoSignUp().setHasExec("0");
 			}
 			break;
+			
+		case IntentString.RequestCode.INFOSIGNUP_TASKBYID:
+			if (IntentString.ResultCode.TASKBYID_INFOSIGNUP == resultCode) {
+				holder.btn_exec.setVisibility(View.GONE);
+				holder.txt_end.setVisibility(View.VISIBLE);
+			}
 
 		default:
 			break;

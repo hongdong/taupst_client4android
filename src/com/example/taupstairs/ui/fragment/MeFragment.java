@@ -39,7 +39,7 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
-import com.example.taupstairs.string.HomePageString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
@@ -278,7 +278,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put(Person.PERSON_ID, defaultPersonId);
 					map.put(Person.PERSON_NICKNAME, nickname);
-					context.localRefresh(HomePageString.UPDATA_NICKNAME, map);
+					context.localRefresh(NormalString.LocalRefresh.UPDATA_NICKNAME, map);
 					personService.updataPersonInfo(defaultPersonId, Person.PERSON_NICKNAME, nickname);
 				} else if (IntentString.ResultCode.UPDATAUSERDATABASE_MEFRAGMENT_SIGNATURE == resultCode) {
 					signature = data.getStringExtra(Person.PERSON_SIGNATURE);
@@ -352,7 +352,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put(Person.PERSON_ID, defaultPersonId);
 						map.put(Person.PERSON_PHOTOURL, fileName);
-						context.localRefresh(HomePageString.UPDATA_PHOTO, map);
+						context.localRefresh(NormalString.LocalRefresh.UPDATA_PHOTO, map);
 						personService.updataPersonInfo(defaultPersonId, Person.PERSON_PHOTOURL, fileName);
 					} else {
 						Toast.makeText(context, "网络竟然出错了", Toast.LENGTH_SHORT).show();

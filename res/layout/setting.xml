@@ -23,42 +23,50 @@
             android:textColor="@color/white"
             android:textSize="19sp" />
     </RelativeLayout>
-    <LinearLayout 
+     <ScrollView 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
-        <ListView 
-	        android:id="@+id/list_setting_user"
+	    android:layout_height="wrap_content">
+	    <LinearLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="15dp"
-	        android:cacheColorHint="#00000000"
-	        android:divider="@color/white_divider"
-	        android:dividerHeight="1dp"
-	        android:background="@drawable/common_list_bg">
-        
-    	</ListView>
-        <ListView 
-	        android:id="@+id/list_setting_soft"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="15dp"
-	        android:cacheColorHint="#00000000"
-	        android:divider="@color/white_divider"
-	        android:dividerHeight="1dp"
-	        android:background="@drawable/common_list_bg">
-        
-    	</ListView>
-    	<Button 
-	        android:id="@+id/btn_change_user"
-	        android:layout_width="match_parent" 
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="20dp"
-	        android:text="@string/change_user"
-	        android:textSize="18sp"
-	        android:textColor="@color/white"
-	        android:background="@drawable/login_bg_btn_login"/>
-    </LinearLayout>
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:orientation="vertical">
+	        <com.example.taupstairs.view.MyListView 
+		        android:id="@+id/list_setting_user"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="15dp"
+		        android:cacheColorHint="#00000000"
+		        android:divider="@color/white_divider"
+		        android:dividerHeight="1dp"
+		        android:background="@drawable/common_list_bg">
+	    	</com.example.taupstairs.view.MyListView>
+	    	
+	        <com.example.taupstairs.view.MyListView 
+		        android:id="@+id/list_setting_soft"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="15dp"
+		        android:cacheColorHint="#00000000"
+		        android:divider="@color/white_divider"
+		        android:dividerHeight="1dp"
+		        android:background="@drawable/common_list_bg">
+	    	</com.example.taupstairs.view.MyListView>
+	    	
+	    	<Button 
+		        android:id="@+id/btn_change_user"
+		        android:layout_width="match_parent" 
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="20dp"
+		        android:text="@string/change_user"
+		        android:textSize="18sp"
+		        android:textColor="@color/white"
+		        android:background="@drawable/login_bg_btn_login"/>
+	    	<TextView 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="20dp"/>
+    	</LinearLayout>
+    </ScrollView>
 </LinearLayout>

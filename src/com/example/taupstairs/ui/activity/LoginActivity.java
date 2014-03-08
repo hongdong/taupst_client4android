@@ -262,15 +262,9 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 	
 	private void beforeJump() {
-		User user = new User();
-		user.setUserId(userId);
-		user.setUserStudentId(studentId);
-		user.setUserPassword(password);
-		user.setUserCollegeId(collegeId);
-		user.setUserCollegeName(collegeName);
+		User user = new User(userId, collegeId, collegeName, studentId, password);
 		/*至关重要的一步，保存后下次会自动跳到主页面*/
 		SharedPreferencesUtil.saveDefaultUser(LoginActivity.this, user);
-		SharedPreferencesUtil.emptyLastestId(this);
 		InfoService infoService = new InfoService(this);
 		infoService.emptyInfoDb();
 		infoService.closeDBHelper();
@@ -283,7 +277,7 @@ public class LoginActivity extends Activity implements ItaActivity {
 		MySignUpStatusService mySignUpStatusService = new MySignUpStatusService(this);
 		mySignUpStatusService.emptyStatusDb();
 		mySignUpStatusService.closeDBHelper();
-		RankService rankService = new RankService(LoginActivity.this);
+		RankService rankService = new RankService(this);
 		rankService.emptyRankDb();
 		rankService.closeDBHelper();
 	}

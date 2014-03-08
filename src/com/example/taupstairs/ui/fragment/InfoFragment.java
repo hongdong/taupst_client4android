@@ -3,7 +3,6 @@ package com.example.taupstairs.ui.fragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
 import com.example.taupstairs.bean.Info;
@@ -23,13 +21,12 @@ import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.InfoService;
-import com.example.taupstairs.string.HomePageString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
 import com.example.taupstairs.ui.activity.InfoExecTaskActivity;
 import com.example.taupstairs.ui.activity.InfoMessageActivity;
 import com.example.taupstairs.ui.activity.InfoSignUpActivity;
-import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
@@ -81,12 +78,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	@Override
 	public void initData() {
 		isRefresh = false;
-		lastestInfoId = SharedPreferencesUtil.getLastestId(context, SharedPreferencesUtil.LASTEST_INFOID);
-		if (null == lastestInfoId) {
-			doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
-		} else {
-			doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
-		}
 		infoService = new InfoService(context);
 		currentInfos = infoService.getInfos();
 	}
@@ -98,6 +89,14 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		if (currentInfos != null) {
 			adapter = new InfoAdapter(context, currentInfos);
 			xlist_info.setAdapter(adapter);
+			lastestInfoId = currentInfos.get(0).getInfoId();
+			if (null == lastestInfoId) {	//上次数据库可能没保存好
+				doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
+			} else {
+				doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+			}
+		} else {
+			doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
 		}
 		xlist_info.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -147,7 +146,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	 */
 	public void localRefresh(int id, Map<String, Object> params) {
 		switch (id) {
-		case HomePageString.NEW_INFO:
+		case NormalString.LocalRefresh.NEW_INFO:
 			if (null == lastestInfoId) {
 				doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
 			} else {
@@ -241,8 +240,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 
 	@Override
 	public void exit() {
-		if (infoService != null && lastestInfoId != null) {
-			SharedPreferencesUtil.savaLastestId(context, SharedPreferencesUtil.LASTEST_INFOID, lastestInfoId);
+		if (infoService != null) {
 			infoService.emptyInfoDb();
 			infoService.insertInfos(currentInfos);
 			infoService.closeDBHelper();

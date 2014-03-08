@@ -43,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
 				db.execSQL(db_drop_sqls[i]);	//删除旧的表
 				db.execSQL(db_create_sqls[i]);	//创建新的表
 			}
+			initCollegeDB(db);	//刚创建完数据库，学校要放进去
 		}
 	}
 

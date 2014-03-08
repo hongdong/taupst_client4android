@@ -24,7 +24,7 @@ import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.StatusService;
-import com.example.taupstairs.string.HomePageString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.ui.activity.TaskDetailActivity;
 import com.example.taupstairs.util.TimeUtil;
@@ -135,7 +135,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 */
 	public void localRefresh(int id, Map<String, Object> params) {
 		switch (id) {
-		case HomePageString.UPDATA_PHOTO:
+		case NormalString.LocalRefresh.UPDATA_PHOTO:
 			String personId_p = (String) params.get(Person.PERSON_ID);
 			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
 			for (Status status : currentStatus) {
@@ -145,7 +145,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			}
 			adapter.notifyDataSetChanged();
 			break;
-		case HomePageString.UPDATA_NICKNAME:
+		case NormalString.LocalRefresh.UPDATA_NICKNAME:
 			String personId_n = (String) params.get(Person.PERSON_ID);
 			String personNickname = (String) params.get(Person.PERSON_NICKNAME);
 			for (Status status : currentStatus) {
@@ -156,7 +156,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			adapter.notifyDataSetChanged();
 			break;
 			
-		case HomePageString.RELEASE_STATUS_SUCCESS:
+		case NormalString.LocalRefresh.RELEASE_STATUS_SUCCESS:
 			Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
 			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
 			break;

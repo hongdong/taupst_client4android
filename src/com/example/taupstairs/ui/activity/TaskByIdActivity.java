@@ -57,6 +57,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	private String messageId, replyId, replyNickname;
 	private ProgressDialog progressDialog;
 	private boolean flag_my_task, flag_end, flag_expired;
+	private boolean flag_go_end;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -117,7 +118,7 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 	}
 	
 	private void initData() {
-		flag_my_task = false;
+		flag_go_end = false;		//是否去完结掉了自己的任务
 		now = TimeUtil.getNow();
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
 		doGetTaskDetailTask();
@@ -133,14 +134,16 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
+				if (flag_go_end) {		//按左上角返回按钮，要看看是不是完结了自己的任务
+					Intent intent = new Intent();
+					setResult(IntentString.ResultCode.TASKBYID_INFOSIGNUP, intent);
+				}
 				finish();
 			}
 		});
 		
 		btn_multi.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				if (flag_my_task) {
 					if (flag_end) {
@@ -148,15 +151,15 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 					} else {
 						//弹框提示是否真的要完结
 						AlertDialog.Builder builder = new AlertDialog.Builder(TaskByIdActivity.this);
-						builder.setTitle("任务完结后其它童鞋将不可报名\n确定要完结吗？")
+						builder.setTitle("提醒")
+						.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-							@Override
 							public void onClick(DialogInterface dialog, int which) {
+								flag_go_end = true;
 								doEndTaskTask();
 							}
 						})
 						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								//销毁对话框，什么都不做
 							}
@@ -539,6 +542,15 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if (flag_go_end) {		//按手机返回键，要看看是不是完结了自己的任务
+			Intent intent = new Intent();
+			setResult(IntentString.ResultCode.TASKBYID_INFOSIGNUP, intent);
+		}
+		super.onBackPressed();
 	}
 	
 	@Override

@@ -54,7 +54,16 @@ public class VersionFeatureActivity extends Activity implements ItaActivity {
 		version_feature.append("<p><strong>2. 版本功能</strong></p>");
 		version_feature.append("<p>2.1</p>");
 		version_feature.append("<p>用户可进行任务的发布，报名任务，留言，以及其他一些相关设置。</p>");
-		version_feature.append("</body></html>");
+		version_feature.append("<p>2.2</p>");
+		version_feature.append("<p>消息页面有4类消息，分别是：有人留言、有人报名、选你执行、评价了你。</p>");
+		version_feature.append("<p>2.3</p>");
+		version_feature.append("<p>用户可自由发布任务，有人报名后可选择任意个报名人执行你的任务。");
+		version_feature.append("任务过期或完结任务后别人将不可报名你的任务。同时完结任务后可对执行者进行评价和给赞。");
+		version_feature.append("对于别人发布的任务，用户在可报名的情况下只能报名一次。报名后流程同上。</p>");
+		version_feature.append("<p>2.4</p>");
+		version_feature.append("<p>用户可随意对任务进行留言，可回复任务发布人也可以是留言列表里的任何人。</p>");
+		version_feature.append("<p>2.5</p>");
+		version_feature.append("<p>排行页面只显示当前排名的1到20名。敢快报名任务得到更多的赞吧！！！</p>");
 		
 		version_feature.append("<p><strong>3. 关于点赞</strong></p>");
 		version_feature.append("<p>3.1</p>");

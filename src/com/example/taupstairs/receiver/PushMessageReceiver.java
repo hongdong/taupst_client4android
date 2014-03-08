@@ -9,6 +9,7 @@ import android.content.Intent;
 import com.baidu.android.pushservice.PushConstants;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.MainService;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 
 /**
@@ -26,7 +27,7 @@ public class PushMessageReceiver extends BroadcastReceiver {
 	public void onReceive(final Context context, Intent intent) {
 		if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
 			Intent updataInfoIntent = new Intent();
-			updataInfoIntent.setAction("com.example.taupstairs.UPDATA_INFO");
+			updataInfoIntent.setAction(NormalString.Receiver.NEW_INFO);
 			context.sendBroadcast(updataInfoIntent);
 		} else if (intent.getAction().equals(PushConstants.ACTION_RECEIVE)) {
 			//处理绑定等方法的返回数据

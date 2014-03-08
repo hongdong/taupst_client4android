@@ -31,73 +31,84 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/btn_ok_bg" />
     </RelativeLayout> 
-    <LinearLayout 
+    <ScrollView 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="@string/real_data"
-            android:textSize="15sp"
-            android:textColor="@color/black"/> 
-        <ListView 
-	        android:id="@+id/list_updata_userdata_real"
+	    android:layout_height="wrap_content">  
+	    <LinearLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp"
-	        android:cacheColorHint="#00000000"
-	        android:divider="@color/white_divider"
-	        android:dividerHeight="1dp"
-	        android:background="@drawable/common_list_bg">     
-		</ListView>   
-		<RelativeLayout 
-		    android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-		    <TextView 
+	        android:orientation="vertical"
+	        android:layout_marginTop="15dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp">
+	        <TextView 
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_centerVertical="true"
 	            android:paddingLeft="10dp"
-	            android:text="@string/real_data_permission"
+	            android:text="@string/real_data"
+	            android:textSize="15sp"
+	            android:textColor="@color/black"/> 
+	        <com.example.taupstairs.view.MyListView 
+		        android:id="@+id/list_updata_userdata_real"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:cacheColorHint="#00000000"
+		        android:divider="@color/white_divider"
+		        android:dividerHeight="1dp"
+		        android:background="@drawable/common_list_bg">     
+			</com.example.taupstairs.view.MyListView>   
+			<RelativeLayout 
+			    android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp">
+			    <TextView 
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerVertical="true"
+		            android:paddingLeft="10dp"
+		            android:text="@string/real_data_permission"
+		            android:textSize="15sp"
+		            android:textColor="@color/red"/> 
+		        <RadioGroup 
+		            android:id="@+id/rg_updata_userdata_real"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_centerVertical="true"
+				    android:layout_alignParentRight="true"
+				    android:orientation="horizontal">
+		            <RadioButton 
+				        android:id="@+id/btn_real_data_public"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="@string/real_data_public"
+				        android:textColor="@color/blue"
+				        android:textSize="14sp"/>
+				    <RadioButton 
+				        android:id="@+id/btn_real_data_hide"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:text="@string/real_data_hide"
+				        android:textColor="@color/blue"
+				        android:textSize="14sp"/>
+		        </RadioGroup>
+			</RelativeLayout>
+			<TextView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp"
+	            android:paddingLeft="10dp"
+	            android:text="@string/real_data_declare"
 	            android:textSize="15sp"
 	            android:textColor="@color/red"/> 
-	        <RadioGroup 
-	            android:id="@+id/rg_updata_userdata_real"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_centerVertical="true"
-			    android:layout_alignParentRight="true"
-			    android:orientation="horizontal">
-	            <RadioButton 
-			        android:id="@+id/btn_real_data_public"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:text="@string/real_data_public"
-			        android:textColor="@color/blue"
-			        android:textSize="14sp"/>
-			    <RadioButton 
-			        android:id="@+id/btn_real_data_hide"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:layout_marginLeft="10dp"
-			        android:text="@string/real_data_hide"
-			        android:textColor="@color/blue"
-			        android:textSize="14sp"/>
-	        </RadioGroup>
-		</RelativeLayout>
-		<TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="10dp"
-            android:text="@string/real_data_declare"
-            android:textSize="15sp"
-            android:textColor="@color/red"/> 
-    </LinearLayout>
+	            
+			<TextView 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="20dp"/>
+			
+	    </LinearLayout>
+	    
+    </ScrollView>
 </LinearLayout>

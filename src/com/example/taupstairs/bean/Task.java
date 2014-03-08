@@ -26,6 +26,7 @@ public class Task {
 	public static final String TA_LOGIN_TASKPARAMS = "login";
 	public static final String TA_LOGIN_ACTIVITY = "LoginActivity";
 	public static final String TA_LOGIN_CAPTCHA = "captcha";
+	public static final String TA_LOGIN_ISEXIST = "isExist";
 	
 	//检测网络
 	public static final int TA_CHECKNET = 2;

@@ -69,9 +69,13 @@ public class DoTaskService {
 		String collegeId = (String) taskParams.get(User.USER_COLLEGEID);
 		String studentId = (String) taskParams.get(User.USER_STUDENTID);
 		String password = (String) taskParams.get(User.USER_PASSWORD);
+		String isEixst = (String) taskParams.get(Task.TA_LOGIN_ISEXIST);
 		String captcha = (String) taskParams.get(Task.TA_LOGIN_CAPTCHA);
 		String login_url = HttpClientUtil.BASE_URL + "data/user/login?student_id=" + studentId 
 				+ "&pwd=" + password + "&school=" + collegeId;
+		if (isEixst != null) {
+			login_url += "&issysn=" + isEixst;
+		}
 		if (captcha != null) {
 			login_url += "&code=" + captcha;
 		}

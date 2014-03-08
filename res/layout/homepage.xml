@@ -20,15 +20,15 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="15dp"
 		        android:button="@null"
-		        android:background="@drawable/hp_bg_btn_info"
-		        android:checked="true"/>
+		        android:background="@drawable/hp_bg_btn_info"/>
 		    <RadioButton 
 		        android:id="@+id/btn_task"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="15dp"
 		        android:button="@null"
-		        android:background="@drawable/hp_bg_btn_task"/>
+		        android:background="@drawable/hp_bg_btn_task"
+		        android:checked="true"/>
 		    <RadioButton 
 		        android:id="@+id/btn_rank"
 		        android:layout_width="wrap_content"

@@ -25,6 +25,7 @@
         <item >00022</item>
         <item >00023</item>
         <item >00024</item>
+        <item >00025</item>
     </string-array>
     <string-array name="college_name">
         <item >厦门大学</item>
@@ -51,5 +52,6 @@
         <item >龙岩学院</item>
         <item >莆田学院</item>
         <item >福建华南女子学院</item>
+        <item >福建对外经济贸易学院</item>
     </string-array>
 </resources>
