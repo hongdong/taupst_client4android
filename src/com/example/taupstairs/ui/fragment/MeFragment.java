@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -31,7 +29,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.PersonVariableDataAdapter;
 import com.example.taupstairs.bean.Person;
@@ -39,9 +36,9 @@ import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
-import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.MyReleaseStatusActivity;
 import com.example.taupstairs.ui.activity.MySignUpStatusActivity;
@@ -66,7 +63,7 @@ public class MeFragment extends Fragment implements ItaFragment {
 	
 	private Bitmap userPhoto;
 	private String nickname, signature;
-	private static final String IMAGE_FILE_NAME = "userPhoto.jpg";
+	private static final String IMAGE_FILE_NAME = "userPhoto.png";
 	private static String[] items = new String[] { "选择本地图片", "拍照" };
 	private String fileName;
 	private ProgressDialog progressDialog;
@@ -194,14 +191,16 @@ public class MeFragment extends Fragment implements ItaFragment {
 					startActivityForResult(intentFromGallery, IntentString.RequestCode.IMAGE_REQUEST_CODE);
 					break;
 				case 1:
-					Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					// 判断存储卡是否可以用，可用进行存储
-					if (SdCardUtil.hasSdcard()) {
-						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
-								Uri.fromFile(new File(Environment.getExternalStorageDirectory(), 
-										IMAGE_FILE_NAME)));
+					if (!SdCardUtil.hasSdcard()) {  
+						Toast.makeText(context, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show(); 
+		            } else { 
+		                File fileName = new File(
+		                		Environment.getExternalStorageDirectory().getAbsolutePath(), IMAGE_FILE_NAME);  
+		                Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileName));
+						startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
 					}
-					startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
 					break;
 				}
 			}
@@ -253,11 +252,8 @@ public class MeFragment extends Fragment implements ItaFragment {
 			case IntentString.RequestCode.CAMERA_REQUEST_CODE:
 				if (SdCardUtil.hasSdcard()) {
 					File tempFile = new File(
-							Environment.getExternalStorageDirectory() + "/" + IMAGE_FILE_NAME);
+							Environment.getExternalStorageDirectory().getAbsolutePath(), IMAGE_FILE_NAME);
 					startPhotoZoom(Uri.fromFile(tempFile));
-				} else {
-					Toast.makeText(context, "未找到存储卡，无法存储照片！",
-							Toast.LENGTH_LONG).show();
 				}
 				break;
 			case IntentString.RequestCode.PHOTO_REQUEST_CODE:

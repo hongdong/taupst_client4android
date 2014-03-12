@@ -21,6 +21,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
+import com.example.taupstairs.listener.LargrPhotoListener;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.services.PersonService;
@@ -149,9 +150,9 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	}
 	
 	private void displayPersonVariable(Person person) {
-		
 		SimpleImageLoader.showImage(holder.img_photo, 
-				HttpClientUtil.PHOTO_BASE_URL + "l" + person.getPersonPhotoUrl());
+				HttpClientUtil.PHOTO_BASE_URL + person.getPersonPhotoUrl());
+		holder.img_photo.setOnClickListener(new LargrPhotoListener(this, person.getPersonPhotoUrl()));
 		holder.txt_nickname.setText(person.getPersonNickname());
 		holder.txt_praise.setText(person.getPersonPraise() + "  ");
 		holder.txt_signature.setText(person.getPersonSignature());

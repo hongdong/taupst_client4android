@@ -7,9 +7,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import org.json.JSONObject;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,7 +22,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.util.SdCardUtil;
@@ -144,14 +141,13 @@ public class UpdataManager {
                 builder.setTitle("提示");  
                 builder.setMessage("当前设备无SD卡，数据无法下载");  
                 builder.setPositiveButton("确定", new OnClickListener() {   
-                    @Override
 					public void onClick(DialogInterface dialog, int which) {  
                         dialog.dismiss();  
                     }  
                 });  
-                builder.show();  
+                builder.create().show();  
                 return;  
-            }else{  
+            } else {  
                 try {  
                     //服务器上新版apk地址  
                     URL url = new URL(downloadUrl);  

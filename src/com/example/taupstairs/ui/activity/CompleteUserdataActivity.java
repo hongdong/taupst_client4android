@@ -38,7 +38,7 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 	private ImageView img_userphoto;
 	private EditText edit_nickname, edit_signatrue, edit_qq, edit_email, edit_phone;
 	private String userId, photo, nickname, signatrue, qq, email, phone;
-	private static final String IMAGE_FILE_NAME = "userPhoto.jpg";
+	private static final String IMAGE_FILE_NAME = "userPhoto.png";
 	private static String[] items = new String[] { "选择本地图片", "拍照" };
 	private boolean flag_img;
 	private Bitmap userPhoto;
@@ -107,14 +107,17 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 					startActivityForResult(intentFromGallery, IntentString.RequestCode.IMAGE_REQUEST_CODE);
 					break;
 				case 1:
-					Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					// 判断存储卡是否可以用，可用进行存储
 					if (SdCardUtil.hasSdcard()) {
-						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
-								Uri.fromFile(new File(Environment.getExternalStorageDirectory(), 
-										IMAGE_FILE_NAME)));
+						File fileName = new File(
+		                		Environment.getExternalStorageDirectory().getAbsolutePath(), IMAGE_FILE_NAME);
+						Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, fileName);
+						startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
+					} else {
+						Toast.makeText(CompleteUserdataActivity.this, "未找到存储卡，无法存储照片！",
+								Toast.LENGTH_LONG).show();
 					}
-					startActivityForResult(intentFromCapture, IntentString.RequestCode.CAMERA_REQUEST_CODE);
 					break;
 				}
 			}
@@ -233,11 +236,8 @@ public class CompleteUserdataActivity extends Activity implements ItaActivity {
 			case IntentString.RequestCode.CAMERA_REQUEST_CODE:
 				if (SdCardUtil.hasSdcard()) {
 					File tempFile = new File(
-							Environment.getExternalStorageDirectory() + "/" + IMAGE_FILE_NAME);
+							Environment.getExternalStorageDirectory().getAbsolutePath(), IMAGE_FILE_NAME);
 					startPhotoZoom(Uri.fromFile(tempFile));
-				} else {
-					Toast.makeText(CompleteUserdataActivity.this, "未找到存储卡，无法存储照片！",
-							Toast.LENGTH_LONG).show();
 				}
 				break;
 			case IntentString.RequestCode.PHOTO_REQUEST_CODE:

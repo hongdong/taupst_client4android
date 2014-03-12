@@ -176,7 +176,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	}
 	
 	private void refreshInfo(int mode, List<Info> newInfos) {
-		if (newInfos != null) {
+		if (newInfos != null && newInfos.size() > 0) {
 			switch (mode) {
 			case Task.TA_GETINFO_MODE_FIRSTTIME:
 				LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_no_info);

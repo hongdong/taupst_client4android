@@ -141,13 +141,15 @@ public class RankFragment extends Fragment implements ItaFragment {
 		switch (taskId) {
 		case Task.TA_GETRANK:
 			ranks = (List<Rank>) params[1];
-			if (ranks != null) {
+			if (ranks != null && ranks.size() > 0) {
 				adapter = new RankAdapter(context, ranks);
 				xlist_rank.setAdapter(adapter);
 				xlist_rank.stopRefresh();
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				xlist_rank.setRefreshTime(lastestUpdata);
 				hasRefresh = true;
+			} else {
+				xlist_rank.stopRefresh();
 			}
 			break;
 

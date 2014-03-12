@@ -186,7 +186,7 @@ public class TaskFragment extends Fragment implements ItaFragment {
 	 * 刷新列表
 	 */
 	private void refreshList(int mode, List<Status> newStatus) {
-		if (newStatus != null) {
+		if (newStatus != null && newStatus.size() > 0) {
 			switch (mode) {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;

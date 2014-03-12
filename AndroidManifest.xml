@@ -144,6 +144,10 @@
         <activity 
             android:name=".ui.activity.FeedbackActivity"
             android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.LargePhotoActivity"
+            android:theme="@style/LargePhoto"
+            android:screenOrientation="portrait"></activity>
         
         <service android:name=".logic.MainService"></service>
         
