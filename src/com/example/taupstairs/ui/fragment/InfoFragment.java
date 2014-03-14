@@ -99,21 +99,21 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
 		}
 		xlist_info.setOnItemClickListener(new OnItemClickListener() {
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentInfos.size() >= arg2) {
-					clickPosition = arg2 - 1;
 					int type = Integer.parseInt(currentInfos.get(clickPosition).getInfoType());
-					TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
-					app.setInfo(currentInfos.get(clickPosition));
-					Intent intent = new Intent(context, infoDetail[type - 1]);
-					startActivity(intent);
+					if (type <= infoDetail.length) {
+						clickPosition = arg2 - 1;
+						TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+						app.setInfo(currentInfos.get(clickPosition));
+						Intent intent = new Intent(context, infoDetail[type - 1]);
+						startActivity(intent);
+					}
 				}
 			}
 		});
 		xlist_info.setXListViewListener(new IXListViewListener() {
-			@Override
 			public void onRefresh() {
 				if (null == lastestInfoId) {
 					doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
@@ -121,8 +121,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 					doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
 				}
 			}
-			
-			@Override
 			public void onLoadMore() {
 				doGetInfoTask(Task.TA_GETINFO_MODE_LOADMORE, oldestInfoId);
 			}

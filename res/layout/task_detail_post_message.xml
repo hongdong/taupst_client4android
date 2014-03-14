@@ -15,6 +15,14 @@
  		android:layout_height="wrap_content"
  		android:layout_marginTop="5dp"
  		android:layout_marginBottom="5dp">
+ 		<ImageView
+ 		    android:id="@+id/img_task_detail_expression"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:layout_marginLeft="10dp"
+        	android:layout_centerVertical="true"
+        	android:src="@drawable/expression_n"
+        	android:contentDescription="@string/hello_world"/>
  		<Button 
 			android:id="@+id/btn_task_detail_message"
 			android:layout_width="wrap_content" 
@@ -32,15 +40,65 @@
             android:id="@+id/edit_task_detail_message"
             android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="10dp"
+			android:layout_marginLeft="5dp"
 			android:layout_marginRight="5dp"
-			android:layout_alignParentLeft="true"
 			android:layout_toLeftOf="@id/btn_task_detail_message"
-			android:maxLines="5"
-			android:maxLength="50"
+			android:layout_toRightOf="@id/img_task_detail_expression"
+			android:maxLines="3"
 			android:textSize="16sp"
 			android:hint="@string/say_a_little"
 			android:textColorHint="@color/gray"
-			android:background="@drawable/edit_42"/>
+			android:background="@drawable/edit_52"
+			android:clickable="true"/>
     </RelativeLayout>
+    <ImageView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:src="@color/task_detail_img"
+	    android:contentDescription="@string/hello_world"/>
+    <LinearLayout 
+        android:id="@+id/layout_expression"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:visibility="gone">
+        <GridView 
+	        android:id="@+id/grid_expression"
+	        android:layout_width="match_parent" 
+			android:layout_height="200dp"
+			android:numColumns="7"
+			android:gravity="center"
+			android:listSelector="@color/transparent"
+			android:background="@color/white">
+    	</GridView>
+    	<ImageView 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:src="@color/task_detail_img"
+		    android:contentDescription="@string/hello_world"/>
+    	<RelativeLayout 
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content">  
+    	    <ImageView 
+    	        android:id="@+id/img_expression_delete"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:padding="8dp"
+			    android:layout_alignParentRight="true"
+			    android:src="@drawable/delete"
+			    android:clickable="true"
+			    android:background="@drawable/delete_bg"
+			    android:contentDescription="@string/hello_world"/>
+    	    <TextView 
+	    	    android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:layout_alignParentLeft="true"
+    	        android:layout_toLeftOf="@id/img_expression_delete"
+    	        android:layout_centerInParent="true"
+    	        android:gravity="center"
+		    	android:text="@string/default_exp"
+		    	android:textColor="@color/black"
+		    	android:textSize="16sp"/>
+    	</RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

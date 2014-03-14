@@ -3,6 +3,9 @@ package com.example.taupstairs.ui.activity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -29,6 +32,7 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
 import com.example.taupstairs.logic.ItaActivity;
+import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.SdCardUtil;
 
@@ -94,25 +98,51 @@ public class LargePhotoActivity extends Activity implements ItaActivity {
 			}
 		});
 		
-		//开一个线程下载大图
-		new Thread() {
-			public void run() {
-				try {
-					HttpGet get = new HttpGet(HttpClientUtil.PHOTO_BASE_URL + "l" + photoUrl);
-					HttpClient httpClient = new DefaultHttpClient();
-					HttpResponse response = httpClient.execute(get);
-					if (200 == response.getStatusLine().getStatusCode()) {
-						InputStream is = response.getEntity().getContent();
-						drawable = Drawable.createFromStream(is, null);
-						handler.sendEmptyMessage(DOWNLOAD_SUCCESS);
-					} else {
-						handler.sendEmptyMessage(DOWNLOAD_ERROR);
-					}
-				} catch (Exception e) {
-					handler.sendEmptyMessage(DOWNLOAD_ERROR);
+		boolean cache = false;
+		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
+		Map<String, SoftReference<Drawable>> map = app.getMap();
+		if (map != null) {
+			SoftReference<Drawable> reference = null;
+			synchronized (this) {
+				reference = map.get(photoUrl);
+			}
+			if (reference != null) {
+				drawable = reference.get();
+				if (drawable != null) {
+					cache = true;
+					progressBar.setVisibility(View.GONE);
+					imageView.setImageDrawable(drawable);
+					registerForContextMenu(imageView);
 				}
 			}
-		}.start();
+		}
+		if (!cache) {
+			new Thread() {
+				public void run() {
+					try {
+						HttpGet get = new HttpGet(HttpClientUtil.PHOTO_BASE_URL + "l" + photoUrl);
+						HttpClient httpClient = new DefaultHttpClient();
+						HttpResponse response = httpClient.execute(get);
+						if (200 == response.getStatusLine().getStatusCode()) {
+							InputStream is = response.getEntity().getContent();
+							drawable = Drawable.createFromStream(is, null);
+							
+							Map<String, SoftReference<Drawable>> map = 
+									new HashMap<String, SoftReference<Drawable>>();
+							map.put(photoUrl, new SoftReference<Drawable>(drawable));
+							TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
+							app.setMap(map);
+							
+							handler.sendEmptyMessage(DOWNLOAD_SUCCESS);
+						} else {
+							handler.sendEmptyMessage(DOWNLOAD_ERROR);
+						}
+					} catch (Exception e) {
+						handler.sendEmptyMessage(DOWNLOAD_ERROR);
+					}
+				}
+			}.start();
+		}
 	}
 	
 	@Override

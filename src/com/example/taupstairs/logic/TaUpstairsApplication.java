@@ -1,7 +1,11 @@
 package com.example.taupstairs.logic;
 
+import java.lang.ref.SoftReference;
+import java.util.Map;
+
 import android.app.Application;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import com.baidu.frontia.FrontiaApplication;
 import com.example.taupstairs.bean.Info;
@@ -16,6 +20,7 @@ public class TaUpstairsApplication extends Application {
 	private Status status;
 	private Info info;
 	private SignUp signUp;
+	private Map<String, SoftReference<Drawable>> map;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -31,7 +36,6 @@ public class TaUpstairsApplication extends Application {
 	public Status getStatus() {
 		return status;
 	}
-	
 	public void setStatus(Status status) {
 		this.status = status;
 	}
@@ -39,7 +43,6 @@ public class TaUpstairsApplication extends Application {
 	public Info getInfo() {
 		return info;
 	}
-	
 	public void setInfo(Info info) {
 		this.info = info;
 	}
@@ -47,9 +50,15 @@ public class TaUpstairsApplication extends Application {
 	public SignUp getSignUp() {
 		return signUp;
 	}
-
 	public void setSignUp(SignUp signUp) {
 		this.signUp = signUp;
+	}
+
+	public Map<String, SoftReference<Drawable>> getMap() {
+		return map;
+	}
+	public void setMap(Map<String, SoftReference<Drawable>> map) {
+		this.map = map;
 	}
 	
 }

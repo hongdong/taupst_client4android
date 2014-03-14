@@ -1,5 +1,6 @@
 package com.example.taupstairs.ui.activity;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +12,24 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.taupstairs.R;
@@ -46,6 +57,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 
 	private Button btn_back, btn_multi, btn_message;
 	private TextView txt_expired, txt_end, txt_multi;
+	private ImageView img_expression, img_expression_delete;
+	private LinearLayout expLayout;
+	private GridView grid_expression;
 	private Status status;
 	private Holder holder;
 	private Time now;
@@ -55,10 +69,12 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	private String edit_text;
 	private String messageId, replyId, replyNickname;
 	private ProgressDialog progressDialog;
-	private boolean flag_message_or_signup, flag_my_task, flag_expired, flag_end;
+	private boolean flag_message_or_signup;
+	private boolean flag_my_task, flag_expired, flag_end;
+	private boolean flag_expression;
+	private int[] imageIds = new int[105];
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.task_detail);
 		MainService.addActivity(TaskDetailActivity.this);
@@ -93,6 +109,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		}
 		
 		flag_message_or_signup = false;
+		flag_expression = true;
 	}
 	
 	/*头像，昵称，性别，发布时间，来自哪个院系、年级，
@@ -120,6 +137,10 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		txt_end = (TextView)findViewById(R.id.txt_task_detail_end);
 		txt_multi = (TextView)findViewById(R.id.txt_task_detail_multi);
 		btn_multi = (Button)findViewById(R.id.btn_task_detail_signup);
+		img_expression = (ImageView)findViewById(R.id.img_task_detail_expression);
+		img_expression_delete = (ImageView)findViewById(R.id.img_expression_delete);
+		expLayout = (LinearLayout)findViewById(R.id.layout_expression);
+		grid_expression = (GridView)findViewById(R.id.grid_expression);
 		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
 		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
 		progressDialog = new ProgressDialog(this);
@@ -145,96 +166,81 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 					HttpClientUtil.PHOTO_BASE_URL + status.getPersonPhotoUrl());
 		PersonDataListener personDataListener = 
 				new PersonDataListener(this, status.getPersonId(), Person.PERMISSION_HIDE);
-		holder.img_task_detail_photo.setOnClickListener(personDataListener);
-		
-		holder.txt_task_detail_nickname.setText(status.getPersonNickname());
-		
+		holder.img_task_detail_photo.setOnClickListener(personDataListener);	
+		holder.txt_task_detail_nickname.setText(status.getPersonNickname());	
 		String personSex = status.getPersonSex().trim();
 		if (personSex.equals(Person.MALE)) {
 			holder.img_task_detail_sex.setImageResource(R.drawable.icon_male);
 		} else if (personSex.equals(Person.FEMALE)) {
 			holder.img_task_detail_sex.setImageResource(R.drawable.icon_female);
-		}
-		
+		}	
 		String displayTime = TimeUtil.getDisplayTime(now, status.getStatusReleaseTime());
-		holder.txt_task_detail_releasetime.setText(displayTime);
-		
+		holder.txt_task_detail_releasetime.setText(displayTime);	
 		holder.txt_task_detail_grade.setText(status.getPersonGrade());
 		holder.txt_task_detail_department.setText(status.getPersonDepartment());
 		holder.txt_task_detail_title.setText(status.getStatusTitle());
 		holder.txt_task_detail_content.setText(status.getStatusContent());
 		holder.txt_task_detail_rewards.setText(status.getStatusRewards());
-		
 		String endTime = TimeUtil.getDisplayTime(now, status.getStatusEndTime());
-		holder.txt_task_detail_endtime.setText(endTime);
-		
+		holder.txt_task_detail_endtime.setText(endTime);	
 		holder.txt_task_detail_signupcount.setText(status.getStatusSignUpCount());
 		String messageCount = status.getStatusMessageCount();
 		holder.txt_task_detail_messagecount.setText(messageCount);
 		
+		createExpressionGridView();
 		showProgressBar();	//显示加载留言的进度条
-		
-		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (flag_message_or_signup) {
-					Intent intent = new Intent();
-					setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
-				}
-				finish();
-			}
-		});
-		
-		btn_multi.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (flag_my_task) {
-					if (flag_end) {
-						jumpToEndTask();
-					} else {
-						//弹框提示是否真的要完结
-						AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailActivity.this);
-						builder.setTitle("提醒")
-						.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
-						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								doEndTaskTask();
-							}
-						})
-						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								//销毁对话框，什么都不做
-							}
-						})
-						.create()
-						.show();
-					}
+		MyOnClickListener listener = new MyOnClickListener();
+		btn_back.setOnClickListener(listener);
+		btn_multi.setOnClickListener(listener);
+		img_expression.setOnClickListener(listener);
+		img_expression_delete.setOnClickListener(listener);
+		edit_message.setOnClickListener(listener);
+		btn_message.setOnClickListener(listener);	
+		grid_expression.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageIds[arg2]);
+				Bitmap smallBitmap = Bitmap.createScaledBitmap(bitmap, 40, 40, true);
+				ImageSpan imageSpan = new ImageSpan(TaskDetailActivity.this, smallBitmap);
+				String str;
+				if (arg2 < 10){
+					str = "[fac00" + arg2;
+				} else if (arg2 < 100){
+					str = "[fac0" + arg2;
 				} else {
-					Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
-					intent.putExtra(Task.TA_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
-					intent.putExtra(Status.STATUS_ID, status.getStatusId());
-					intent.putExtra(Status.PERSON_ID, status.getPersonId());
-					startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
+					str = "[fac" + arg2;
 				}
+				SpannableString spannableString = new SpannableString(str);
+				spannableString.setSpan(imageSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				int selectionStart = edit_message.getSelectionStart();
+				edit_message.getText().insert(selectionStart, spannableString);
 			}
 		});
-		
-		btn_message.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (edit_message.getText().toString().trim().equals("")) {
-					
-				} else {
-					showProgressDialog();
-					doMessageTask();
-				}
-			}
-		});
-		
 		doCheckStatusTask();
 		doGetMessageTask();
+	}
+	
+	/**
+	 * 初始化表情
+	 */
+	private void createExpressionGridView() {
+		List<Map<String,Object>> listItems = new ArrayList<Map<String,Object>>();
+		for(int i = 0; i < 105; i++){
+			try {
+				Field field = R.drawable.class.getDeclaredField("smiley_" + i);
+				int resourceId = Integer.parseInt(field.get(null).toString());
+				imageIds[i] = resourceId;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	        Map<String,Object> listItem = new HashMap<String,Object>();
+			listItem.put("image", imageIds[i]);
+			listItems.add(listItem);
+		}
+		
+		SimpleAdapter simpleAdapter = new SimpleAdapter(this, listItems, R.layout.expression_cell, 
+				new String[]{"image"}, new int[] {R.id.img_expression_cell});
+		grid_expression.setAdapter(simpleAdapter);
 	}
 	
 	private void showProgressBar() {
@@ -386,6 +392,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 						postMessage(newMessageId);	
 						replyId = null;
 						KeyBoardUtil.dismiss(this, edit_message);
+						expLayout.setVisibility(View.GONE);
 					} else {		
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 					}
@@ -531,21 +538,117 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		default:
 			break;
 		}
-	}
+	} 
 	
 	@Override
 	public void onBackPressed() {
-		if (flag_message_or_signup) {
-			Intent intent = new Intent();
-			setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
+		if (expLayout.isShown()) {	//如果显示着表情的时候，先把表情布局取消掉
+			expLayout.setVisibility(View.GONE);
+		} else {
+			if (flag_message_or_signup) {
+				Intent intent = new Intent();
+				setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
+			}
+			super.onBackPressed();
 		}
-		super.onBackPressed();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(TaskDetailActivity.this);
+	}
+	
+	class MyOnClickListener implements OnClickListener {
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.btn_back_task_detail:
+				if (flag_message_or_signup) {
+					Intent intent = new Intent();
+					setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
+				}
+				finish();
+				break;
+
+			case R.id.btn_task_detail_signup:
+				if (flag_my_task) {
+					if (flag_end) {
+						jumpToEndTask();
+					} else {
+						//弹框提示是否真的要完结
+						AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailActivity.this);
+						builder.setTitle("提醒")
+						.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								doEndTaskTask();
+							}
+						})
+						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								//销毁对话框，什么都不做
+							}
+						})
+						.create()
+						.show();
+					}
+				} else {
+					Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
+					intent.putExtra(Task.TA_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
+					intent.putExtra(Status.STATUS_ID, status.getStatusId());
+					intent.putExtra(Status.PERSON_ID, status.getPersonId());
+					startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
+				}
+				break;
+				
+			case R.id.img_task_detail_expression:
+				if (flag_expression) {
+					img_expression.setImageResource(R.drawable.expression_p);
+					KeyBoardUtil.dismiss(TaskDetailActivity.this, edit_message);
+					expLayout.setVisibility(View.VISIBLE);
+				} else {
+					img_expression.setImageResource(R.drawable.expression_n);
+					KeyBoardUtil.show(TaskDetailActivity.this, edit_message);
+					expLayout.setVisibility(View.GONE);
+				}
+				flag_expression = !flag_expression;
+				break;
+				
+			case R.id.edit_task_detail_message:
+				img_expression.setImageResource(R.drawable.expression_n);
+				expLayout.setVisibility(View.GONE);
+				break;
+				
+			case R.id.btn_task_detail_message:
+				if (!edit_message.getText().toString().trim().equals("")) {
+					showProgressDialog();
+					doMessageTask();
+				}
+				break;
+				
+			case R.id.img_expression_delete:
+				int selectionStart = edit_message.getSelectionStart();// 获取光标的位置
+				if (selectionStart > 0) {
+				    String body = edit_message.getText().toString();
+				    if (!TextUtils.isEmpty(body)) {
+				    	String tempStr = body.substring(0, selectionStart);
+				    	int i = tempStr.lastIndexOf("[");// 获取最后一个表情的位置
+				    	if (i != -1) {
+				    		CharSequence cs = tempStr.subSequence(i, selectionStart - 3);
+				    		if (cs.equals("[fac")) {// 判断是否是一个表情
+				    			edit_message.getEditableText().delete(i, selectionStart);
+				    			return;
+				    		}
+				    	}
+				    	edit_message.getEditableText().delete(selectionStart - 1, selectionStart);
+				    }
+				}
+				break;
+				
+			default:
+				break;
+			}
+		}
 	}
 	
 }

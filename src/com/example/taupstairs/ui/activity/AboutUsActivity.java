@@ -49,7 +49,7 @@ public class AboutUsActivity extends Activity implements ItaActivity {
 		about_us.append("邮箱地址为：taupst@126.com。</p>");
 		
 		about_us.append("<p>2.4</p>");
-		about_us.append("<p>有兴趣的用户可加入我们的qq群进行讨论，qq群号为：24527732。</p>");
+		about_us.append("<p>有兴趣的用户可加入我们的qq群进行讨论，qq群号为：245927732。</p>");
 		
 		about_us.append("</body></html>");
 		txt_about_us.setMovementMethod(ScrollingMovementMethod.getInstance());

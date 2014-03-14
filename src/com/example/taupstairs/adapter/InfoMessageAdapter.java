@@ -1,13 +1,20 @@
 package com.example.taupstairs.adapter;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +24,13 @@ import android.widget.TextView;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.MessageContent;
+import com.example.taupstairs.string.NormalString;
 
 public class InfoMessageAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<Map<String, Object>> list;
+	private SpannableString spannableString;
 	
 	public InfoMessageAdapter(Context context, List<Map<String, Object>> list) {
 		this.context = context;
@@ -45,16 +54,27 @@ public class InfoMessageAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.info_message_content_message, null);
-		
+		TextView textView = (TextView) LayoutInflater.from(context).inflate(
+				R.layout.info_message_content_message, null);
 		Map<String, Object> item = list.get(position);
 		String content = (String) item.get(MessageContent.CONTENT);
+		spannableString = new SpannableString(content);
+		spanName(item);
+		spanExp(content);
+		textView.setText(spannableString);
+		return textView;
+	}
+	
+	/**
+	 * 名字高亮
+	 * @param item	一个留言项
+	 */
+	private void spanName(Map<String, Object> item) {
 		int reply_start = (Integer) item.get(MessageContent.REPLY_START);
 		int reply_end = (Integer) item.get(MessageContent.REPLY_END);
 		int receive_start = (Integer) item.get(MessageContent.RECEIVE_START);
 		int receive_end = (Integer) item.get(MessageContent.RECEIVEY_END);
 		int green = context.getResources().getColor(R.color.green);
-		SpannableString spannableString = new SpannableString(content);
 		spannableString.setSpan(new ForegroundColorSpan(green), 
 				reply_start, reply_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 		spannableString.setSpan(new StyleSpan(Typeface.BOLD), 
@@ -63,8 +83,34 @@ public class InfoMessageAdapter extends BaseAdapter {
 				receive_start, receive_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 		spannableString.setSpan(new StyleSpan(Typeface.BOLD), 
 				receive_start, receive_end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-		textView.setText(spannableString);
-		return textView;
+	}
+	
+	/**
+	 * 表情转换
+	 * @param content 留言内容
+	 */
+	private void spanExp(String content) {
+		Pattern pattern = Pattern.compile(NormalString.Pattern.EXPRESSION);
+		Matcher matcher = pattern.matcher(content);
+		while (matcher.find()) {
+			int start = matcher.start();
+			int end = matcher.end();
+			String tempString = content.substring(start + 4, end);
+			int number = Integer.parseInt(tempString);
+			if (number >= 0 && number < 105) {
+				try {
+					Field field = R.drawable.class.getDeclaredField("smiley_" + number);
+					int resourceId = Integer.parseInt(field.get(null).toString());
+					Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+					Bitmap smallBitmap = Bitmap.createScaledBitmap(bitmap, 35, 35, true);
+					ImageSpan imageSpan = new ImageSpan(context, smallBitmap);
+					spannableString.setSpan(imageSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
 	}
 
 }

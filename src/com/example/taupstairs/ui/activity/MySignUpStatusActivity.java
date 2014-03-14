@@ -190,7 +190,9 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 		xlist_task.setRefreshTime(lastestUpdata);
 		if (currentStatus.size() > 0) {
 			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
-			xlist_task.setPullLoadEnable(true);
+			if (currentStatus.size() >= 10) {
+				xlist_task.setPullLoadEnable(true);
+			}
 		}
 	}
 	

@@ -1,23 +1,39 @@
 package com.example.taupstairs.ui.activity;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoMessageAdapter;
 import com.example.taupstairs.bean.Info;
@@ -37,6 +53,7 @@ import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.PersonService;
 import com.example.taupstairs.string.JsonString;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.KeyBoardUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
@@ -45,6 +62,9 @@ import com.example.taupstairs.util.TimeUtil;
 public class InfoMessageActivity extends Activity implements ItaActivity {
 
 	private Button btn_back, btn_message;
+	private ImageView img_expression, img_expression_delete;
+	private LinearLayout expLayout;
+	private GridView grid_expression;
 	private Holder holder;
 	private Info info;
 	private InfoMessageAdapter adapter;
@@ -52,6 +72,8 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 	private String edit_text;
 	private String replyId, replyNickname;
 	private ProgressDialog progressDialog;
+	private boolean flag_expression;
+	private int[] imageIds = new int[105];
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -118,53 +140,86 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 		}
 		replyId = info.getPersonId();	//这两个不初始化的话，直接回复就会出错
 		replyNickname = info.getPersonNickname();
+		flag_expression = true;
 	}
 	
 	private void initView() {
 		btn_back = (Button) findViewById(R.id.btn_back_info_message_detail);
 		edit_message = (EditText)findViewById(R.id.edit_task_detail_message);
 		btn_message = (Button)findViewById(R.id.btn_task_detail_message);
+		img_expression = (ImageView)findViewById(R.id.img_task_detail_expression);
+		img_expression_delete = (ImageView)findViewById(R.id.img_expression_delete);
+		expLayout = (LinearLayout)findViewById(R.id.layout_expression);
+		grid_expression = (GridView)findViewById(R.id.grid_expression);
 		progressDialog = new ProgressDialog(this);
 		
 		SimpleImageLoader.showImage(holder.img_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + info.getPersonPhotoUrl());
 		PersonDataListener personDataListener = 
 				new PersonDataListener(this, info.getPersonId(), Person.PERMISSION_HIDE);
-		holder.img_photo.setOnClickListener(personDataListener);
-		
-		holder.txt_nickname.setText(info.getPersonNickname());
-		
+		holder.img_photo.setOnClickListener(personDataListener);	
+		holder.txt_nickname.setText(info.getPersonNickname());	
 		String personSex = info.getPersonSex().trim();
 		if (personSex.equals(Person.MALE)) {
 			holder.img_sex.setImageResource(R.drawable.icon_male);
 		} else if (personSex.equals(Person.FEMALE)) {
 			holder.img_sex.setImageResource(R.drawable.icon_female);
 		}
-		
 		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), info.getInfoReleaseTime());
 		holder.txt_releasetime.setText(displayTime);
-		
 		holder.txt_grade.setText(info.getPersonGrade());
 		holder.txt_department.setText(info.getPersonDepartment());
 		
-		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-		
-		btn_message.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (edit_message.getText().toString().trim().equals("")) {
-					
+		createExpressionGridView();
+		MyOnClickListener listener = new MyOnClickListener();
+		btn_back.setOnClickListener(listener);
+		img_expression.setOnClickListener(listener);
+		img_expression_delete.setOnClickListener(listener);
+		edit_message.setOnClickListener(listener);
+		btn_message.setOnClickListener(listener);
+		grid_expression.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageIds[arg2]);
+				Bitmap smallBitmap = Bitmap.createScaledBitmap(bitmap, 40, 40, true);
+				ImageSpan imageSpan = new ImageSpan(InfoMessageActivity.this, smallBitmap);
+				String str;
+				if (arg2 < 10){
+					str = "[fac00" + arg2;
+				} else if (arg2 < 100){
+					str = "[fac0" + arg2;
 				} else {
-					showProgressDialog();
-					doMessageTask();
+					str = "[fac" + arg2;
 				}
+				SpannableString spannableString = new SpannableString(str);
+				spannableString.setSpan(imageSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				int selectionStart = edit_message.getSelectionStart();
+				edit_message.getText().insert(selectionStart, spannableString);
 			}
 		});
+	}
+	
+	/**
+	 * 初始化表情
+	 */
+	private void createExpressionGridView() {
+		List<Map<String,Object>> listItems = new ArrayList<Map<String,Object>>();
+		for(int i = 0; i < 105; i++){
+			try {
+				Field field = R.drawable.class.getDeclaredField("smiley_" + i);
+				int resourceId = Integer.parseInt(field.get(null).toString());
+				imageIds[i] = resourceId;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	        Map<String,Object> listItem = new HashMap<String,Object>();
+			listItem.put("image", imageIds[i]);
+			listItems.add(listItem);
+		}
+		
+		SimpleAdapter simpleAdapter = new SimpleAdapter(this, listItems, R.layout.expression_cell, 
+				new String[]{"image"}, new int[] {R.id.img_expression_cell});
+		grid_expression.setAdapter(simpleAdapter);
 	}
 	
 	private void showProgressBar() {
@@ -250,6 +305,7 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 						edit_message.setText("");
 						postMessage();	
 						KeyBoardUtil.dismiss(this, edit_message);
+						expLayout.setVisibility(View.GONE);
 					} else {		
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();
 					}
@@ -268,11 +324,41 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 	 * 显示留言消息基本部分
 	 */
 	private void displayMessage() {
-		holder.txt_message.setText(info.getInfoMessage().getCurrentMessage());
+		String content = info.getInfoMessage().getCurrentMessage();
+		SpannableString spannableString = new SpannableString(content);
+		spanExp(content, spannableString);
+		holder.txt_message.setText(spannableString);
 		holder.view.setOnClickListener(new TaskByIdListener(this, info.getInfoMessage().getStatusId()));
 		holder.txt_status_nickname.setText(info.getInfoMessage().getStatusPersonNickname());
 		holder.txt_status_title.setText("  :  " + info.getInfoMessage().getStatusTitle());
 		displayMessageList();
+	}
+	
+	/**
+	 * 表情转换
+	 * @param content 留言内容
+	 */
+	private void spanExp(String content, SpannableString spannableString) {
+		Pattern pattern = Pattern.compile(NormalString.Pattern.EXPRESSION);
+		Matcher matcher = pattern.matcher(content);
+		while (matcher.find()) {
+			int start = matcher.start();
+			int end = matcher.end();
+			String tempString = content.substring(start + 4, end);
+			int number = Integer.parseInt(tempString);
+			if (number >= 0 && number < 105) {
+				try {
+					Field field = R.drawable.class.getDeclaredField("smiley_" + number);
+					int resourceId = Integer.parseInt(field.get(null).toString());
+					Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+					Bitmap smallBitmap = Bitmap.createScaledBitmap(bitmap, 35, 35, true);
+					ImageSpan imageSpan = new ImageSpan(InfoMessageActivity.this, smallBitmap);
+					spannableString.setSpan(imageSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	/**
@@ -334,6 +420,63 @@ public class InfoMessageActivity extends Activity implements ItaActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(this);
+	}
+	
+	class MyOnClickListener implements OnClickListener {
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.btn_back_info_message_detail:
+				finish();
+				break;
+				
+			case R.id.img_task_detail_expression:
+				if (flag_expression) {
+					img_expression.setImageResource(R.drawable.expression_p);
+					KeyBoardUtil.dismiss(InfoMessageActivity.this, edit_message);
+					expLayout.setVisibility(View.VISIBLE);
+				} else {
+					img_expression.setImageResource(R.drawable.expression_n);
+					KeyBoardUtil.show(InfoMessageActivity.this, edit_message);
+					expLayout.setVisibility(View.GONE);
+				}
+				flag_expression = !flag_expression;
+				break;
+				
+			case R.id.edit_task_detail_message:
+				img_expression.setImageResource(R.drawable.expression_n);
+				expLayout.setVisibility(View.GONE);
+				break;
+				
+			case R.id.btn_task_detail_message:
+				if (!edit_message.getText().toString().trim().equals("")) {
+					showProgressDialog();
+					doMessageTask();
+				}
+				break;
+				
+			case R.id.img_expression_delete:
+				int selectionStart = edit_message.getSelectionStart();// 获取光标的位置
+				if (selectionStart > 0) {
+				    String body = edit_message.getText().toString();
+				    if (!TextUtils.isEmpty(body)) {
+				    	String tempStr = body.substring(0, selectionStart);
+				    	int i = tempStr.lastIndexOf("[");// 获取最后一个表情的位置
+				    	if (i != -1) {
+				    		CharSequence cs = tempStr.subSequence(i, selectionStart - 3);
+				    		if (cs.equals("[fac")) {// 判断是否是一个表情
+				    			edit_message.getEditableText().delete(i, selectionStart);
+				    			return;
+				    		}
+				    	}
+				    	edit_message.getEditableText().delete(selectionStart - 1, selectionStart);
+				    }
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
 	}
 	
 }

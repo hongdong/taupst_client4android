@@ -86,6 +86,7 @@
     <string name="no_message">暂时还没有</string>
     <string name="say_a_little">说几句吧</string>
     <string name="post_message">发  表</string>
+    <string name="default_exp">默认</string>
     
     <string name="end_task">完结任务</string>
     <string name="signup_list">报名列表</string>

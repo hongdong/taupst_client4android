@@ -14,4 +14,8 @@ public class NormalString {
 		public static final String CHANGE_USER = "com.example.taupstairs.CHANGE_USER";
 	}
 	
+	public class Pattern {
+		public static final String EXPRESSION = "\\[fac[0-1][0-9][0-9]";
+	}
+	
 }
