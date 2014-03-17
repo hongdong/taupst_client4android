@@ -234,15 +234,8 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_END_TASK:
-				Bundle data_end_task = msg.getData();
-				String activity_end_task = data_end_task.getString(Task.TA_END_TASK_ACTIVITY);
-				if (activity_end_task.equals(Task.TA_END_TASK_ACTIVITY_DETAIL)) {
-					ItaActivity itaActivity = (ItaActivity) getActivityByName(Task.TA_END_TASK_ACTIVITY_DETAIL);
-					itaActivity.refresh(Task.TA_END_TASK, msg.obj);
-				} else if (activity_end_task.equals(Task.TA_END_TASK_ACTIVITY_BYID)) {
-					ItaActivity itaActivity = (ItaActivity) getActivityByName(Task.TA_END_TASK_ACTIVITY_BYID);
-					itaActivity.refresh(Task.TA_END_TASK, msg.obj);
-				}
+				ItaActivity itaActivity = (ItaActivity) getActivityByName(Task.TA_END_TASK_ACTIVITY);
+				itaActivity.refresh(Task.TA_END_TASK, msg.obj);
 				break;
 				
 			case Task.TA_GET_SIGNUP_LIST:
@@ -424,9 +417,6 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_END_TASK:
 			msg.obj = doTaskService.doEndTask(task);
-			String activity_end_task = (String) taskParams.get(Task.TA_END_TASK_ACTIVITY);
-			Bundle data_end_task = msg.getData();
-			data_end_task.putString(Task.TA_END_TASK_ACTIVITY, activity_end_task);
 			break;
 			
 		case Task.TA_GET_SIGNUP_LIST:

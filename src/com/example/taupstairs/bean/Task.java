@@ -147,9 +147,7 @@ public class Task {
 	public static final String TA_GET_TASK_DETAIL_ACTIVITY = "TaskByIdActivity";
 	
 	public static final int TA_END_TASK = 20;
-	public static final String TA_END_TASK_ACTIVITY = "activity";
-	public static final String TA_END_TASK_ACTIVITY_DETAIL = "TaskDetailActivity";
-	public static final String TA_END_TASK_ACTIVITY_BYID = "TaskByIdActivity";
+	public static final String TA_END_TASK_ACTIVITY = "SignUpListActivity";
 	
 	public static final int TA_PUSH = 21;
 	public static final String TA_PUSH_CHANNEL_ID = "channel_id";

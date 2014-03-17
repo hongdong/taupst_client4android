@@ -186,7 +186,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(InfoSignUpActivity.this, TaskByIdActivity.class);
 				intent.putExtra(Status.STATUS_ID, statusId);
-				startActivityForResult(intent, IntentString.RequestCode.INFOSIGNUP_TASKBYID);
+				startActivity(intent);
 			}
 		});
 		holder.txt_status_nickname.setText(infoSignUp.getStatusPersonNickname());
@@ -252,12 +252,6 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 				info.getInfoSignUp().setHasExec("0");
 			}
 			break;
-			
-		case IntentString.RequestCode.INFOSIGNUP_TASKBYID:
-			if (IntentString.ResultCode.TASKBYID_INFOSIGNUP == resultCode) {
-				holder.btn_exec.setVisibility(View.GONE);
-				holder.txt_end.setVisibility(View.VISIBLE);
-			}
 
 		default:
 			break;

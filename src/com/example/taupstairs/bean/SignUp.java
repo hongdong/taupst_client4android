@@ -15,6 +15,7 @@ public class SignUp {
 	public static final String PERSON_ID = "personId";
 	public static final String SIGNUP_PRAISE = "signUpPraise";
 	public static final String SIGNUP_MESSAGE = "signUpMessage";
+	public static final String CLICK_POSITION = "clickPosition";
 	
 	public String getSignUpId() {
 		return signUpId;

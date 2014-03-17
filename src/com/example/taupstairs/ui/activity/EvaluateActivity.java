@@ -36,6 +36,7 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 	private TextView txt_praise;
 	private SeekBar sk_evaluate;
 	private String statusId;
+	private int clickPosition;
 	private SignUp signUp;
 	private String signUpPraise, signUpMessage;
 	private ProgressDialog progressDialog;
@@ -55,6 +56,7 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 	
 	private void initData() {
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
+		clickPosition = getIntent().getIntExtra(SignUp.CLICK_POSITION, 0);
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 		signUp = app.getSignUp();
 		signUpPraise = "0";
@@ -69,14 +71,12 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
 		
 		btn_ok.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				signUpMessage = edit_evaluate.getText().toString();
 				doEvaluateTask();
@@ -86,17 +86,12 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 		txt_praise.setText("0");
 		
 		sk_evaluate.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				
 			}
-			
-			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				
 			}
-			
-			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				signUpPraise = String.valueOf(progress);
@@ -148,6 +143,7 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 						TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 						app.setSignUp(signUp);
 						Intent intent = new Intent();
+						intent.putExtra(SignUp.CLICK_POSITION, clickPosition);
 						setResult(IntentString.ResultCode.EVALUATE_SIGNUPLIST, intent);
 						finish();
 					} else {

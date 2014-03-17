@@ -21,7 +21,7 @@
     	android:src="@drawable/img_select"
     	android:contentDescription="@string/drawable"/>
 
-    <ImageView
+    <ImageView 
         android:id="@+id/img_fm_me_drawable"
         android:layout_width="80dp"
         android:layout_height="80dp"

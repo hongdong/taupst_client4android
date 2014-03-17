@@ -227,6 +227,9 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			if (newInfos != null) {	//可能没有新的消息，也要更新“上次更新时间”
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				xlist_info.setRefreshTime(lastestUpdata);
+				if (currentInfos.size() >= 20) {	//小于一页（20条）的时候，不要显示加载更多选项
+					xlist_info.setPullLoadEnable(true);
+				}
 			}
 		}
 	}

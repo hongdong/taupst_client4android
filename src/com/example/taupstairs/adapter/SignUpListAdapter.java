@@ -60,7 +60,7 @@ public class SignUpListAdapter extends BaseAdapter {
 		SimpleImageLoader.showImage(holder.img_photo, 
 				HttpClientUtil.PHOTO_BASE_URL + signUp.getPersonPhotoUrl());
 		PersonDataListener personDataListener = 
-				new PersonDataListener(context, signUp.getPersonId(), Person.PERMISSION_HIDE);
+				new PersonDataListener(context, signUp.getPersonId(), Person.PERMISSION_PUBLIC);
 		holder.img_photo.setOnClickListener(personDataListener);
 		
 		holder.txt_nickname.setText(signUp.getPersonNickname());
