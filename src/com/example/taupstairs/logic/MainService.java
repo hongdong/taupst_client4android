@@ -28,7 +28,6 @@ public class MainService extends Service implements Runnable {
 	private DoTaskService doTaskService = new DoTaskService(MainService.this);
 	
 	Handler handler = new Handler() {
-		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {	
 			case Task.TA_LOGIN:
@@ -57,7 +56,9 @@ public class MainService extends Service implements Runnable {
 				String activity_getuserdata = data_getuserdata.getString(Task.TA_GETUSERDATA_ACTIVITY);
 				if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_PERSONDATA)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETUSERDATA_ACTIVITY_PERSONDATA);
-					activity.refresh(Task.TA_GETUSERDATA, msg.obj);
+					if (activity != null) {
+						activity.refresh(Task.TA_GETUSERDATA, msg.obj);
+					}	
 				} else if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_ME)) {
 					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_ACTIVITY_ME);
 					fragment.refresh(Task.TA_GETUSERDATA, msg.obj);
@@ -212,6 +213,8 @@ public class MainService extends Service implements Runnable {
 					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_SIGNUP);
 				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_ENDTASK)) {
 					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_ENDTASK);
+				} else if (activity_getinfo_detail.equals(Task.TA_GETINFO_DETAIL_PRIVATELETTER)) {
+					activity_getinfo = (ItaActivity) getActivityByName(Task.TA_GETINFO_DETAIL_PRIVATELETTER);
 				}
 				if (activity_getinfo != null) {
 					activity_getinfo.refresh(Task.TA_GETINFO_DETAIL, msg.obj);
@@ -258,6 +261,11 @@ public class MainService extends Service implements Runnable {
 			case Task.TA_FEEDBACK:
 				ItaActivity activity_feedback = (ItaActivity) getActivityByName(Task.TA_FEEDBACK_ACTIVITY);
 				activity_feedback.refresh(Task.TA_FEEDBACK, msg.obj);
+				break;
+				
+			case Task.TA_PRIVATE_LETTER:
+				ItaActivity activity_private_letter = (ItaActivity) getActivityByName(Task.TA_PRIVATE_LETTER_ACTIVITY);
+				activity_private_letter.refresh(Task.TA_PRIVATE_LETTER, msg.obj);
 				break;
 
 			default:
@@ -431,6 +439,10 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_FEEDBACK:
 			msg.obj = doTaskService.doFeedbackTask(task);
+			break;
+			
+		case Task.TA_PRIVATE_LETTER:
+			msg.obj = doTaskService.doSendPrivateLetterTask(task);
 			break;
 
 		default:

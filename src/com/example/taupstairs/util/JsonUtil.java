@@ -11,6 +11,7 @@ import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoEndTask;
 import com.example.taupstairs.bean.InfoExecTask;
 import com.example.taupstairs.bean.InfoMessage;
+import com.example.taupstairs.bean.InfoPrivateLetter;
 import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.Message;
 import com.example.taupstairs.bean.MessageContent;
@@ -299,6 +300,12 @@ public class JsonUtil {
 				infoEndTask.setStatusTitle(jsonObject.getString(JsonString.InfoEndTask.STATUS_TITLE));
 				infoEndTask.setEndTaskPraise(jsonObject.getString(JsonString.InfoEndTask.ENDTASK_PRAISE));
 				object = infoEndTask;
+				break;
+				
+			case 5:
+				InfoPrivateLetter infoPrivateLetter = new InfoPrivateLetter();
+				infoPrivateLetter.setLetter(jsonObject.getString(JsonString.InfoPrivateLetter.LETTER));
+				object = infoPrivateLetter;
 				break;
 	
 			default:

@@ -26,6 +26,7 @@ import com.example.taupstairs.ui.activity.HomePageActivity;
 import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
 import com.example.taupstairs.ui.activity.InfoExecTaskActivity;
 import com.example.taupstairs.ui.activity.InfoMessageActivity;
+import com.example.taupstairs.ui.activity.InfoPrivateLetterActivity;
 import com.example.taupstairs.ui.activity.InfoSignUpActivity;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
@@ -42,7 +43,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	
 	@SuppressWarnings("rawtypes")
 	private Class[] infoDetail = {InfoMessageActivity.class, InfoExecTaskActivity.class, 
-		InfoSignUpActivity.class, InfoEndTaskActivity.class, };
+		InfoSignUpActivity.class, InfoEndTaskActivity.class, InfoPrivateLetterActivity.class};
 	
 	private InfoService infoService;
 	private String lastestInfoId;
@@ -102,9 +103,9 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentInfos.size() >= arg2) {
+					clickPosition = arg2 - 1;
 					int type = Integer.parseInt(currentInfos.get(clickPosition).getInfoType());
-					if (type <= infoDetail.length) {
-						clickPosition = arg2 - 1;
+					if (type > 0 && type <= infoDetail.length) {
 						TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
 						app.setInfo(currentInfos.get(clickPosition));
 						Intent intent = new Intent(context, infoDetail[type - 1]);
@@ -129,6 +130,7 @@ public class InfoFragment extends Fragment implements ItaFragment {
 	
 	private void doGetInfoTask(int mode, String infoId) {
 		if (!isRefresh) {
+			isRefresh = true;
 			HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
 			taskParams.put(Task.TA_GETINFO_MODE, mode);
 			taskParams.put(Task.TA_GETINFO_INFOID, infoId);
@@ -171,6 +173,8 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		default:
 			break;
 		}
+		/*把标志设为false，这样才能再开获取status的网络连接*/
+		isRefresh = false;
 	}
 	
 	private void refreshInfo(int mode, List<Info> newInfos) {
@@ -220,6 +224,10 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			changeListData();
 		} else {
 			xlist_info.stopRefresh();
+			if (newInfos != null) {	//可能没有新的消息，也要更新“上次更新时间”
+				lastestUpdata = TimeUtil.setLastestUpdata();
+				xlist_info.setRefreshTime(lastestUpdata);
+			}
 		}
 	}
 	

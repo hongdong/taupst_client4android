@@ -74,6 +74,8 @@
     <string name="person_data_setting">我也去设置</string>
     <string name="person_data_gosetting">（点击设置）</string>
     <string name="loading">正在加载....</string>
+    <string name="private_letter">私信</string>
+    <string name="send_private_letter">发私信</string>
     
     <string name="task_detail">任务详情</string>
     <string name="rewards">报酬  :</string>

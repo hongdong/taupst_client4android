@@ -380,17 +380,17 @@ public class DoTaskService {
 		String infoId = null;
 		switch (mode) {
 		case Task.TA_GETINFO_MODE_FIRSTTIME:
-			getinfo_url = HttpClientUtil.BASE_URL + "data/news/newsList2Down";
+			getinfo_url = HttpClientUtil.BASE_URL + "data/news/newsList2Down_2";
 			break;
 			
 		case Task.TA_GETINFO_MODE_PULLREFRESH:
 			infoId = (String) taskParams.get(Task.TA_GETINFO_INFOID);
-			getinfo_url = HttpClientUtil.BASE_URL + "data/news/newsList2Down?news_id=" + infoId;
+			getinfo_url = HttpClientUtil.BASE_URL + "data/news/newsList2Down_2?news_id=" + infoId;
 			break;
 			
 		case Task.TA_GETINFO_MODE_LOADMORE:
 			infoId = (String) taskParams.get(Task.TA_GETINFO_INFOID);
-			getinfo_url = HttpClientUtil.BASE_URL + "data/news/newsList2Up?news_id=" + infoId;
+			getinfo_url = HttpClientUtil.BASE_URL + "data/news/newsList2Up_2?news_id=" + infoId;
 			break;
 
 		default:
@@ -412,7 +412,7 @@ public class DoTaskService {
 		String infoType = (String) taskParams.get(Info.INFO_TYPE);
 		String getinfo_detail_url = HttpClientUtil.BASE_URL + 
 				"data/news/detail?source=" + infoSource + "&type=" + infoType;
-		if (infoType.equals("2")) {		//类型2有接口有更新
+		if (infoType.equals("2") || infoType.equals("5")) {		
 			getinfo_detail_url = HttpClientUtil.BASE_URL + 
 					"data/news/detail_2?source=" + infoSource + "&type=" + infoType;
 		}
@@ -437,8 +437,6 @@ public class DoTaskService {
 		try {
 			exec_task_url = StringUtil.replaceBlank(exec_task_url);
 			result = HttpClientUtil.getRequest(exec_task_url);
-			System.out.println(exec_task_url);
-			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -519,6 +517,22 @@ public class DoTaskService {
 		}
 		return result;
 	} 
+	
+	public String doSendPrivateLetterTask(Task task) {
+		String result = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String privateLetterString = (String) taskParams.get(Task.TA_PRIVATE_LETTER_STRING);
+		String personId = (String) taskParams.get(Person.PERSON_ID);
+		String private_letter_url = HttpClientUtil.BASE_URL + 
+				"data/pl/send?letter=" + privateLetterString + "&to_user=" + personId;
+		try {
+			private_letter_url = StringUtil.replaceBlank(private_letter_url);
+			result = HttpClientUtil.getRequest(private_letter_url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	/*
 	 * 用户注销

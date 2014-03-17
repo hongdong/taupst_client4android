@@ -138,6 +138,7 @@ public class Task {
 	public static final String TA_GETINFO_DETAIL_EXECTASK = "InfoExecTaskActivity";
 	public static final String TA_GETINFO_DETAIL_ENDTASK = "InfoEndTaskActivity";
 	public static final String TA_GETINFO_DETAIL_SIGNUP = "InfoSignUpActivity";
+	public static final String TA_GETINFO_DETAIL_PRIVATELETTER = "InfoPrivateLetterActivity";
 	
 	public static final int TA_EXEC_TASK = 18;
 	public static final String TA_EXEC_TASK_ACTIVITY = "InfoSignUpExecActivity";
@@ -166,6 +167,10 @@ public class Task {
 	
 	public static final int TA_CHECKUPDATA = 25;
 	public static final String TA_CHECKUPDATA_ACTIVITY = "HomePageActivity";
+	
+	public static final int TA_PRIVATE_LETTER = 26;
+	public static final String TA_PRIVATE_LETTER_STRING = "private_letter_string";
+	public static final String TA_PRIVATE_LETTER_ACTIVITY = "SendPrivateLetterActivity";
 	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();

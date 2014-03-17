@@ -30,7 +30,7 @@ import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class PersonDataActivity extends Activity implements ItaActivity {
 
-	private Button btn_back;
+	private Button btn_back, btn_private_letter;
 	private Holder holder;
 	private String personId, permission;
 	private Person person;
@@ -69,12 +69,19 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_person_data);
+		btn_private_letter = (Button)findViewById(R.id.btn_private_letter);
 		txt_setting = (TextView)findViewById(R.id.txt_person_data_setting);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		btn_private_letter.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(PersonDataActivity.this, SendPrivateLetterActivity.class);
+				intent.putExtra(Person.PERSON_ID, personId);
+				startActivity(intent);
 			}
 		});
 		txt_setting.setOnClickListener(new OnClickListener() {

@@ -180,6 +180,8 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		default:
 			break;
 		}
+		/*把标志设为false，这样才能再开获取status的网络连接*/
+		isRefresh = false;
 	}
 	
 	/*
@@ -208,9 +210,6 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		} else {
 			xlist_task.stopRefresh();
 		}
-		
-		/*把标志设为false，这样才能再开获取status的网络连接*/
-		isRefresh = false;
 	}
 	
 	/*

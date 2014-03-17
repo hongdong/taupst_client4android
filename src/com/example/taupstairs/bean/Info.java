@@ -22,6 +22,7 @@ public class Info {
 	private InfoExecTask infoExecTask;
 	private InfoEndTask infoEndTask;
 	private InfoSignUp infoSignUp;
+	private InfoPrivateLetter infoPrivateLetter;
 	
 	public static final int INFO_COUNT_PERPAGE = 20;
 	
@@ -140,18 +141,24 @@ public class Info {
 	public void setInfoSignUp(InfoSignUp infoSignUp) {
 		this.infoSignUp = infoSignUp;
 	}
-	
+	public InfoPrivateLetter getInfoPrivateLetter() {
+		return infoPrivateLetter;
+	}
+	public void setInfoPrivateLetter(InfoPrivateLetter infoPrivateLetter) {
+		this.infoPrivateLetter = infoPrivateLetter;
+	}
 	@Override
 	public String toString() {
-		return "Info [infoId=" + infoId + ", personId=" + personId
-				+ ", personPhotoUrl=" + personPhotoUrl + ", personNickname="
-				+ personNickname + ", infoReleaseTime=" + infoReleaseTime
-				+ ", infoContent=" + infoContent + ", personDepartment="
-				+ personDepartment + ", personGrade=" + personGrade
-				+ ", personSex=" + personSex + ", infoSource=" + infoSource
-				+ ", infoType=" + infoType + ", infoMessage=" + infoMessage
-				+ ", infoExecTask=" + infoExecTask + ", infoEndTask="
-				+ infoEndTask + ", infoSignUp=" + infoSignUp + "]";
+		return "Info [id=" + id + ", infoId=" + infoId + ", personId="
+				+ personId + ", personPhotoUrl=" + personPhotoUrl
+				+ ", personNickname=" + personNickname + ", infoReleaseTime="
+				+ infoReleaseTime + ", infoContent=" + infoContent
+				+ ", personDepartment=" + personDepartment + ", personGrade="
+				+ personGrade + ", personSex=" + personSex + ", infoSource="
+				+ infoSource + ", infoType=" + infoType + ", infoMessage="
+				+ infoMessage + ", infoExecTask=" + infoExecTask
+				+ ", infoEndTask=" + infoEndTask + ", infoSignUp=" + infoSignUp
+				+ ", infoPrivateLetter=" + infoPrivateLetter + "]";
 	}
 	
 }

@@ -156,6 +156,10 @@ public class JsonString {
 		public static final String ENDTASK_PRAISE = "prise";
 	}
 	
+	public static class InfoPrivateLetter {
+		public static final String LETTER = "letter";
+	}
+	
 	public static class SignUp {
 		public static final String SIGNUP_ID = "sign_id";
 		public static final String PERSON_ID = "users_id";

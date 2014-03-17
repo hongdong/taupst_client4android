@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+	android:layout_marginTop="20dp"
+    android:orientation="vertical" >
+    <Button 
+        android:id="@+id/btn_private_letter"
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content"
+        android:text="@string/private_letter"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_private_letter_bg"/>
+</LinearLayout>
