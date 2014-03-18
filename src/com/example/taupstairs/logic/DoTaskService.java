@@ -16,6 +16,7 @@ import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.SignUp;
+import com.example.taupstairs.bean.SignUpListTaskDetail;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -532,6 +533,21 @@ public class DoTaskService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public SignUpListTaskDetail doGetSignUpListDetailTask(Task task) {
+		SignUpListTaskDetail st = null;
+		Map<String, Object> taskParams = task.getTaskParams();
+		String signUpId = (String) taskParams.get(SignUp.SIGNUP_ID);
+		String url = HttpClientUtil.BASE_URL + 
+				"/data/sign/sd?sign_id=" + signUpId;
+		try {
+			String jsonString = HttpClientUtil.getRequest(url);
+			st = JsonUtil.getSignUpListTaskDetail(jsonString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return st;
 	}
 	
 	/*

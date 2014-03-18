@@ -1,6 +1,7 @@
 package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
+import java.util.Map;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +16,8 @@ import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.InfoSignUp;
 import com.example.taupstairs.bean.Person;
-import com.example.taupstairs.bean.Status;
+import com.example.taupstairs.bean.SignUp;
+import com.example.taupstairs.bean.SignUpListTaskDetail;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.Time;
 import com.example.taupstairs.imageCache.SimpleImageLoader;
@@ -27,12 +29,15 @@ import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.util.HttpClientUtil;
 import com.example.taupstairs.util.TimeUtil;
 
-public class InfoSignUpActivity extends Activity implements ItaActivity {
+public class SignUpListInfoDetailActivity extends Activity implements ItaActivity {
 
 	private Button btn_back;
 	private Holder holder;
-	private Info info;
-	private boolean to_select;
+	private int clickPosition;
+	private SignUp signUp;
+	private String signUpId;
+	private SignUpListTaskDetail st;
+	private boolean to_select;		//是否可以选Ta执行（就是那个按钮是否显示了，还是显示“已选Ta执行”）
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,7 +45,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		MainService.addActivity(this);
 		init();
 	}
-
+	
 	@Override
 	public void init() {
 		initHolder();
@@ -97,40 +102,24 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	}
 	
 	private void initData() {
-		to_select = true;
+		showProgressBar();
+		clickPosition = getIntent().getIntExtra(SignUp.CLICK_POSITION, 0);
 		TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
-		info = app.getInfo();
-		if (null == info.getInfoSignUp()) {	//可能本地已经保存了
-			showProgressBar();
-			doGetInfoSignUpTask();
-		} else {
-			displaySignUp();
-		}
+		signUp = app.getSignUp();
+		signUpId = signUp.getSignUpId();
+		to_select = true;
+		doGetInfoSignUpTask();
 	}
 	
 	private void initView() {
-		btn_back = (Button)findViewById(R.id.btn_back_info_singup_detail);
-		
-		/*person数据的显示*/
-		SimpleImageLoader.showImage(holder.img_photo, 
-				HttpClientUtil.PHOTO_BASE_URL + info.getPersonPhotoUrl());
-		PersonDataListener personDataListener = 
-				new PersonDataListener(this, info.getPersonId(), Person.PERMISSION_PUBLIC);
-		holder.img_photo.setOnClickListener(personDataListener);
-		holder.txt_nickname.setText(info.getPersonNickname());
-		String personSex = info.getPersonSex().trim();
-		if (personSex.equals(Person.MALE)) {
-			holder.img_sex.setImageResource(R.drawable.icon_male);
-		} else if (personSex.equals(Person.FEMALE)) {
-			holder.img_sex.setImageResource(R.drawable.icon_female);
-		}
-		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), info.getInfoReleaseTime());
-		holder.txt_releasetime.setText(displayTime);
-		holder.txt_grade.setText(info.getPersonGrade());
-		holder.txt_department.setText(info.getPersonDepartment());
-		
+		btn_back = (Button)findViewById(R.id.btn_back_info_singup_detail);	
 		btn_back.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if (signUp.getIsExe().equals("0")) {
+					Intent intent = new Intent();
+					intent.putExtra(SignUp.CLICK_POSITION, clickPosition);
+					setResult(IntentString.ResultCode.INFODETAIL_SIGNUPLIST, intent);
+				}
 				finish();
 			}
 		});
@@ -144,15 +133,10 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		holder.layout_loading.setVisibility(View.GONE);
 	}
 	
-	/**
-	 * 获取详情
-	 */
 	private void doGetInfoSignUpTask() {
-		HashMap<String, Object> taskParams = new HashMap<String, Object>();
-		taskParams.put(Info.INFO_SOURCE, info.getInfoSource());
-		taskParams.put(Info.INFO_TYPE, info.getInfoType());
-		taskParams.put(Task.TA_GETINFO_DETAIL_ACTIVITY, Task.TA_GETINFO_DETAIL_SIGNUP);
-		Task task = new Task(Task.TA_GETINFO_DETAIL, taskParams);
+		Map<String, Object> taskParams = new HashMap<String, Object>();
+		taskParams.put(SignUp.SIGNUP_ID, signUpId);
+		Task task = new Task(Task.TA_SIGNUP_INFODETAIL, taskParams);
 		MainService.addTask(task);
 	}
 
@@ -161,10 +145,9 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 		if (params[1] != null) {
 			int taskId = (Integer) params[0];
 			switch (taskId) {
-			case Task.TA_GETINFO_DETAIL:
+			case Task.TA_SIGNUP_INFODETAIL:
 				hideProgressBar();
-				InfoSignUp infoSignUp = (InfoSignUp) params[1];
-				info.setInfoSignUp(infoSignUp);
+				st = (SignUpListTaskDetail) params[1];
 				displaySignUp();
 				break;
 
@@ -178,56 +161,77 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	 * 显示被报名消息详情
 	 */
 	private void displaySignUp() {
-		InfoSignUp infoSignUp = info.getInfoSignUp();
-		holder.txt_signup_string.setText(infoSignUp.getSignUpString());
-		final String statusId = infoSignUp.getStatusId();
-		holder.view.setOnClickListener(new OnClickListener() {
+		SimpleImageLoader.showImage(holder.img_photo, 
+				HttpClientUtil.PHOTO_BASE_URL + st.getPersonPhotoUrl());
+		PersonDataListener personDataListener = 
+				new PersonDataListener(this, st.getPersonId(), Person.PERMISSION_PUBLIC);
+		holder.img_photo.setOnClickListener(personDataListener);
+		holder.txt_nickname.setText(st.getPersonNickname());
+		String personSex = st.getPersonSex().trim();
+		if (personSex.equals(Person.MALE)) {
+			holder.img_sex.setImageResource(R.drawable.icon_male);
+		} else if (personSex.equals(Person.FEMALE)) {
+			holder.img_sex.setImageResource(R.drawable.icon_female);
+		}
+		String displayTime = TimeUtil.getDisplayTime(TimeUtil.getNow(), st.getInfoReleaseTime());
+		holder.txt_releasetime.setText(displayTime);
+		holder.txt_grade.setText(st.getPersonGrade());
+		holder.txt_department.setText(st.getPersonDepartment());
+		
+		holder.txt_signup_string.setText(st.getSignUpString());
+		holder.view.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
-				Intent intent = new Intent(InfoSignUpActivity.this, TaskByIdActivity.class);
-				intent.putExtra(Status.STATUS_ID, statusId);
-				startActivityForResult(intent, IntentString.RequestCode.INFOSIGNUP_TASKBYID);
+				//这里不要跳转了，不然一直嵌套
 			}
 		});
-		holder.txt_status_nickname.setText(infoSignUp.getStatusPersonNickname());
-		holder.txt_status_title.setText("  :  " + infoSignUp.getStatusTitle());
-		String contact = infoSignUp.getPersonContact();
+		holder.txt_status_nickname.setText(st.getStatusPersonNickname());
+		holder.txt_status_title.setText("  :  " + st.getStatusTitle());
+		String contact = st.getPersonContact();
 		/*以下为联系方式，可能对方没有全部提供*/
 		char[] optional = contact.toCharArray();
 		if (optional[0] != '0') {
-			holder.txt_person_phone.setText(infoSignUp.getPersonPhone());
+			holder.txt_person_phone.setText(st.getPersonPhone());
 		} else {
 			holder.txt_person_phone.setText("Ta没有向您提供手机号");
 		}
 		if (optional[1] != '0') {
-			holder.txt_person_qq.setText(infoSignUp.getPersonQq());
+			holder.txt_person_qq.setText(st.getPersonQq());
 		} else {
 			holder.txt_person_qq.setText("Ta没有向您提供qq号");
 		}
 		if (optional[2] != '0') {
-			holder.txt_person_email.setText(infoSignUp.getPersonEmail());
+			holder.txt_person_email.setText(st.getPersonEmail());
 		} else {
 			holder.txt_person_email.setText("Ta没有向您提供email");
 		}
 		
 		Time now = TimeUtil.getNow();
-		Time end = TimeUtil.originalToTime(infoSignUp.getStatusEndTime());
+		Time end = TimeUtil.originalToTime(st.getStatusEndTime());
 		if (TimeUtil.LARGE == TimeUtil.compare(now, end)) {
 			to_select = false;
 			holder.txt_expired.setVisibility(View.VISIBLE);
 		}
-		
-		if (infoSignUp.getStatusState().trim().equals("3")) {
-			to_select = false;							
+	
+		if (st.getStatusState().trim().equals("3")) {
+			to_select = false;
 			holder.txt_end.setVisibility(View.VISIBLE);
 		}
-	
-		String hasExec = infoSignUp.getHasExec();
+		
+		String hasExec = st.getHasExec();
 		if (hasExec.equals("1")) {
 			if (to_select) {
 				holder.btn_exec.setVisibility(View.VISIBLE);
 				holder.btn_exec.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						Intent intent = new Intent(InfoSignUpActivity.this, InfoSignUpExecActivity.class);
+						Intent intent = new Intent(SignUpListInfoDetailActivity.this, InfoSignUpExecActivity.class);
+						//这个没传过去，选择执行页面获取不到报名id，就会异常
+						TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
+						InfoSignUp infoSignUp = new InfoSignUp();
+						infoSignUp.setSignUpId(signUpId);
+						Info info = new Info();
+						info.setInfoSignUp(infoSignUp);
+						app.setInfo(info);
+						
 						startActivityForResult(intent, IntentString.RequestCode.INFOSIGNUP_INFOSIGNUPEXEC);
 					}
 				});
@@ -246,15 +250,7 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 				Toast.makeText(this, "选择成功", Toast.LENGTH_SHORT).show();
 				holder.btn_exec.setVisibility(View.GONE);
 				holder.txt_multi.setVisibility(View.VISIBLE);
-				/*根新本地存储，下回不显示“选Ta执行”的按钮*/
-				info.getInfoSignUp().setHasExec("0");
-			}
-			break;
-			
-		case IntentString.RequestCode.INFOSIGNUP_TASKBYID:
-			if (IntentString.ResultCode.TASKBYID_INFOSIGNUP == resultCode) {
-				holder.btn_exec.setVisibility(View.GONE);
-				holder.txt_end.setVisibility(View.VISIBLE);
+				signUp.setIsExe("0");
 			}
 			break;
 
@@ -264,9 +260,19 @@ public class InfoSignUpActivity extends Activity implements ItaActivity {
 	}
 	
 	@Override
+	public void onBackPressed() {
+		if (signUp.getIsExe().equals("0")) {
+			Intent intent = new Intent();
+			intent.putExtra(SignUp.CLICK_POSITION, clickPosition);
+			setResult(IntentString.ResultCode.INFODETAIL_SIGNUPLIST, intent);
+		}
+		super.onBackPressed();
+	}
+	
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(this);
 	}
-	
+
 }

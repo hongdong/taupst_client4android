@@ -133,7 +133,6 @@ public class EvaluateActivity extends Activity implements ItaActivity {
 			switch (taskId) {
 			case Task.TA_EVALUATE:
 				String result = (String) params[1];
-				System.out.println(result);
 				try {
 					JSONObject jsonObject = new JSONObject(result);
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();

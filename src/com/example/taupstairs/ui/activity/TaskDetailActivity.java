@@ -282,7 +282,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		intent.putExtra(Task.TA_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
 		intent.putExtra(Status.STATUS_ID, status.getStatusId());
 		intent.putExtra(Status.PERSON_ID, status.getPersonId());
-		startActivityForResult(intent, IntentString.RequestCode.TASKBYID_SIGNUP);
+		startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
 	}
 	
 	/**

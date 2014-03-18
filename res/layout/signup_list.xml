@@ -42,7 +42,8 @@
 			android:layout_marginLeft="0.5dp"
 			android:layout_marginRight="0.5dp"
 			android:divider="@null"
-			android:cacheColorHint="#00000000">
+			android:cacheColorHint="#00000000"
+			android:listSelector="@color/transparent">
 	  	</ListView>
 	  	<include layout="@layout/loading"/>
 	  	<include layout="@layout/no_info"/>

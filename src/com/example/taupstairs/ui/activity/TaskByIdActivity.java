@@ -529,6 +529,10 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		if (expLayout.isShown()) {	//如果显示着表情的时候，先把表情布局取消掉
 			expLayout.setVisibility(View.GONE);
 		} else {
+			if (flag_end) {
+				Intent intent = new Intent();
+				setResult(IntentString.ResultCode.TASKBYID_INFOSIGNUP, intent);
+			}
 			super.onBackPressed();
 		}
 	}
@@ -543,6 +547,10 @@ public class TaskByIdActivity extends Activity implements ItaActivity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.btn_back_task_detail:
+				if (flag_end) {
+					Intent intent = new Intent();
+					setResult(IntentString.ResultCode.TASKBYID_INFOSIGNUP, intent);
+				}
 				finish();
 				break;
 				

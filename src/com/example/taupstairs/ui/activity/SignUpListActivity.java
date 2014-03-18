@@ -2,10 +2,8 @@ package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,14 +12,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.SignUpListAdapter;
 import com.example.taupstairs.bean.SignUp;
@@ -41,7 +36,6 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 	private ListView list_signup_list;
 	private List<SignUp> signUps;
 	private SignUpListAdapter adapter;
-	private int clickPosition;
 	private ProgressDialog progressDialog;
 	private boolean flag_end;
 	@Override
@@ -86,7 +80,7 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 				if (!flag_end) {
 					//弹框提示是否真的要完结
 					AlertDialog.Builder builder = new AlertDialog.Builder(SignUpListActivity.this);
-					builder.setTitle("提醒")
+					builder.setTitle("完结任务")
 					.setMessage("任务完结后其它童鞋将不可报名\n确定要完结吗？")
 					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
@@ -178,25 +172,8 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 			txt_no_info.setText("这个任务没有人报名");
 			layout.setVisibility(View.VISIBLE);	
 		} else {
-			adapter = new SignUpListAdapter(this, signUps);
+			adapter = new SignUpListAdapter(this, signUps, statusId);
 			list_signup_list.setAdapter(adapter);
-			list_signup_list.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-						long arg3) {
-					SignUp signUp = signUps.get(arg2);
-					if (signUp.getIsExe().equals("0") && signUp.getSignUpPraise().equals("")) {
-						clickPosition = arg2;
-						TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
-						app.setSignUp(signUps.get(arg2));
-						Intent intent = new Intent(SignUpListActivity.this, EvaluateActivity.class);
-						intent.putExtra(Status.STATUS_ID, statusId);
-						startActivityForResult(intent, IntentString.RequestCode.SIGNUPLIST_EVALUATE);
-					} else {	
-						//已经评价过了
-					}
-				}
-			});
 		}
 	}
 	
@@ -209,6 +186,18 @@ public class SignUpListActivity extends Activity implements ItaActivity {
 				Toast.makeText(this, "评价成功", Toast.LENGTH_SHORT).show();
 				TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 				SignUp signUp = app.getSignUp();
+				int clickPosition = data.getIntExtra(SignUp.CLICK_POSITION, -1);
+				signUps.add(clickPosition, signUp);
+				signUps.remove(clickPosition + 1);
+				adapter.notifyDataSetChanged();
+			}
+			break;
+			
+		case IntentString.RequestCode.SIGNUPLIST_INFODETAIL:
+			if (IntentString.ResultCode.INFODETAIL_SIGNUPLIST == resultCode) {
+				TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
+				SignUp signUp = app.getSignUp();
+				int clickPosition = data.getIntExtra(SignUp.CLICK_POSITION, -1);
 				signUps.add(clickPosition, signUp);
 				signUps.remove(clickPosition + 1);
 				adapter.notifyDataSetChanged();

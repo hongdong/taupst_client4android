@@ -260,6 +260,13 @@ public class MainService extends Service implements Runnable {
 				ItaActivity activity_private_letter = (ItaActivity) getActivityByName(Task.TA_PRIVATE_LETTER_ACTIVITY);
 				activity_private_letter.refresh(Task.TA_PRIVATE_LETTER, msg.obj);
 				break;
+				
+			case Task.TA_SIGNUP_INFODETAIL:
+				ItaActivity activity27 = (ItaActivity) getActivityByName(Task.TA_SIGNUP_INFODETAIL_ACTIVITY);
+				if (activity27 != null) {
+					activity27.refresh(Task.TA_SIGNUP_INFODETAIL, msg.obj);
+				}
+				break;
 
 			default:
 				break;
@@ -433,6 +440,10 @@ public class MainService extends Service implements Runnable {
 			
 		case Task.TA_PRIVATE_LETTER:
 			msg.obj = doTaskService.doSendPrivateLetterTask(task);
+			break;
+			
+		case Task.TA_SIGNUP_INFODETAIL:
+			msg.obj = doTaskService.doGetSignUpListDetailTask(task);
 			break;
 
 		default:

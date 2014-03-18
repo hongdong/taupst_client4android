@@ -18,6 +18,7 @@ import com.example.taupstairs.bean.MessageContent;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Rank;
 import com.example.taupstairs.bean.SignUp;
+import com.example.taupstairs.bean.SignUpListTaskDetail;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.string.JsonString;
 
@@ -358,6 +359,43 @@ public class JsonUtil {
 			e.printStackTrace();
 		}
 		return signUps;
+	}
+	
+	public static SignUpListTaskDetail getSignUpListTaskDetail(String jsonString) {
+		SignUpListTaskDetail st = new SignUpListTaskDetail();
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);
+			st.setPersonId(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_ID));
+			st.setPersonPhotoUrl(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_PHOTOURL));
+			st.setPersonNickname(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_NICKNAME));
+			st.setInfoReleaseTime(jsonObject.getString(JsonString.SignUpListTaskDetail.INFO_RELEASETIME));
+			st.setPersonDepartment(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_DEPARTMENT));
+			st.setPersonGrade(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_GRADE));
+			st.setPersonSex(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_SEX));
+			
+			st.setSignUpId(jsonObject.getString(JsonString.SignUpListTaskDetail.SIGNUP_ID));
+			st.setStatusId(jsonObject.getString(JsonString.SignUpListTaskDetail.STATUS_ID));
+			st.setStatusPersonId(jsonObject.getString(JsonString.SignUpListTaskDetail.STATUS_PERSONID));
+			st.setStatusPersonNickname(jsonObject.getString(JsonString.SignUpListTaskDetail.STATUS_PERSONNICKNAME));
+			st.setStatusTitle(jsonObject.getString(JsonString.SignUpListTaskDetail.STATUS_TITLE));
+			st.setStatusEndTime(jsonObject.getString(JsonString.SignUpListTaskDetail.STATUS_ENDTIME));
+			st.setStatusState(jsonObject.getString(JsonString.SignUpListTaskDetail.STATUS_STATE));
+			st.setSignUpString(jsonObject.getString(JsonString.SignUpListTaskDetail.SIGNUP_STRING));
+			st.setHasExec(jsonObject.getString(JsonString.SignUpListTaskDetail.HAS_EXEC));
+			st.setPersonContact(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_CONTACK));
+			if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_PHONE)) {
+				st.setPersonPhone(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_PHONE));
+			}
+			if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_QQ)) {
+				st.setPersonQq(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_QQ));
+			}
+			if (!jsonObject.isNull(JsonString.InfoSignUp.PERSON_EMAIL)) {
+				st.setPersonEmail(jsonObject.getString(JsonString.SignUpListTaskDetail.PERSON_EMAIL));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return st;
 	}
 	
 }

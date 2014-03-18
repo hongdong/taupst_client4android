@@ -18,10 +18,12 @@ import android.widget.Toast;
 
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
+import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.util.FileUtil;
+import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class SettingActivity extends Activity implements ItaActivity {
 
@@ -52,7 +54,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog = new ProgressDialog(SettingActivity.this);
 		
 		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -62,7 +63,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 				R.layout.common_txt_item, setting_user);
 		list_user.setAdapter(adapter_user);
 		list_user.setOnItemClickListener(new OnItemClickListener() {
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				switch (arg2) {			
@@ -90,7 +90,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 				R.layout.common_txt_item, setting_soft);
 		list_soft.setAdapter(adapter_soft);
 		list_soft.setOnItemClickListener(new OnItemClickListener() {
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Intent intent = new Intent(SettingActivity.this, listSoftClasses[arg2]);
@@ -99,7 +98,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 		});
 		
 		btn_change_user.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {	
 				showProgressDialog();
 				Map<String, Object> taskParams = new HashMap<String, Object>();
@@ -141,7 +139,7 @@ public class SettingActivity extends Activity implements ItaActivity {
 			MainService.emptyMainService();				//先清空MainService里面的链表
 			Intent intent_change_user = new Intent(NormalString.Receiver.CHANGE_USER);
 			sendBroadcast(intent_change_user);
-			//上面操作可能比较久，所以在这里再隐藏进度条
+			SharedPreferencesUtil.saveDefaultUser(SettingActivity.this, new User(null, null, null, null));
 			Intent intent_login = new Intent(SettingActivity.this, LoginActivity.class);
 			startActivity(intent_login);				//最后跳到登录界面
 			finish();

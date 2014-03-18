@@ -170,6 +170,9 @@ public class Task {
 	public static final String TA_PRIVATE_LETTER_STRING = "private_letter_string";
 	public static final String TA_PRIVATE_LETTER_ACTIVITY = "SendPrivateLetterActivity";
 	
+	public static final int TA_SIGNUP_INFODETAIL = 27;
+	public static final String TA_SIGNUP_INFODETAIL_ACTIVITY = "SignUpListInfoDetailActivity";
+	
 	public Task(int taskId, Map<String, Object> taskParams) {
 		super();
 		this.taskId = taskId;

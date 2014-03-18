@@ -94,6 +94,7 @@
     <string name="signup_list">报名列表</string>
     <string name="has_evaluate">已评价</string>
     <string name="evaluate">评价</string>
+    <string name="detail">详情</string>
     <string name="evaluata_ta">您将要给Ta</string>
     <string name="evaluate_praise">个赞（最高32个赞）</string>
     <string name="signup_activity">报名</string>
@@ -114,6 +115,7 @@
     <string name="version_feature">版本特性</string>
     <string name="feedback">用户反馈</string>
     <string name="change_user">切换用户</string>
+    <string name="user_exit">退出登录</string>
     
     <string name="updata_userdata">更新用户资料</string>
     <string name="updata_userdata_real">实名资料设置</string>

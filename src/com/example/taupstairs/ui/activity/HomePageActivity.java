@@ -398,8 +398,8 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 			if (action.equals(NormalString.Receiver.NEW_INFO)) {
 				localRefresh(NormalString.LocalRefresh.NEW_INFO, null);
 			} else if (action.equals(NormalString.Receiver.CHANGE_USER)) {
-				finish();	
 				PushManager.stopWork(getApplicationContext());
+				finish();	
 			}
 		}
 	}
