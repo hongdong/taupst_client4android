@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.taupstairs"
-    android:versionCode="3"
-    android:versionName="1.2" >
+    android:versionCode="4"
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -70,6 +70,18 @@
         <activity 
             android:name=".ui.activity.HomePageActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.InfoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.TaskActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.RankActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".ui.activity.MeActivity"
             android:screenOrientation="portrait"></activity>
         <activity 
             android:name=".ui.activity.SettingActivity"

@@ -18,9 +18,7 @@
     <string name="captcha">验证码填这里</string>
     <string name="refresh_college_captcha">换一张</string>
     <string name="about_us">关于我们</string>
-    <string name="about_us_text">看看要写什么   </string>
     <string name="server_declare">服务声明</string>
-    <string name="server_declare_text">看看要写什么</string>
     
     <string name="complete_userdata">完善用户信息</string>
     <string name="userdata_base">基本资料：（完善信息，让更多的人认识你吧）</string>
@@ -34,6 +32,11 @@
     <string name="email_hint">可输入您的伊妹儿</string>
     <string name="phone">Phone:</string>
     <string name="phone_hint">可输入您的爪机号</string>
+    
+    <string name="info">消息</string>
+    <string name="task">任务</string>
+    <string name="rank">排行</string>
+    <string name="me">我</string>
     
     <string name="info_message">有人留言</string>
     <string name="info_signup">有人报名</string>

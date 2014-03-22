@@ -1,102 +1,76 @@
 package com.example.taupstairs.ui.activity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.app.ActivityGroup;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.example.taupstairs.R;
-import com.example.taupstairs.adapter.HomePageFragmentPagerAdapter;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
 import com.example.taupstairs.logic.ItaActivity;
-import com.example.taupstairs.logic.ItaFragment;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.manager.UpdataManager;
-import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.NormalString;
-import com.example.taupstairs.ui.fragment.InfoFragment;
-import com.example.taupstairs.ui.fragment.MeFragment;
-import com.example.taupstairs.ui.fragment.RankFragment;
-import com.example.taupstairs.ui.fragment.TaskFragment;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 import com.example.taupstairs.util.Utils;
 
-public class HomePageActivity extends FragmentActivity implements ItaActivity {
-
-	private User defaultUser;
-	private RadioGroup radioGroup;
-	private Button btn_top_right;
-	private RadioButton btn_info, btn_task, btn_rank;
-	private List<RadioButton> buttons;
+@SuppressWarnings("deprecation")
+public class HomePageActivity extends ActivityGroup implements ItaActivity {
 	
+	private User defaultUser;
 	private boolean first_time_login = true;
 	private boolean isExit = false;
-	
+	private static final String TAB_INFO = "info";
+	private static final String TAB_TASK = "task";
+	private static final String TAB_RANK = "rank";
+	private static final String TAB_ME = "me";
+	private String[] tabs = {TAB_INFO, TAB_TASK, TAB_RANK, TAB_ME};
+	private int[] ids = {R.id.btn_info, R.id.btn_task, R.id.btn_rank, R.id.btn_me, };
+	private TabHost tabHost;
+	private RadioGroup rg;
 	private HomePageReceiver receiver;
-	
-	private ViewPager viewPager;
-	private List<Fragment> fragments;
-	private InfoFragment infoFragment;
-	private TaskFragment taskFragment;
-	private RankFragment rankFragment;
-	private MeFragment meFragment;
-	private int currentIndex;
-	private static final int INDEX_INFO = 0;
-	private static final int INDEX_TASK = 1;
-	private static final int INDEX_RANK = 2;
-	private static final int INDEX_ME = 3;
-	private boolean flag_clear;
+	@SuppressWarnings("rawtypes")
+	private Class[] hpClasses = {InfoActivity.class, TaskActivity.class, 
+			RankActivity.class, MeActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homepage);
-		MainService.addActivity(HomePageActivity.this);
+		MainService.addActivity(this);
 		init();
 	}
 	
 	@Override
 	public void init() {
 		initData();
-		initCheckNetTask();
-		initReceiver();
+		initNet();
 		initView();
-		initListener();
+		initReceiver();
 	}
 	
-	/*初始化全局变量*/
-	private void initData() {		
+	private void initData() {
 		defaultUser = SharedPreferencesUtil.getDefaultUser(HomePageActivity.this);
-		currentIndex = 0;
-		flag_clear = false;
 	}
 	
 	/*进入软件时检测网络*/
-	private void initCheckNetTask() {
+	private void initNet() {
 		new Thread() {
-			@Override
 			public void run() {
 				while (true) {
 					doCheckNetTask();
@@ -110,122 +84,33 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		}.start();
 	}
 	
-	/**
-	 * 初始化百度Push服务发来的广播接收
-	 */
-	private void initReceiver() {
-		receiver = new HomePageReceiver();
-		IntentFilter filter = new IntentFilter();  
-        filter.addAction(NormalString.Receiver.NEW_INFO);
-        filter.addAction(NormalString.Receiver.CHANGE_USER);
-        registerReceiver(receiver, filter);  
-	}
-	
-	/*初始化UI*/
 	private void initView() {
-		radioGroup = (RadioGroup)findViewById(R.id.rg_homepage);
-		btn_top_right = (Button)findViewById(R.id.btn_me_write);
-		btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
-		btn_info = (RadioButton)findViewById(R.id.btn_info);
-		btn_task = (RadioButton)findViewById(R.id.btn_task);
-		btn_rank = (RadioButton)findViewById(R.id.btn_rank);
-		buttons = new ArrayList<RadioButton>();
-		buttons.add(btn_info);
-		buttons.add(btn_task);
-		buttons.add(btn_rank);
-		infoFragment = new InfoFragment(HomePageActivity.this);
-		taskFragment = new TaskFragment(HomePageActivity.this);
-		rankFragment = new RankFragment(HomePageActivity.this);
-		meFragment = new MeFragment(HomePageActivity.this);
-		fragments = new ArrayList<Fragment>();
-		fragments.add(infoFragment);
-		fragments.add(taskFragment);
-		fragments.add(rankFragment);
-		fragments.add(meFragment);
-		viewPager = (ViewPager) findViewById(R.id.hp_viewpager);
-		HomePageFragmentPagerAdapter adapter = new HomePageFragmentPagerAdapter(getSupportFragmentManager(), fragments);
-		viewPager.setAdapter(adapter);
-		//预加载4个fragment。默认的不会预加载这么多，页面切换会卡
-		viewPager.setOffscreenPageLimit(fragments.size());	
-		//刚进去跳到任务页面
-		flag_clear = false;
-		currentIndex = INDEX_TASK;
-		setCurrent(INDEX_TASK);	
-	}
-	
-	/*初始化控件的监听器*/
-	private void initListener() {
-		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {	
-				if (flag_clear) {
-					flag_clear = false;
-				} else {
-					switch (checkedId) {
-					case R.id.btn_info:			
-						setCurrent(INDEX_INFO);
-						break;
-					case R.id.btn_task:
-						setCurrent(INDEX_TASK);
-						break;
-					case R.id.btn_rank:
-						setCurrent(INDEX_RANK);
-						break;
-
-					default:
-						break;
+		tabHost = (TabHost) findViewById(android.R.id.tabhost);
+		tabHost.setup(getLocalActivityManager());
+		for (int i = 0; i < hpClasses.length; i++) {
+			TabSpec spec = tabHost.newTabSpec(tabs[i]).setIndicator(tabs[i])
+					.setContent(new Intent(this, hpClasses[i]));
+			tabHost.addTab(spec);
+		}
+		
+		rg = (RadioGroup)findViewById(R.id.rg_homepage);
+		rg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				for (int i = 0; i < ids.length; i++) {
+					if (ids[i] == checkedId) {
+						tabHost.setCurrentTabByTag(tabs[i]);
 					}
 				}
 			}
 		});
-		/*初始化右上角按键的监听器*/
-		btn_top_right.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (INDEX_TASK == currentIndex) {
-					Intent intent = new Intent(HomePageActivity.this, WriteActivity.class);
-					startActivityForResult(intent, IntentString.RequestCode.HOMEPAGE_WRITE);	
-				} else {		
-					currentIndex = INDEX_ME;	
-					viewPager.setCurrentItem(currentIndex);
-				}
-			}
-		});
-		
-		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
-			@Override
-			public void onPageSelected(int arg0) {
-				currentIndex = arg0;
-				if (INDEX_ME == currentIndex) {
-					flag_clear = true;
-					/*clearCheck函数会促发两次onCheckedChanged，这让我郁闷了半天。
-					 * 第一次的checkedId为clearCheck之前被选中按钮的id
-					 * 第二次的checkedId为clearCheck之后的，没有选中的，就为-1
-					 * 最后灵活的设置了一个标志，问题解决了*/
-					radioGroup.clearCheck();
-				} else {
-					buttons.get(currentIndex).setChecked(true);
-				}
-			}
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				
-			}
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				
-			}
-		});
+		rg.check(R.id.btn_task);
 	}
 	
-	/*设置当前状态*/
-	private void setCurrent(int index) {
-		viewPager.setCurrentItem(index);
-		if (INDEX_TASK == index) {
-			btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_write);
-		} else {
-			btn_top_right.setBackgroundResource(R.drawable.hp_bg_btn_me);
-		}	
+	private void initReceiver() {
+		receiver = new HomePageReceiver();
+		IntentFilter filter = new IntentFilter();  
+        filter.addAction(NormalString.Receiver.CHANGE_USER);
+        registerReceiver(receiver, filter);  
 	}
 	
 	private void doCheckNetTask() {
@@ -246,10 +131,6 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	private void doUsetExitTask() {
 		finish();
 		PushManager.stopWork(getApplicationContext());
-		for (int i = 0; i < fragments.size(); i++) {
-			ItaFragment fragment = (ItaFragment) fragments.get(i);
-			fragment.exit();
-		}
 		Map<String, Object> taskParams = new HashMap<String, Object>();
 		taskParams.put(Task.TA_USEREXIT_TYPE, Task.TA_USEREXIT_TYPE_NORMAL);
 		taskParams.put(Task.TA_USEREXIT_TASKPARAMS, Task.TA_USEREXIT_ACTIVITY_HOMEPAGE);
@@ -284,63 +165,15 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 			break;
 			
 		case Task.TA_USEREXIT:
-			System.exit(0);
+			Intent intent = new Intent(HomePageActivity.this, MainService.class);
+			stopService(intent);
+			android.os.Process.killProcess(android.os.Process.myPid());
 			break;
 
 		default:
 			break;
 		}
 	}	
-	
-	/*
-	 * 本地回调
-	 */
-	public void localRefresh(int id, Map<String, Object> params) {
-		switch (id) {
-		case NormalString.LocalRefresh.UPDATA_PHOTO:
-			taskFragment.localRefresh(id, params);
-			rankFragment.localRefresh(id, params);
-			break;
-		case NormalString.LocalRefresh.UPDATA_NICKNAME:
-			taskFragment.localRefresh(id, params);
-			rankFragment.localRefresh(id, params);
-			break;
-			
-		case NormalString.LocalRefresh.NEW_INFO:
-			infoFragment.localRefresh(id, params);
-			break;
-			
-		case NormalString.LocalRefresh.RELEASE_STATUS_SUCCESS:
-			taskFragment.localRefresh(id, params);
-			break;
-
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-		case IntentString.RequestCode.HOMEPAGE_WRITE:
-			if (IntentString.ResultCode.WRITE_HOMEPAGE == resultCode) {
-				localRefresh(NormalString.LocalRefresh.RELEASE_STATUS_SUCCESS, null);
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		String action = intent.getAction();
-		if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
-			setCurrent(INDEX_INFO);
-		}
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -367,13 +200,11 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 	}
 	
 	private void exitByTwoClick() {  
-	    Timer tExit = null;  
 	    if (isExit == false) {  
 	        isExit = true; // 准备退出  
 	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();  
-	        tExit = new Timer();  
+	        Timer tExit = new Timer();  
 	        tExit.schedule(new TimerTask() {  
-	            @Override
 				public void run() {  
 	                isExit = false; // 取消退出  
 	            }  
@@ -389,17 +220,20 @@ public class HomePageActivity extends FragmentActivity implements ItaActivity {
 		unregisterReceiver(receiver);
 	}
 	
-	/**
-	 *接收广播。目前接收两个：新消息推送、切换账户
-	 */
+	@Override
+	protected void onNewIntent(Intent intent) {
+		String action = intent.getAction();
+		if (PushConstants.ACTION_RECEIVER_NOTIFICATION_CLICK.equals(action)) {
+			rg.check(R.id.btn_info);
+		}
+	}
+	
 	public class HomePageReceiver extends BroadcastReceiver {
 		public void onReceive(final Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(NormalString.Receiver.NEW_INFO)) {
-				localRefresh(NormalString.LocalRefresh.NEW_INFO, null);
-			} else if (action.equals(NormalString.Receiver.CHANGE_USER)) {
-				PushManager.stopWork(getApplicationContext());
-				finish();	
+			if (action.equals(NormalString.Receiver.CHANGE_USER)) {
+				finish();
+				PushManager.stopWork(getApplicationContext());	
 			}
 		}
 	}

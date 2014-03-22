@@ -60,8 +60,8 @@ public class MainService extends Service implements Runnable {
 						activity.refresh(Task.TA_GETUSERDATA, msg.obj);
 					}	
 				} else if (activity_getuserdata.equals(Task.TA_GETUSERDATA_ACTIVITY_ME)) {
-					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_GETUSERDATA_ACTIVITY_ME);
-					fragment.refresh(Task.TA_GETUSERDATA, msg.obj);
+					ItaActivity activity3 = (ItaActivity) getActivityByName(Task.TA_GETUSERDATA_ACTIVITY_ME);
+					activity3.refresh(Task.TA_GETUSERDATA, msg.obj);
 				}
 				break;
 				
@@ -69,9 +69,9 @@ public class MainService extends Service implements Runnable {
 				Bundle data_getstatus = msg.getData();
 				String activity_getstatus = data_getstatus.getString(Task.TA_GETSTATUS_ACTIVITY);
 				int mode = data_getstatus.getInt(Task.TA_GETSTATUS_MODE);
-				if (activity_getstatus.equals(Task.TA_GETSTATUS_FRAGMENT)) {
-					ItaFragment fragment_getstatus = (ItaFragment) getFragmentByName(Task.TA_GETSTATUS_FRAGMENT);
-					fragment_getstatus.refresh(Task.TA_GETSTATUS, mode, msg.obj);
+				if (activity_getstatus.equals(Task.TA_GETSTATUS_ACTIVITY_TASK)) {
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETSTATUS_ACTIVITY_TASK);
+					activity.refresh(Task.TA_GETSTATUS, mode, msg.obj);
 				} else if (activity_getstatus.equals(Task.TA_GETSTATUS_MYRELEASESTATUS)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_GETSTATUS_MYRELEASESTATUS);
 					if (activity != null) {
@@ -97,8 +97,8 @@ public class MainService extends Service implements Runnable {
 					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_UPDATAUSERDATA_ACTIVITY_COMPLETE);
 					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
 				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_FRAGMENT_ME)) {
-					ItaFragment fragment = (ItaFragment) getFragmentByName(Task.TA_UPDATAUSERDATA_FRAGMENT_ME);
-					fragment.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
+					ItaActivity activity = (ItaActivity) getActivityByName(Task.TA_UPDATAUSERDATA_FRAGMENT_ME);
+					activity.refresh(Task.TA_UPDATAUSERDATA, msg.obj);
 				} else if (activity_updata_userdata.equals(Task.TA_UPDATAUSERDATA_ACTIVITY_BASE)) {
 					ItaActivity activity = (ItaActivity) getActivityByName(
 							Task.TA_UPDATAUSERDATA_ACTIVITY_BASE);
@@ -156,8 +156,8 @@ public class MainService extends Service implements Runnable {
 				break;
 				
 			case Task.TA_GETRANK:
-				ItaFragment fragment_getrank = (ItaFragment) getFragmentByName(Task.TA_GETRANK_ACTIVITY);
-				fragment_getrank.refresh(Task.TA_GETRANK, msg.obj);
+				ItaActivity activity12 = (ItaActivity) getActivityByName(Task.TA_GETRANK_ACTIVITY);
+				activity12.refresh(Task.TA_GETRANK, msg.obj);
 				break;
 				
 			case Task.TA_USEREXIT:
@@ -189,16 +189,16 @@ public class MainService extends Service implements Runnable {
 					ItaActivity activity_upload = (ItaActivity) getActivityByName(Task.TA_UPLOADPHOTO_ACTIVITY_COMPLETE);
 					activity_upload.refresh(Task.TA_UPLOADPHOTO, msg.obj);
 				} else if (activity_upload_photo.equals(Task.TA_UPLOADPHOTO_ACTIVITY_ME)) {
-					ItaFragment activity_upload = (ItaFragment) getFragmentByName(Task.TA_UPLOADPHOTO_ACTIVITY_ME);
-					activity_upload.refresh(Task.TA_UPLOADPHOTO, msg.obj);
+					ItaActivity activity15 = (ItaActivity) getActivityByName(Task.TA_UPLOADPHOTO_ACTIVITY_ME);
+					activity15.refresh(Task.TA_UPLOADPHOTO, msg.obj);
 				}
 				break;
 				
 			case Task.TA_GETINFO:
-				ItaFragment fragment_getinfo = (ItaFragment) getFragmentByName(Task.TA_GETINFO_FRAGMENT);
+				ItaActivity activity16 = (ItaActivity) getActivityByName(Task.TA_GETINFO_ACTIVITY);
 				Bundle data_getinfo = msg.getData();
 				int mode_getinfo = data_getinfo.getInt(Task.TA_GETINFO_MODE);
-				fragment_getinfo.refresh(Task.TA_GETINFO, mode_getinfo, msg.obj);
+				activity16.refresh(Task.TA_GETINFO, mode_getinfo, msg.obj);
 				break;
 				
 			case Task.TA_GETINFO_DETAIL:
@@ -455,7 +455,7 @@ public class MainService extends Service implements Runnable {
 	/*清空activitys和fragments链表*/
 	public static void emptyMainService() {
 		activities.clear();
-		fragments.clear();
+//		fragments.clear();
 	}
 	
 	/*将Activity添加到Activity链表中去*/
@@ -489,8 +489,8 @@ public class MainService extends Service implements Runnable {
 	public static void removeFragment(Fragment fragment) {
 		fragments.remove(fragment);
 	}
-	
-	/*根据Fragment的name从Fragment链表中找到它*/
+/*	
+	根据Fragment的name从Fragment链表中找到它
 	private Fragment getFragmentByName(String name) {
 		if (!fragments.isEmpty()) {
 			for (Fragment fragment : fragments) {
@@ -502,7 +502,7 @@ public class MainService extends Service implements Runnable {
 			}
 		}
 		return null;
-	}
+	}	*/
 
 	@Override
 	public IBinder onBind(Intent arg0) {

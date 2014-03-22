@@ -95,6 +95,7 @@ public class PersonDataActivity extends Activity implements ItaActivity {
 	private void testData() {
 		String myId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		if (personId.equals(myId)) {
+			btn_private_letter.setVisibility(View.GONE);
 			PersonService personService = new PersonService(this);
 			person = personService.getPersonById(myId);
 			displayPersonVariable(person);

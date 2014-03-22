@@ -1,101 +1,80 @@
-package com.example.taupstairs.ui.fragment;
+package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.InfoAdapter;
 import com.example.taupstairs.bean.Info;
 import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.logic.ItaFragment;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.InfoService;
 import com.example.taupstairs.string.NormalString;
-import com.example.taupstairs.ui.activity.HomePageActivity;
-import com.example.taupstairs.ui.activity.InfoEndTaskActivity;
-import com.example.taupstairs.ui.activity.InfoExecTaskActivity;
-import com.example.taupstairs.ui.activity.InfoMessageActivity;
-import com.example.taupstairs.ui.activity.InfoPrivateLetterActivity;
-import com.example.taupstairs.ui.activity.InfoSignUpActivity;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
 
-public class InfoFragment extends Fragment implements ItaFragment {
+public class InfoActivity extends Activity implements ItaActivity {
 
-	private View view;
-	private HomePageActivity context;
 	private XListView xlist_info;
 	private InfoAdapter adapter;
 	private List<Info> currentInfos;
 	private int clickPosition;
-	
+	private InfoReceiver receiver;
 	@SuppressWarnings("rawtypes")
 	private Class[] infoDetail = {InfoMessageActivity.class, InfoExecTaskActivity.class, 
 		InfoSignUpActivity.class, InfoEndTaskActivity.class, InfoPrivateLetterActivity.class};
-	
 	private InfoService infoService;
 	private String lastestInfoId;
 	private String oldestInfoId;
 	private String lastestUpdata;
-	
 	private boolean isRefresh;
 	
-	public InfoFragment() {
-		super();
-	}
-	
-	public InfoFragment(HomePageActivity context) {
-		super();
-		this.context = context;
-	}
-
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MainService.addFragment(InfoFragment.this);
+		setContentView(R.layout.hp_info);
+		MainService.addActivity(this);
+		init();
+	}
+	
+	@Override
+	public void init() {
 		initData();
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fm_info, container, false);
 		initView();
-		return view;
+		initReceiver();
 	}
 	
-	@Override
-	public void initData() {
+	private void initData() {
 		isRefresh = false;
-		infoService = new InfoService(context);
+		infoService = new InfoService(this);
 		currentInfos = infoService.getInfos();
 	}
-
-	@Override
-	public void initView() {
-		xlist_info = (XListView) view.findViewById(R.id.xlist_fm_info);
+	
+	private void initView() {
+		xlist_info = (XListView) findViewById(R.id.xlist_hp_info);
 		xlist_info.setPullLoadEnable(false);
 		if (currentInfos != null) {
-			adapter = new InfoAdapter(context, currentInfos);
+			adapter = new InfoAdapter(this, currentInfos);
 			xlist_info.setAdapter(adapter);
 			lastestInfoId = currentInfos.get(0).getInfoId();
-			if (null == lastestInfoId) {	//上次数据库可能没保存好
-				doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
-			} else {
-				doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
-			}
+			oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
+			doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
 		} else {
 			doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
 		}
@@ -106,9 +85,9 @@ public class InfoFragment extends Fragment implements ItaFragment {
 					clickPosition = arg2 - 1;
 					int type = Integer.parseInt(currentInfos.get(clickPosition).getInfoType());
 					if (type > 0 && type <= infoDetail.length) {
-						TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+						TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 						app.setInfo(currentInfos.get(clickPosition));
-						Intent intent = new Intent(context, infoDetail[type - 1]);
+						Intent intent = new Intent(InfoActivity.this, infoDetail[type - 1]);
 						startActivity(intent);
 					}
 				}
@@ -128,34 +107,21 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		});
 	}
 	
+	private void initReceiver() {
+		receiver = new InfoReceiver();
+		IntentFilter filter = new IntentFilter();  
+        filter.addAction(NormalString.Receiver.NEW_INFO);
+        registerReceiver(receiver, filter);  
+	}
+	
 	private void doGetInfoTask(int mode, String infoId) {
 		if (!isRefresh) {
 			isRefresh = true;
-			HashMap<String, Object> taskParams = new HashMap<String, Object>(2);
+			Map<String, Object> taskParams = new HashMap<String, Object>();
 			taskParams.put(Task.TA_GETINFO_MODE, mode);
 			taskParams.put(Task.TA_GETINFO_INFOID, infoId);
 			Task task = new Task(Task.TA_GETINFO, taskParams);
 			MainService.addTask(task);
-		}
-	}
-	
-	/**
-	 * homepage的本地回调
-	 * @param id
-	 * @param params
-	 */
-	public void localRefresh(int id, Map<String, Object> params) {
-		switch (id) {
-		case NormalString.LocalRefresh.NEW_INFO:
-			if (null == lastestInfoId) {
-				doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
-			} else {
-				doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
-			}
-			break;
-
-		default:
-			break;
 		}
 	}
 
@@ -173,38 +139,31 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		default:
 			break;
 		}
-		/*把标志设为false，这样才能再开获取status的网络连接*/
 		isRefresh = false;
 	}
 	
 	private void refreshInfo(int mode, List<Info> newInfos) {
-		if (newInfos != null && newInfos.size() > 0) {
+		if (newInfos != null) {
 			switch (mode) {
 			case Task.TA_GETINFO_MODE_FIRSTTIME:
-				LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_no_info);
+				LinearLayout layout = (LinearLayout) findViewById(R.id.layout_no_info);
 				if (newInfos.size() <= 0) {	
-					TextView txt_no_info = (TextView) view.findViewById(R.id.txt_no_info);
+					TextView txt_no_info = (TextView) findViewById(R.id.txt_no_info);
 					txt_no_info.setText("还没有消息");
 					layout.setVisibility(View.VISIBLE);	//这个时候要显示没有消息
 				} else {
-					layout.setVisibility(View.GONE);
+					layout.setVisibility(View.GONE);	
 				}
 				currentInfos = newInfos;
-				adapter = new InfoAdapter(context, currentInfos);
-				xlist_info.setAdapter(adapter);
+				adapter = new InfoAdapter(this, currentInfos);
+				xlist_info.setAdapter(adapter);	
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				break;
 				
 			case Task.TA_GETINFO_MODE_PULLREFRESH:
 				if (newInfos.size() < 20) {
-					if (currentInfos != null) {
-						currentInfos.addAll(0, newInfos);
-						adapter.notifyDataSetChanged();
-					} else {	
-						currentInfos = newInfos;
-						adapter = new InfoAdapter(context, currentInfos);
-						xlist_info.setAdapter(adapter);
-					}
+					currentInfos.addAll(0, newInfos);
+					adapter.notifyDataSetChanged();
 				} else {
 					currentInfos = newInfos;
 					adapter.notifyDataSetInvalidated();
@@ -224,13 +183,6 @@ public class InfoFragment extends Fragment implements ItaFragment {
 			changeListData();
 		} else {
 			xlist_info.stopRefresh();
-			if (newInfos != null) {	//可能没有新的消息，也要更新“上次更新时间”
-				lastestUpdata = TimeUtil.setLastestUpdata();
-				xlist_info.setRefreshTime(lastestUpdata);
-				if (currentInfos.size() >= 20) {	//小于一页（20条）的时候，不要显示加载更多选项
-					xlist_info.setPullLoadEnable(true);
-				}
-			}
 		}
 	}
 	
@@ -240,19 +192,38 @@ public class InfoFragment extends Fragment implements ItaFragment {
 		xlist_info.setRefreshTime(lastestUpdata);
 		if (currentInfos.size() > 0) {
 			lastestInfoId = currentInfos.get(0).getInfoId();
-			oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
-			if (currentInfos.size() >= 20) {	//小于一页（20条）的时候，不要显示加载更多选项
+			if (currentInfos.size() >= 20) {
+				oldestInfoId = currentInfos.get(currentInfos.size() - 1).getInfoId();
 				xlist_info.setPullLoadEnable(true);
 			}
 		}
 	}
-
+	
 	@Override
-	public void exit() {
-		if (infoService != null) {
+	public void onBackPressed() {
+		getParent().onBackPressed();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (infoService != null && currentInfos != null) {
 			infoService.emptyInfoDb();
 			infoService.insertInfos(currentInfos);
 			infoService.closeDBHelper();
+		}
+	}
+	
+	public class InfoReceiver extends BroadcastReceiver {
+		public void onReceive(final Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(NormalString.Receiver.NEW_INFO)) {
+				if (null == lastestInfoId) {
+					doGetInfoTask(Task.TA_GETINFO_MODE_FIRSTTIME, null);
+				} else {
+					doGetInfoTask(Task.TA_GETINFO_MODE_PULLREFRESH, lastestInfoId);
+				}
+			} 
 		}
 	}
 

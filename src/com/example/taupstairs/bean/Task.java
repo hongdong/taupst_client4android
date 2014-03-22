@@ -38,7 +38,7 @@ public class Task {
 	public static final String TA_GETUSERDATA_TASKPARAMS = "getuserdata";
 	public static final String TA_GETUSERDATA_ACTIVITY = "activity";
 	public static final String TA_GETUSERDATA_ACTIVITY_PERSONDATA = "PersonDataActivity";
-	public static final String TA_GETUSERDATA_ACTIVITY_ME = "MeFragment";
+	public static final String TA_GETUSERDATA_ACTIVITY_ME = "MeActivity";
 	
 	//获取任务信息
 	public static final int TA_GETSTATUS = 4;
@@ -50,7 +50,7 @@ public class Task {
 	public static final int TA_GETSTATUS_MODE_FIRSTTIME = 1;
 	public static final int TA_GETSTATUS_MODE_LOADMORE = 3;
 	public static final String TA_GETSTATUS_ACTIVITY = "activity";
-	public static final String TA_GETSTATUS_FRAGMENT = "TaskFragment";
+	public static final String TA_GETSTATUS_ACTIVITY_TASK = "TaskActivity";
 	public static final String TA_GETSTATUS_MYRELEASESTATUS = "MyReleaseStatusActivity";
 	public static final String TA_GETSTATUS_MYSIGNUPSTATUS = "MySignUpStatusActivity";
 	
@@ -74,7 +74,7 @@ public class Task {
 	public static final String TA_UPDATAUSERDATA_URL = "updatauserdata";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY = "activity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
-	public static final String TA_UPDATAUSERDATA_FRAGMENT_ME = "MeFragment";
+	public static final String TA_UPDATAUSERDATA_FRAGMENT_ME = "MeActivity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_BASE = "UpdataUserdataBaseActivity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_OPTIONAL = "UpdataUserdataOptionalActivity";
 	public static final String TA_UPDATAUSERDATA_ACTIVITY_REAL = "UpdataUserdataRealActivity";
@@ -105,7 +105,7 @@ public class Task {
 	public static final String TA_SIGNUP_MESSAGE = "message";
 	
 	public static final int TA_GETRANK = 12;
-	public static final String TA_GETRANK_ACTIVITY = "RankFragment";
+	public static final String TA_GETRANK_ACTIVITY = "RankActivity";
 	public static final String TA_GETRANK_MODE = "getrank_mode";
 	public static final String TA_GETRANK_MODE_OVERALL = "1";
 	public static final String TA_GETRANK_MODE_MONTH = "2";
@@ -120,7 +120,7 @@ public class Task {
 	public static final int TA_UPLOADPHOTO = 15;
 	public static final String TA_UPLOADPHOTO_ACTIVITY = "activity";
 	public static final String TA_UPLOADPHOTO_ACTIVITY_COMPLETE = "CompleteUserdataActivity";
-	public static final String TA_UPLOADPHOTO_ACTIVITY_ME = "MeFragment";
+	public static final String TA_UPLOADPHOTO_ACTIVITY_ME = "MeActivity";
 	public static final String TA_UPLOADPHOTO_BITMAP = "bitmap";
 	
 	//获取任务信息
@@ -130,7 +130,7 @@ public class Task {
 	public static final int TA_GETINFO_MODE_PULLREFRESH = 2;
 	public static final int TA_GETINFO_MODE_LOADMORE = 3;
 	public static final String TA_GETINFO_INFOID = "infoid";
-	public static final String TA_GETINFO_FRAGMENT = "InfoFragment";
+	public static final String TA_GETINFO_ACTIVITY = "InfoActivity";
 	
 	public static final int TA_GETINFO_DETAIL = 17;
 	public static final String TA_GETINFO_DETAIL_ACTIVITY = "activity";

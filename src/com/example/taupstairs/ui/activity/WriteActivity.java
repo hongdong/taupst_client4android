@@ -136,7 +136,7 @@ public class WriteActivity extends Activity implements ItaActivity {
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
 					if (state.equals(JsonString.Return.STATE_OK)) {
 						Intent intent = new Intent();
-						setResult(IntentString.ResultCode.WRITE_HOMEPAGE, intent);
+						setResult(IntentString.ResultCode.WRITE_TASKACTIVITY, intent);
 						finish();
 					} else {
 						Toast.makeText(WriteActivity.this, "惊呆了，网络出错了", Toast.LENGTH_SHORT).show();

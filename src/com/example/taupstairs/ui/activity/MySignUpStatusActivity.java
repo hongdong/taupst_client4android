@@ -68,7 +68,6 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 	private void initView() {
 		btn_back = (Button)findViewById(R.id.btn_back_my_signup_status);
 		btn_back.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -77,6 +76,7 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 		xlist_task = (XListView) findViewById(R.id.xlist_my_signup_status);	
 		xlist_task.setPullLoadEnable(false);
 		if (currentStatus != null) {
+			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
 			adapter = new TaskAdapter(this, currentStatus);
 			xlist_task.setAdapter(adapter);
 		}
@@ -148,31 +148,30 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 	 */
 	private void refreshList(int mode, List<Status> newStatus) {
 		if (newStatus != null) {
-			switch (mode) {
-			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
-				if (newStatus.size() <= 0) {
-					LinearLayout layout = (LinearLayout) findViewById(R.id.layout_no_info);
-					TextView txt_no_info = (TextView) findViewById(R.id.txt_no_info);
-					txt_no_info.setText("还没有报名过任务");
-					layout.setVisibility(View.VISIBLE);	
-				} 
-				currentStatus = newStatus;
-				/*第一次上面不会设置这个，所以这里要设置*/
-				adapter = new TaskAdapter(this, currentStatus);
-				xlist_task.setAdapter(adapter);
-				lastestUpdata = TimeUtil.setLastestUpdata();
-				break;
-				
-			case Task.TA_GETSTATUS_MODE_LOADMORE:
-				currentStatus.addAll(newStatus);
-				adapter.notifyDataSetChanged();
-				break;
+			if (newStatus.size() > 0) {
+				switch (mode) {
+				case Task.TA_GETSTATUS_MODE_FIRSTTIME:
+					currentStatus = newStatus;
+					adapter = new TaskAdapter(this, currentStatus);
+					xlist_task.setAdapter(adapter);
+					lastestUpdata = TimeUtil.setLastestUpdata();
+					break;
+					
+				case Task.TA_GETSTATUS_MODE_LOADMORE:
+					currentStatus.addAll(newStatus);
+					adapter.notifyDataSetChanged();
+					break;
 
-			default:
-				break;
+				default:
+					break;
+				}
+				changeListData();
+			} else {
+				LinearLayout layout = (LinearLayout) findViewById(R.id.layout_no_info);
+				TextView txt_no_info = (TextView) findViewById(R.id.txt_no_info);
+				txt_no_info.setText("还没有报名过任务");
+				layout.setVisibility(View.VISIBLE);	
 			}
-			
-			changeListData();
 		} else {
 			xlist_task.stopRefresh();
 		}
@@ -188,11 +187,9 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 		xlist_task.stopRefresh();
 		xlist_task.stopLoadMore();
 		xlist_task.setRefreshTime(lastestUpdata);
-		if (currentStatus.size() > 0) {
+		if (currentStatus.size() >= 10) {
 			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
-			if (currentStatus.size() >= 10) {
-				xlist_task.setPullLoadEnable(true);
-			}
+			xlist_task.setPullLoadEnable(true);
 		}
 	}
 	
@@ -219,7 +216,7 @@ public class MySignUpStatusActivity extends Activity implements ItaActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		MainService.removeActivity(this);
-		if (statusService != null) {
+		if (statusService != null && currentStatus != null) {
 			statusService.emptyStatusDb();
 			statusService.insertListStatus(currentStatus);
 			statusService.closeDBHelper();

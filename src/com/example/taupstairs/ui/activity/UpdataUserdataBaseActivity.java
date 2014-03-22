@@ -139,12 +139,12 @@ public class UpdataUserdataBaseActivity extends Activity implements ItaActivity 
 						if (type.equals(Person.PERSON_NICKNAME)) {	
 							Intent intent = new Intent();
 							intent.putExtra(Person.PERSON_NICKNAME, updata);
-							setResult(IntentString.ResultCode.UPDATAUSERDATABASE_MEFRAGMENT_NICKNAME, intent);
+							setResult(IntentString.ResultCode.UPDATAUSERDATABASE_MEACTIVITY_NICKNAME, intent);
 							finish();
 						} else if (type.equals(Person.PERSON_SIGNATURE)) {
 							Intent intent = new Intent();
 							intent.putExtra(Person.PERSON_SIGNATURE, updata);
-							setResult(IntentString.ResultCode.UPDATAUSERDATABASE_MEFRAGMENT_SIGNATURE, intent);
+							setResult(IntentString.ResultCode.UPDATAUSERDATABASE_MEACTIVITY_SIGNATURE, intent);
 							finish();
 						}
 					} else {

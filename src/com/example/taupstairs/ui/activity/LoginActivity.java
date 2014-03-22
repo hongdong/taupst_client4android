@@ -34,6 +34,7 @@ import com.example.taupstairs.services.StatusService;
 import com.example.taupstairs.string.IntentString;
 import com.example.taupstairs.string.JsonString;
 import com.example.taupstairs.toast.LoginToast;
+import com.example.taupstairs.util.KeyBoardUtil;
 import com.example.taupstairs.util.SharedPreferencesUtil;
 
 public class LoginActivity extends Activity implements ItaActivity {
@@ -283,7 +284,8 @@ public class LoginActivity extends Activity implements ItaActivity {
 	}
 	
 	/*跳转到主页面去*/
-	private void jumpToHomePage() {			
+	private void jumpToHomePage() {	
+		KeyBoardUtil.dismiss(this, edit_studentid);
 		Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
 		startActivity(intent);
 		finish();

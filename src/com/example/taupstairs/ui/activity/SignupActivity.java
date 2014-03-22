@@ -49,7 +49,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 	private PersonService personService;
 	private Person person;
 	private String qq, email, phone;
-	private String activityName, statusId, statusPersonId;
+	private String statusId, statusPersonId;
 	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,6 @@ public class SignupActivity extends Activity implements ItaActivity {
 		handler = new Handler(); 
 		personId = SharedPreferencesUtil.getDefaultUser(this).getUserId();
 		personService = new PersonService(this);
-		activityName = getIntent().getStringExtra(Task.TA_ACTIVITY);
 		statusId = getIntent().getStringExtra(Status.STATUS_ID);
 		statusPersonId = getIntent().getStringExtra(Status.PERSON_ID);
 	} 
@@ -237,11 +236,7 @@ public class SignupActivity extends Activity implements ItaActivity {
 					String state = jsonObject.getString(JsonString.Return.STATE).trim();
 					if (state.equals(JsonString.Return.STATE_OK)) {
 						Intent intent = new Intent();
-						if (activityName.equals(Task.TA_GETMESSAGE_ACTIVITY_DETAIL)) {
-							setResult(IntentString.ResultCode.SIGNUP_TASKDETAIL, intent);
-						} else if (activityName.equals(Task.TA_GETMESSAGE_ACTIVITY_BYID)) {
-							setResult(IntentString.ResultCode.SIGNUP_TASKBYID, intent);
-						}
+						setResult(IntentString.ResultCode.SIGNUP_TASK, intent);
 						finish();
 					} else {
 						Toast.makeText(this, "网络竟然出错了", Toast.LENGTH_SHORT).show();

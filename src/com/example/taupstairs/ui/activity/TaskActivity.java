@@ -1,168 +1,132 @@
-package com.example.taupstairs.ui.fragment;
+package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
-
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import com.example.taupstairs.R;
 import com.example.taupstairs.adapter.TaskAdapter;
 import com.example.taupstairs.bean.Person;
 import com.example.taupstairs.bean.Status;
 import com.example.taupstairs.bean.Task;
-import com.example.taupstairs.logic.ItaFragment;
+import com.example.taupstairs.logic.ItaActivity;
 import com.example.taupstairs.logic.MainService;
 import com.example.taupstairs.logic.TaUpstairsApplication;
 import com.example.taupstairs.services.StatusService;
-import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.string.IntentString;
-import com.example.taupstairs.ui.activity.TaskDetailActivity;
+import com.example.taupstairs.string.NormalString;
 import com.example.taupstairs.util.TimeUtil;
 import com.example.taupstairs.view.XListView;
 import com.example.taupstairs.view.XListView.IXListViewListener;
 
-public class TaskFragment extends Fragment implements ItaFragment {
+public class TaskActivity extends Activity implements ItaActivity {
 
-	private Context context;
-	private View view;
+	private Button btn_write;
 	private XListView xlist_task;
 	private TaskAdapter adapter;
 	private List<Status> currentStatus;
 	private int clickPosition;
-	
-	/*是否正在加载任务*/
-	private boolean isRefresh;
-	
 	private StatusService statusService;
 	private String oldestStatusId;
 	private String lastestUpdata;
+	private TaskReceiver receiver;
 	
-	public TaskFragment() {
-		super();
-	}
-	
-	public TaskFragment(Context context) {
-		super();
-		this.context = context;
-	}
-	
+	/*是否正在加载任务*/
+	private boolean isRefresh;
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MainService.addFragment(TaskFragment.this);
-		initData();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		view =  inflater.inflate(R.layout.fm_task, container, false);
-		initView();
-		return view;
+		setContentView(R.layout.hp_task);
+		MainService.addActivity(this);
+		init();
 	}
 	
 	@Override
+	public void init() {
+		initData();
+		initView();
+		initReceiver();
+	}
+	
 	public void initData() {
 		isRefresh = false;		
-		statusService = new StatusService(context);	
+		statusService = new StatusService(this);	
 		currentStatus = statusService.getListStatus();
 		getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);
 	}
-
-	@Override
+	
 	public void initView() {
-		xlist_task = (XListView) view.findViewById(R.id.xlist_fm_task);	
+		btn_write = (Button)findViewById(R.id.btn_write);
+		btn_write.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(TaskActivity.this, WriteActivity.class);
+				startActivityForResult(intent, IntentString.RequestCode.TASKACTIVITY_WRITE);
+			}
+		});
+		xlist_task = (XListView) findViewById(R.id.xlist_hp_task);	
 		xlist_task.setPullLoadEnable(false);
 		if (currentStatus != null) {
-			adapter = new TaskAdapter(context, currentStatus);
+			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
+			adapter = new TaskAdapter(this, currentStatus);
 			xlist_task.setAdapter(adapter);
 		}
 		xlist_task.setOnItemClickListener(new OnItemClickListener() {
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (currentStatus.size() >= arg2) {
 					clickPosition = arg2 - 1;
 					/*全局变量传递数据*/
-					Intent intent = new Intent(context, TaskDetailActivity.class);
-					TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+					Intent intent = new Intent(TaskActivity.this, TaskDetailActivity.class);
+					TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 					app.setStatus(currentStatus.get(arg2 - 1));
-					startActivityForResult(intent, IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL);
+					startActivityForResult(intent, IntentString.RequestCode.TASKACTIVITY_TASKDETAIL);
 				}
 			}
 		});
 		xlist_task.setXListViewListener(new IXListViewListener() {
-			@Override
 			public void onRefresh() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
 			}
-			@Override
 			public void onLoadMore() {
 				getStatusFromTask(Task.TA_GETSTATUS_MODE_LOADMORE, oldestStatusId);
 			}
 		});
 	}
 	
-	/*
-	 * 加载任务。
-	 * 参数标志着是不是第一次加载，下拉刷新，上拉加载更多
+	private void initReceiver() {
+		receiver = new TaskReceiver();
+		IntentFilter filter = new IntentFilter();  
+        filter.addAction(NormalString.Receiver.UPDATA_NICKNAME);
+        filter.addAction(NormalString.Receiver.UPDATA_PHOTO);
+        registerReceiver(receiver, filter);  
+	}
+	
+	/**
+	 * 
+	 * @param mode
+	 * @param statusId
 	 */
 	private void getStatusFromTask(int mode, String statusId) {
 		if (!isRefresh) {
 			isRefresh = true;
 			Map<String, Object> taskParams = new HashMap<String, Object>();
-			taskParams.put(Task.TA_GETSTATUS_ACTIVITY, Task.TA_GETSTATUS_FRAGMENT);
+			taskParams.put(Task.TA_GETSTATUS_ACTIVITY, Task.TA_GETSTATUS_ACTIVITY_TASK);
 			taskParams.put(Task.TA_GETSTATUS_TYPE, Task.TA_GETSTATUS_TYPE_ALL);
 			taskParams.put(Task.TA_GETSTATUS_MODE, mode);
 			taskParams.put(Status.STATUS_ID, statusId);
 			Task task = new Task(Task.TA_GETSTATUS, taskParams);
 			MainService.addTask(task);
-		}
-	}
-	
-	/*
-	 * HomePage的本地回调
-	 */
-	public void localRefresh(int id, Map<String, Object> params) {
-		switch (id) {
-		case NormalString.LocalRefresh.UPDATA_PHOTO:
-			String personId_p = (String) params.get(Person.PERSON_ID);
-			String personPhotoUrl = (String) params.get(Person.PERSON_PHOTOURL);
-			for (Status status : currentStatus) {
-				if (personId_p.equals(status.getPersonId())) {
-					status.setPersonPhotoUrl(personPhotoUrl);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-		case NormalString.LocalRefresh.UPDATA_NICKNAME:
-			String personId_n = (String) params.get(Person.PERSON_ID);
-			String personNickname = (String) params.get(Person.PERSON_NICKNAME);
-			for (Status status : currentStatus) {
-				if (personId_n.equals(status.getPersonId())) {
-					status.setPersonNickname(personNickname);
-				}
-			}
-			adapter.notifyDataSetChanged();
-			break;
-			
-		case NormalString.LocalRefresh.RELEASE_STATUS_SUCCESS:
-			Toast.makeText(context, "成功发布任务", Toast.LENGTH_SHORT).show();
-			getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);	
-			break;
-
-		default:
-			break;
 		}
 	}
 
@@ -184,15 +148,12 @@ public class TaskFragment extends Fragment implements ItaFragment {
 		isRefresh = false;
 	}
 	
-	/*
-	 * 刷新列表
-	 */
 	private void refreshList(int mode, List<Status> newStatus) {
 		if (newStatus != null && newStatus.size() > 0) {
 			switch (mode) {
 			case Task.TA_GETSTATUS_MODE_FIRSTTIME:
 				currentStatus = newStatus;
-				adapter = new TaskAdapter(context, currentStatus);
+				adapter = new TaskAdapter(this, currentStatus);
 				xlist_task.setAdapter(adapter);
 				lastestUpdata = TimeUtil.setLastestUpdata();
 				break;
@@ -205,33 +166,27 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			default:
 				break;
 			}
-			
 			changeListData();
 		} else {
 			xlist_task.stopRefresh();
 		}
 	}
 	
-	/*
-	 * 改变list相关的保存的数据
-	 */
 	private void changeListData() {
 		xlist_task.stopRefresh();
 		xlist_task.stopLoadMore();
 		xlist_task.setRefreshTime(lastestUpdata);
-		if (currentStatus.size() > 0) {
-			oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
-			xlist_task.setPullLoadEnable(true);
-		}
+		oldestStatusId = currentStatus.get(currentStatus.size() - 1).getStatusId();
+		xlist_task.setPullLoadEnable(true);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case IntentString.RequestCode.TASKFRAGMENT_TASKDETAIL:
-			if (IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT == resultCode) {
-				TaUpstairsApplication app = (TaUpstairsApplication) getActivity().getApplication();
+		case IntentString.RequestCode.TASKACTIVITY_TASKDETAIL:
+			if (IntentString.ResultCode.TASKDETAIL_TASKACTIVITY == resultCode) {
+				TaUpstairsApplication app = (TaUpstairsApplication) getApplication();
 				Status status = app.getStatus();
 				currentStatus.add(clickPosition, status);
 				currentStatus.remove(clickPosition + 1);
@@ -239,22 +194,56 @@ public class TaskFragment extends Fragment implements ItaFragment {
 			}
 			break;
 
+		case IntentString.RequestCode.TASKACTIVITY_WRITE:
+			if (IntentString.ResultCode.WRITE_TASKACTIVITY == resultCode) {
+				Toast.makeText(this, "成功发布任务", Toast.LENGTH_SHORT).show();
+				getStatusFromTask(Task.TA_GETSTATUS_MODE_FIRSTTIME, null);
+			}
+			break;
+			
 		default:
 			break;
 		}
 	}
-
-	/*
-	 * 退出的时候保存一下最新任务ID和任务。
-	 * 保存的方法里面只会保存一页（20条）的内容
-	 */
+	
 	@Override
-	public void exit() {
-		if (statusService != null) {
+	public void onBackPressed() {
+		getParent().onBackPressed();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (statusService != null && currentStatus != null) {
 			statusService.emptyStatusDb();
 			statusService.insertListStatus(currentStatus);
 			statusService.closeDBHelper();
 		}
 	}
 	
+	public class TaskReceiver extends BroadcastReceiver {
+		public void onReceive(final Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(NormalString.Receiver.UPDATA_NICKNAME)) {
+				String personId = intent.getStringExtra(Person.PERSON_ID);
+				String personNickname = intent.getStringExtra(Person.PERSON_NICKNAME);
+				for (Status status : currentStatus) {
+					if (personId.equals(status.getPersonId())) {
+						status.setPersonNickname(personNickname);
+					}
+				}
+				adapter.notifyDataSetChanged();
+			} else if (action.equals(NormalString.Receiver.UPDATA_PHOTO)) {
+				String personId = intent.getStringExtra(Person.PERSON_ID);
+				String personPhotoUrl = intent.getStringExtra(Person.PERSON_PHOTOURL);
+				for (Status status : currentStatus) {
+					if (personId.equals(status.getPersonId())) {
+						status.setPersonPhotoUrl(personPhotoUrl);
+					}
+				}
+				adapter.notifyDataSetChanged();
+			}
+		}
+	}
+
 }

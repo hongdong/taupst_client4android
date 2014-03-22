@@ -279,10 +279,9 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	
 	private void jumpToSignup() {
 		Intent intent = new Intent(TaskDetailActivity.this, SignupActivity.class);
-		intent.putExtra(Task.TA_ACTIVITY, Task.TA_GETMESSAGE_ACTIVITY_DETAIL);
 		intent.putExtra(Status.STATUS_ID, status.getStatusId());
 		intent.putExtra(Status.PERSON_ID, status.getPersonId());
-		startActivityForResult(intent, IntentString.RequestCode.TASKDETAIL_SIGNUP);
+		startActivityForResult(intent, IntentString.RequestCode.TASK_SIGNUP);
 	}
 	
 	/**
@@ -482,8 +481,8 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case IntentString.RequestCode.TASKDETAIL_SIGNUP:
-			if (IntentString.ResultCode.SIGNUP_TASKDETAIL == resultCode) {
+		case IntentString.RequestCode.TASK_SIGNUP:
+			if (IntentString.ResultCode.SIGNUP_TASK == resultCode) {
 				Toast.makeText(this, "报名成功", Toast.LENGTH_SHORT).show();
 				btn_multi.setVisibility(View.GONE);
 				txt_multi.setText("已报名");
@@ -515,7 +514,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 		} else {
 			if (flag_message_or_signup) {
 				Intent intent = new Intent();
-				setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
+				setResult(IntentString.ResultCode.TASKDETAIL_TASKACTIVITY, intent);
 			}
 			super.onBackPressed();
 		}
@@ -533,7 +532,7 @@ public class TaskDetailActivity extends Activity implements ItaActivity {
 			case R.id.btn_back_task_detail:
 				if (flag_message_or_signup) {
 					Intent intent = new Intent();
-					setResult(IntentString.ResultCode.TASKDETAIL_TASKFRAGMENT, intent);
+					setResult(IntentString.ResultCode.TASKDETAIL_TASKACTIVITY, intent);
 				}
 				finish();
 				break;
