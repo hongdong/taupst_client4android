@@ -29,7 +29,7 @@
 			android:layout_alignParentRight="true"
 			android:layout_centerVertical="true"
 			android:layout_marginRight="15dp"
-			android:background="@drawable/hp_bg_btn_me"/>
+			android:background="@drawable/btn_setting_bg"/>
 	</RelativeLayout>
 	<FrameLayout 
 		android:layout_width="match_parent"
