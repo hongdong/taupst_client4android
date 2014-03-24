@@ -2,7 +2,6 @@ package com.example.taupstairs.ui.activity;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.taupstairs.R;
 import com.example.taupstairs.bean.Task;
 import com.example.taupstairs.bean.User;
@@ -115,11 +113,13 @@ public class SettingActivity extends Activity implements ItaActivity {
 		progressDialog.show();
 	}
 	
+	/*
 	private void dismissProgressDialog() {
 		if (progressDialog.isShowing()) {
 			progressDialog.dismiss();
 		}
 	}
+	*/
 	
 	private void emptyCacheMemory() {
 		progressDialog.setCancelable(false);
@@ -132,7 +132,6 @@ public class SettingActivity extends Activity implements ItaActivity {
 
 	@Override
 	public void refresh(Object... params) {
-		dismissProgressDialog();
 		int taskId = (Integer) params[0];
 		switch (taskId) {
 		case Task.TA_USEREXIT:
